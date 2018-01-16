@@ -17,6 +17,7 @@ cmake-build-release/
 
 # IntelliJ
 out/
+target/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
@@ -33,8 +34,6 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 ### Java template
-# Compiled class file
-*.class
 
 # Log file
 *.log
@@ -58,3 +57,4 @@ hs_err_pid*
 
 .idea/
 TeamProject2018_13.iml
+ResturantManager.iml
