@@ -25,12 +25,18 @@ public class Authentication {
    * Authenticates the log in request, and redirects them if successful.
    * @param request The HTTP request
    * @param response The response to give.
-   * @return null.
+   * @return The a JSON response showing whether is was successful and if so, the session key.
    */
-  public static Response logInUser(Request request, Response response) {
-
+  public static String logInUser(Request request, Response response) {
     System.out.println(request.body());
-    response.redirect("/api/menu");
-    return response;
+    String sessionkey = authenticate("admin", "pa55w0rd");
+    if (sessionkey == null) {
+      return "{\"validlogin\":false,\"sessionkey\":null}";
+    } else {
+      return "{\"validlogin\":true,\"sessionkey\":\"" + sessionkey + "\"}";
+      //FIXME: Do we really need validlogin and session key? (just check if sessionkey is null)
+      //FIXME: Should sessionkey be a cookie instead?
+      //TODO: Add in some meta data so it knows whether to redirect to waiter or kitchen portal
+    }
   }
 }

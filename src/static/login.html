@@ -8,12 +8,14 @@
         $(document).ready(function(){
             $("#loginbutton").click(function(){
                 $.post("/api/login",
-                    {
-                       name: $("#username").val(),
+                    JSON.stringify({
+                       username: $("#username").val(),
                        password: $("#password").val()
-                    },
-                function(data,status) {
-                    alert("Data: " + data + "\nStatus: " + status);
+                    }),
+                function(data) {
+                    console.log(data);
+                    var response = JSON.parse(data);
+                    console.log("Valid Login: " + response.validlogin + "\nSession key: " + response.sessionkey);
                 });
             });
         });
