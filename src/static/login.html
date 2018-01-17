@@ -16,12 +16,18 @@
                     console.log(data);
                     var response = JSON.parse(data);
                     console.log("Valid Login: " + response.validlogin + "\nSession key: " + response.sessionkey);
+                    if (response.validlogin === true) {
+                        window.location.replace("/");
+                    } else {
+                        $("#errormessage").text("Incorrect username/password combination!");
+                    }
                 });
             });
         });
     </script>
 </head>
 <body>
+<h2 id="errormessage"></h2>
 <input type="text" id="username" name="username" title="Username">
 <br>
 <input type="password" id="password" name="password" title="Password">
