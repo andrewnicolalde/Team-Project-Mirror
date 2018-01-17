@@ -16,7 +16,8 @@ public class TestAuthentication {
 
   @Test
   public void testAuthenticate() {
+    AuthenticationParameters ap = new AuthenticationParameters("admin", "pa55w0rd");
     assertEquals("Asserts a valid session key is returned when valid login details are given.",
-            "498379438759384", authenticate("admin", "pa55w0rd"));
+            "498379438759384", authenticate(ap));
   }
 }

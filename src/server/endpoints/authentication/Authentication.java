@@ -13,11 +13,10 @@ public class Authentication {
 
   /**
    * Checks if the username and password combination is valid and returns a session key of they are.
-   * @param username The username to authenticate.
-   * @param password The password to authenticate.
+   * @param authenticationParameters An object holding the username and password combination
    * @return A session key as a string, or null if the username/password combination is invalid.
    */
-  static String authenticate(String username, String password) {
+  static String authenticate(AuthenticationParameters authenticationParameters) {
     return "498379438759384";
   }
 
@@ -28,8 +27,13 @@ public class Authentication {
    * @return The a JSON response showing whether is was successful and if so, the session key.
    */
   public static String logInUser(Request request, Response response) {
-    System.out.println(request.body());
-    String sessionkey = authenticate("admin", "pa55w0rd");
+    // Convert the data from the client into an object
+    AuthenticationParameters ap = GSON.fromJson(request.body(), AuthenticationParameters.class);
+
+    // Authenticate the username/password combo
+    String sessionkey = authenticate(ap);
+
+    // Generate response to send to the user.
     if (sessionkey == null) {
       return "{\"validlogin\":false,\"sessionkey\":null}";
     } else {
