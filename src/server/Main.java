@@ -2,6 +2,7 @@ package server;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
+import static spark.Spark.staticFileLocation;
 
 import server.endpoints.authentication.Authentication;
 import server.endpoints.customer.Menu;
@@ -12,8 +13,13 @@ public class Main {
    * @param args Standard for a Java program, any launch arguments are passed onto the function.
    */
   public static void main(String[] args) {
+    staticFileLocation("static"); // Lets spark know where the static files are
+
+    // End points
     get("/api/menu", (req, res) -> Menu.getMenu());
     post("/api/login", (req, res) -> Authentication.authenticate("admin",
             "pa55w0rd"));
+
+    System.out.println("Visit: http://localhost:4567/index.html");
   }
 }
