@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#loginbutton").click(function(){
+                $.post("/api/login",
+                    {
+                       name: $("#username").val(),
+                       password: $("#password").val()
+                    },
+                function(data,status) {
+                    alert("Data: " + data + "\nStatus: " + status);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<input type="text" id="username" name="username" title="Username">
+<br>
+<input type="password" id="password" name="password" title="Password">
+<br>
+<button id="loginbutton">Log in</button>
+</body>
+</html>

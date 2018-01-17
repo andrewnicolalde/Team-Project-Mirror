@@ -17,9 +17,8 @@ public class Main {
 
     // End points
     get("/api/menu", (req, res) -> Menu.getMenu());
-    post("/api/login", (req, res) -> Authentication.authenticate("admin",
-            "pa55w0rd"));
+    post("/api/login", Authentication::logInUser);
 
-    System.out.println("Visit: http://localhost:4567/index.html");
+    System.out.println("Visit: http://localhost:4567");
   }
 }
