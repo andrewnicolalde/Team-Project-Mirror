@@ -6,7 +6,7 @@
     <artifactId>ARMS</artifactId>
     <version>0.1</version>
     <build>
-        <sourceDirectory>src</sourceDirectory>
+        <sourceDirectory>server/src</sourceDirectory>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -19,7 +19,7 @@
         </plugins>
         <resources>
             <resource>
-                <directory>src</directory>
+                <directory>server/src</directory>
             </resource>
         </resources>
     </build>
