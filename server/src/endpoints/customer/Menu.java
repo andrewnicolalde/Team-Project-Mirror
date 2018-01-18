@@ -6,6 +6,6 @@ public class Menu {
    * @return The menu in JSON as a string.
    */
   public static String getMenu() {
-    return "{items:[Beef Burger, Chicken Salad, Water, Diet Coke, Fish and Chips]}";
+    return "{\"items\":[\"Beef Burger\",\"Chicken Salad\",\"Water\",\"Diet Coke\",\"Fish and Chips\"]}";
   }
 }
