@@ -1,0 +1,23 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+           "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+           "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+  <session-factory>
+    <!-- Connection Settings !-->
+    <property name="connection.dialect">org.hibernate.dialect.PostgreSQL9Dialect</property>
+    <property name="connection.driver_class">org.postgresql.driver</property>
+    <property name="connection.url">jdbc:IP</property>
+    <property name="connection.username">USERNAME</property>
+    <property name="connection.password">PASSWORD</property>
+    
+    <property name="connection_pool_size">1</property>
+
+    <!-- Creates tables on startup and shows the SQL executed in the console !-->
+    <property name="hbm2ddl.auto">create</property>
+    <property name="show_sql">true</property>
+
+    <!-- The location of the entity table !-->
+    <mapping resource="RESOURCE CLASS PATH"/>
+  </session-factory>
+</hibernate-configuration>
