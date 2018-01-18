@@ -45,7 +45,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>Main</mainClass>
+                            <mainClass>server.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
