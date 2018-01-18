@@ -1,4 +1,4 @@
-package server.endpoints.authentication;
+package endpoints.authentication;
 
 public class AuthenticationParameters {
   private String username;

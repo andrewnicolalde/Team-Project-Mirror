@@ -1,11 +1,9 @@
-package server;
-
 import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
-import server.endpoints.authentication.Authentication;
-import server.endpoints.customer.Menu;
+import endpoints.authentication.Authentication;
+import endpoints.customer.Menu;
 
 public class Main {
   /**

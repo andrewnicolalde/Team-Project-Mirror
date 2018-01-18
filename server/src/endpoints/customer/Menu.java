@@ -1,4 +1,4 @@
-package server.endpoints.customer;
+package endpoints.customer;
 
 public class Menu {
   /**

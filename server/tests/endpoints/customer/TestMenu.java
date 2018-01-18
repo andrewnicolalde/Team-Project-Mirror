@@ -1,9 +1,9 @@
-package server.endpoints.customer;
+package endpoints.customer;
 
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static server.endpoints.customer.Menu.getMenu;
+import static endpoints.customer.Menu.getMenu;
 
 public class TestMenu {
   @Test

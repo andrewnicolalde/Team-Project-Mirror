@@ -1,11 +1,11 @@
-package server.endpoints.authentication;
+package endpoints.authentication;
 
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
-import static server.endpoints.authentication.Authentication.authenticate;
-import static server.endpoints.authentication.Authentication.isValidLoginCombination;
+import static endpoints.authentication.Authentication.authenticate;
+import static endpoints.authentication.Authentication.isValidLoginCombination;
 
 public class TestAuthentication {
   @Test

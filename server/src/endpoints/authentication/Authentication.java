@@ -1,4 +1,4 @@
-package server.endpoints.authentication;
+package endpoints.authentication;
 
 import com.google.gson.Gson;
 import spark.Request;
