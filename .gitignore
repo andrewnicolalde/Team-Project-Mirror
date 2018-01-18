@@ -56,5 +56,4 @@ fabric.properties
 hs_err_pid*
 
 .idea/
-TeamProject2018_13.iml
-ResturantManager.iml
+*.iml
