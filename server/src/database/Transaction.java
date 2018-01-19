@@ -6,8 +6,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- * This class is for the database.Transaction Table in the database. It requires the <code>database.Transaction.hbm.xml</code>
- * file, to map this Java class to the XML file.
+ * This class is for the Transaction Table in the database.
  *
  * @author Andrew Nicolalde
  */
