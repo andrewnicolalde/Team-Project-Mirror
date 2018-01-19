@@ -9,6 +9,7 @@
     </description>
 
     <class>database.Staff</class>
+    <class>database.Transaction</class>
 
     <properties>
       <property name="javax.persistence.jdbc.driver" value="POSTGRE DRIVER"/>
