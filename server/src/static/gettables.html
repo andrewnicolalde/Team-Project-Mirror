@@ -5,15 +5,21 @@
     <title>Get Tables</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
+        // Run this script when the page loads. (Can be on a button press etc.)
         $(document).ready(function () {
             // Send a request to get the tables
-           $.get("/api/tables", function(data) {
-               //Callback function
-
+           $.post("/api/tables",
+               // Post data to send (Will later confirm what you need to send)
+               JSON.stringify({
+                   sessionkey: 1234,
+                   transactionkey: 5678
+               }),
+               // Callback function
+               function(data) {
                // Parse the json into objects
                var response = JSON.parse(data);
 
-               // Loop through response and append items to a list (Or do what ever you like to them
+               // Loop through response and append items to a list (Or do what ever you like to them)
                for (i = 0; i < response.length; i++) {
                    $("#tables_list").append("<li>" + response[i].number + ": " + response[i].status + "</li>");
                }
