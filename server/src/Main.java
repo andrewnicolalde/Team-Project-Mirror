@@ -2,8 +2,10 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
+
 import endpoints.authentication.Authentication;
 import endpoints.customer.Menu;
+
 
 public class Main {
   /**
@@ -12,6 +14,9 @@ public class Main {
    */
   public static void main(String[] args) {
     staticFileLocation("static"); // Lets spark know where the static files are
+
+    int port = Integer.parseInt(System.getenv("PORT"));
+    port(port);
 
     // End points
     get("/api/menu", (req, res) -> Menu.getMenu());

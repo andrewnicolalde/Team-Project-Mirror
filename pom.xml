@@ -9,6 +9,18 @@
         <sourceDirectory>server/src</sourceDirectory>
         <plugins>
             <plugin>
+                <groupId>com.heroku.sdk</groupId>
+                <artifactId>heroku-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <configuration>
+                    <buildpacks>
+                        <buildpack>heroku/exec</buildpack>
+                        <buildpack>heroku/metrics</buildpack>
+                        <buildpack>heroku/jvm</buildpack>
+                    </buildpacks>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
                 <configuration>
@@ -33,7 +45,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>Main</mainClass>
+                            <mainClass>server.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -75,6 +87,11 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.8.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.21</version>
         </dependency>
     </dependencies>
 </project>
