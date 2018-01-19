@@ -16,8 +16,8 @@ import org.hibernate.annotations.GenericGenerator;
  * @author Andrew Nicolalde
  */
 @Entity
-@Table(name = "ORDER")
-public class Order {
+@Table(name = "FOODORDER")
+public class FoodOrder {
 
   /**
    * This field stores the orderId as a long.
@@ -56,7 +56,7 @@ public class Order {
    * @param transactionId This field is a type Long foreign key referencing the
    *                      transactionId of Transaction.
    */
-  public Order(Long orderId, String status, Timestamp timeConfirmed, Long transactionId) {
+  public FoodOrder(Long orderId, String status, Timestamp timeConfirmed, Long transactionId) {
     this.orderId = orderId;
     this.status = status;
     this.timeConfirmed = timeConfirmed;
@@ -66,7 +66,7 @@ public class Order {
   /**
    * IntelliJ said I had to have this.
    */
-  public Order() {
+  public FoodOrder() {
   }
 
   public Long getOrderId() {

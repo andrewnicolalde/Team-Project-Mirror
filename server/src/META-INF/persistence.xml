@@ -12,7 +12,7 @@
 
     <class>database.Staff</class>
     <class>database.Transaction</class>
-    <class>database.Order</class>
+    <class>database.FoodOrder</class>
 
     <properties>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
