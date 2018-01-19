@@ -15,10 +15,13 @@
     <class>database.FoodOrder</class>
 
     <properties>
-      <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://ec2-107-21-236-219.compute-1.amazonaws.com:5432/dbt8khcujqvcvb?sslmode=require"/>
-      <property name="javax.persistence.jdbc.user" value="pasbcflrolrqzx"/>
-      <property name="javax.persistence.jdbc.password" value="015c8faff904624b4ee0e200acd4f8a54c1752752dd3cd5a4e5b2adbdbd417fb"/>
+        <property name="hibernate.archive.autodetection" value="class" />
+        <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect" />
+        <property name="hibernate.connection.driver_class" value="org.postgresql.Driver" />
+        <property name="hibernate.connection.url" value="jdbc:postgresql://cs2810a.cikqu0q5fvi4.eu-west-2.rds.amazonaws.com:5432/arms" />
+        <property name="hibernate.connection.username" value="auberixli" />
+        <property name="hibernate.connection.password" value="c6si4jTVUwYneW4WdNjArQGoIZlnzt4u57akF6EsYeXPturegl8lB7IVMaLxrgsACZIQLbxC" />
+        <property name="hibernate.flushMode" value="FLUSH_AUTO" />
 
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.hbm2ddl.auto" value="create"/>
