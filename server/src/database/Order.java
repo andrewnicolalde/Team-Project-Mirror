@@ -63,6 +63,12 @@ public class Order {
     this.transactionId = transactionId;
   }
 
+  /**
+   * IntelliJ said I had to have this.
+   */
+  public Order() {
+  }
+
   public Long getOrderId() {
     return this.orderId;
   }
