@@ -1,5 +1,6 @@
 package database;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -33,6 +34,9 @@ public class Session {
   @JoinColumn(name = "tableId", nullable = false)
   private RestaurantTable restaurantTable;
 
+  @Column(name = "isActive")
+  private boolean isActive;
+
   /**
    * Empty Constructor used by hibernate.
    */
@@ -45,11 +49,13 @@ public class Session {
    * @param sessionId The random hash for the session.
    * @param staff The staff member responsible for the session.
    * @param tableId The table in the session.
+   * @param isActive If the session is currently active.
    */
-  public Session(String sessionId, Staff staff, RestaurantTable tableId) {
+  public Session(String sessionId, Staff staff, RestaurantTable tableId, boolean isActive) {
     this.sessionId = sessionId;
     this.staff = staff;
     this.restaurantTable = tableId;
+    this.isActive = isActive;
   }
 
   public String getSessionId() {
@@ -74,5 +80,13 @@ public class Session {
 
   public void setRestaurantTable(RestaurantTable restaurantTable) {
     this.restaurantTable = restaurantTable;
+  }
+
+  public boolean isActive() {
+    return isActive;
+  }
+
+  public void setActive(boolean active) {
+    isActive = active;
   }
 }

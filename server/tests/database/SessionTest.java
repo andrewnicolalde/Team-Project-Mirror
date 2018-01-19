@@ -57,7 +57,7 @@ public class SessionTest {
     //Create new session.
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    entityManager.persist(new Session("Random Hash", tempStaff, table));
+    entityManager.persist(new Session("Random Hash", tempStaff, table, true));
     entityManager.getTransaction().commit();
     entityManager.close();
 
@@ -72,6 +72,7 @@ public class SessionTest {
       assertEquals("Check sessionId", "Random Hash", session.getSessionId());
       assertEquals("Check staffId", tempStaff.getEmployeeNumber(), session.getStaff().getEmployeeNumber());
       assertEquals("Check tableId", table.getTableId(), session.getRestaurantTable().getTableId());
+      assertEquals("Check isActive", true, session.isActive());
     }
 
     entityManager.getTransaction().commit();
