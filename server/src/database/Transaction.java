@@ -1,9 +1,12 @@
 package database;
 
-import org.hibernate.annotations.GenericGenerator;
+import java.sql.*;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.*;
 
 /**
  * This class is for the Transaction Table in the database.
@@ -58,18 +61,21 @@ public class Transaction {
   private Long franchiseId;
 
   /**
-   * This constructor allows us to create Transactions
+   * This constructor allows us to create Transactions.
    *
    * @param transactionId This field stores the transaction id as a Long.
-   * @param isPaid This field stores the paid status of the order as a Boolean.
-   * @param sessionId This field is a type Long foreign key referencing the sessionId of a Session.
-   * @param total This field stores the combined price of every Menu_Item in every order
-   *              belonging to this transaction.
-   * @param datetimePaid This field stores the precise time at which a database.Transaction was paid for
+   * @param isPaid        This field stores the paid status of the order as a Boolean.
+   * @param sessionId     This field is a type Long foreign key referencing the sessionId
+   *                      of a Session.
+   * @param total         This field stores the combined price of every Menu_Item in every order
+   *                      belonging to this transaction.
+   * @param datetimePaid  This field stores the precise time at which a Transaction was paid for
    *                      as a <code>java.sql.Timestamp</code>
-   * @param franchiseId This is a type Long foreign key referencing the franchiseId of a Franchise.
+   * @param franchiseId   This is a type Long foreign key referencing the
+   *                      franchiseId of a Franchise.
    */
-  public Transaction(Long transactionId, Boolean isPaid, Long sessionId, Double total, Timestamp datetimePaid, Long franchiseId){
+  public Transaction(Long transactionId, Boolean isPaid, Long sessionId, Double total,
+                     Timestamp datetimePaid, Long franchiseId) {
     this.transactionId = transactionId;
     this.isPaid = isPaid;
     this.sessionId = sessionId;
@@ -78,19 +84,25 @@ public class Transaction {
     this.franchiseId = franchiseId;
   }
 
-  public Long getTransactionId(){
+  /**
+   * IntelliJ said I had to have this.
+   */
+  public Transaction() {
+  }
+
+  public Long getTransactionId() {
     return this.transactionId;
   }
 
-  public void setTransactionId(Long transactionId){
+  public void setTransactionId(Long transactionId) {
     this.transactionId = transactionId;
   }
 
-  public Boolean getIsPaid(){
+  public Boolean getIsPaid() {
     return this.isPaid;
   }
 
-  public void setIsPaid(Boolean isPaid){
+  public void setIsPaid(Boolean isPaid) {
     this.isPaid = isPaid;
   }
 
@@ -98,7 +110,7 @@ public class Transaction {
     return sessionId;
   }
 
-  public void setSessionId(Long sessionId){
+  public void setSessionId(Long sessionId) {
     this.sessionId = sessionId;
   }
 
@@ -106,7 +118,7 @@ public class Transaction {
     return total;
   }
 
-  public void setTotal(Double total){
+  public void setTotal(Double total) {
     this.total = total;
   }
 
@@ -114,7 +126,7 @@ public class Transaction {
     return datetimePaid;
   }
 
-  public void setDatetimePaid(Timestamp datetimePaid){
+  public void setDatetimePaid(Timestamp datetimePaid) {
     this.datetimePaid = datetimePaid;
   }
 
@@ -122,7 +134,7 @@ public class Transaction {
     return franchiseId;
   }
 
-  public void setFranchiseId(Long franchiseId){
+  public void setFranchiseId(Long franchiseId) {
     this.franchiseId = franchiseId;
   }
 
