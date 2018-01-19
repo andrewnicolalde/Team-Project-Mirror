@@ -12,10 +12,10 @@
     <class>database.Transaction</class>
 
     <properties>
-      <property name="javax.persistence.jdbc.driver" value="POSTGRE DRIVER"/>
-      <property name="javax.persistence.jdbc.url" value="jdbc:"/>
-      <property name="javax.persistence.jdbc.user" value=""/>
-      <property name="javax.persistence.jdbc.password" value=""/>
+      <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:postgres://pasbcflrolrqzx:015c8faff904624b4ee0e200acd4f8a54c1752752dd3cd5a4e5b2adbdbd417fb@ec2-107-21-236-219.compute-1.amazonaws.com:5432/dbt8khcujqvcvb"/>
+      <property name="javax.persistence.jdbc.user" value="pasbcflrolrqzx"/>
+      <property name="javax.persistence.jdbc.password" value="015c8faff904624b4ee0e200acd4f8a54c1752752dd3cd5a4e5b2adbdbd417fb"/>
 
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.hbm2ddl.auto" value="create"/>
