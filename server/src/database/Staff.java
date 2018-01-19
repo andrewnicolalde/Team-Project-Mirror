@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * This class maps this class the the Staff table in the database.
+ * This class maps to the Staff table in the database.
  * 
  * @author Marcus Messer
  */
