@@ -1,10 +1,7 @@
-import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.staticFileLocation;
-
-
 import endpoints.authentication.Authentication;
 import endpoints.customer.Menu;
+
+import static spark.Spark.*;
 
 
 public class Main {
