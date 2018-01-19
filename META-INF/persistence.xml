@@ -5,7 +5,7 @@
 
   <persistence-unit name="server.database">
     <description>
-      Persistence unit for ARMS Hibernate JPA
+      Persistence unit for ARMS Hibernate JPA.
     </description>
 
     <class>database.Staff</class>
