@@ -1,0 +1,77 @@
+package database;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
+
+/**
+ * This class maps this class the the Staff table in the database.
+ * 
+ * @author Marcus Messer
+ */
+@Entity
+@Table(name = "STAFF")
+public class Staff {
+
+  /**
+   * This filed stores the employee number. It is an auto generated incremented number.
+   */
+  @Id
+  @GeneratedValue(generator = "increment")
+  @GenericGenerator(name = "increment", strategy = "increment")
+  private Long employeeNumber;
+  /**
+   * This field stores the password for the employee.
+   */
+  @Column(name = "password")
+  private String password;
+  /**
+   * This field stores the department the employee belongs too.
+   */
+  @Column(name = "department")
+  private String department;
+
+  /**
+   * This empty constructor is used by hibernate.
+   */
+  public Staff() {
+    //Empty Body
+  }
+
+  /**
+   * This constructor allows us to create new employees.
+   * @param password The new employees password.
+   * @param department The new employees department.
+   */
+  public Staff(String password, String department) {
+    this.password = password;
+    this.department = department;
+  }
+
+  public Long getEmployeeNumber() {
+    return employeeNumber;
+  }
+
+  public void setEmployeeNumber(Long employeeNumber) {
+    this.employeeNumber = employeeNumber;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public String getDepartment() {
+    return department;
+  }
+
+  public void setDepartment(String department) {
+    this.department = department;
+  }
+}
