@@ -9,7 +9,7 @@ $(document).ready(function () {
     // Loop through response and append items to a list (Or do what ever you like to them
     for (i = 0; i < response.length; i++) {
       console.log(i);
-      $("#tables-list").append("<li class='list-group-item'>" + response[i].number + ": " + response[i].status + "</li>");
+      $("#tables-list").append("<li class='list-group-item'><span class='table-card-name'>Table " + response[i].number + ":</span> " + response[i].status + "</li>");
     }
   });
 });
