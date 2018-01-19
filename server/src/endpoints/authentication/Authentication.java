@@ -1,5 +1,6 @@
 package endpoints.authentication;
 
+import authentication.EmployeeAuthenticator;
 import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
@@ -13,10 +14,10 @@ public class Authentication {
 
   /**
    * Checks if the username and password combination is valid and returns a session key of they are.
-   * @param authenticationParameters An object holding the username and password combination
+   * @param employeeAuthenticationParameters An object holding the username and password combination
    * @return A session key as a string, or null if the username/password combination is invalid.
    */
-  static String authenticate(AuthenticationParameters authenticationParameters) {
+  static String authenticate(EmployeeAuthenticationParameters employeeAuthenticationParameters) {
     return "498379438759384";
   }
 
@@ -26,21 +27,20 @@ public class Authentication {
    * @param response The response to give.
    * @return The a JSON response showing whether is was successful and if so, the session key.
    */
-  public static String logInUser(Request request, Response response) {
+  public static String logInEmployee(Request request, Response response, EmployeeAuthenticator em) {
     // Convert the data from the client into an object
-    AuthenticationParameters ap = GSON.fromJson(request.body(), AuthenticationParameters.class);
+    EmployeeAuthenticationParameters ap = GSON.fromJson(request.body(),
+            EmployeeAuthenticationParameters.class);
 
-    // Authenticate the username/password combo
-    String sessionkey = authenticate(ap);
+    //em.authenticateEmployee(ap.getEmployeeNumber(), ap.getPassword());
+
+    // TODO: Save the session key in the current session
 
     // Generate response to send to the user.
-    if (sessionkey == null) {
-      return "{\"validlogin\":false,\"sessionkey\":null}";
+    if (true) { //(sessionkey == null) {
+      return "{\"validlogin\":false,\"redirection\":null}";
     } else {
-      return "{\"validlogin\":true,\"sessionkey\":\"" + sessionkey + "\"}";
-      //FIXME: Do we really need validlogin and session key? (just check if sessionkey is null)
-      //FIXME: Should sessionkey be a cookie instead?
-      //TODO: Add in some meta data so it knows whether to redirect to waiter or kitchen portal
+      return "{\"validlogin\":true,\"redirection\":\"/\"}";
     }
   }
 }

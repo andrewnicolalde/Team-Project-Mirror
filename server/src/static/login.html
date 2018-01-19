@@ -13,11 +13,9 @@
                        password: $("#password").val()
                     }),
                 function(data) {
-                    console.log(data);
                     var response = JSON.parse(data);
-                    console.log("Valid Login: " + response.validlogin + "\nSession key: " + response.sessionkey);
                     if (response.validlogin === true) {
-                        window.location.replace("/");
+                        window.location.replace(response.redirection);
                     } else {
                         $("#errormessage").text("Incorrect username/password combination!");
                     }
