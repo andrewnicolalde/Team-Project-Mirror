@@ -16,33 +16,43 @@ public class StaffTest {
 
   @Before
   public void setUp() {
+    //Create link to the database
     entityManagerFactory = Persistence.createEntityManagerFactory("server.database");
   }
 
   @After
   public void tearDown() {
+    //Close link to the database
     entityManagerFactory.close();
   }
 
   @Test
   public void addUserTest() {
+    //Connect to the database
     EntityManager entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
+    //Add a new staff member to the database
     entityManager.persist(new Staff("Password", "Waiter"));
     entityManager.getTransaction().commit();
+    //Close the connection to the database
     entityManager.close();
 
+    //Open a new connection to the database
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
 
+    //Gets the list of staff members
     List<Staff> result = entityManager.createQuery("from Staff", Staff.class).getResultList();
 
+    //Check if the new staff member is created correctly
     for (Staff staff : result) {
       assertEquals("New Staff Member Password = Query Result", "Password",
           staff.getPassword());
       assertEquals("New Staff Member Department = Query Result", "Waiter",
           staff.getDepartment());
     }
+
+    //Close connection to the server
     entityManager.getTransaction().commit();
     entityManager.close();
   }
