@@ -4,6 +4,7 @@ import static spark.Spark.staticFileLocation;
 
 import endpoints.authentication.Authentication;
 import endpoints.customer.Menu;
+import endpoints.waiter.Tables;
 
 public class Main {
   /**
@@ -15,6 +16,7 @@ public class Main {
 
     // End points
     get("/api/menu", (req, res) -> Menu.getMenu());
+    get("/api/tables", Tables::getTables);
     post("/api/login", Authentication::logInUser);
 
     System.out.println("Visit: http://localhost:4567");
