@@ -27,35 +27,39 @@ public class RestaurantTableTest {
   }
 
   @Test
-  public void tableTest() {
+  public void createTableTest() {
+    EntityManager entityManager;
 
-    //Connect to the database
-    EntityManager entityManager = entityManagerFactory.createEntityManager();
+    //Create new franchise for the purpose of this test.
+    entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    //Add a new staff member to the database
-    entityManager.persist(new RestaurantTable(TableStatus.FREE, 1,
-        new Franchise("London", "1 London Way", "0123456789")));
+    Franchise franchise = new Franchise("London", "1 London Way", "0123456789");
+    entityManager.persist(franchise);
     entityManager.getTransaction().commit();
-    //Close the connection to the database
     entityManager.close();
 
-    //Open a new connection to the database
+    //Create new table.
+    entityManager = entityManagerFactory.createEntityManager();
+    entityManager.getTransaction().begin();
+    entityManager.persist(new RestaurantTable(TableStatus.FREE, 1, franchise));
+    entityManager.getTransaction().commit();
+    entityManager.close();
+
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
 
-    //Gets the list of staff members
+    //Get the tables from the database.
     List<RestaurantTable> result = entityManager.createQuery("from RestaurantTable ",
         RestaurantTable.class).getResultList();
 
-    //Check if the new staff member is created correctly
     for (RestaurantTable restaurantTable : result) {
       assertEquals("Check table status", TableStatus.FREE, restaurantTable.getStatus());
       assertEquals("Check table number", 1, restaurantTable.getTableNumber());
-      assertEquals("Check franchise", new Franchise("London", "1 London Way",
-          "0123456789"), restaurantTable.getFranchise());
+      assertEquals("Check franchise", franchise.getFranchiseId(),
+          restaurantTable.getFranchise().getFranchiseId());
     }
 
-    //Close connection to the server
+
     entityManager.getTransaction().commit();
     entityManager.close();
   }
