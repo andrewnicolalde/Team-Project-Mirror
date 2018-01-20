@@ -33,11 +33,11 @@ public class Transaction {
   private Boolean isPaid;
 
   /**
-   * This field is a type Long foreign key referencing the sessionId of
-   * a Session.
+   * This field stores a reference to the session the transaction took place on.
    */
-  @Column(name = "sessionId")
-  private Long sessionId;
+  @ManyToOne
+  @JoinColumn(name = "sessionId", nullable = false)
+  private Session session;
 
   /**
    * This field stores the combined price of every Menu_Item in every order
@@ -54,38 +54,27 @@ public class Transaction {
   private Timestamp datetimePaid;
 
   /**
-   * This is a type Long foreign key referencing the franchiseId of a
-   * Franchise.
-   */
-  @Column(name = "franchiseId")
-  private Long franchiseId;
-
-  /**
    * This constructor allows us to create Transactions.
    *
    * @param transactionId This field stores the transaction id as a Long.
    * @param isPaid        This field stores the paid status of the order as a Boolean.
-   * @param sessionId     This field is a type Long foreign key referencing the sessionId
-   *                      of a Session.
+   * @param session       This field stores a reference to the session the transaction took place on
    * @param total         This field stores the combined price of every Menu_Item in every order
    *                      belonging to this transaction.
    * @param datetimePaid  This field stores the precise time at which a Transaction was paid for
    *                      as a <code>java.sql.Timestamp</code>
-   * @param franchiseId   This is a type Long foreign key referencing the
-   *                      franchiseId of a Franchise.
    */
-  public Transaction(Long transactionId, Boolean isPaid, Long sessionId, Double total,
-                     Timestamp datetimePaid, Long franchiseId) {
+  public Transaction(Long transactionId, Boolean isPaid, Session session, Double total,
+                     Timestamp datetimePaid) {
     this.transactionId = transactionId;
     this.isPaid = isPaid;
-    this.sessionId = sessionId;
+    this.session = session;
     this.total = total;
     this.datetimePaid = datetimePaid;
-    this.franchiseId = franchiseId;
   }
 
   /**
-   * IntelliJ said I had to have this.
+   * Blank constructor for Hibernate ORM
    */
   public Transaction() {
   }
@@ -106,12 +95,12 @@ public class Transaction {
     this.isPaid = isPaid;
   }
 
-  public Long getSessionId() {
-    return sessionId;
+  public Session getSession() {
+    return session;
   }
 
-  public void setSessionId(Long sessionId) {
-    this.sessionId = sessionId;
+  public void setSession(Session session) {
+    this.session = session;
   }
 
   public Double getTotal() {
@@ -129,13 +118,4 @@ public class Transaction {
   public void setDatetimePaid(Timestamp datetimePaid) {
     this.datetimePaid = datetimePaid;
   }
-
-  public Long getFranchiseId() {
-    return franchiseId;
-  }
-
-  public void setFranchiseId(Long franchiseId) {
-    this.franchiseId = franchiseId;
-  }
-
 }
