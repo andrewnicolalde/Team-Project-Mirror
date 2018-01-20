@@ -16,7 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "STAFF")
-public class Staff {
+public class Staff implements DatabaseTable {
 
   /**
    * This filed stores the employee number. It is an auto generated incremented number.
