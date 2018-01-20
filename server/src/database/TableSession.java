@@ -14,19 +14,13 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "SESSION")
-public class Session {
+public class TableSession {
 
   /**
    * This field is the session id, it is a random hash produced by the server and not the database.
    */
   @Id
-  private String sessionId;
-  /**
-   * This field sets the relationship with the <code>Staff</code> table.
-   */
-  @ManyToOne
-  @JoinColumn(name = "employeeNumber", nullable = false)
-  private Staff staff;
+  private String tableSessionId;
   /**
    * This field sets the relationship with the <code>RestaurantTable</code> table.
    */
@@ -34,44 +28,29 @@ public class Session {
   @JoinColumn(name = "tableId", nullable = false)
   private RestaurantTable restaurantTable;
 
-  @Column(name = "isActive")
-  private boolean isActive;
-
   /**
    * Empty Constructor used by hibernate.
    */
-  public Session() {
+  public TableSession() {
     //Empty Body
   }
 
   /**
    * This constructor is used to create new sessions.
-   * @param sessionId The random hash for the session.
-   * @param staff The staff member responsible for the session.
+   * @param tableSessionId The random hash for the session.
    * @param tableId The table in the session.
-   * @param isActive If the session is currently active.
    */
-  public Session(String sessionId, Staff staff, RestaurantTable tableId, boolean isActive) {
-    this.sessionId = sessionId;
-    this.staff = staff;
+  public TableSession(String tableSessionId, RestaurantTable tableId) {
+    this.tableSessionId = tableSessionId;
     this.restaurantTable = tableId;
-    this.isActive = isActive;
   }
 
-  public String getSessionId() {
-    return sessionId;
+  public String getTableSessionId() {
+    return tableSessionId;
   }
 
-  public void setSessionId(String sessionId) {
-    this.sessionId = sessionId;
-  }
-
-  public Staff getStaff() {
-    return staff;
-  }
-
-  public void setStaff(Staff staff) {
-    this.staff = staff;
+  public void setTableSessionId(String sessionId) {
+    this.tableSessionId = sessionId;
   }
 
   public RestaurantTable getRestaurantTable() {
@@ -80,13 +59,5 @@ public class Session {
 
   public void setRestaurantTable(RestaurantTable restaurantTable) {
     this.restaurantTable = restaurantTable;
-  }
-
-  public boolean isActive() {
-    return isActive;
-  }
-
-  public void setActive(boolean active) {
-    isActive = active;
   }
 }

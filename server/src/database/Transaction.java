@@ -34,7 +34,7 @@ public class Transaction {
 
   /**
    * This field is a type Long foreign key referencing the sessionId of
-   * a Session.
+   * a TableSession.
    */
   @Column(name = "sessionId")
   private Long sessionId;
@@ -66,7 +66,7 @@ public class Transaction {
    * @param transactionId This field stores the transaction id as a Long.
    * @param isPaid        This field stores the paid status of the order as a Boolean.
    * @param sessionId     This field is a type Long foreign key referencing the sessionId
-   *                      of a Session.
+   *                      of a TableSession.
    * @param total         This field stores the combined price of every Menu_Item in every order
    *                      belonging to this transaction.
    * @param datetimePaid  This field stores the precise time at which a Transaction was paid for
