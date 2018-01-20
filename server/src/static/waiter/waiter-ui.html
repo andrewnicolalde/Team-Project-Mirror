@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/tableretrieve.js"></script>
     <meta charset="UTF-8">
     <title>Waiter UI</title>
 </head>
@@ -12,11 +15,8 @@
         <!-- The waiter clicks the table to see the current order & add/subtract items & confirm -->
         <div class="col-sm">
             Tables
-            <ul class="list-group">
-                <li class="list-group-item">Table 1</li>
-                <li class="list-group-item">Table 3</li>
-                <li class="list-group-item">Table 3</li>
-                <!-- TODO: Tables appear dynamically depending on the specific restauraunt. -->
+            <ul class="list-group" id="tables-list">
+              <!-- Loaded dynamically via jQuery script -->
             </ul>
         </div>
         <div class="col-sm">

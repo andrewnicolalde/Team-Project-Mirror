@@ -72,27 +72,7 @@ header a:hover{
     color: #ffffff;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*waiter-ui.html Tables column*/
+.table-card-name{
+    font-weight: bold;
+}
