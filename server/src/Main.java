@@ -20,6 +20,7 @@ public class Main {
     get("/api/tables", Tables::getTables);
     post("/api/login", Authentication::logInUser);
     post("/api/order", Orders::getOrder);
+    post("/api/addToOrder", Orders::addOrderMenuItem);
 
     System.out.println("Visit: http://localhost:4567");
   }

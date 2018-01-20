@@ -26,6 +26,22 @@
            function(data) {
                console.log(data);
            });
+
+           $.post("/api/addToOrder",
+           JSON.stringify({
+               tableNumber: 1,
+               menuItemId: 1
+           }),
+           function(data) {
+               if (data === "success") {
+                   // Add the item to the order on screen
+                   console.log("Success!");
+               } else {
+                   // Display some error to the user
+                   // Print some debug info to the console.
+                   console.log("Something went wrong! :(");
+               }
+           });
         });
     </script>
 </head>
