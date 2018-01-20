@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -35,6 +37,13 @@ public class Staff {
   private String department;
 
   /**
+   * This field store which franchise the employee belongs too.
+   */
+  @ManyToOne
+  @JoinColumn(name = "franchiseId", nullable = false)
+  private Franchise franchise;
+
+  /**
    * This empty constructor is used by hibernate.
    */
   public Staff() {
@@ -45,10 +54,12 @@ public class Staff {
    * This constructor allows us to create new employees.
    * @param password The new employees password.
    * @param department The new employees department.
+   * @param franchise The store the employee belongs too.
    */
-  public Staff(String password, String department) {
+  public Staff(String password, String department, Franchise franchise) {
     this.password = password;
     this.department = department;
+    this.franchise = franchise;
   }
 
   public Long getEmployeeNumber() {
@@ -73,5 +84,13 @@ public class Staff {
 
   public void setDepartment(String department) {
     this.department = department;
+  }
+
+  public Franchise getFranchise() {
+    return franchise;
+  }
+
+  public void setFranchise(Franchise franchise) {
+    this.franchise = franchise;
   }
 }
