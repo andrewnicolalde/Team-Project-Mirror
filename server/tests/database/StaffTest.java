@@ -42,7 +42,7 @@ public class StaffTest {
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
     //Add a new staff member to the database
-    entityManager.persist(new Staff("Password", "Waiter", franchise));
+    entityManager.persist(new Staff("Password", "RestaurantTableStaff", franchise));
     entityManager.getTransaction().commit();
     //Close the connection to the database
     entityManager.close();
@@ -58,7 +58,7 @@ public class StaffTest {
     for (Staff staff : result) {
       assertEquals("New Staff Member Password = Query Result", "Password",
           staff.getPassword());
-      assertEquals("New Staff Member Department = Query Result", "Waiter",
+      assertEquals("New Staff Member Department = Query Result", "RestaurantTableStaff",
           staff.getDepartment());
       assertEquals("Check franchise Id", franchise.getFranchiseId(),
           staff.getFranchise().getFranchiseId());

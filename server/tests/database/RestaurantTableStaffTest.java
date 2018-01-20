@@ -10,7 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class StaffSessionTest {
+public class RestaurantTableStaffTest {
 
   private EntityManagerFactory entityManagerFactory;
 
@@ -27,45 +27,53 @@ public class StaffSessionTest {
   }
 
   @Test
-  public void createStaffSessionTest() {
+  public void createRestaurantTableStaffTest() {
 
     EntityManager entityManager;
-    //Create new Franchise
+    //Create new franchise
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
     Franchise franchise = new Franchise("London", "1 London Way",
-        "012346789");
+        "0123465789");
     entityManager.persist(franchise);
     entityManager.getTransaction().commit();
     entityManager.close();
 
-    //Create new Staff member
+    //Create new table
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    Staff staff = new Staff("Password", "RestaurantTableStaff", franchise);
+    RestaurantTable restaurantTable = new RestaurantTable(TableStatus.FREE, 1, franchise);
+    entityManager.persist(restaurantTable);
+    entityManager.getTransaction().commit();
+    entityManager.close();
+
+    //Create new Staff
+    entityManager = entityManagerFactory.createEntityManager();
+    entityManager.getTransaction().begin();
+    Staff staff = new Staff("Password", "Waiter", franchise);
     entityManager.persist(staff);
     entityManager.getTransaction().commit();
     entityManager.close();
 
-    //Create new StaffSession
+    //Create new RestaurantTableStaff
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    entityManager.persist(new StaffSession("Random Hash", staff));
+    entityManager.persist(new RestaurantTableStaff(staff, restaurantTable));
     entityManager.getTransaction().commit();
     entityManager.close();
 
-    //Get StaffSession from database.
+    //Get RestaurantTableStaff from database.
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
 
-    List<StaffSession> result = entityManager.createQuery("from StaffSession ",
-        StaffSession.class).getResultList();
+    List<RestaurantTableStaff> result = entityManager.createQuery("from RestaurantTableStaff ",
+        RestaurantTableStaff.class).getResultList();
 
-    for (StaffSession staffSession : result) {
-      assertEquals("Check sessionID", "Random Hash",
-          staffSession.getStaffSessionId());
-      assertEquals("Check staff Id", staff.getEmployeeNumber(),
-          staffSession.getStaff().getEmployeeNumber());
+    for (RestaurantTableStaff restaurantTableStaff : result) {
+      assertEquals("Check staff member", staff.getEmployeeNumber(),
+          restaurantTableStaff.getStaff().getEmployeeNumber());
+      assertEquals("Check table", restaurantTable.getTableId(),
+          restaurantTableStaff.getRestaurantTable().getTableId());
     }
 
     entityManager.getTransaction().commit();
