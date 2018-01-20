@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class EmployeeAuthenticatorTest {
@@ -27,7 +28,6 @@ public class EmployeeAuthenticatorTest {
   @After
   public void after() {
     ea.close();
-    em.close();
   }
 
   @Test
@@ -41,5 +41,18 @@ public class EmployeeAuthenticatorTest {
     em.close();
 
     assertTrue("Asserts the EmployeeAuthenticator returns true on a correct password", ea.checkCredentials(newStaff.getEmployeeNumber(), "pa55w0rd"));
+  }
+
+  @Test
+  public void checkInvalidPasswordTest() {
+    // Connect to database
+    em.getTransaction().begin();
+    // Create new staff member
+    Staff newStaff = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), "Waiter");
+    em.persist(newStaff);
+    em.getTransaction().commit();
+    em.close();
+
+    assertFalse("Asserts the EmployeeAuthenticator returns true on a correct password", ea.checkCredentials(newStaff.getEmployeeNumber(), "NotTheRightPassword"));
   }
 }
