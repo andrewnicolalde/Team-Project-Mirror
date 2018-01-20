@@ -19,15 +19,6 @@ public class Connector {
   private Connector() {
   }
 
-  public void createItem(DatabaseTable databaseTable) {
-    entityManager = entityManagerFactory.createEntityManager();
-    entityManager.getTransaction().begin();
-    entityManager.persist(databaseTable);
-    entityManager.getTransaction().commit();
-    entityManager.close();
-  }
-
-
   public void createConnection() {
     entityManagerFactory = Persistence.createEntityManagerFactory("server.database");
   }
@@ -36,12 +27,27 @@ public class Connector {
     entityManagerFactory.close();
   }
 
+  public void createItem(DatabaseTable databaseTable) {
+    connectEntityManager();
+    entityManager.persist(databaseTable);
+    closeEntityManger();
+  }
+
   public List<DatabaseTable> query(String query, Class<?> table) {
+    connectEntityManager();
+    List<DatabaseTable> temp = (List<DatabaseTable>) entityManager.createQuery(query, table)
+        .getResultList();
+    closeEntityManger();
+    return temp;
+  }
+
+  private void connectEntityManager() {
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    List<DatabaseTable> temp = (List<DatabaseTable>) entityManager.createQuery(query, table).getResultList();
+  }
+
+  private void closeEntityManger() {
     entityManager.getTransaction().commit();
     entityManager.close();
-    return temp;
   }
 }
