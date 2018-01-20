@@ -21,6 +21,7 @@ public class Main {
     post("/api/login", Authentication::logInUser);
     post("/api/order", Orders::getOrder);
     post("/api/addToOrder", Orders::addOrderMenuItem);
+    post("/api/changeOrderStatus", Orders::changeOrderStatus);
 
     System.out.println("Visit: http://localhost:4567");
   }

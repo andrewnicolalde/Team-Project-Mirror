@@ -26,4 +26,9 @@ public class Orders {
     OrderMenuItemParameters omi = GSON.fromJson(request.body(), OrderMenuItemParameters.class);
     return "success";
   }
+
+  public static String changeOrderStatus(Request request, Response response) {
+    ChangeOrderStatusParameters cos = GSON.fromJson(request.body(), ChangeOrderStatusParameters.class);
+    return "success";
+  }
 }

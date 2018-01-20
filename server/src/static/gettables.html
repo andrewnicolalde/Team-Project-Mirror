@@ -42,6 +42,22 @@
                    console.log("Something went wrong! :(");
                }
            });
+
+            $.post("/api/changeOrderStatus",
+                JSON.stringify({
+                    tableNumber: 1,
+                    newOrderStatus: "cooking"
+                }),
+                function(data) {
+                    if (data === "success") {
+                        // Change status on the client
+                        console.log("Success!");
+                    } else {
+                        // Display some error to the user
+                        // Print some debug info to the console.
+                        console.log("Something went wrong! :(");
+                    }
+                });
         });
     </script>
 </head>
