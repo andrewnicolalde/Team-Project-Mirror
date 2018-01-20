@@ -50,7 +50,7 @@ public class RestaurantTableStaffTest {
     //Create new Staff
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    Staff staff = new Staff("Password", "Waiter", franchise);
+    Staff staff = new Staff("Password", Department.WAITER, franchise);
     entityManager.persist(staff);
     entityManager.getTransaction().commit();
     entityManager.close();

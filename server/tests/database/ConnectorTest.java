@@ -82,7 +82,7 @@ public class ConnectorTest {
 
     connector.createItem(franchise);
 
-    Staff staff = new Staff("Password", "Waiter", franchise);
+    Staff staff = new Staff("Password", Department.WAITER, franchise);
     connector.createItem(staff);
 
     EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -110,7 +110,7 @@ public class ConnectorTest {
         "0123456789");
     connector.createItem(franchise);
 
-    Staff staff = new Staff("Password", "Waiter", franchise);
+    Staff staff = new Staff("Password", Department.WAITER, franchise);
     connector.createItem(staff);
 
     List<Staff> result = (List<Staff>)(List<?>)connector.query("from Staff", Staff.class);

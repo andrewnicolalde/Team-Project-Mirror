@@ -42,7 +42,7 @@ public class StaffSessionTest {
     //Create new Staff member
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    Staff staff = new Staff("Password", "RestaurantTableStaff", franchise);
+    Staff staff = new Staff("Password", Department.WAITER, franchise);
     entityManager.persist(staff);
     entityManager.getTransaction().commit();
     entityManager.close();

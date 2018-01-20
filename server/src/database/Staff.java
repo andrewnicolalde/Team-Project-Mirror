@@ -34,7 +34,7 @@ public class Staff implements DatabaseTable {
    * This field stores the department the employee belongs too.
    */
   @Column(name = "department")
-  private String department;
+  private Department department;
 
   /**
    * This field store which franchise the employee belongs too.
@@ -57,7 +57,7 @@ public class Staff implements DatabaseTable {
    * @param department The new employees department.
    * @param franchise The store the employee belongs too.
    */
-  public Staff(String password, String department, Franchise franchise) {
+  public Staff(String password, Department department, Franchise franchise) {
     this.password = password;
     this.department = department;
     this.franchise = franchise;
@@ -79,11 +79,11 @@ public class Staff implements DatabaseTable {
     this.password = password;
   }
 
-  public String getDepartment() {
+  public Department getDepartment() {
     return department;
   }
 
-  public void setDepartment(String department) {
+  public void setDepartment(Department department) {
     this.department = department;
   }
 
