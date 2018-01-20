@@ -18,6 +18,14 @@
                    $("#tables_list").append("<li>" + response[i].number + ": " + response[i].status + "</li>");
                }
            });
+
+           $.post("/api/order",
+           JSON.stringify({
+               orderNumber: 1
+           }),
+           function(data) {
+               console.log(data);
+           });
         });
     </script>
 </head>
