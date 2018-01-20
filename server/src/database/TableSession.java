@@ -1,6 +1,5 @@
 package database;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -13,7 +12,7 @@ import javax.persistence.Table;
  * @author Marcus Messer
  */
 @Entity
-@Table(name = "SESSION")
+@Table(name = "TABLE_SESSION")
 public class TableSession {
 
   /**
@@ -37,6 +36,7 @@ public class TableSession {
 
   /**
    * This constructor is used to create new sessions.
+   *
    * @param tableSessionId The random hash for the session.
    * @param tableId The table in the session.
    */

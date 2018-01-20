@@ -1,6 +1,7 @@
 package endpoints.authentication;
 
 public class AuthenticationParameters {
+
   private String username;
   private String password;
 

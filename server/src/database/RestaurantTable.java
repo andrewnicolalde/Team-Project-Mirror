@@ -49,6 +49,7 @@ public class RestaurantTable {
 
   /**
    * This constructor is to create new tables in any restaurant.
+   *
    * @param status This is the status table from <code>TableStatus.java</code>.
    * @param tableNumber This is the table number within the restaurant.
    * @param franchise This is the franchise branch that the tables belong to.

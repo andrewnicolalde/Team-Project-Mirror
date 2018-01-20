@@ -11,7 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 /**
  * This class maps to the Staff table in the database.
- * 
+ *
  * @author Marcus Messer
  */
 @Entity
@@ -52,6 +52,7 @@ public class Staff {
 
   /**
    * This constructor allows us to create new employees.
+   *
    * @param password The new employees password.
    * @param department The new employees department.
    * @param franchise The store the employee belongs too.

@@ -59,7 +59,6 @@ public class RestaurantTableTest {
           restaurantTable.getFranchise().getFranchiseId());
     }
 
-
     entityManager.getTransaction().commit();
     entityManager.close();
   }

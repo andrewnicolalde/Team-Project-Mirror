@@ -1,12 +1,12 @@
 package database;
 
-import java.sql.*;
-
-import javax.persistence.*;
+import java.sql.Timestamp;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * This class is for the Transaction Table in the database.
@@ -64,18 +64,18 @@ public class Transaction {
    * This constructor allows us to create Transactions.
    *
    * @param transactionId This field stores the transaction id as a Long.
-   * @param isPaid        This field stores the paid status of the order as a Boolean.
-   * @param sessionId     This field is a type Long foreign key referencing the sessionId
-   *                      of a TableSession.
-   * @param total         This field stores the combined price of every Menu_Item in every order
-   *                      belonging to this transaction.
-   * @param datetimePaid  This field stores the precise time at which a Transaction was paid for
-   *                      as a <code>java.sql.Timestamp</code>
-   * @param franchiseId   This is a type Long foreign key referencing the
-   *                      franchiseId of a Franchise.
+   * @param isPaid This field stores the paid status of the order as a Boolean.
+   * @param sessionId This field is a type Long foreign key referencing the sessionId
+   * of a TableSession.
+   * @param total This field stores the combined price of every Menu_Item in every order
+   * belonging to this transaction.
+   * @param datetimePaid This field stores the precise time at which a Transaction was paid for
+   * as a <code>java.sql.Timestamp</code>
+   * @param franchiseId This is a type Long foreign key referencing the
+   * franchiseId of a Franchise.
    */
   public Transaction(Long transactionId, Boolean isPaid, Long sessionId, Double total,
-                     Timestamp datetimePaid, Long franchiseId) {
+      Timestamp datetimePaid, Long franchiseId) {
     this.transactionId = transactionId;
     this.isPaid = isPaid;
     this.sessionId = sessionId;

@@ -5,6 +5,7 @@ import spark.Request;
 import spark.Response;
 
 public class Authentication {
+
   private static final Gson GSON = new Gson();
 
   static boolean isValidLoginCombination(String username, String password) {
@@ -13,6 +14,7 @@ public class Authentication {
 
   /**
    * Checks if the username and password combination is valid and returns a session key of they are.
+   *
    * @param authenticationParameters An object holding the username and password combination
    * @return A session key as a string, or null if the username/password combination is invalid.
    */
@@ -22,6 +24,7 @@ public class Authentication {
 
   /**
    * Authenticates the log in request, and redirects them if successful.
+   *
    * @param request The HTTP request
    * @param response The response to give.
    * @return The a JSON response showing whether is was successful and if so, the session key.
