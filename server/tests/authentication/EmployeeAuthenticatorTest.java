@@ -53,6 +53,19 @@ public class EmployeeAuthenticatorTest {
     em.getTransaction().commit();
     em.close();
 
-    assertFalse("Asserts the EmployeeAuthenticator returns true on a correct password", ea.checkCredentials(newStaff.getEmployeeNumber(), "NotTheRightPassword"));
+    assertFalse("Asserts the EmployeeAuthenticator returns false on an incorrect password", ea.checkCredentials(newStaff.getEmployeeNumber(), "NotTheRightPassword"));
+  }
+
+  @Test
+  public void checkInvalidEmployeeNumberTest() {
+    // Connect to database
+    em.getTransaction().begin();
+    // Create new staff member
+    Staff newStaff = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), "Waiter");
+    em.persist(newStaff);
+    em.getTransaction().commit();
+    em.close();
+
+    assertFalse("Asserts the EmployeeAuthenticator returns false on an incorrect employee number", ea.checkCredentials(newStaff.getEmployeeNumber()+500, "pa55w0rd"));
   }
 }
