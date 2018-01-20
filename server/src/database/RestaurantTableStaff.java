@@ -15,7 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "RESTURANT_TABLE_STAFF")
-public class RestaurantTableStaff {
+public class RestaurantTableStaff implements DatabaseTable {
 
   /**
    * This field if used to identify rtsId.
