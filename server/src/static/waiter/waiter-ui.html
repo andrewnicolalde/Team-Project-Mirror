@@ -5,11 +5,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="../js/tableretrieve.js"></script>
+    <script type="text/javascript" src="../js/menuretrieve-waiter.js"></script>
     <meta charset="UTF-8">
     <title>Waiter UI</title>
 </head>
 <body>
-<!--3 Columns-->
+<!-- 3 Columns -->
 <div class="container">
     <div class="row">
         <!-- The waiter clicks the table to see the current order & add/subtract items & confirm -->
@@ -21,10 +22,7 @@
         </div>
         <div class="col-sm">
             Menu
-            <ul class="list-group">
-                <li class="list-group-item">Taco</li>
-                <li class="list-group-item">Tortilla Chips</li>
-                <li class="list-group-item">Burrito</li>
+            <ul class="list-group" id="menu-list">
               <!-- TODO: Show pictures of each item. -->
             </ul>
         </div>
@@ -34,6 +32,10 @@
                 <!-- TODO: Items in order appear dynamically. List should be scrollable. -->
             </ul>
         </div>
+    </div>
+    <div class="row">
+        <button type="button" class="btn btn-success">Confirm Order</button>
+        <button type="button" class="btn btn-danger">Cancel Order</button>
     </div>
 </div>
 </body>
