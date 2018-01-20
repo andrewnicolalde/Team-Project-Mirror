@@ -1,13 +1,13 @@
 package endpoints.order;
 
 public class OrderRequestParameters {
-  private Long orderNumber;
+  private Long tableNumber;
 
-  public OrderRequestParameters(Long orderNumber) {
-    this.orderNumber = orderNumber;
+  public OrderRequestParameters(Long tableNumber) {
+    this.tableNumber = tableNumber;
   }
 
-  public Long getOrderNumber() {
-    return orderNumber;
+  public Long getTableNumber() {
+    return tableNumber;
   }
 }
