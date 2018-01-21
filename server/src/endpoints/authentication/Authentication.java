@@ -5,6 +5,7 @@ import spark.Request;
 import spark.Response;
 
 public class Authentication {
+
   private static final Gson GSON = new Gson();
 
   static boolean isValidLoginCombination(String username, String password) {

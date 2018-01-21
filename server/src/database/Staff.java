@@ -4,17 +4,19 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
  * This class maps to the Staff table in the database.
- * 
+ *
  * @author Marcus Messer
  */
 @Entity
 @Table(name = "STAFF")
-public class Staff {
+public class Staff implements DatabaseTable {
 
   /**
    * This filed stores the employee number. It is an auto generated incremented number.
@@ -32,7 +34,14 @@ public class Staff {
    * This field stores the department the employee belongs too.
    */
   @Column(name = "department")
-  private String department;
+  private Department department;
+
+  /**
+   * This field store which franchise the employee belongs too.
+   */
+  @ManyToOne
+  @JoinColumn(name = "franchiseId", nullable = false)
+  private Franchise franchise;
 
   /**
    * This empty constructor is used by hibernate.
@@ -43,12 +52,15 @@ public class Staff {
 
   /**
    * This constructor allows us to create new employees.
+   *
    * @param password The new employees password.
    * @param department The new employees department.
+   * @param franchise The store the employee belongs too.
    */
-  public Staff(String password, String department) {
+  public Staff(String password, Department department, Franchise franchise) {
     this.password = password;
     this.department = department;
+    this.franchise = franchise;
   }
 
   public Long getEmployeeNumber() {
@@ -67,11 +79,19 @@ public class Staff {
     this.password = password;
   }
 
-  public String getDepartment() {
+  public Department getDepartment() {
     return department;
   }
 
-  public void setDepartment(String department) {
+  public void setDepartment(Department department) {
     this.department = department;
+  }
+
+  public Franchise getFranchise() {
+    return franchise;
+  }
+
+  public void setFranchise(Franchise franchise) {
+    this.franchise = franchise;
   }
 }

@@ -10,6 +10,7 @@ public class Main {
 
   /**
    * Main method sets up the api end points.
+   *
    * @param args Standard for a Java program, any launch arguments are passed onto the function.
    */
   public static void main(String[] args) {

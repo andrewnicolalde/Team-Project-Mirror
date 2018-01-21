@@ -1,12 +1,12 @@
 package database;
 
-import java.sql.*;
-
-import javax.persistence.*;
+import java.sql.Timestamp;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * This class is for the Transaction Table in the database.
@@ -52,6 +52,13 @@ public class Transaction {
    */
   @Column(name = "datetimePaid")
   private Timestamp datetimePaid;
+
+  /**
+   * This is a type Long foreign key referencing the franchiseId of a
+   * Franchise.
+   */
+  @Column(name = "franchiseId")
+  private Long franchiseId;
 
   /**
    * This constructor allows us to create Transactions.

@@ -10,7 +10,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SessionTest {
+public class TableSessionTest {
+
   private EntityManagerFactory entityManagerFactory;
 
   @Before
@@ -26,16 +27,9 @@ public class SessionTest {
   }
 
   @Test
-  public void createSessionTest() {
+  public void createTableSessionTest() {
 
     EntityManager entityManager;
-    //Create new staff member.
-    entityManager = entityManagerFactory.createEntityManager();
-    entityManager.getTransaction().begin();
-    Staff tempStaff = new Staff("Password", "Waiter");
-    entityManager.persist(tempStaff);
-    entityManager.getTransaction().commit();
-    entityManager.close();
 
     //Create new franchise.
     entityManager = entityManagerFactory.createEntityManager();
@@ -54,10 +48,10 @@ public class SessionTest {
     entityManager.getTransaction().commit();
     entityManager.close();
 
-    //Create new session.
+    //Create new table session.
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    entityManager.persist(new Session("Random Hash", tempStaff, table, true));
+    entityManager.persist(new TableSession("Random Hash", table));
     entityManager.getTransaction().commit();
     entityManager.close();
 
@@ -65,14 +59,13 @@ public class SessionTest {
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
 
-    List<Session> result = entityManager.createQuery("from Session ",
-        Session.class).getResultList();
+    List<TableSession> result = entityManager.createQuery("from TableSession ",
+        TableSession.class).getResultList();
 
-    for ( Session session: result) {
-      assertEquals("Check sessionId", "Random Hash", session.getSessionId());
-      assertEquals("Check staffId", tempStaff.getEmployeeNumber(), session.getStaff().getEmployeeNumber());
-      assertEquals("Check tableId", table.getTableId(), session.getRestaurantTable().getTableId());
-      assertEquals("Check isActive", true, session.isActive());
+    for (TableSession tableSession : result) {
+      assertEquals("Check sessionId", "Random Hash", tableSession.getTableSessionId());
+      assertEquals("Check tableId", table.getTableId(),
+          tableSession.getRestaurantTable().getTableId());
     }
 
     entityManager.getTransaction().commit();

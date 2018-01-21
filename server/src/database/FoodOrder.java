@@ -1,13 +1,11 @@
 package database;
 
 import java.sql.Timestamp;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -49,12 +47,13 @@ public class FoodOrder {
 
   /**
    * This constructor allows us to create new Orders.
+   *
    * @param orderId This field stores the orderId as a long.
    * @param status This field stores the status of the order as a String.
    * @param timeConfirmed This field stores the timeConfirmed of the order as a
-   *                      <code>java.sql.Timestamp</code>.
+   * <code>java.sql.Timestamp</code>.
    * @param transactionId This field is a type Long foreign key referencing the
-   *                      transactionId of Transaction.
+   * transactionId of Transaction.
    */
   public FoodOrder(Long orderId, String status, Timestamp timeConfirmed, Long transactionId) {
     this.orderId = orderId;
