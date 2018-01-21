@@ -1,11 +1,8 @@
 package database;
 
 import java.sql.Timestamp;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -35,9 +32,6 @@ public class Transaction {
   /**
    * This field stores a reference to the session the transaction took place on.
    */
-  @ManyToOne
-  @JoinColumn(name = "sessionId", nullable = false)
-  private Session session;
 
   /**
    * This field stores the combined price of every Menu_Item in every order
@@ -54,30 +48,31 @@ public class Transaction {
   private Timestamp datetimePaid;
 
   /**
-   * This is a type Long foreign key referencing the franchiseId of a
-   * Franchise.
+   * This field stores a link to the employee who is in charge of the transaction
    */
-  @Column(name = "franchiseId")
-  private Long franchiseId;
+  @ManyToOne
+  @JoinColumn(name = "server_id", nullable = false)
+  private RestaurantTableStaff restaurantTableStaff;
 
   /**
    * This constructor allows us to create Transactions.
    *
-   * @param transactionId This field stores the transaction id as a Long.
-   * @param isPaid        This field stores the paid status of the order as a Boolean.
-   * @param session       This field stores a reference to the session the transaction took place on
-   * @param total         This field stores the combined price of every Menu_Item in every order
-   *                      belonging to this transaction.
-   * @param datetimePaid  This field stores the precise time at which a Transaction was paid for
-   *                      as a <code>java.sql.Timestamp</code>
+   * @param transactionId        This field stores the transaction id as a Long.
+   * @param isPaid               This field stores the paid status of the order as a Boolean.
+   * @param total                This field stores the combined price of every Menu_Item in every
+   *                             order belonging to this transaction.
+   * @param datetimePaid         This field stores the precise time at which a Transaction was paid
+   *                             for as a <code>java.sql.Timestamp</code>
+   * @param restaurantTableStaff This field stores link to the employee who is in charge of the
+   *                             transaction
    */
-  public Transaction(Long transactionId, Boolean isPaid, Session session, Double total,
-                     Timestamp datetimePaid) {
+  public Transaction(Long transactionId, Boolean isPaid, Double total, Timestamp datetimePaid,
+                     RestaurantTableStaff restaurantTableStaff) {
     this.transactionId = transactionId;
     this.isPaid = isPaid;
-    this.session = session;
     this.total = total;
     this.datetimePaid = datetimePaid;
+    this.restaurantTableStaff = restaurantTableStaff;
   }
 
   /**
@@ -102,14 +97,6 @@ public class Transaction {
     this.isPaid = isPaid;
   }
 
-  public Session getSession() {
-    return session;
-  }
-
-  public void setSession(Session session) {
-    this.session = session;
-  }
-
   public Double getTotal() {
     return total;
   }
@@ -124,5 +111,13 @@ public class Transaction {
 
   public void setDatetimePaid(Timestamp datetimePaid) {
     this.datetimePaid = datetimePaid;
+  }
+
+  public RestaurantTableStaff getRestaurantTableStaff() {
+    return restaurantTableStaff;
+  }
+
+  public void setRestaurantTableStaff(RestaurantTableStaff restaurantTableStaff) {
+    this.restaurantTableStaff = restaurantTableStaff;
   }
 }
