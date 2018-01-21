@@ -1,6 +1,5 @@
 package endpoints.authentication;
 
-import authentication.EmployeeAuthenticator;
 import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
@@ -27,7 +26,7 @@ public class Authentication {
    * @param response The response to give.
    * @return The a JSON response showing whether is was successful and if so, the session key.
    */
-  public static String logInEmployee(Request request, Response response, EmployeeAuthenticator em) {
+  public static String logInEmployee(Request request, Response response) {
     // Convert the data from the client into an object
     EmployeeAuthenticationParameters ap = GSON.fromJson(request.body(),
             EmployeeAuthenticationParameters.class);
