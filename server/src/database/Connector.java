@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.xml.crypto.Data;
 
 /**
  * This class is a facade to communicate with the database.
@@ -78,6 +79,13 @@ public class Connector {
         .getResultList();
     closeEntityManger();
     return temp;
+  }
+
+  public DatabaseTable get(Object primaryKey, Class<?> table) {
+    connectEntityManager();
+    DatabaseTable result = (DatabaseTable)entityManager.find(table, primaryKey);
+    closeEntityManger();
+    return result;
   }
 
   /**

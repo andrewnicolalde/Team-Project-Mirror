@@ -7,9 +7,9 @@
   <script>
         $(document).ready(function(){
             $("#loginbutton").click(function(){
-                $.post("/api/login",
+                $.post("/api/loginStaff",
                     JSON.stringify({
-                       username: $("#username").val(),
+                       employeeNumber: $("#username").val(),
                        password: $("#password").val()
                     }),
                 function(data) {
