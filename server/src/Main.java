@@ -2,14 +2,13 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
-import database.Connector;
-import database.Department;
-import database.Franchise;
-import database.Staff;
+import database.*;
 import endpoints.authentication.Authentication;
 import endpoints.customer.Menu;
 import endpoints.waiter.Tables;
 import org.mindrot.jbcrypt.BCrypt;
+
+import java.util.List;
 
 public class Main {
 
@@ -27,7 +26,12 @@ public class Main {
     connector = Connector.getInstance();
     connector.createConnection();
 
-    // TODO: Remove all sessions when the server boots up.
+    // Check if there are any existing sessions, and end them.
+    List<StaffSession> currentSessions = (List<StaffSession>)(List<?>)connector.query(
+            "from StaffSession", StaffSession.class);
+    for (StaffSession session : currentSessions) {
+      connector.remove(session);
+    }
 
     // Create dummy employees for testing
     Franchise f = new Franchise("Egham", "Egham High Street", "0123456789");

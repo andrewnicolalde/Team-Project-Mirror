@@ -67,7 +67,6 @@ public class Authentication {
               "from StaffSession where employeeNumber = " + ap.getEmployeeNumber(),
               StaffSession.class);
       for (StaffSession session : currentSessions) {
-        //session = (StaffSession)connector.merge(session);
         connector.remove(session);
       }
 
