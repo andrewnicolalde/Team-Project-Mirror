@@ -81,11 +81,30 @@ public class Connector {
     return temp;
   }
 
+  /**
+   * Queries the database for a single object with the given primary key.
+   * @author Toby Such
+   * @param primaryKey The primary key of the object.
+   * @param table The table of the type the object is.
+   * @return The object with type table, and with the primary key given.
+   */
   public DatabaseTable get(Object primaryKey, Class<?> table) {
     connectEntityManager();
     DatabaseTable result = (DatabaseTable)entityManager.find(table, primaryKey);
     closeEntityManger();
     return result;
+  }
+
+  /**
+   * Removes an entity instance from the database.
+   * @author Toby Such
+   * @param entity The entity to remove.
+   */
+  public void remove(DatabaseTable entity) {
+    connectEntityManager();
+    // Have to merge as the object will have been gotten by a different entity manager.
+    entityManager.remove(entityManager.merge(entity));
+    closeEntityManger();
   }
 
   /**

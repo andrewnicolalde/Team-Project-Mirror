@@ -3,11 +3,13 @@ package endpoints.authentication;
 import com.google.gson.Gson;
 import database.Connector;
 import database.Staff;
+import database.StaffSession;
+import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
 
-import java.util.List;
+
 
 public class Authentication {
 
@@ -15,7 +17,7 @@ public class Authentication {
   private static Connector connector;
 
   /**
-   * Checks if the given details correctly match an employee stored in the database
+   * Checks if the given details correctly match an employee stored in the database.
    * @param ap An EmployeeAuthenticationParameters object which holds the given login details.
    * @return A boolean value showing whether or not the details match an employee's.
    */
@@ -31,11 +33,11 @@ public class Authentication {
 
   /**
    * Checks if the username and password combination is valid and returns a session key of they are.
-   * @param employeeAuthenticationParameters An object holding the username and password combination
+   * @param eap An object holding the username and password combination
    * @return A session key as a string, or null if the username/password combination is invalid.
    */
-  private static String authenticate(EmployeeAuthenticationParameters employeeAuthenticationParameters) {
-    if (isValidLoginCombination(employeeAuthenticationParameters)) {
+  private static String authenticate(EmployeeAuthenticationParameters eap) {
+    if (isValidLoginCombination(eap)) {
       return BCrypt.gensalt(); // Salt is a random string of characters, perfect for a session key.
     } else {
       return null;
@@ -60,7 +62,20 @@ public class Authentication {
 
     // sessionKey will be null if the details are invalid.
     if (sessionKey != null) {
-      // TODO: Save the session key in the current session
+      // Check if there are any existing sessions with the current user, and end them.
+      List<StaffSession> currentSessions = (List<StaffSession>)(List<?>)connector.query(
+              "from StaffSession where employeeNumber = " + ap.getEmployeeNumber(),
+              StaffSession.class);
+      for (StaffSession session : currentSessions) {
+        //session = (StaffSession)connector.merge(session);
+        connector.remove(session);
+      }
+
+      // Create a new session with the current user.
+      StaffSession staffSession = new StaffSession(sessionKey,
+              (Staff)connector.get(ap.getEmployeeNumber(), Staff.class));
+      connector.createItem(staffSession);
+
       return "{\"validlogin\":true,\"redirection\":\"/\"}";
     } else {
       return "{\"validlogin\":false,\"redirection\":null}";

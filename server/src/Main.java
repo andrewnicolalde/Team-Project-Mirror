@@ -27,12 +27,17 @@ public class Main {
     connector = Connector.getInstance();
     connector.createConnection();
 
-    // Create dummy employee for testing
+    // TODO: Remove all sessions when the server boots up.
+
+    // Create dummy employees for testing
     Franchise f = new Franchise("Egham", "Egham High Street", "0123456789");
     connector.createItem(f);
     Staff staff = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), Department.WAITER, f);
     connector.createItem(staff);
     System.out.println("Staff ID: " + staff.getEmployeeNumber());
+    Staff staff2 = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), Department.WAITER, f);
+    connector.createItem(staff2);
+    System.out.println("Staff ID: " + staff2.getEmployeeNumber());
 
     // End points
     get("/api/menu", (req, res) -> Menu.getMenu());
