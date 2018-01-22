@@ -16,7 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author Andrew Nicolalde
  */
 @Entity
-@Table(name = "FOODORDER")
+@Table(name = "FOOD_ORDER")
 public class FoodOrder {
 
   /**
