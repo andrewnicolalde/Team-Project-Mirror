@@ -1,3 +1,4 @@
+import static spark.Spark.before;
 import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
@@ -44,8 +45,12 @@ public class Main {
     System.out.println("Staff ID: " + staff2.getEmployeeNumber());
 
     // End points
-    get("/api/menu", (req, res) -> Menu.getMenu());
-    get("/api/tables", Tables::getTables);
+    // Before is used to verify the user has access to the content they are requesting.
+    before("/api/auth/*", Authentication::checkStaffSession);
+
+    // These end points all return JSON and are meant to be requested via AJAX requests.
+    get("/api/auth/menu", (req, res) -> Menu.getMenu());
+    get("/api/auth/tables", Tables::getTables);
     post("/api/loginStaff", Authentication::logInEmployee);
 
     System.out.println("Visit: http://localhost:4567");

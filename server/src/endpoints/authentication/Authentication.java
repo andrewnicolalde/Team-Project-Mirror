@@ -1,5 +1,7 @@
 package endpoints.authentication;
 
+import static spark.Spark.halt;
+
 import com.google.gson.Gson;
 import database.Connector;
 import database.Staff;
@@ -8,8 +10,6 @@ import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
-
-
 
 public class Authentication {
 
@@ -75,9 +75,37 @@ public class Authentication {
               (Staff)connector.get(ap.getEmployeeNumber(), Staff.class));
       connector.createItem(staffSession);
 
+      // Create the spark session and set the session key.
+      request.session(true);
+      request.session().attribute("StaffSessionKey", sessionKey);
+
       return "{\"validlogin\":true,\"redirection\":\"/\"}";
     } else {
       return "{\"validlogin\":false,\"redirection\":null}";
+    }
+  }
+
+  /**
+   * Checks if the request has a valid staff session key. Will halt if not.
+   * @param request The HTTP request.
+   * @param response The HTTP response.
+   */
+  public static void checkStaffSession(Request request, Response response) {
+    // Check if session has a StaffSessionKey
+    if (request.session().attribute("StaffSessionKey") == null) {
+      // Not authenticated.
+      // I'm sorry Dave.
+      halt(401, "error_401");
+    }
+
+    // Attempt to get the session from the database.
+    StaffSession session = (StaffSession)connector.get(request.session().attribute(
+            "StaffSessionKey"), StaffSession.class);
+
+    if (session == null) {
+      // Has a session key but is not a valid one. Possible logged in on another device since.
+      // I'm afraid I can't do that.
+      halt(401, "error_401");
     }
   }
 }
