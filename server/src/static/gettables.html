@@ -4,44 +4,18 @@
     <meta charset="UTF-8">
     <title>Get Tables</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/ajax.js"></script>
     <script>
         $(document).ready(function () {
-            /* Old way, doesn't support error handling.
-            // Send a request to get the tables
-           $.get("/api/auth/tables", function(data) {
-               //Callback function
+            get("/api/auth/tables", function(data) {
+                //Callback function
 
-               // Parse the json into objects
-               var response = JSON.parse(data);
+                // Parse the json into objects
+                var response = JSON.parse(data);
 
-               // Loop through response and append items to a list (Or do what ever you like to them
-               for (i = 0; i < response.length; i++) {
-                   $("#tables_list").append("<li>" + response[i].number + ": " + response[i].status + "</li>");
-               }
-           });
-           */
-            $.ajax({
-                type: "GET",
-                url: "/api/auth/tables",
-                // If this is a post request, include: data: "{"some data to send to the server"}"
-                success: function(data) {
-                    // Callback function
-
-                    // Parse the json into objects
-                    var response = JSON.parse(data);
-
-                    // Loop through response and append items to a list (Or do what ever you like to them
-                    for (i = 0; i < response.length; i++) {
-                        $("#tables_list").append("<li>" + response[i].number + ": " + response[i].status + "</li>");
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    if (textStatus === "error") {
-                        if (errorThrown === "Unauthorized") {
-                            // 401 error, redirect to 401 page.
-                            window.location.replace("/401.html");
-                        }
-                    }
+                // Loop through response and append items to a list (Or do what ever you like to them
+                for (i = 0; i < response.length; i++) {
+                    $("#tables_list").append("<li>" + response[i].number + ": " + response[i].status + "</li>");
                 }
             });
         });

@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <title>Login</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="/js/ajax.js"></script>
   <script>
         $(document).ready(function(){
             $("#loginbutton").click(function(){
-                $.post("/api/loginStaff",
+                post("/api/loginStaff",
                     JSON.stringify({
                        employeeNumber: $("#username").val(),
                        password: $("#password").val()
