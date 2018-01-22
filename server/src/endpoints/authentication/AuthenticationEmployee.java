@@ -11,7 +11,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
 
-public class Authentication {
+public class AuthenticationEmployee {
 
   private static final Gson GSON = new Gson();
   private static Connector connector;
@@ -107,5 +107,18 @@ public class Authentication {
       // I'm afraid I can't do that.
       halt(401, "error_401");
     }
+  }
+
+  /**
+   * Logs out the employee.
+   * @param request The HTTP request
+   * @param response The HTTP response
+   * @return A string representing the status
+   */
+  public static String logOutEmployee(Request request, Response response) {
+    StaffSession session = (StaffSession)connector.get(request.session().attribute(
+        "StaffSessionKey"), StaffSession.class);
+    connector.remove(session);
+    return "success";
   }
 }
