@@ -56,33 +56,6 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
     entityManagerFactory.close();
   }
 
-
-  /**
-   * Queries the database for a single object with the given primary key.
-   * @author Toby Such
-   * @param primaryKey The primary key of the object.
-   * @param table The table of the type the object is.
-   * @return The object with type table, and with the primary key given.
-   */
-  public DatabaseTable get(Object primaryKey, Class<?> table) {
-    connectEntityManager();
-    DatabaseTable result = (DatabaseTable)entityManager.find(table, primaryKey);
-    closeEntityManger();
-    return result;
-  }
-
-  /**
-   * Removes an entity instance from the database.
-   * @author Toby Such
-   * @param entity The entity to remove.
-   */
-  public void remove(DatabaseTable entity) {
-    connectEntityManager();
-    // Have to merge as the object will have been gotten by a different entity manager.
-    entityManager.remove(entityManager.merge(entity));
-    closeEntityManger();
-  }
-
   /**
    * This function is the start of the communication with the database.
    */
@@ -129,13 +102,18 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
   /**
    * Similar to query, but gets only one item by it's primary key.
    *
+   * @author Toby Such
+   *
    * @param primaryKey The primary key of the item you are trying to find.
    * @param clazz      The class of the item you are trying to find.
    * @return The item with the same primary key and same class.
    */
   @Override
   public T getOne(PK primaryKey, Class<T> clazz) {
-    return null;
+    connectEntityManager();
+    T result = entityManager.find(clazz, primaryKey);
+    closeEntityManger();
+    return result;
   }
 
   /**
@@ -145,7 +123,10 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
    */
   @Override
   public void remove(T t) {
-
+    connectEntityManager();
+    // Have to merge as the object will have been gotten by a different entity manager.
+    entityManager.remove(entityManager.merge(t));
+    closeEntityManger();
   }
 
   /**
