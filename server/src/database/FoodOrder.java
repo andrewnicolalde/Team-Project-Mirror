@@ -31,7 +31,7 @@ public class FoodOrder {
    * This field stores the status of the order as a String.
    */
   @Column(name = "status")
-  private String status;
+  private OrderStatus status;
 
   /**
    * This field stores the timeConfirmed of the order as a
@@ -57,7 +57,7 @@ public class FoodOrder {
    * @param transaction This field is a type Long foreign key referencing the
    *                    transaction of Transaction.
    */
-  public FoodOrder(String status, Timestamp timeConfirmed, Transaction transaction) {
+  public FoodOrder(OrderStatus status, Timestamp timeConfirmed, Transaction transaction) {
     this.status = status;
     this.timeConfirmed = timeConfirmed;
     this.transaction = transaction;
@@ -77,11 +77,11 @@ public class FoodOrder {
     this.orderId = orderId;
   }
 
-  public String getStatus() {
+  public OrderStatus getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(OrderStatus status) {
     this.status = status;
   }
 
