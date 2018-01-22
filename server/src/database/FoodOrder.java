@@ -5,6 +5,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -42,24 +44,23 @@ public class FoodOrder {
    * This field is a type Long foreign key referencing the
    * transactionId of Transaction.
    */
-  @Column(name = "transactionID")
-  private Long transactionId;
+  @ManyToOne
+  @JoinColumn(name = "transactionId")
+  private Transaction transaction;
 
   /**
    * This constructor allows us to create new Orders.
    *
-   * @param orderId This field stores the orderId as a long.
    * @param status This field stores the status of the order as a String.
    * @param timeConfirmed This field stores the timeConfirmed of the order as a
    * <code>java.sql.Timestamp</code>.
-   * @param transactionId This field is a type Long foreign key referencing the
-   * transactionId of Transaction.
+   * @param transaction This field is a type Long foreign key referencing the
+   *                    transaction of Transaction.
    */
-  public FoodOrder(Long orderId, String status, Timestamp timeConfirmed, Long transactionId) {
-    this.orderId = orderId;
+  public FoodOrder(String status, Timestamp timeConfirmed, Transaction transaction) {
     this.status = status;
     this.timeConfirmed = timeConfirmed;
-    this.transactionId = transactionId;
+    this.transaction = transaction;
   }
 
   /**
@@ -92,11 +93,11 @@ public class FoodOrder {
     this.timeConfirmed = timeConfirmed;
   }
 
-  public Long getTransactionId() {
-    return transactionId;
+  public Transaction getTransaction() {
+    return transaction;
   }
 
-  public void setTransactionId(Long transactionId) {
-    this.transactionId = transactionId;
+  public void setTransaction(Transaction transaction) {
+    this.transaction = transaction;
   }
 }
