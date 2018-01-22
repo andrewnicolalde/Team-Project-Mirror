@@ -13,7 +13,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "TABLE_SESSION")
-public class TableSession implements DatabaseTable {
+public class TableSession {
 
   /**
    * This field is the session id, it is a random hash produced by the server and not the database.

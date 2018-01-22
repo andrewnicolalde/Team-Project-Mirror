@@ -62,8 +62,7 @@ public class ConnectorTest {
         "0123456789");
     connector.createItem(franchise);
 
-    List<Franchise> result = (List<Franchise>)(List<?>)connector.query(
-        "from Franchise", Franchise.class);
+    List<Franchise> result = connector.query("from Franchise", Franchise.class);
 
     for (Franchise item : result){
       assertEquals("Check query", franchise.getFranchiseId(), item.getFranchiseId());
