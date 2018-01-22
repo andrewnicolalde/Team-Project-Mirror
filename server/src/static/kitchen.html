@@ -16,13 +16,46 @@
 
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+  <script>
+    function logout() {
+      //TODO ajax stuff
+      // /api/auth/logoutStaff
+    }
+
+    function updatePage(data) {
+
+      var response = JSON.parse(data);
+
+      for (i = 0; i < response.length; i++) {
+        // first item or item on same order (assuming grouped by order)
+        if (i === 0 || response[i].orderNo === response[i-1].orderNo) { // this might be a bad check.
+          // set the order number to be a class of the column to separate them.
+          $(".row").append("<div class=\"col "+ response[i].orderNo +"\">" +
+                "<div class='card text-center'" +
+                  "<div class='card-header'>Order No: " + response[i].orderNo + "</div>" +
+                  "<div class='card-body'>Item: " + response[i].item +
+                  "<br />Requirements: " + response[i].requirements +
+                  "</div>" +
+                "</div>" +
+              "</div>");
+        }
+
+      }
+
+    }
+  </script>
 </head>
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-  <ul class="nav navbar-nav">
+  <ul class="nav navbar-nav mr-auto">
     <a class="navbar-brand" href="kitchen.html">ARMS</a>
     <li class="nav-item">
       <a class="nav-link" href="kitchen.html">Home</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" onclick="logout()">Logout</a>
     </li>
   </ul>
 </nav>
@@ -31,11 +64,20 @@
 </div>
 <div class="container-fluid">
   <div class="row">
-    <div class="col">
-      <div class="card text-center">A card just to show.</div>
+    <div class="col 1">
+      <div class="card text-center">
+        <div class="card-header">Order No: 1</div>
+        <div class="card-body">Item: Burrito
+        <br />Requirements: No Cheese</div>
+      </div>
+      <div class="card text-center">
+        <div class="card-header">Order No: 1</div>
+        <div class="card-body">Item: Burrito
+          <br />Requirements: No Cheese</div>
+      </div>
     </div>
     <div class="col">
-      <div  class="card text-center">Another card in other column</div>
+      <div class="card text-center">Another card in other column</div>
     </div>
   </div>
 </div>
