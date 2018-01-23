@@ -1,12 +1,13 @@
 package database;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  * This class represents the table of restaurant tables.
@@ -50,9 +51,9 @@ public class RestaurantTable {
   /**
    * This constructor is to create new tables in any restaurant.
    *
-   * @param status This is the status table from <code>TableStatus.java</code>.
+   * @param status      This is the status table from <code>TableStatus.java</code>.
    * @param tableNumber This is the table number within the restaurant.
-   * @param franchise This is the franchise branch that the tables belong to.
+   * @param franchise   This is the franchise branch that the tables belong to.
    */
   public RestaurantTable(TableStatus status, int tableNumber, Franchise franchise) {
     this.status = status;

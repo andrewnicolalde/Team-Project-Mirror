@@ -1,16 +1,15 @@
 package database;
 
-import static org.junit.Assert.assertEquals;
-
-import java.sql.Connection;
-import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class ConnectorTest {
 
@@ -45,7 +44,7 @@ public class ConnectorTest {
     entityManager.getTransaction().commit();
     entityManager.close();
 
-    for (Franchise item : result){
+    for (Franchise item : result) {
       assertEquals("Check new franchise", franchise.getFranchiseId(), item.getFranchiseId());
     }
 
@@ -64,7 +63,7 @@ public class ConnectorTest {
 
     List<Franchise> result = connector.query("from Franchise", Franchise.class);
 
-    for (Franchise item : result){
+    for (Franchise item : result) {
       assertEquals("Check query", franchise.getFranchiseId(), item.getFranchiseId());
     }
 
@@ -72,7 +71,7 @@ public class ConnectorTest {
   }
 
   @Test
-  public void createStaffUsingConnector(){
+  public void createStaffUsingConnector() {
     Connector connector = Connector.getInstance();
     connector.createConnection();
 
@@ -92,7 +91,7 @@ public class ConnectorTest {
     entityManager.getTransaction().commit();
     entityManager.close();
 
-    for (Staff item : result){
+    for (Staff item : result) {
       assertEquals("Check new franchise", franchise.getFranchiseId(),
           item.getFranchise().getFranchiseId());
     }
@@ -101,7 +100,7 @@ public class ConnectorTest {
   }
 
   @Test
-  public void queryStaffUsingConnector(){
+  public void queryStaffUsingConnector() {
     Connector connector = Connector.getInstance();
     connector.createConnection();
 
@@ -112,7 +111,7 @@ public class ConnectorTest {
     Staff staff = new Staff("Password", Department.WAITER, franchise);
     connector.createItem(staff);
 
-    List<Staff> result = (List<Staff>)(List<?>)connector.query("from Staff", Staff.class);
+    List<Staff> result = (List<Staff>) (List<?>) connector.query("from Staff", Staff.class);
 
     for (Staff item : result) {
       assertEquals("Check query", staff.getEmployeeNumber(), item.getEmployeeNumber());

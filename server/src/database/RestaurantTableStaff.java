@@ -1,12 +1,13 @@
 package database;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  * This class maps this class to the database.
@@ -49,7 +50,8 @@ public class RestaurantTableStaff {
 
   /**
    * This constructor is used to create new entities in this table.
-   * @param staff This is the staff member that will be serving the table.
+   *
+   * @param staff           This is the staff member that will be serving the table.
    * @param restaurantTable This is the table that will be served by the staff member.
    */
   public RestaurantTableStaff(Staff staff, RestaurantTable restaurantTable) {

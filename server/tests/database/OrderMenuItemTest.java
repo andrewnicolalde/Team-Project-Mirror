@@ -10,9 +10,9 @@ import javax.persistence.Persistence;
 import java.sql.Timestamp;
 import java.util.List;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-public class FoodOrderTest {
+public class OrderMenuItemTest {
   private EntityManagerFactory entityManagerFactory;
 
   @Before
@@ -83,23 +83,50 @@ public class FoodOrderTest {
     entityManager.getTransaction().commit();
     entityManager.close();
 
-    //Get orders from database.
+    //Create new category
+    entityManager = entityManagerFactory.createEntityManager();
+    entityManager.getTransaction().begin();
+    Category category = new Category("Food");
+    entityManager.persist(category);
+    entityManager.getTransaction().commit();
+    entityManager.close();
+
+    //Create new menu item
+    entityManager = entityManagerFactory.createEntityManager();
+    entityManager.getTransaction().begin();
+    MenuItem menuItem = new MenuItem("Burger", "Got meat",
+        "Well it's a burger", 1.00, false, false,
+        false, category);
+    entityManager.persist(menuItem);
+    entityManager.getTransaction().commit();
+    entityManager.close();
+
+    //Create new menu order item
+    entityManager = entityManagerFactory.createEntityManager();
+    entityManager.getTransaction().begin();
+    OrderMenuItem orderMenuItem = new OrderMenuItem(menuItem, foodOrder,
+        "Special instrcutions");
+    entityManager.persist(orderMenuItem);
+    entityManager.getTransaction().commit();
+    entityManager.close();
+
+
+    //Get menu order item from database.
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
 
-    List<FoodOrder> result = entityManager.createQuery("from FoodOrder ",
-        FoodOrder.class).getResultList();
+    List<OrderMenuItem> result = entityManager.createQuery("from OrderMenuItem ",
+        OrderMenuItem.class).getResultList();
 
-    for (FoodOrder item : result) {
-      assertEquals("Check id", item.getOrderId(), foodOrder.getOrderId());
-      assertEquals("Check status", item.getStatus(), foodOrder.getStatus());
-      assertEquals("Check time", item.getTimeConfirmed(), foodOrder.getTimeConfirmed());
-      assertEquals("Check transaction id", item.getTransaction().getTransactionId(),
-          foodOrder.getTransaction().getTransactionId());
+    for (OrderMenuItem item : result) {
+      assertEquals("Check id", item.getOrderMenuItemId(), orderMenuItem.getOrderMenuItemId());
+      assertEquals("Check menu item", item.getMenuItem().getMenuItemId(),
+          menuItem.getMenuItemId());
+      assertEquals("Check food order", item.getFoodOrder().getOrderId(),
+          foodOrder.getOrderId());
     }
 
     entityManager.getTransaction().commit();
     entityManager.close();
   }
-
 }

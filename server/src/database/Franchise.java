@@ -1,10 +1,11 @@
 package database;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  * This class maps Hibernate to the Franchise table.
@@ -45,8 +46,8 @@ public class Franchise {
   /**
    * This constrctuor is used by the server to create entries in the table.
    *
-   * @param name The name of the restaurant.
-   * @param address The address of the restaurant.
+   * @param name          The name of the restaurant.
+   * @param address       The address of the restaurant.
    * @param contactNumber The contact number for the restaurant.
    */
   public Franchise(String name, String address, String contactNumber) {

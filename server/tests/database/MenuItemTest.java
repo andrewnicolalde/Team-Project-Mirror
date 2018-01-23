@@ -30,7 +30,7 @@ public class MenuItemTest {
   public void createMenuItemTest() {
 
     EntityManager entityManager;
-    //Create new Franchise
+    //Create new category
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
     Category category = new Category("Food");

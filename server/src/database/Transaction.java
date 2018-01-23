@@ -1,6 +1,7 @@
 package database;
 
-import java.sql.Timestamp;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,8 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
+import java.sql.Timestamp;
 
 /**
  * This class is for the Transaction Table in the database.
@@ -34,10 +34,6 @@ public class Transaction {
    */
   @Column(name = "isPaid")
   private Boolean isPaid;
-
-  /**
-   * This field stores a reference to the session the transaction took place on.
-   */
 
   /**
    * This field stores the combined price of every Menu_Item in every order

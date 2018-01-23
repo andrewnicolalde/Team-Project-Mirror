@@ -1,5 +1,7 @@
 package database;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  * This class maps to the Staff table in the database.
@@ -53,9 +54,9 @@ public class Staff {
   /**
    * This constructor allows us to create new employees.
    *
-   * @param password The new employees password.
+   * @param password   The new employees password.
    * @param department The new employees department.
-   * @param franchise The store the employee belongs too.
+   * @param franchise  The store the employee belongs too.
    */
   public Staff(String password, Department department, Franchise franchise) {
     this.password = password;

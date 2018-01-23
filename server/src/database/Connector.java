@@ -1,9 +1,9 @@
 package database;
 
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.List;
 
 /**
  * This class is a facade to communicate with the database.
@@ -29,6 +29,7 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
 
   /**
    * Gets the current instance of the connector.
+   *
    * @return the instance of the class.
    */
   public static Connector getInstance() {
@@ -102,11 +103,10 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
   /**
    * Similar to query, but gets only one item by it's primary key.
    *
-   * @author Toby Such
-   *
    * @param primaryKey The primary key of the item you are trying to find.
    * @param clazz      The class of the item you are trying to find.
    * @return The item with the same primary key and same class.
+   * @author Toby Such
    */
   @Override
   public T getOne(PK primaryKey, Class<T> clazz) {
