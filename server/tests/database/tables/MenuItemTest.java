@@ -1,5 +1,7 @@
-package database;
+package database.tables;
 
+import database.tables.Category;
+import database.tables.MenuItem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

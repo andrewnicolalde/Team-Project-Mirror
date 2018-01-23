@@ -1,5 +1,6 @@
-package database;
+package database.tables;
 
+import database.tables.Franchise;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +12,8 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class CategoryTest {
+public class FranchiseTest {
+
   private EntityManagerFactory entityManagerFactory;
 
   @Before
@@ -27,30 +29,34 @@ public class CategoryTest {
   }
 
   @Test
-  public void createCategoryTest() {
+  public void createFranchiseTest() {
 
     EntityManager entityManager;
-    //Create new category
+    //Create new Franchise
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    Category category = new Category("Food");
-    entityManager.persist(category);
+    entityManager.persist(new Franchise("London", "1 London Way",
+        "0123456789"));
     entityManager.getTransaction().commit();
     entityManager.close();
 
-    //Get category from database.
+    //Get franchises from database.
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
 
-    List<Category> result = entityManager.createQuery("from Category ",
-        Category.class).getResultList();
+    List<Franchise> result = entityManager.createQuery("from Franchise ",
+        Franchise.class).getResultList();
 
-    for (Category item : result) {
-      assertEquals("Check id", category.getCategoryId(), item.getCategoryId());
-      assertEquals("Check name", category.getName(), item.getName());
+    for (Franchise franchise : result) {
+      assertEquals("New Franchise Name = London", "London", franchise.getName());
+      assertEquals("New Franchise Address = 1 London Way", "1 London Way",
+          franchise.getAddress());
+      assertEquals("New Franchise Contact No = 0123456789", "0123456789",
+          franchise.getContactNo());
     }
 
     entityManager.getTransaction().commit();
     entityManager.close();
   }
 }
+

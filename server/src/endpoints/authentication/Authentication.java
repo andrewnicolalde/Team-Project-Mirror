@@ -4,8 +4,8 @@ import static spark.Spark.halt;
 
 import com.google.gson.Gson;
 import database.Connector;
-import database.Staff;
-import database.StaffSession;
+import database.tables.Staff;
+import database.tables.StaffSession;
 import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;

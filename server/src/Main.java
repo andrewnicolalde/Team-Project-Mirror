@@ -3,7 +3,11 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
-import database.*;
+import database.Connector;
+import database.tables.Department;
+import database.tables.Franchise;
+import database.tables.Staff;
+import database.tables.StaffSession;
 import endpoints.authentication.Authentication;
 import endpoints.customer.Menu;
 import endpoints.waiter.Tables;

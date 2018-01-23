@@ -1,6 +1,4 @@
-package database;
-
-import org.hibernate.annotations.GenericGenerator;
+package database.tables;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +8,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+
+import org.hibernate.annotations.GenericGenerator;
+
 
 /**
  * This class is for the Transaction Table in the database.
@@ -43,7 +44,7 @@ public class Transaction {
   private Double total;
 
   /**
-   * This field stores the precise time at which a database.Transaction was paid for
+   * This field stores the precise time at which a database.tables.Transaction was paid for
    * as a <code>java.sql.Timestamp</code>
    */
   @Column(name = "datetimePaid")

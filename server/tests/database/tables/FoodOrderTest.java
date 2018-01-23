@@ -1,5 +1,14 @@
-package database;
+package database.tables;
 
+import database.tables.Department;
+import database.tables.FoodOrder;
+import database.tables.Franchise;
+import database.tables.OrderStatus;
+import database.tables.RestaurantTable;
+import database.tables.RestaurantTableStaff;
+import database.tables.Staff;
+import database.tables.TableStatus;
+import database.tables.Transaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +21,7 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 
-public class TransactionTest {
+public class FoodOrderTest {
   private EntityManagerFactory entityManagerFactory;
 
   @Before
@@ -74,24 +83,32 @@ public class TransactionTest {
     entityManager.getTransaction().commit();
     entityManager.close();
 
-    //Get transaction from database.
+    //Create new order
+    entityManager = entityManagerFactory.createEntityManager();
+    entityManager.getTransaction().begin();
+    FoodOrder foodOrder = new FoodOrder(OrderStatus.CANCELED, new Timestamp(1516709651),
+        transaction);
+    entityManager.persist(foodOrder);
+    entityManager.getTransaction().commit();
+    entityManager.close();
+
+    //Get orders from database.
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
 
-    List<Transaction> result = entityManager.createQuery("from Transaction ",
-        Transaction.class).getResultList();
+    List<FoodOrder> result = entityManager.createQuery("from FoodOrder ",
+        FoodOrder.class).getResultList();
 
-    for (Transaction item : result) {
-      assertEquals("Check id", item.getTransactionId(), transaction.getTransactionId());
-      assertEquals("Check isPaid", item.getIsPaid(), transaction.getIsPaid());
-      assertEquals("Check total", item.getTotal(), transaction.getTotal());
-      assertEquals("Check timestamp", item.getDatetimePaid(), transaction.getDatetimePaid());
-      assertEquals("Check resturant table id",
-          item.getRestaurantTableStaff().getRestaurntTableStaffId(),
-          transaction.getRestaurantTableStaff().getRestaurntTableStaffId());
+    for (FoodOrder item : result) {
+      assertEquals("Check id", item.getOrderId(), foodOrder.getOrderId());
+      assertEquals("Check status", item.getStatus(), foodOrder.getStatus());
+      assertEquals("Check time", item.getTimeConfirmed(), foodOrder.getTimeConfirmed());
+      assertEquals("Check transaction id", item.getTransaction().getTransactionId(),
+          foodOrder.getTransaction().getTransactionId());
     }
 
     entityManager.getTransaction().commit();
     entityManager.close();
   }
+
 }

@@ -1,6 +1,4 @@
-package database;
-
-import org.hibernate.annotations.GenericGenerator;
+package database.tables;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * This class maps the menu item table.
@@ -87,8 +87,8 @@ public class MenuItem {
    * @param isGlutenFree If the item is gluten free.
    * @param category     The category the item belongs in.
    */
-  public MenuItem(String name, String allergyInfo, String description, Double price, Boolean isVegan,
-                  Boolean isVegetarian, Boolean isGlutenFree, Category category) {
+  public MenuItem(String name, String allergyInfo, String description, Double price,
+                  Boolean isVegan, Boolean isVegetarian, Boolean isGlutenFree, Category category) {
     this.name = name;
     this.allergyInfo = allergyInfo;
     this.description = description;

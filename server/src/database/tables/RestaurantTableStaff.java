@@ -1,6 +1,4 @@
-package database;
-
-import org.hibernate.annotations.GenericGenerator;
+package database.tables;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * This class maps this class to the database.

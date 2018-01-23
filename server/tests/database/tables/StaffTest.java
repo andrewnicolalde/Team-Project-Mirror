@@ -1,5 +1,8 @@
-package database;
+package database.tables;
 
+import database.tables.Department;
+import database.tables.Franchise;
+import database.tables.Staff;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

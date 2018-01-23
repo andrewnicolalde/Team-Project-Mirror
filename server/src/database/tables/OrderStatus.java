@@ -1,4 +1,4 @@
-package database;
+package database.tables;
 
 /**
  * This enum is used to represent the status of the FoodOrder.

@@ -1,4 +1,4 @@
-package database;
+package database.tables;
 
 /**
  * This enum states the possible payment methods, and is used in the transaction table.

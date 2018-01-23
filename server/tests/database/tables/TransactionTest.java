@@ -1,5 +1,12 @@
-package database;
+package database.tables;
 
+import database.tables.Department;
+import database.tables.Franchise;
+import database.tables.RestaurantTable;
+import database.tables.RestaurantTableStaff;
+import database.tables.Staff;
+import database.tables.TableStatus;
+import database.tables.Transaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,9 +17,9 @@ import javax.persistence.Persistence;
 import java.sql.Timestamp;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static junit.framework.TestCase.assertEquals;
 
-public class OrderMenuItemTest {
+public class TransactionTest {
   private EntityManagerFactory entityManagerFactory;
 
   @Before
@@ -74,56 +81,21 @@ public class OrderMenuItemTest {
     entityManager.getTransaction().commit();
     entityManager.close();
 
-    //Create new order
-    entityManager = entityManagerFactory.createEntityManager();
-    entityManager.getTransaction().begin();
-    FoodOrder foodOrder = new FoodOrder(OrderStatus.CANCELED, new Timestamp(1516709651),
-        transaction);
-    entityManager.persist(foodOrder);
-    entityManager.getTransaction().commit();
-    entityManager.close();
-
-    //Create new category
-    entityManager = entityManagerFactory.createEntityManager();
-    entityManager.getTransaction().begin();
-    Category category = new Category("Food");
-    entityManager.persist(category);
-    entityManager.getTransaction().commit();
-    entityManager.close();
-
-    //Create new menu item
-    entityManager = entityManagerFactory.createEntityManager();
-    entityManager.getTransaction().begin();
-    MenuItem menuItem = new MenuItem("Burger", "Got meat",
-        "Well it's a burger", 1.00, false, false,
-        false, category);
-    entityManager.persist(menuItem);
-    entityManager.getTransaction().commit();
-    entityManager.close();
-
-    //Create new menu order item
-    entityManager = entityManagerFactory.createEntityManager();
-    entityManager.getTransaction().begin();
-    OrderMenuItem orderMenuItem = new OrderMenuItem(menuItem, foodOrder,
-        "Special instrcutions");
-    entityManager.persist(orderMenuItem);
-    entityManager.getTransaction().commit();
-    entityManager.close();
-
-
-    //Get menu order item from database.
+    //Get transaction from database.
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
 
-    List<OrderMenuItem> result = entityManager.createQuery("from OrderMenuItem ",
-        OrderMenuItem.class).getResultList();
+    List<Transaction> result = entityManager.createQuery("from Transaction ",
+        Transaction.class).getResultList();
 
-    for (OrderMenuItem item : result) {
-      assertEquals("Check id", item.getOrderMenuItemId(), orderMenuItem.getOrderMenuItemId());
-      assertEquals("Check menu item", item.getMenuItem().getMenuItemId(),
-          menuItem.getMenuItemId());
-      assertEquals("Check food order", item.getFoodOrder().getOrderId(),
-          foodOrder.getOrderId());
+    for (Transaction item : result) {
+      assertEquals("Check id", item.getTransactionId(), transaction.getTransactionId());
+      assertEquals("Check isPaid", item.getIsPaid(), transaction.getIsPaid());
+      assertEquals("Check total", item.getTotal(), transaction.getTotal());
+      assertEquals("Check timestamp", item.getDatetimePaid(), transaction.getDatetimePaid());
+      assertEquals("Check resturant table id",
+          item.getRestaurantTableStaff().getRestaurntTableStaffId(),
+          transaction.getRestaurantTableStaff().getRestaurntTableStaffId());
     }
 
     entityManager.getTransaction().commit();

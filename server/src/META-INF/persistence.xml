@@ -10,9 +10,9 @@
 
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-    <class>database.Staff</class>
-    <class>database.Transaction</class>
-    <class>database.FoodOrder</class>
+    <class>database.tables.Staff</class>
+    <class>database.tables.Transaction</class>
+    <class>database.tables.FoodOrder</class>
 
     <properties>
       <property name="hibernate.archive.autodetection" value="class"/>

@@ -1,4 +1,4 @@
-package database;
+package database.tables;
 
 import org.hibernate.annotations.GenericGenerator;
 

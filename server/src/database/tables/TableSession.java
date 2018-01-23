@@ -1,4 +1,4 @@
-package database;
+package database.tables;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
