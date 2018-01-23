@@ -63,7 +63,6 @@ public class Transaction {
   /**
    * This constructor allows us to create Transactions.
    *
-   * @param transactionId        This field stores the transaction id as a Long.
    * @param isPaid               This field stores the paid status of the order as a Boolean.
    * @param total                This field stores the combined price of every Menu_Item in every
    *                             order belonging to this transaction.
@@ -72,9 +71,8 @@ public class Transaction {
    * @param restaurantTableStaff This field stores link to the employee who is in charge of the
    *                             transaction
    */
-  public Transaction(Long transactionId, Boolean isPaid, Double total, Timestamp datetimePaid,
+  public Transaction(Boolean isPaid, Double total, Timestamp datetimePaid,
                      RestaurantTableStaff restaurantTableStaff) {
-    this.transactionId = transactionId;
     this.isPaid = isPaid;
     this.total = total;
     this.datetimePaid = datetimePaid;
