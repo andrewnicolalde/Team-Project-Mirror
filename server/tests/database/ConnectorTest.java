@@ -3,6 +3,7 @@ package database;
 import database.tables.Department;
 import database.tables.Franchise;
 import database.tables.Staff;
+import javafx.scene.control.ListCell;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import javax.persistence.Persistence;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class ConnectorTest {
 
@@ -74,6 +76,59 @@ public class ConnectorTest {
   }
 
   @Test
+  public void getOneFranchiseUsingConnector() {
+    Connector connector = Connector.getInstance();
+    connector.createConnection();
+
+    Franchise franchise = new Franchise("London", "1 London Way",
+        "0123456789");
+    connector.createItem(franchise);
+
+    Franchise result = (Franchise) connector.getOne(franchise.getFranchiseId(), Franchise.class);
+    assertEquals("Check get", result.getFranchiseId(), franchise.getFranchiseId());
+    connector.closeConnection();
+  }
+
+  @Test
+  public void removeFranchiseUsingConnector() {
+    Connector connector = Connector.getInstance();
+    connector.createConnection();
+
+    Franchise franchise = new Franchise("London", "1 London Way",
+        "0123456789");
+    connector.createItem(franchise);
+
+    List<Franchise> temp = connector.query("from Franchise", Franchise.class);
+    if (temp.size() == 0) {
+      fail("No item added");
+    }
+
+    connector.remove(franchise);
+
+    temp = connector.query("from Franchise", Franchise.class);
+    assertEquals("Check size after remove", temp.size(), 0);
+  }
+
+  @Test
+  public void updateFranchiseUsingConnector() {
+    Connector connector = Connector.getInstance();
+    connector.createConnection();
+
+    Franchise franchise = new Franchise("London", "1 London Way",
+        "0123456789");
+    connector.createItem(franchise);
+
+    franchise.setName("New London");
+    connector.update(franchise);
+
+    List<Franchise> result = connector.query("from Franchise", Franchise.class);
+
+    for (Franchise item : result) {
+      assertEquals("Check updated", item.getName(), "New London");
+    }
+  }
+
+  @Test
   public void createStaffUsingConnector() {
     Connector connector = Connector.getInstance();
     connector.createConnection();
@@ -123,4 +178,25 @@ public class ConnectorTest {
     connector.closeConnection();
   }
 
+  @Test
+  public void updateStaffUsingConnector() {
+    Connector connector = Connector.getInstance();
+    connector.createConnection();
+
+    Franchise franchise = new Franchise("London", "1 London Way",
+        "0123456789");
+    connector.createItem(franchise);
+
+    Staff staff = new Staff("Password", Department.WAITER, franchise);
+    connector.createItem(staff);
+
+    staff.setDepartment(Department.KITCHEN);
+    connector.update(staff);
+
+    Staff temp = (Staff) connector.getOne(staff.getEmployeeNumber(), Staff.class);
+
+    assertEquals("Check update", temp.getDepartment(), Department.KITCHEN);
+
+    connector.closeConnection();
+  }
 }

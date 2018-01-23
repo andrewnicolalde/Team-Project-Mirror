@@ -136,6 +136,8 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
    */
   @Override
   public void update(T t) {
-
+    connectEntityManager();
+    entityManager.merge(t);
+    closeEntityManger();
   }
 }
