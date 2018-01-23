@@ -11,7 +11,7 @@ $(document).ready(function() {
 
     // Add items to menu list
     for(i = 0; i < response.length; i++) {
-      $("#menu-list").append("<li class='list-group-item' id= \"menu-item-"+ i +"\"><span class='waiter-ui-span-bold'>"
+      $("#menu-list").append("<li class='list-group-item list-group-item-action' id= \"menu-item-"+ i +"\"><span class='waiter-ui-span-bold'>"
           + response[i].name + ": </span> " + response[i].price + "</li>");
       // Show dietary information
       if(response[i].is_gluten_free){ // Gluten Free
