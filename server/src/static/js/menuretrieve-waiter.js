@@ -1,7 +1,10 @@
-/*
-This script should be used only for the waiter's UI. This is because this script
-only displays the name of each menu item & its price, along with dietary info.
-Obviously a customer would want to see more than that.
+/**
+ * This script is responsible for retrieving and displaying the menu
+ * item elements in the Menu column in waiter-ui.html.
+ *
+ * Note: This script should be used only for the waiter's UI. This is because this script
+ * only displays the name of each menu item & its price, along with dietary info.
+ * Obviously a customer would want to see more than that.
  */
 $(document).ready(function() {
   // Send get request to server for menu JSON

@@ -1,3 +1,7 @@
+/**
+ * This script is responsible for retrieving and displaying the tables
+ * (i.e. Table 1) in the Tables column in waiter-ui.html
+ */
 $(document).ready(function () {
   // Send a request to get the tables
   $.get("/api/tables", function(data) {
