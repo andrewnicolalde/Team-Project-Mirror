@@ -30,7 +30,7 @@ public class CategoryTest {
   public void createCategoryTest() {
 
     EntityManager entityManager;
-    //Create new Franchise
+    //Create new category
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
     Category category = new Category("Food");
@@ -38,7 +38,7 @@ public class CategoryTest {
     entityManager.getTransaction().commit();
     entityManager.close();
 
-    //Get franchises from database.
+    //Get category from database.
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
 
