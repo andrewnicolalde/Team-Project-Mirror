@@ -7,7 +7,6 @@ package database;
  */
 public enum OrderStatus {
   CANCELED,
-  COOKED,
   READY_TO_COLLECT,
   CONFIRMED
 }
