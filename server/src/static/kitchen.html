@@ -22,27 +22,7 @@
       // /api/auth/logoutStaff
     }
 
-    function updatePage(data) {
 
-      var response = JSON.parse(data);
-
-      for (i = 0; i < response.length; i++) {
-        // first item or item on same order (assuming grouped by order)
-        if (i === 0 || response[i].orderNo === response[i-1].orderNo) { // this might be a bad check.
-          // set the order number to be a class of the column to separate them.
-          $(".row").append("<div class=\"col "+ response[i].orderNo +"\">" +
-                "<div class='card text-center'" +
-                  "<div class='card-header'>Order No: " + response[i].orderNo + "</div>" +
-                  "<div class='card-body'>Item: " + response[i].item +
-                  "<br />Requirements: " + response[i].requirements +
-                  "</div>" +
-                "</div>" +
-              "</div>");
-        }
-
-      }
-
-    }
   </script>
 </head>
 <body>
@@ -76,10 +56,22 @@
           <br />Requirements: No Cheese</div>
       </div>
     </div>
-    <div class="col">
-      <div class="card text-center">Another card in other column</div>
+    <div class="col 2">
+      <div class="card text-center">
+        <div class="card-header">Order No: 2</div>
+        <div class="card-body">Item: Tacos
+          <br />Requirements: Extra Cheese</div>
+      </div>
+    </div>
+    <div class="col 3">
+      <div class="card text-center">
+        <div class="card-header">Order No: 3</div>
+        <div class="card-body">Item: Tacos
+          <br />Requirements: No Salsa</div>
+      </div>
     </div>
   </div>
+</div>
 </div>
 </body>
 </html>

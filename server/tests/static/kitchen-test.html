@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.5.0.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="qunit.js"></script>
+  <title>Kitchen-Test</title>
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <script src="https://code.jquery.com/qunit/qunit-2.5.0.js"></script>
+  <script src="update-kitchen.js"></script>
+  <script>
+    QUnit.test( "Test adding a div", function( assert ) {
+      var fixture = $("#qunit-fixture");
+      fixture.append("<div class='1'>Some card test</div>");
+      assert.equal( $("div", fixture).length, 1, "We expect to have one div" );
+    });
+  </script>
+</body>
+</html>
