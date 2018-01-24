@@ -80,9 +80,11 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
    */
   @Override
   public void createItem(T t) {
-    connectEntityManager();
-    entityManager.persist(t);
-    closeEntityManger();
+    synchronized (this) {
+      connectEntityManager();
+      entityManager.persist(t);
+      closeEntityManger();
+    }
   }
 
   /**
@@ -94,10 +96,12 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
    */
   @Override
   public List query(String query, Class<T> clazz) {
-    connectEntityManager();
-    List<T> temp = entityManager.createQuery(query, clazz).getResultList();
-    closeEntityManger();
-    return temp;
+    synchronized (this) {
+      connectEntityManager();
+      List<T> temp = entityManager.createQuery(query, clazz).getResultList();
+      closeEntityManger();
+      return temp;
+    }
   }
 
   /**
@@ -110,10 +114,12 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
    */
   @Override
   public T getOne(PK primaryKey, Class<T> clazz) {
-    connectEntityManager();
-    T result = entityManager.find(clazz, primaryKey);
-    closeEntityManger();
-    return result;
+    synchronized (this){
+      connectEntityManager();
+      T result = entityManager.find(clazz, primaryKey);
+      closeEntityManger();
+      return result;
+    }
   }
 
   /**
@@ -123,10 +129,12 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
    */
   @Override
   public void remove(T t) {
-    connectEntityManager();
-    // Have to merge as the object will have been gotten by a different entity manager.
-    entityManager.remove(entityManager.merge(t));
-    closeEntityManger();
+    synchronized (this) {
+      connectEntityManager();
+      // Have to merge as the object will have been gotten by a different entity manager.
+      entityManager.remove(entityManager.merge(t));
+      closeEntityManger();
+    }
   }
 
   /**
@@ -136,8 +144,10 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
    */
   @Override
   public void update(T t) {
-    connectEntityManager();
-    entityManager.merge(t);
-    closeEntityManger();
+    synchronized (this) {
+      connectEntityManager();
+      entityManager.merge(t);
+      closeEntityManger();
+    }
   }
 }
