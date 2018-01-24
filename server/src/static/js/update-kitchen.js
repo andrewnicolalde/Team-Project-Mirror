@@ -22,3 +22,7 @@ function updatePage(data) {
   }
 }
 
+function orderPresent( orderNum) {
+  var present = document.getElementsByClassName(orderNum);
+  return present.length !== 0;
+}

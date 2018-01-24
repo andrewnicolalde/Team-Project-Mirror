@@ -4,19 +4,30 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.5.0.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="qunit.js"></script>
+  <script type="text/javascript" src="../../src/static/js/update-kitchen.js"></script>
   <title>Kitchen-Test</title>
 </head>
 <body>
   <div id="qunit"></div>
   <div id="qunit-fixture"></div>
   <script src="https://code.jquery.com/qunit/qunit-2.5.0.js"></script>
-  <script src="update-kitchen.js"></script>
+
   <script>
     QUnit.test( "Test adding a div", function( assert ) {
       var fixture = $("#qunit-fixture");
       fixture.append("<div class='1'>Some card test</div>");
       assert.equal( $("div", fixture).length, 1, "We expect to have one div" );
+    });
+    QUnit.test( "Test finding an order number on the page", function ( assert ) {
+      var fixture = $("#qunit-fixture");
+      fixture.append("<div class=\"col 1\">\n"
+          + "      <div class=\"card text-center\">\n"
+          + "        <div class=\"card-header\">Order No: 1</div>\n"
+          + "        <div class=\"card-body\">Item: Burrito\n"
+          + "        <br />Requirements: No Cheese</div>\n"
+          + "      </div>\n"
+          + "     </div>\n");
+      assert.equal( orderPresent("1"), true, "checks if an order number is on the page");
     });
   </script>
 </body>
