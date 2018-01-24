@@ -4,7 +4,7 @@
  */
 $(document).ready(function () {
   // Send a request to get the tables
-  $.get("/api/tables", function(data) {
+  get("/api/auth/tables", function(data) {
     //Callback function
 
     // Parse the json into objects

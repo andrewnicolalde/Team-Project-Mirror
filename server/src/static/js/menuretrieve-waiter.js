@@ -8,7 +8,7 @@
  */
 $(document).ready(function() {
   // Send get request to server for menu JSON
-  $.get("/api/menu", function(data){
+  get("/api/auth/menu", function(data){
     // Parse JSON
     var response = JSON.parse(data);
 
