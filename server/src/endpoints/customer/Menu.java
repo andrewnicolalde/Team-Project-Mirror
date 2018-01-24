@@ -4,7 +4,7 @@ public class Menu {
 
   /**
    * Gets the full menu from the database and returns it in JSON.
-   *
+   * No JSON input as it is a get request.
    * @return The menu in JSON as a string.
    */
   public static String getMenu() {
