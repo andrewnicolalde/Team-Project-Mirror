@@ -10,9 +10,17 @@ $(document).ready(function () {
     // Parse the json into objects
     var response = JSON.parse(data);
 
-    // Loop through response and append items to a list (Or do what ever you like to them
+    /*
+    *  Loop through response and append items to a list
+    *  Or do whatever you'd like with them.
+    */
     for (i = 0; i < response.length; i++) {
-      $("#tables-list").append("<li data-tablenum='" + response[i].number + "' id='table-" + response[i].number + "' class='list-group-item list-group-item-action' onclick=\"loadOrder(this.getAttribute('data-tablenum'))\" ><span class='waiter-ui-span-bold'>Table " + response[i].number + ":</span> " + response[i].status + "</li>");
+      $("#tables-list").append("<li data-tablenum='" + response[i].number +
+          "' id='table-" + response[i].number
+          + "' class='list-group-item list-group-item-action' "
+          + "onclick=\"loadOrder(this.getAttribute('data-tablenum'))\" >"
+          + "<span class='waiter-ui-span-bold'>Table "
+          + response[i].number + ":</span> " + response[i].status + "</li>");
     }
   });
 });
