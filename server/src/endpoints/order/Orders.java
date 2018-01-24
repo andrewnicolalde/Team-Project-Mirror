@@ -21,7 +21,7 @@ public class Orders {
   }
 
 
-  private static String getOrderMenuItems(Long tableNumber) {
+  public static String getOrderMenuItems(Long tableNumber) {
     // TODO: Search database for order contents
     return "[{\"id\":1,\"name\":\"Taco\",\"category\":\"Main\",\"allergy_info\":\"None\"," +
         "\"description\":\"Some meat in hard shell plus some lettuce\",\"price\":7.99,\"is_vegan\":false," +
