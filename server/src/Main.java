@@ -67,6 +67,7 @@ public class Main {
     post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
     post("/api/auth/getOrder", Orders::getOrder);
     post("/api/auth/addToOrder", Orders::addOrderMenuItem);
+    post("/api/auth/removeFromOrder", Orders::removeOrderMenuItem);
     post("/api/auth/changeOrderStatus", Orders::changeOrderStatus);
 
     System.out.println("Visit: http://localhost:4567");
