@@ -2,12 +2,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>ac.rhul.CS2815.2018.13</groupId>
+    <groupId>ac.rhul.CS2810.2018.13</groupId>
     <artifactId>ARMS</artifactId>
     <version>0.1</version>
     <build>
         <sourceDirectory>server/src</sourceDirectory>
         <plugins>
+            <plugin>
+                <groupId>com.heroku.sdk</groupId>
+                <artifactId>heroku-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <configuration>
+                    <buildpacks>
+                        <buildpack>heroku/exec</buildpack>
+                        <buildpack>heroku/metrics</buildpack>
+                        <buildpack>heroku/jvm</buildpack>
+                    </buildpacks>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
@@ -33,7 +45,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>Main</mainClass>
+                            <mainClass>server.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -81,6 +93,10 @@
             <groupId>postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>9.1-901-1.jdbc4</version>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.21</version>
         </dependency>
     </dependencies>
 </project>
