@@ -4,60 +4,20 @@
     <meta charset="UTF-8">
     <title>Get Tables</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./js/ajax-wrapper.js"></script>
     <script>
         $(document).ready(function () {
-            // Send a request to get the tables
-           $.get("/api/tables", function(data) {
-               //Callback function
+            get("/api/auth/tables", function(data) {
+                //Callback function
 
-               // Parse the json into objects
-               var response = JSON.parse(data);
+                // Parse the json into objects
+                var response = JSON.parse(data);
 
-               // Loop through response and append items to a list (Or do what ever you like to them
-               for (i = 0; i < response.length; i++) {
-                   $("#tables_list").append("<li>" + response[i].number + ": " + response[i].status + "</li>");
-               }
-           });
-
-           $.post("/api/order",
-           JSON.stringify({
-               tableNumber: 1
-           }),
-           function(data) {
-               console.log(data);
-           });
-
-           $.post("/api/addToOrder",
-           JSON.stringify({
-               tableNumber: 1,
-               menuItemId: 1
-           }),
-           function(data) {
-               if (data === "success") {
-                   // Add the item to the order on screen
-                   console.log("Success!");
-               } else {
-                   // Display some error to the user
-                   // Print some debug info to the console.
-                   console.log("Something went wrong! :(");
-               }
-           });
-
-            $.post("/api/changeOrderStatus",
-                JSON.stringify({
-                    tableNumber: 1,
-                    newOrderStatus: "cooking"
-                }),
-                function(data) {
-                    if (data === "success") {
-                        // Change status on the client
-                        console.log("Success!");
-                    } else {
-                        // Display some error to the user
-                        // Print some debug info to the console.
-                        console.log("Something went wrong! :(");
-                    }
-                });
+                // Loop through response and append items to a list (Or do what ever you like to them
+                for (i = 0; i < response.length; i++) {
+                    $("#tables_list").append("<li>" + response[i].number + ": " + response[i].status + "</li>");
+                }
+            });
         });
     </script>
 </head>
