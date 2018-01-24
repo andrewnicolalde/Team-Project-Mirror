@@ -4,14 +4,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.xml.crypto.Data;
 
 /**
  * This class is a facade to communicate with the database.
  *
  * @author Marcus Messer
  */
-public class Connector {
+public class Connector<T, PK> implements GenericDao<T, PK> {
 
   /**
    * This field is a the singlton instance of the class, as there will be only one connection to
@@ -57,29 +56,6 @@ public class Connector {
     entityManagerFactory.close();
   }
 
-  /**
-   * This function allows you to create a new item in the database.
-   * @param databaseTable The new item to be added to the database.
-   */
-  public void createItem(DatabaseTable databaseTable) {
-    connectEntityManager();
-    entityManager.persist(databaseTable);
-    closeEntityManger();
-  }
-
-  /**
-   * This function allows you to query the database.
-   * @param query The query you would like the result to.
-   * @param table The table you are querring.
-   * @return The result from the query as a list.
-   */
-  public List<DatabaseTable> query(String query, Class<?> table) {
-    connectEntityManager();
-    List<DatabaseTable> temp = (List<DatabaseTable>) entityManager.createQuery(query, table)
-        .getResultList();
-    closeEntityManger();
-    return temp;
-  }
 
   /**
    * Queries the database for a single object with the given primary key.
@@ -121,5 +97,64 @@ public class Connector {
   private void closeEntityManger() {
     entityManager.getTransaction().commit();
     entityManager.close();
+  }
+
+  /**
+   * Creates a new entity in the database.
+   *
+   * @param t The new item to be added to the database.
+   */
+  @Override
+  public void createItem(T t) {
+    connectEntityManager();
+    entityManager.persist(t);
+    closeEntityManger();
+  }
+
+  /**
+   * Query the database to find a result of that specific class.
+   *
+   * @param query The query of what you want to find.
+   * @param clazz The class of the enitiy you are trying to find.
+   * @return A list of the results of the query.
+   */
+  @Override
+  public List query(String query, Class<T> clazz) {
+    connectEntityManager();
+    List<T> temp = entityManager.createQuery(query, clazz).getResultList();
+    closeEntityManger();
+    return temp;
+  }
+
+  /**
+   * Similar to query, but gets only one item by it's primary key.
+   *
+   * @param primaryKey The primary key of the item you are trying to find.
+   * @param clazz      The class of the item you are trying to find.
+   * @return The item with the same primary key and same class.
+   */
+  @Override
+  public T getOne(PK primaryKey, Class<T> clazz) {
+    return null;
+  }
+
+  /**
+   * This function removes an object from the database.
+   *
+   * @param t The item to be removed.
+   */
+  @Override
+  public void remove(T t) {
+
+  }
+
+  /**
+   * This function updates an entity in the database.
+   *
+   * @param t The item to be updated.
+   */
+  @Override
+  public void update(T t) {
+
   }
 }

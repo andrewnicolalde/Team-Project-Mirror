@@ -13,7 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "FRANCHISE")
-public class Franchise implements DatabaseTable {
+public class Franchise {
 
   /**
    * This field is the ID of the restaurant, it is also the primary key of the table.
