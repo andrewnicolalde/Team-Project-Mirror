@@ -1,4 +1,4 @@
-package database;
+package database.tables;
 
 /**
  * This enum shows the status of the table.

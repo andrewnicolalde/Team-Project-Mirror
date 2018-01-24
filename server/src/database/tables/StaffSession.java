@@ -1,4 +1,4 @@
-package database;
+package database.tables;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -37,8 +37,9 @@ public class StaffSession {
 
   /**
    * This constructor is used to add new staff sessions to the database.
+   *
    * @param staffSessionId The random has of the session.
-   * @param staff The staff member related to the session.
+   * @param staff          The staff member related to the session.
    */
   public StaffSession(String staffSessionId, Staff staff) {
     this.staffSessionId = staffSessionId;

@@ -3,8 +3,12 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
-import database.*;
 import endpoints.authentication.AuthenticationEmployee;
+import database.Connector;
+import database.tables.Department;
+import database.tables.Franchise;
+import database.tables.Staff;
+import database.tables.StaffSession;
 import endpoints.customer.Menu;
 import endpoints.waiter.Tables;
 import org.mindrot.jbcrypt.BCrypt;
@@ -28,8 +32,7 @@ public class Main {
     connector.createConnection();
 
     // Check if there are any existing sessions, and end them.
-    List<StaffSession> currentSessions = (List<StaffSession>)(List<?>)connector.query(
-            "from StaffSession", StaffSession.class);
+    List<StaffSession> currentSessions = connector.query("from StaffSession", StaffSession.class);
     for (StaffSession session : currentSessions) {
       connector.remove(session);
     }

@@ -1,11 +1,14 @@
-package database;
+package database.tables;
 
-import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.sql.Timestamp;
+
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -14,7 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author Andrew Nicolalde
  */
 @Entity
-@Table(name = "FOODORDER")
+@Table(name = "FOOD_ORDER")
 public class FoodOrder {
 
   /**
@@ -29,7 +32,7 @@ public class FoodOrder {
    * This field stores the status of the order as a String.
    */
   @Column(name = "status")
-  private String status;
+  private OrderStatus status;
 
   /**
    * This field stores the timeConfirmed of the order as a
@@ -42,24 +45,23 @@ public class FoodOrder {
    * This field is a type Long foreign key referencing the
    * transactionId of Transaction.
    */
-  @Column(name = "transactionID")
-  private Long transactionId;
+  @ManyToOne
+  @JoinColumn(name = "transactionId")
+  private Transaction transaction;
 
   /**
    * This constructor allows us to create new Orders.
    *
-   * @param orderId This field stores the orderId as a long.
-   * @param status This field stores the status of the order as a String.
+   * @param status        This field stores the status of the order as a String.
    * @param timeConfirmed This field stores the timeConfirmed of the order as a
-   * <code>java.sql.Timestamp</code>.
-   * @param transactionId This field is a type Long foreign key referencing the
-   * transactionId of Transaction.
+   *                      <code>java.sql.Timestamp</code>.
+   * @param transaction   This field is a type Long foreign key referencing the
+   *                      transaction of Transaction.
    */
-  public FoodOrder(Long orderId, String status, Timestamp timeConfirmed, Long transactionId) {
-    this.orderId = orderId;
+  public FoodOrder(OrderStatus status, Timestamp timeConfirmed, Transaction transaction) {
     this.status = status;
     this.timeConfirmed = timeConfirmed;
-    this.transactionId = transactionId;
+    this.transaction = transaction;
   }
 
   /**
@@ -76,11 +78,11 @@ public class FoodOrder {
     this.orderId = orderId;
   }
 
-  public String getStatus() {
+  public OrderStatus getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(OrderStatus status) {
     this.status = status;
   }
 
@@ -92,11 +94,11 @@ public class FoodOrder {
     this.timeConfirmed = timeConfirmed;
   }
 
-  public Long getTransactionId() {
-    return transactionId;
+  public Transaction getTransaction() {
+    return transaction;
   }
 
-  public void setTransactionId(Long transactionId) {
-    this.transactionId = transactionId;
+  public void setTransaction(Transaction transaction) {
+    this.transaction = transaction;
   }
 }

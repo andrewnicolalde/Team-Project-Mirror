@@ -4,8 +4,8 @@ import static spark.Spark.halt;
 
 import com.google.gson.Gson;
 import database.Connector;
-import database.Staff;
-import database.StaffSession;
+import database.tables.Staff;
+import database.tables.StaffSession;
 import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
@@ -22,7 +22,7 @@ public class AuthenticationEmployee {
    * @return A boolean value showing whether or not the details match an employee's.
    */
   private static boolean isValidLoginCombination(EmployeeAuthenticationParameters ap) {
-    Staff employee = (Staff)connector.get(ap.getEmployeeNumber(), Staff.class);
+    Staff employee = (Staff)connector.getOne(ap.getEmployeeNumber(), Staff.class);
     if (employee == null) { // If the employee does not exist, then fail
       return false;
     }
@@ -72,7 +72,7 @@ public class AuthenticationEmployee {
 
       // Create a new session with the current user.
       StaffSession staffSession = new StaffSession(sessionKey,
-              (Staff)connector.get(ap.getEmployeeNumber(), Staff.class));
+              (Staff)connector.getOne(ap.getEmployeeNumber(), Staff.class));
       connector.createItem(staffSession);
 
       // Create the spark session and set the session key.
@@ -99,7 +99,7 @@ public class AuthenticationEmployee {
     }
 
     // Attempt to get the session from the database.
-    StaffSession session = (StaffSession)connector.get(request.session().attribute(
+    StaffSession session = (StaffSession)connector.getOne(request.session().attribute(
             "StaffSessionKey"), StaffSession.class);
 
     if (session == null) {

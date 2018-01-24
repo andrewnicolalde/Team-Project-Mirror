@@ -1,9 +1,9 @@
 package database;
 
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.List;
 
 /**
  * This class is a facade to communicate with the database.
@@ -29,6 +29,7 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
 
   /**
    * Gets the current instance of the connector.
+   *
    * @return the instance of the class.
    */
   public static Connector getInstance() {
@@ -54,33 +55,6 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
    */
   public void closeConnection() {
     entityManagerFactory.close();
-  }
-
-
-  /**
-   * Queries the database for a single object with the given primary key.
-   * @author Toby Such
-   * @param primaryKey The primary key of the object.
-   * @param table The table of the type the object is.
-   * @return The object with type table, and with the primary key given.
-   */
-  public DatabaseTable get(Object primaryKey, Class<?> table) {
-    connectEntityManager();
-    DatabaseTable result = (DatabaseTable)entityManager.find(table, primaryKey);
-    closeEntityManger();
-    return result;
-  }
-
-  /**
-   * Removes an entity instance from the database.
-   * @author Toby Such
-   * @param entity The entity to remove.
-   */
-  public void remove(DatabaseTable entity) {
-    connectEntityManager();
-    // Have to merge as the object will have been gotten by a different entity manager.
-    entityManager.remove(entityManager.merge(entity));
-    closeEntityManger();
   }
 
   /**
@@ -132,10 +106,14 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
    * @param primaryKey The primary key of the item you are trying to find.
    * @param clazz      The class of the item you are trying to find.
    * @return The item with the same primary key and same class.
+   * @author Toby Such
    */
   @Override
   public T getOne(PK primaryKey, Class<T> clazz) {
-    return null;
+    connectEntityManager();
+    T result = entityManager.find(clazz, primaryKey);
+    closeEntityManger();
+    return result;
   }
 
   /**
@@ -145,7 +123,10 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
    */
   @Override
   public void remove(T t) {
-
+    connectEntityManager();
+    // Have to merge as the object will have been gotten by a different entity manager.
+    entityManager.remove(entityManager.merge(t));
+    closeEntityManger();
   }
 
   /**
@@ -155,6 +136,8 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
    */
   @Override
   public void update(T t) {
-
+    connectEntityManager();
+    entityManager.merge(t);
+    closeEntityManger();
   }
 }
