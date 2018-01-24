@@ -61,12 +61,11 @@ public class Main {
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
 
-    // Read endpoints
     get("/api/auth/menu", (req, res) -> Menu.getMenu());
     get("/api/auth/tables", Tables::getTables);
     get("/api/auth/logoutStaff", AuthenticationEmployee::logOutEmployee);
     post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
-    post("/api/auth/getorder", Orders::getOrder);
+    post("/api/auth/getOrder", Orders::getOrder);
 
 
     System.out.println("Visit: http://localhost:4567");
