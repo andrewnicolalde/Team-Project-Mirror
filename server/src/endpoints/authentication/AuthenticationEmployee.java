@@ -116,7 +116,7 @@ public class AuthenticationEmployee {
    * @return A string representing the status
    */
   public static String logOutEmployee(Request request, Response response) {
-    StaffSession session = (StaffSession)connector.get(request.session().attribute(
+    StaffSession session = (StaffSession)connector.getOne(request.session().attribute(
         "StaffSessionKey"), StaffSession.class);
     connector.remove(session);
     return "success";
