@@ -69,7 +69,6 @@ public class Main {
     post("/api/auth/addToOrder", Orders::addOrderMenuItem);
     post("/api/auth/changeOrderStatus", Orders::changeOrderStatus);
 
-
     System.out.println("Visit: http://localhost:4567");
   }
 }
