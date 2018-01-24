@@ -45,7 +45,8 @@ public class Main {
     }
 
     // Create dummy employees for testing
-    Franchise f = new Franchise("Egham", "Egham High Street", "0123456789");
+    Franchise f = new Franchise("Egham", "Egham High Street",
+        "0123456789", "Password");
     connector.createItem(f);
     Staff staff = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), Department.WAITER, f);
     connector.createItem(staff);

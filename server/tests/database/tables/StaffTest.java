@@ -1,8 +1,5 @@
 package database.tables;
 
-import database.tables.Department;
-import database.tables.Franchise;
-import database.tables.Staff;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +35,7 @@ public class StaffTest {
     //Create a new Franchise
     entityManager.getTransaction().begin();
     Franchise franchise = new Franchise("London", "1 London Way", ""
-        + "0123465789");
+        + "0123465789", "Password");
     entityManager.persist(franchise);
     entityManager.getTransaction().commit();
     entityManager.close();
@@ -64,8 +61,8 @@ public class StaffTest {
           staff.getPassword());
       assertEquals("New Staff Member Department = Query Result", Department.WAITER,
           staff.getDepartment());
-      assertEquals("Check franchise Id", franchise.getFranchiseId(),
-          staff.getFranchise().getFranchiseId());
+      assertEquals("Check franchise Id", franchise.getName(),
+          staff.getFranchise().getName());
     }
 
     //Close connection to the server

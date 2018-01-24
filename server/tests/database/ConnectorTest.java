@@ -3,7 +3,6 @@ package database;
 import database.tables.Department;
 import database.tables.Franchise;
 import database.tables.Staff;
-import javafx.scene.control.ListCell;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +37,7 @@ public class ConnectorTest {
     connector.createConnection();
 
     Franchise franchise = new Franchise("London", "1 London Way",
-        "0123465789");
+        "0123465789", "Password");
     connector.createItem(franchise);
 
     EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -50,7 +49,7 @@ public class ConnectorTest {
     entityManager.close();
 
     for (Franchise item : result) {
-      assertEquals("Check new franchise", franchise.getFranchiseId(), item.getFranchiseId());
+      assertEquals("Check new franchise", franchise.getName(), item.getName());
     }
 
     connector.closeConnection();
@@ -63,13 +62,13 @@ public class ConnectorTest {
     connector.createConnection();
 
     Franchise franchise = new Franchise("London", "1 London Way",
-        "0123456789");
+        "0123456789", "Password");
     connector.createItem(franchise);
 
     List<Franchise> result = connector.query("from Franchise", Franchise.class);
 
     for (Franchise item : result) {
-      assertEquals("Check query", franchise.getFranchiseId(), item.getFranchiseId());
+      assertEquals("Check query", franchise.getName(), item.getName());
     }
 
     connector.closeConnection();
@@ -81,11 +80,11 @@ public class ConnectorTest {
     connector.createConnection();
 
     Franchise franchise = new Franchise("London", "1 London Way",
-        "0123456789");
+        "0123456789", "Password");
     connector.createItem(franchise);
 
-    Franchise result = (Franchise) connector.getOne(franchise.getFranchiseId(), Franchise.class);
-    assertEquals("Check get", result.getFranchiseId(), franchise.getFranchiseId());
+    Franchise result = (Franchise) connector.getOne(franchise.getName(), Franchise.class);
+    assertEquals("Check get", result.getName(), franchise.getName());
     connector.closeConnection();
   }
 
@@ -95,7 +94,7 @@ public class ConnectorTest {
     connector.createConnection();
 
     Franchise franchise = new Franchise("London", "1 London Way",
-        "0123456789");
+        "0123456789", "Password");
     connector.createItem(franchise);
 
     List<Franchise> temp = connector.query("from Franchise", Franchise.class);
@@ -110,31 +109,12 @@ public class ConnectorTest {
   }
 
   @Test
-  public void updateFranchiseUsingConnector() {
-    Connector connector = Connector.getInstance();
-    connector.createConnection();
-
-    Franchise franchise = new Franchise("London", "1 London Way",
-        "0123456789");
-    connector.createItem(franchise);
-
-    franchise.setName("New London");
-    connector.update(franchise);
-
-    List<Franchise> result = connector.query("from Franchise", Franchise.class);
-
-    for (Franchise item : result) {
-      assertEquals("Check updated", item.getName(), "New London");
-    }
-  }
-
-  @Test
   public void createStaffUsingConnector() {
     Connector connector = Connector.getInstance();
     connector.createConnection();
 
     Franchise franchise = new Franchise("London", "1 London Way",
-        "0123456789");
+        "0123456789", "Password");
 
     connector.createItem(franchise);
 
@@ -150,8 +130,8 @@ public class ConnectorTest {
     entityManager.close();
 
     for (Staff item : result) {
-      assertEquals("Check new franchise", franchise.getFranchiseId(),
-          item.getFranchise().getFranchiseId());
+      assertEquals("Check new franchise", franchise.getName(),
+          item.getFranchise().getName());
     }
 
     connector.closeConnection();
@@ -163,7 +143,7 @@ public class ConnectorTest {
     connector.createConnection();
 
     Franchise franchise = new Franchise("London", "1 London Way",
-        "0123456789");
+        "0123456789", "Password");
     connector.createItem(franchise);
 
     Staff staff = new Staff("Password", Department.WAITER, franchise);
@@ -184,7 +164,7 @@ public class ConnectorTest {
     connector.createConnection();
 
     Franchise franchise = new Franchise("London", "1 London Way",
-        "0123456789");
+        "0123456789", "Password");
     connector.createItem(franchise);
 
     Staff staff = new Staff("Password", Department.WAITER, franchise);
