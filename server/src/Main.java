@@ -60,10 +60,14 @@ public class Main {
     before("/api/auth/*", AuthenticationEmployee::checkStaffSession);
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
+
+    // Read endpoints
     get("/api/auth/menu", (req, res) -> Menu.getMenu());
     get("/api/auth/tables", Tables::getTables);
-    post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
     get("/api/auth/logoutStaff", AuthenticationEmployee::logOutEmployee);
+    post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
+    post("/api/auth/getorder", Orders::getOrder);
+
 
     System.out.println("Visit: http://localhost:4567");
   }
