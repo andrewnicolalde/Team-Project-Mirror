@@ -10,7 +10,7 @@ function loadOrder(tableNumber){
   var tableNumberToSend = JSON.stringify({tableNumber: tableNumber});
   post("/api/auth/getOrder", tableNumberToSend, function(data){
 
-    // Parse response
+    // Parse JSON
     var response = JSON.parse(data);
 
     // Remove any existing elements in the current order list
