@@ -114,7 +114,7 @@ public class ConnectorTest {
     connector.createConnection();
 
     Franchise franchise = new Franchise("London", "1 London Way",
-        "0123456789");
+        "0123456789", "Password");
     connector.createItem(franchise);
 
     franchise.setName("New London");
@@ -132,7 +132,7 @@ public class ConnectorTest {
     connector.createConnection();
 
     Franchise franchise = new Franchise("London", "1 London Way",
-        "0123456789");
+        "0123456789", "Password");
     connector.createItem(franchise);
 
     franchise.setName("New London");

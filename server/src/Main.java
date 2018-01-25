@@ -5,11 +5,14 @@ import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
 import endpoints.authentication.AuthenticationEmployee;
+import endpoints.authentication.AuthenticationTable;
 import database.Connector;
 import database.tables.Department;
 import database.tables.Franchise;
+import database.tables.RestaurantTable;
 import database.tables.Staff;
 import database.tables.StaffSession;
+import database.tables.TableStatus;
 import endpoints.customer.Menu;
 import endpoints.order.Orders;
 import endpoints.waiter.Tables;
