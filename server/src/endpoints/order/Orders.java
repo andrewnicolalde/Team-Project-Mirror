@@ -3,9 +3,14 @@ package endpoints.order;
 import com.google.gson.Gson;
 import com.sun.org.apache.xpath.internal.operations.Or;
 import database.Connector;
+import database.tables.FoodOrder;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
+import database.tables.Staff;
+import database.tables.StaffSession;
+import database.tables.TableSession;
 import javafx.scene.control.ListCell;
+import org.hibernate.criterion.Order;
 import spark.Request;
 import spark.Response;
 
@@ -53,7 +58,7 @@ public class Orders {
     connector.closeConnection();
 
     CustomerOrderData[] customerOrderData = new CustomerOrderData[orderMenuItems.size()];
-    for (int i = 0; i < customerOrderData.length; i ++) {
+    for (int i = 0; i < customerOrderData.length; i++) {
       customerOrderData[i] = new CustomerOrderData(orderMenuItems.get(i));
     }
     return GSON.toJson(customerOrderData);
@@ -71,6 +76,31 @@ public class Orders {
    */
   public static String addOrderMenuItem(Request request, Response response) {
     OrderMenuItemParameters omi = GSON.fromJson(request.body(), OrderMenuItemParameters.class);
+    Connector connector = Connector.getInstance();
+    connector.createConnection();
+
+    StaffSession tempStaff = (StaffSession) connector.getOne(request.attribute("StaffSessionKey"),
+        StaffSession.class);
+
+    //TODO reintroduce when table session key exists
+//    TableSession tempTableSess = (TableSession) connector.getOne(request.attribute("TableSessionKey"),
+//        TableSession.class);
+
+    List<FoodOrder> foodOrders = connector.query("from FoodOrder foodOrder where " +
+            "foodOrder.transaction.restaurantTableStaff.restaurantTable." +
+            "tableNumber = " + omi.getTableNumber() + " and " +
+            "foodOrder.transaction.restaurantTableStaff.restaurantTable.TableSession." +
+            "tableSessionId = " + 1 + " and " +
+            "foodOrder.transaction.restaurantTableStaff.restaurantTable.franchise.franchiseId = " +
+            tempStaff.getStaff().getFranchise().getFranchiseId(),
+        FoodOrder.class);
+
+    OrderMenuItem orderMenuItem = new OrderMenuItem((MenuItem) connector.getOne(
+        omi.getMenuItemId(), MenuItem.class), foodOrders.get(0), omi.getRequirements());
+
+    connector.createItem(orderMenuItem);
+
+    connector.closeConnection();
     return "success";
   }
 
