@@ -126,7 +126,6 @@ public class AuthenticationEmployee {
         "StaffSessionKey"), StaffSession.class);
     connector.remove(session);
     request.session().removeAttribute("StaffSessionKey");
-    response.redirect("/login.html");
     return "success";
   }
 }
