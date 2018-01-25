@@ -3,10 +3,22 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
-import endpoints.authentication.Authentication;
+import endpoints.authentication.AuthenticationEmployee;
+import database.Connector;
+import database.tables.Department;
+import database.tables.Franchise;
+import database.tables.Staff;
+import database.tables.StaffSession;
 import endpoints.customer.Menu;
+import endpoints.order.Orders;
+import endpoints.waiter.Tables;
+import org.mindrot.jbcrypt.BCrypt;
+
+import java.util.List;
 
 public class Main {
+
+  private static Connector connector;
 
   /**
    * Main method sets up the api end points.
@@ -22,9 +34,41 @@ public class Main {
     port(port);
     */
 
-    // End points
-    get("/api/menu", (req, res) -> Menu.getMenu());
-    post("/api/login", Authentication::logInUser);
+    // Setup the database connector
+    connector = Connector.getInstance();
+    connector.createConnection();
 
+    // Check if there are any existing sessions, and end them.
+    List<StaffSession> currentSessions = connector.query("from StaffSession", StaffSession.class);
+    for (StaffSession session : currentSessions) {
+      connector.remove(session);
+    }
+
+    // Create dummy employees for testing
+    Franchise f = new Franchise("Egham", "Egham High Street", "0123456789");
+    connector.createItem(f);
+    Staff staff = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), Department.WAITER, f);
+    connector.createItem(staff);
+    System.out.println("Staff ID: " + staff.getEmployeeNumber());
+    Staff staff2 = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), Department.WAITER, f);
+    connector.createItem(staff2);
+    System.out.println("Staff ID: " + staff2.getEmployeeNumber());
+
+    // End points
+    // Before is used to verify the user has access to the content they are requesting.
+    before("/api/auth/*", AuthenticationEmployee::checkStaffSession);
+
+    // These end points all return JSON and are meant to be requested via AJAX requests.
+
+    get("/api/auth/menu", (req, res) -> Menu.getMenu());
+    get("/api/auth/tables", Tables::getTables);
+    get("/api/auth/logoutStaff", AuthenticationEmployee::logOutEmployee);
+    post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
+    post("/api/auth/getOrder", Orders::getOrder);
+    post("/api/auth/addToOrder", Orders::addOrderMenuItem);
+    post("/api/auth/removeFromOrder", Orders::removeOrderMenuItem);
+    post("/api/auth/changeOrderStatus", Orders::changeOrderStatus);
+
+    System.out.println("Visit: http://localhost:4567");
   }
 }
