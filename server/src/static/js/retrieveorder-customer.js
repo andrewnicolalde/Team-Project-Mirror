@@ -4,7 +4,7 @@
  */
 $(document).ready(function () {
     // TODO: Update path once real endpoint is set up
-    post("/api/auth/getOrder", function (data) {
+    post("/api/authStaff/getOrder", function (data) {
         //parse JSON
         var response = JSON.parse(data);
         for (i = 0; i < response.length; i++) {

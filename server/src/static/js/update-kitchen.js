@@ -3,7 +3,7 @@
  * @param data the data response to an ajax query.
  */
 function updatePage() {
-  $.post("/api/auth/kitchen", function(data) {
+  post("/api/authStaff/kitchen", function(data) {
     var response = JSON.parse(data);
     var displayedOrders = [];
 

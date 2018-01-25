@@ -68,11 +68,11 @@ public class Main {
     get("/api/authStaff/menu", (req, res) -> Menu.getMenu());
     get("/api/authStaff/tables", Tables::getTables);
     post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
-    post("/api/auth/getOrder", Orders::getOrder);
-    post("/api/auth/addToOrder", Orders::addOrderMenuItem);
-    post("/api/auth/removeFromOrder", Orders::removeOrderMenuItem);
-    post("/api/auth/changeOrderStatus", Orders::changeOrderStatus);
-    post("api/auth/kitchen", (req, res) -> KitchenOrder.getOrder());
+    post("/api/authStaff/getOrder", Orders::getOrder);
+    post("/api/authStaff/addToOrder", Orders::addOrderMenuItem);
+    post("/api/authStaff/removeFromOrder", Orders::removeOrderMenuItem);
+    post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
+    post("api/authStaff/kitchen", (req, res) -> KitchenOrder.getOrder());
     get("/api/authStaff/logout", AuthenticationEmployee::logOutEmployee);
 
     System.out.println("Visit: http://localhost:4567");
