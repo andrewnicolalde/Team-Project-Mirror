@@ -14,6 +14,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="bootstrap/js/customjs.js"></script>
     <link rel="stylesheet" href="homepagestyle.css">
 
 </head>
@@ -29,7 +30,7 @@
 
 <div class="jumbotron jumbotron-fluid bg-info text-white text-center">
     <div class="container">
-        <h class="display-2">Menu</h>
+        <h1> class="display-2">Menu</h1>
     </div>
 </div>
 
@@ -63,17 +64,17 @@
                 <tbody>
                 <tr>
                     <th scope="row">1</th>
-                    <td><a href="#">Layered buffalo chicken nachos with creamy gorgonzola sauce</a></td>
+                    <td class="myBtn"><a href="#">Layered buffalo chicken nachos with creamy gorgonzola sauce</a></td>
                     <td>£5.00</td>
                 </tr>
                 <tr>
                     <th scope="row">2</th>
-                    <td><a href="#">Jalapeño chicken wraps</a></td>
+                    <td class="myBtn"><a href="#">Jalapeño chicken wraps</a></td>
                     <td>£4.00</td>
                 </tr>
                 <tr>
                     <th scope="row">3</th>
-                    <td><a href="#">Queso fundido with chorizo</a></td>
+                    <td class="myBtn"><a href="#">Queso fundido with chorizo</a></td>
                     <td>£2.50</td>
                 </tr>
                 </tbody>
@@ -92,17 +93,17 @@
                 <tbody>
                 <tr>
                     <th scope="row">1</th>
-                    <td><a href="#">Grilled Fish Tacos with Chipotle-Lime Dressing</a></td>
+                    <td class="myBtn"><a href="#">Grilled Fish Tacos with Chipotle-Lime Dressing</a></td>
                     <td>£12.00</td>
                 </tr>
                 <tr>
                     <th scope="row">2</th>
-                    <td><a href="#">Chili Rellenos Casserole</a></td>
+                    <td class="myBtn"><a href="#">Chili Rellenos Casserole</a></td>
                     <td>£10.00</td>
                 </tr>
                 <tr>
                     <th scope="row">3</th>
-                    <td><a href="#">Ronaldo's Beef Carnitas</a></td>
+                    <td class="myBtn"><a href="#">Ronaldo's Beef Carnitas</a></td>
                     <td>£9.50</td>
                 </tr>
                 </tbody>
@@ -121,43 +122,40 @@
                 <tbody>
                 <tr>
                     <th scope="row">1</th>
-                    <td><a href="#">Tres Leches Cake</a></td>
+                    <td class="myBtn"><a href="#">Tres Leches Cake</a></td>
                     <td>£6.00</td>
                 </tr>
                 <tr>
                     <th scope="row">2</th>
-                    <td><a href="#">Frozen Margarita Pie</a></td>
+                    <td class="myBtn"><a href="#">Frozen Margarita Pie</a></td>
                     <td>£3.00</td>
                 </tr>
                 <tr>
                     <th scope="row">3</th>
-                    <td><a href="#">Flan</a></td>
+                    <td class="myBtn"><a href="#">Flan</a></td>
                     <td>£4.50</td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
-</div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Item added!</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
 </body>
 </html>
