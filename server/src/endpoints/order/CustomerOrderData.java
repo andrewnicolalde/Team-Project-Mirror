@@ -2,6 +2,11 @@ package endpoints.order;
 
 import database.tables.OrderMenuItem;
 
+/**
+ * This class is used to map the query results into something GSON can convert into JSON.
+ *
+ * @author Marcus Messer
+ */
 public class CustomerOrderData {
   private Long id;
   private String name;
@@ -14,6 +19,10 @@ public class CustomerOrderData {
   private Boolean is_gluten_free;
   private String picture_src;
 
+  /**
+   * This function creates the objects that can be converted to JSON.
+   * @param orderMenuItem
+   */
   public CustomerOrderData(OrderMenuItem orderMenuItem) {
     this.id = orderMenuItem.getOrderMenuItemId();
     this.name = orderMenuItem.getMenuItem().getName();

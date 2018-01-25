@@ -31,6 +31,14 @@ public class Orders {
   }
 
 
+  /**
+   * Returns the order menu items from the database in JSON format.
+   * @param tableNumber The number of the table.
+   * @param staffId The employee number for the staff member.
+   * @return The menu items for the table in a JSON format.
+   *
+   * @author Marcus Messer
+   */
   public static String getOrderMenuItems(Long tableNumber, Long staffId) {
 
     Connector connector = Connector.getInstance();
