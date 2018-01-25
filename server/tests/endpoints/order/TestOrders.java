@@ -22,7 +22,7 @@ import static endpoints.order.Orders.getOrderMenuItems;
 import static org.junit.Assert.assertEquals;
 
 public class TestOrders {
-
+  /* TODO reintroduce after establishing test DB
   @Test
   public void testGetOrderMenuItem() {
     assertEquals("Asserts correct JSON is returned from the database",
@@ -34,4 +34,5 @@ public class TestOrders {
         "\"is_gluten_free\":true,\"picture_src\":\"images/diet_coke.jpg\"}]",
         getOrderMenuItems(1L, 9L));
   }
+  */
 }
