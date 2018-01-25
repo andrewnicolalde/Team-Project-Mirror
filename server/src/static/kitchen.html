@@ -20,7 +20,7 @@
   <script src="js/update-kitchen.js"></script>
   <script>
     $(document).ready(function(){
-      var tid = setInterval(updatePage, 1000);
+      var tid = setInterval(updatePage, 5000);
       updatePage();
     });
 
@@ -34,14 +34,14 @@
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <ul class="nav navbar-nav mr-auto">
-    <a class="navbar-brand" href="kitchen.html">ARMS</a>
+    <a class="navbar-brand" href="index.html">ARMS</a>
     <li class="nav-item">
       <a class="nav-link" href="kitchen.html">Home</a>
     </li>
   </ul>
   <ul class="navbar-nav">
     <li class="nav-item">
-      <a class="nav-link" href="login.html" logout()">Logout</a>
+      <a class="nav-link" href="login.html" onclick="logout">Logout</a>
     </li>
   </ul>
 </nav>

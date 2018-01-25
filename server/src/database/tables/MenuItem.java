@@ -62,6 +62,11 @@ public class MenuItem {
   private Boolean isGlutenFree;
 
   /**
+   * Thus field stores where the picure is stored
+   */
+  private String pictureSrc;
+
+  /**
    * This field states what category the item belongs too.
    */
   @ManyToOne
@@ -88,7 +93,8 @@ public class MenuItem {
    * @param category     The category the item belongs in.
    */
   public MenuItem(String name, String allergyInfo, String description, Double price,
-                  Boolean isVegan, Boolean isVegetarian, Boolean isGlutenFree, Category category) {
+                  Boolean isVegan, Boolean isVegetarian, Boolean isGlutenFree, String pictureSrc,
+                  Category category) {
     this.name = name;
     this.allergyInfo = allergyInfo;
     this.description = description;
@@ -96,6 +102,7 @@ public class MenuItem {
     this.isVegan = isVegan;
     this.isGlutenFree = isGlutenFree;
     this.isVegetarian = isVegetarian;
+    this.pictureSrc = pictureSrc;
     this.category = category;
   }
 
@@ -169,5 +176,13 @@ public class MenuItem {
 
   public void setMenuItemId(Long menuItemId) {
     this.menuItemId = menuItemId;
+  }
+
+  public String getPictureSrc() {
+    return pictureSrc;
+  }
+
+  public void setPictureSrc(String pictureSrc) {
+    this.pictureSrc = pictureSrc;
   }
 }
