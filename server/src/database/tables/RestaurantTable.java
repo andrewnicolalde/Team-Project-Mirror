@@ -38,7 +38,7 @@ public class RestaurantTable {
    * This field is the foreign key for the franchise it references the franchise table.
    */
   @ManyToOne
-  @JoinColumn(name = "franchiseId", nullable = false)
+  @JoinColumn(name = "franchise_name", nullable = false)
   private Franchise franchise;
 
   /**

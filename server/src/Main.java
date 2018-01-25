@@ -8,8 +8,10 @@ import endpoints.authentication.AuthenticationEmployee;
 import database.Connector;
 import database.tables.Department;
 import database.tables.Franchise;
+import database.tables.RestaurantTable;
 import database.tables.Staff;
 import database.tables.StaffSession;
+import database.tables.TableStatus;
 import endpoints.customer.Menu;
 import endpoints.kitchen.KitchenOrder;
 import endpoints.order.Orders;
@@ -48,7 +50,8 @@ public class Main {
     }
 
     // Create dummy employees for testing
-    Franchise f = new Franchise("Egham", "Egham High Street", "0123456789");
+    Franchise f = new Franchise("Egham", "Egham High Street",
+        "0123456789", BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()));
     connector.createItem(f);
     Staff staff = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), Department.WAITER, f);
     connector.createItem(staff);
@@ -59,19 +62,18 @@ public class Main {
 
     // End points
     // Before is used to verify the user has access to the content they are requesting.
-    before("/api/auth/*", AuthenticationEmployee::checkStaffSession);
+    before("/api/authStaff/*", AuthenticationEmployee::checkStaffSession);
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
-
-    get("/api/auth/menu", (req, res) -> Menu.getMenu());
-    get("/api/auth/tables", Tables::getTables);
-    get("/api/auth/logoutStaff", AuthenticationEmployee::logOutEmployee);
+    get("/api/authStaff/menu", (req, res) -> Menu.getMenu());
+    get("/api/authStaff/tables", Tables::getTables);
     post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
     post("/api/auth/getOrder", Orders::getOrder);
     post("/api/auth/addToOrder", Orders::addOrderMenuItem);
     post("/api/auth/removeFromOrder", Orders::removeOrderMenuItem);
     post("/api/auth/changeOrderStatus", Orders::changeOrderStatus);
     post("api/auth/kitchen", (req, res) -> KitchenOrder.getOrder());
+    get("/api/authStaff/logout", AuthenticationEmployee::logOutEmployee);
 
     System.out.println("Visit: http://localhost:4567");
   }

@@ -17,20 +17,19 @@ import javax.persistence.Table;
 public class Franchise {
 
   /**
-   * This field is the ID of the restaurant, it is also the primary key of the table.
+   * This field is the name of the restaurant.
    */
   @Id
-  @GeneratedValue(generator = "increment")
-  @GenericGenerator(name = "increment", strategy = "increment")
-  private Long franchiseId;
+  private String name;
+
+  /**
+   * This field is the hashed password for the restaurant.
+   */
+  private String password;
   /**
    * This field is the address for the restaurant.
    */
   private String address;
-  /**
-   * This field is the name of the restaurant.
-   */
-  private String name;
   /**
    * This field is the contact number of the restaurant.
    */
@@ -44,25 +43,19 @@ public class Franchise {
   }
 
   /**
-   * This constrctuor is used by the server to create entries in the table.
-   *
-   * @param name          The name of the restaurant.
+   * This constructor is used by the server to create entries in the table.
+   *  @param name          The name of the restaurant.
    * @param address       The address of the restaurant.
    * @param contactNumber The contact number for the restaurant.
+   * @param password      The password for the restaurant.
    */
-  public Franchise(String name, String address, String contactNumber) {
+  public Franchise(String name, String address, String contactNumber, String password) {
     this.name = name;
     this.address = address;
     this.contactNo = contactNumber;
+    this.password = password;
   }
 
-  public Long getFranchiseId() {
-    return franchiseId;
-  }
-
-  public void setFranchiseId(Long franchiseId) {
-    this.franchiseId = franchiseId;
-  }
 
   public String getAddress() {
     return address;
@@ -86,5 +79,13 @@ public class Franchise {
 
   public void setContactNo(String contactNo) {
     this.contactNo = contactNo;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 }

@@ -1,17 +1,5 @@
 package database.tables;
 
-import database.tables.Category;
-import database.tables.Department;
-import database.tables.FoodOrder;
-import database.tables.Franchise;
-import database.tables.MenuItem;
-import database.tables.OrderMenuItem;
-import database.tables.OrderStatus;
-import database.tables.RestaurantTable;
-import database.tables.RestaurantTableStaff;
-import database.tables.Staff;
-import database.tables.TableStatus;
-import database.tables.Transaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +35,7 @@ public class OrderMenuItemTest {
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
     Franchise franchise = new Franchise("London", "1 London Way",
-        "0123456789");
+        "0123456789", "Password");
     entityManager.persist(franchise);
     entityManager.getTransaction().commit();
     entityManager.close();
