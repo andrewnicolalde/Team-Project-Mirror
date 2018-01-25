@@ -8,7 +8,7 @@
  */
 function loadOrder(tableNumber){
   var tableNumberToSend = JSON.stringify({tableNumber: tableNumber});
-  post("/api/auth/getOrder", tableNumberToSend, function(data){
+  post("/api/authStaff/getOrder", tableNumberToSend, function(data){
 
     // Parse JSON
     var response = JSON.parse(data);

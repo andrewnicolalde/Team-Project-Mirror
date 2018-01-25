@@ -125,6 +125,7 @@ public class AuthenticationEmployee {
     StaffSession session = (StaffSession)connector.getOne(request.session().attribute(
         "StaffSessionKey"), StaffSession.class);
     connector.remove(session);
+    request.session().removeAttribute("StaffSessionKey");
     return "success";
   }
 }
