@@ -11,9 +11,9 @@ function updatePage() {
       // check if in temp array, -1 means its not.
       if (displayedOrders.indexOf(response[i].orderId) === -1) {
         // if its not check if its on the page.
-        if (orderPresent(response[i].orderId)) {
+        if (!orderPresent(response[i].orderId)) {
           displayedOrders.push(response[i].orderId);
-          var column = "<div class='col '+ response[i].orderId>\n";
+          var column = "<div class='col "+ response[i].orderId +"'>\n";
           for (var j = 0; j < response[i].orderContents.length; j++) {
             column = column + "<div class='card text-center'>\n"
                 + "<div class='card-header'> Order: " + response[i].orderId + "</div>\n"
@@ -21,7 +21,7 @@ function updatePage() {
                 + "<br />Requirements: " + response[i].orderContents[j].requirements + "</div>\n"
                 + "</div>\n";
           }
-          column = column + "</div>"
+          column = column + "</div>";
           $(".row").append(column);
         }
       }
