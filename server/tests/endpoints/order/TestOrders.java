@@ -22,46 +22,6 @@ import static endpoints.order.Orders.getOrderMenuItems;
 import static org.junit.Assert.assertEquals;
 
 public class TestOrders {
-//  @Before
-//  public void setUp() {
-//    Connector connector = Connector.getInstance();
-//    connector.createConnection();
-//
-//    Category category = new Category("Food");
-//    connector.createItem(category);
-//
-//    MenuItem menuItem = new MenuItem("Chicken", "Got meat",
-//        "Well it's chicken", 1.00, false, false,
-//        false, category);
-//    connector.createItem(menuItem);
-//    Franchise franchise = new Franchise("Egham", "1 London Way",
-//        "0123456789");
-//    connector.createItem(franchise);
-//    Staff staff = new Staff("Password", Department.KITCHEN, franchise);
-//    connector.createItem(staff);
-//    RestaurantTable restaurantTable = new RestaurantTable(TableStatus.FILLED, 1,
-//        franchise);
-//    connector.createItem(restaurantTable);
-//
-//    RestaurantTableStaff restaurantTableStaff = new RestaurantTableStaff(staff, restaurantTable);
-//    connector.createItem(restaurantTableStaff);
-//
-//    Transaction transaction = new Transaction(false, 1.00, new Timestamp(1516709651),
-//        restaurantTableStaff);
-//
-//    connector.createItem(transaction);
-//
-//    FoodOrder foodOrder = new FoodOrder(OrderStatus.COOKING, new Timestamp(1516709651),
-//        transaction);
-//    connector.createItem(foodOrder);
-//
-//    OrderMenuItem orderMenuItem = new OrderMenuItem(menuItem, foodOrder,
-//        "Special instrcutions");
-//
-//    connector.createItem(orderMenuItem);
-//
-//    connector.closeConnection();
-//  }
 
   @Test
   public void testGetOrderMenuItem() {
