@@ -13,7 +13,10 @@ import database.tables.Staff;
 import database.tables.StaffSession;
 import database.tables.TableStatus;
 import endpoints.customer.Menu;
+import endpoints.kitchen.KitchenOrder;
+import endpoints.order.Orders;
 import endpoints.waiter.Tables;
+import endpoints.kitchen.KitchenOrder;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
@@ -56,8 +59,6 @@ public class Main {
     Staff staff2 = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), Department.WAITER, f);
     connector.createItem(staff2);
     System.out.println("Staff ID: " + staff2.getEmployeeNumber());
-    RestaurantTable table = new RestaurantTable(TableStatus.FREE, 1, f);
-    connector.createItem(table);
 
     // End points
     // Before is used to verify the user has access to the content they are requesting.
@@ -67,6 +68,11 @@ public class Main {
     get("/api/authStaff/menu", (req, res) -> Menu.getMenu());
     get("/api/authStaff/tables", Tables::getTables);
     post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
+    post("/api/authStaff/getOrder", Orders::getOrder);
+    post("/api/authStaff/addToOrder", Orders::addOrderMenuItem);
+    post("/api/authStaff/removeFromOrder", Orders::removeOrderMenuItem);
+    post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
+    post("api/authStaff/kitchen", (req, res) -> KitchenOrder.getOrder());
     get("/api/authStaff/logout", AuthenticationEmployee::logOutEmployee);
 
     System.out.println("Visit: http://localhost:4567");
