@@ -1,3 +1,4 @@
+import static spark.Spark.before;
 import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
@@ -10,8 +11,10 @@ import database.tables.Franchise;
 import database.tables.Staff;
 import database.tables.StaffSession;
 import endpoints.customer.Menu;
+import endpoints.kitchen.KitchenOrder;
 import endpoints.order.Orders;
 import endpoints.waiter.Tables;
+import endpoints.kitchen.KitchenOrder;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
@@ -68,6 +71,7 @@ public class Main {
     post("/api/auth/addToOrder", Orders::addOrderMenuItem);
     post("/api/auth/removeFromOrder", Orders::removeOrderMenuItem);
     post("/api/auth/changeOrderStatus", Orders::changeOrderStatus);
+    post("api/auth/kitchen", (req, res) -> KitchenOrder.getOrder());
 
     System.out.println("Visit: http://localhost:4567");
   }

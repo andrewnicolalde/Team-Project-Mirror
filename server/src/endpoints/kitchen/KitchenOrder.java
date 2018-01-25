@@ -1,6 +1,6 @@
 package endpoints.kitchen;
 
-public class Order {
+public class KitchenOrder {
 
   public static String getOrder() {
     return "[{\"orderId\":1,\"orderContents\":" +
