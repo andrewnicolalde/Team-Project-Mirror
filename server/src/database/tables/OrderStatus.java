@@ -6,7 +6,10 @@ package database.tables;
  * @author Marcus Messer
  */
 public enum OrderStatus {
-  CANCELED,
-  READY_TO_COLLECT,
-  CONFIRMED
+  CANCELLED,
+  ORDERING,
+  READY_TO_CONFIRM,
+  COOKING,
+  READY_TO_DELIVER,
+  DELIVERED
 }
