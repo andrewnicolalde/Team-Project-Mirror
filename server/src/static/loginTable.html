@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="./js/ajax.js"></script>
+  <script>
+        $(document).ready(function(){
+            $("#loginbutton").click(function(){
+                post("/api/loginTable",
+                    JSON.stringify({
+                       name: $("#username").val(),
+                       password: $("#password").val(),
+                       tableNumber: $("#tablenumber").val()
+                    }),
+                function(data) {
+                    var response = JSON.parse(data);
+                    if (response.validlogin === true) {
+                        window.location.replace(response.redirection);
+                    } else {
+                        $("#errormessage").text("Incorrect username/password combination!");
+                    }
+                });
+            });
+        });
+
+  </script>
+</head>
+<body>
+<h2 id="errormessage"></h2>
+<input type="text" id="username" name="username" title="Username">
+<br>
+<input type="password" id="password" name="password" title="Password">
+<br>
+<input type="text" id="tablenumber" name="Table Number" title="Password">
+<br>
+<button id="loginbutton">Log in</button>
+</body>
+</html>
