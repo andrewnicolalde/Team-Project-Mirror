@@ -11,6 +11,7 @@ import database.tables.Franchise;
 import database.tables.Staff;
 import database.tables.StaffSession;
 import endpoints.customer.Menu;
+import endpoints.order.Orders;
 import endpoints.waiter.Tables;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -27,13 +28,13 @@ public class Main {
    */
   public static void main(String[] args) {
     staticFileLocation("static"); // Lets spark know where the static files are
-    
+
     /*
     // Uncomment this if you are pushing to Heroku
     int port = Integer.parseInt(System.getenv("PORT"));
     port(port);
     */
-    
+
     // Setup the database connector
     connector = Connector.getInstance();
     connector.createConnection();
@@ -60,10 +61,15 @@ public class Main {
     before("/api/auth/*", AuthenticationEmployee::checkStaffSession);
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
+
     get("/api/auth/menu", (req, res) -> Menu.getMenu());
     get("/api/auth/tables", Tables::getTables);
-    post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
     get("/api/auth/logoutStaff", AuthenticationEmployee::logOutEmployee);
+    post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
+    post("/api/auth/getOrder", Orders::getOrder);
+    post("/api/auth/addToOrder", Orders::addOrderMenuItem);
+    post("/api/auth/removeFromOrder", Orders::removeOrderMenuItem);
+    post("/api/auth/changeOrderStatus", Orders::changeOrderStatus);
 
     System.out.println("Visit: http://localhost:4567");
   }

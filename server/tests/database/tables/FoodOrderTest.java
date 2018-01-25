@@ -77,7 +77,7 @@ public class FoodOrderTest {
     //Create new order
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    FoodOrder foodOrder = new FoodOrder(OrderStatus.CANCELED, new Timestamp(1516709651),
+    FoodOrder foodOrder = new FoodOrder(OrderStatus.CANCELLED, new Timestamp(1516709651),
         transaction);
     entityManager.persist(foodOrder);
     entityManager.getTransaction().commit();

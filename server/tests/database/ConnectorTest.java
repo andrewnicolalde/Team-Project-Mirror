@@ -109,6 +109,45 @@ public class ConnectorTest {
   }
 
   @Test
+  public void updateFranchiseUsingConnector() {
+    Connector connector = Connector.getInstance();
+    connector.createConnection();
+
+    Franchise franchise = new Franchise("London", "1 London Way",
+        "0123456789");
+    connector.createItem(franchise);
+
+    franchise.setName("New London");
+    connector.update(franchise);
+
+    List<Franchise> result = connector.query("from Franchise", Franchise.class);
+
+    for (Franchise item : result) {
+      assertEquals("Check updated", item.getName(), "New London");
+    }
+  }
+  @Test
+  public void updateTwiceFranchiseUsingConnector() {
+    Connector connector = Connector.getInstance();
+    connector.createConnection();
+
+    Franchise franchise = new Franchise("London", "1 London Way",
+        "0123456789");
+    connector.createItem(franchise);
+
+    franchise.setName("New London");
+    franchise.setAddress("2 London Way");
+    connector.update(franchise);
+
+    List<Franchise> result = connector.query("from Franchise", Franchise.class);
+
+    for (Franchise item : result) {
+      assertEquals("Check updated", item.getName(), "New London");
+      assertEquals("Check updated address", item.getAddress(), "2 London Way");
+    }
+  }
+
+  @Test
   public void createStaffUsingConnector() {
     Connector connector = Connector.getInstance();
     connector.createConnection();
