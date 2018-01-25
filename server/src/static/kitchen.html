@@ -16,10 +16,15 @@
 
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+  <script src="js/update-kitchen.js"></script>
   <script>
+    $(document).ready(function(){
+      var tid = setInterval(updatePage, 1000);
+      updatePage();
+    });
+
     function logout() {
-      //TODO ajax stuff
-      // /api/auth/logoutStaff
+      $.get("/api/auth/logoutStaff");
     }
 
 
