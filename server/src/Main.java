@@ -5,7 +5,6 @@ import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
 import endpoints.authentication.AuthenticationEmployee;
-import endpoints.authentication.AuthenticationTable;
 import database.Connector;
 import database.tables.Department;
 import database.tables.Franchise;
@@ -14,7 +13,6 @@ import database.tables.Staff;
 import database.tables.StaffSession;
 import database.tables.TableStatus;
 import endpoints.customer.Menu;
-import endpoints.order.Orders;
 import endpoints.waiter.Tables;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -64,14 +62,11 @@ public class Main {
     // End points
     // Before is used to verify the user has access to the content they are requesting.
     before("/api/authStaff/*", AuthenticationEmployee::checkStaffSession);
-    before("/api/authTable/*", AuthenticationTable::checkTableSession);
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/menu", (req, res) -> Menu.getMenu());
     get("/api/authStaff/tables", Tables::getTables);
     post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
-    post("/api/loginTable", AuthenticationTable::logInTable);
-    get("/api/authTable/logout", AuthenticationTable::logOutTable);
     get("/api/authStaff/logout", AuthenticationEmployee::logOutEmployee);
 
     System.out.println("Visit: http://localhost:4567");
