@@ -1,6 +1,5 @@
 /**
  * Preliminary method to update the page dynamically with new orders.
- * @param data the data response to an ajax query.
  */
 function updatePage() {
   post("/api/authStaff/kitchen", function(data) {
