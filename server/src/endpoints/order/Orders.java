@@ -92,7 +92,7 @@ public class Orders {
             "foodOrder.transaction.restaurantTableStaff.restaurantTable.TableSession." +
             "tableSessionId = " + 1 + " and " +
             "foodOrder.transaction.restaurantTableStaff.restaurantTable.franchise.franchiseId = " +
-            tempStaff.getStaff().getFranchise().getFranchiseId(),
+            tempStaff.getStaff().getFranchise().getName(),
         FoodOrder.class);
 
     OrderMenuItem orderMenuItem = new OrderMenuItem((MenuItem) connector.getOne(

@@ -10,12 +10,12 @@ import database.tables.RestaurantTableStaff;
 public class TableData {
   private int number;
   private String status;
-  private Long franchise;
+  private String franchise;
 
   public TableData(RestaurantTableStaff restaurantTableStaff) {
     this.number = restaurantTableStaff.getRestaurantTable().getTableNumber();
     this.status = restaurantTableStaff.getRestaurantTable().getStatus().toString();
-    this.franchise = restaurantTableStaff.getRestaurantTable().getFranchise().getFranchiseId();
+    this.franchise = restaurantTableStaff.getRestaurantTable().getFranchise().getName();
   }
 
   public int getNumber() {
@@ -26,7 +26,7 @@ public class TableData {
     return status;
   }
 
-  public Long getFranchise() {
+  public String getFranchise() {
     return franchise;
   }
 }
