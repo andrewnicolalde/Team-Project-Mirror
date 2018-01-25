@@ -36,6 +36,7 @@ public class Orders {
    * JSON input:
    *     tableNumber: An integer representing the table number
    *     menuItemId: An integer representing the id of the MenuItem to add to the order.
+   *     description: A string representing a description/extra details for the order.
    * @param request A HTTP request object.
    * @param response A HTTP response object.
    * @return A string saying either "success" or "failed"
