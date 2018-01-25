@@ -13,10 +13,11 @@
   <script src="https://code.jquery.com/qunit/qunit-2.5.0.js"></script>
 
   <script>
+    QUnit.module("Check if order is present on the page");
     QUnit.test( "Test adding a div", function( assert ) {
       var fixture = $("#qunit-fixture");
       fixture.append("<div class='1'>Some card test</div>");
-      assert.equal( $("div", fixture).length, 1, "We expect to have one div" );
+      assert.deepEqual( $("div", fixture).length, 1, "We expect to have one div" );
     });
     QUnit.test( "Test finding an order number on the page", function ( assert ) {
       var fixture = $("#qunit-fixture");
@@ -27,8 +28,31 @@
           + "        <br />Requirements: No Cheese</div>\n"
           + "      </div>\n"
           + "     </div>\n");
-      assert.equal( orderPresent("1"), true, "checks if an order number is on the page");
+      assert.deepEqual( orderPresent("1"), true, "checks if an order number is on the page");
     });
+
+    QUnit.module("Update page");
+    QUnit.test( "Adding a present order to temp array", function ( assert) {
+      var fixture = $("#qunit-fixture");
+      fixture.append("<div class='row'><div class=\"col 1\">\n"
+          + "      <div class=\"card text-center\">\n"
+          + "        <div class=\"card-header\">Order No: 1</div>\n"
+          + "        <div class=\"card-body\">Item: Burrito\n"
+          + "        <br />Requirements: No Cheese</div>\n"
+          + "      </div>\n"
+      +"<div class=\"card text-center\">\n"
+      + "        <div class=\"card-header\">Order No: 1</div>\n"
+      + "        <div class=\"card-body\">Item: Burrito\n"
+      + "        <br />Requirements: No Cheese</div>\n"
+      + "      </div>\n"
+          + "     </div>\n");
+      updatePage("[{\"orderId\":1,\"orderContents\":" +
+          "[{\"orderMenuItemId\":1,\"itemName\":\"Taco\",\"requirements\":\"Extra spicy\"}," +
+          "{\"orderMenuItemId\":3,\"itemName\":\"Burrito\",\"requirements\":\"\"}]}," +
+          "{\"orderId\":2,\"orderContents\":[{\"orderMenuItemId\":5,\"itemName\":\"taco\",\"requirements\":\"None\"}]}]")
+      assert.deepEqual($('.col', fixture).length, 2, "checking the array is being filled.");
+    });
+
   </script>
 </body>
 </html>

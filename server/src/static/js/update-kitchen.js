@@ -5,21 +5,37 @@
 function updatePage(data) {
 
   var response = JSON.parse(data);
+  var displayedOrders = [];
 
-  for (i = 0; i < response.length; i++) {
-    // first item or item on same order (assuming grouped by order)
-    if (i === 0 || response[i].orderNo === response[i-1].orderNo) { // this might be a bad check.
-      // set the order number to be a class of the column to separate them.
-      $(".row").append("<div class=\"col "+ response[i].orderNo +"\">" +
+  for (var i = 0; i < response.length; i++) {
+    // check if in temp array, -1 means its not.
+    if (displayedOrders.indexOf(response[i].orderId) === -1) {
+      // if its not check if its on the page.
+      if (orderPresent(response[i].orderId)) {
+        displayedOrders.push(response[i].orderId);
+        var column = "<div class='col '+ response[i].orderId>\n";
+        for (var j = 0; j < response[i].orderContents.length; j++) {
+          column = column + "<div class='card text-center'>\n"
+              + "<div class='card-header'> Order: " + response[i].orderId + "</div>\n"
+              + "<div class='card-body'> Item: " + response[i].orderContents[j].itemName + "\n"
+              + "<br />Requirements: " + response[i].orderContents[j].requirements + "</div>\n"
+              + "</div>\n";
+        }
+        column = column + "</div>"
+        $(".row").append(column);
+      }
+
+      /*$(".row").append("<div class=\"col "+ response[i].orderNo +"\">" +
           "<div class='card text-center'" +
           "<div class='card-header'>Order No: " + response[i].orderNo + "</div>" +
           "<div class='card-body'>Item: " + response[i].item +
           "<br />Requirements: " + response[i].requirements +
           "</div>" +
           "</div>" +
-          "</div>");
+          "</div>");*/
     }
   }
+  return displayedOrders;
 }
 
 function orderPresent( orderNum) {
