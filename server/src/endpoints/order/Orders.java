@@ -1,8 +1,18 @@
 package endpoints.order;
 
 import com.google.gson.Gson;
+import com.sun.org.apache.xpath.internal.operations.Or;
+import database.Connector;
+import database.tables.MenuItem;
+import database.tables.OrderMenuItem;
+import javafx.scene.control.ListCell;
 import spark.Request;
 import spark.Response;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.util.List;
 
 public class Orders {
   private static final Gson GSON = new Gson();
@@ -17,18 +27,28 @@ public class Orders {
    */
   public static String getOrder(Request request, Response response) {
     OrderRequestParameters or = GSON.fromJson(request.body(), OrderRequestParameters.class);
-    return getOrderMenuItems(or.getTableNumber());
+    return getOrderMenuItems(or.getTableNumber(), request.attribute("StaffSessionKey"));
   }
 
 
-  public static String getOrderMenuItems(Long tableNumber) {
-    // TODO: Search database for order contents
-    return "[{\"id\":1,\"name\":\"Taco\",\"category\":\"Main\",\"allergy_info\":\"None\"," +
-        "\"description\":\"Some meat in hard shell plus some lettuce\",\"price\":7.99,\"is_vegan\":false," +
-        "\"is_vegetarian\":false,\"is_gluten_free\":false,\"picture_src\":\"images/taco.jpg\"},{\"id\":2," +
-        "\"name\":\"Pepsi Max\",\"allergy_info\":\"None\",\"category\":\"Drinks\"," +
-        "\"description\":\"Coca cola of the diet variety\",\"price\":4.99,\"is_vegan\":true,\"is_vegetarian\":true," +
-        "\"is_gluten_free\":true,\"picture_src\":\"images/diet_coke.jpg\"}]";
+  public static String getOrderMenuItems(Long tableNumber, Long staffId) {
+
+    Connector connector = Connector.getInstance();
+    connector.createConnection();
+    List<OrderMenuItem> orderMenuItems = connector.query("from OrderMenuItem "
+        + "orderMenuItem where orderMenuItem.foodOrder.transaction.restaurantTableStaff."
+        + "restaurantTable.tableNumber = " + tableNumber + " and "
+        + "orderMenuItem.foodOrder.transaction.restaurantTableStaff.staff.employeeNumber = "
+        + staffId, OrderMenuItem.class);
+
+
+    connector.closeConnection();
+
+    CustomerOrderData[] customerOrderData = new CustomerOrderData[orderMenuItems.size()];
+    for (int i = 0; i < customerOrderData.length; i ++) {
+      customerOrderData[i] = new CustomerOrderData(orderMenuItems.get(i));
+    }
+    return GSON.toJson(customerOrderData);
   }
 
   /**
