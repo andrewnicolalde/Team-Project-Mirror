@@ -33,7 +33,7 @@ public class Main {
   public static void main(String[] args) {
     staticFileLocation("static"); // Lets spark know where the static files are
 
-    
+
     // Uncomment this if you are pushing to Heroku
     int port = Integer.parseInt(System.getenv("PORT"));
     port(port);
