@@ -1,6 +1,5 @@
 package database.tables;
 
-import database.tables.Franchise;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +35,7 @@ public class FranchiseTest {
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
     entityManager.persist(new Franchise("London", "1 London Way",
-        "0123456789"));
+        "0123456789", "Password"));
     entityManager.getTransaction().commit();
     entityManager.close();
 

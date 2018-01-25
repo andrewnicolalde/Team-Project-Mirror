@@ -1,8 +1,5 @@
 package database.tables;
 
-import database.tables.Franchise;
-import database.tables.RestaurantTable;
-import database.tables.TableStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +34,8 @@ public class RestaurantTableTest {
     //Create new franchise for the purpose of this test.
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    Franchise franchise = new Franchise("London", "1 London Way", "0123456789");
+    Franchise franchise = new Franchise("London", "1 London Way",
+        "0123456789", "Password");
     entityManager.persist(franchise);
     entityManager.getTransaction().commit();
     entityManager.close();
@@ -59,8 +57,8 @@ public class RestaurantTableTest {
     for (RestaurantTable restaurantTable : result) {
       assertEquals("Check table status", TableStatus.FREE, restaurantTable.getStatus());
       assertEquals("Check table number", 1, restaurantTable.getTableNumber());
-      assertEquals("Check franchise", franchise.getFranchiseId(),
-          restaurantTable.getFranchise().getFranchiseId());
+      assertEquals("Check franchise", franchise.getName(),
+          restaurantTable.getFranchise().getName());
     }
 
     entityManager.getTransaction().commit();
