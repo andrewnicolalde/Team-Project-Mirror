@@ -20,9 +20,7 @@
       <property name="hibernate.connection.username" value="auberixli"/>
       <property name="hibernate.connection.password"
         value="c6si4jTVUwYneW4WdNjArQGoIZlnzt4u57akF6EsYeXPturegl8lB7IVMaLxrgsACZIQLbxC"/>
-      <!--<property name="hibernate.flushMode" value="FLUSH_AUTO"/>-->
 
-      <!--<property name="hibernate.show_sql" value="true"/>-->
       <property name="hibernate.hbm2ddl.auto" value="update"/>
     </properties>
 
