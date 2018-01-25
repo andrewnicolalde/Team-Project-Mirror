@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="/js/ajax.js"></script>
+  <script>
         $(document).ready(function(){
             $("#loginbutton").click(function(){
-                $.post("/api/login",
+                post("/api/loginStaff",
                     JSON.stringify({
-                       username: $("#username").val(),
+                       employeeNumber: $("#username").val(),
                        password: $("#password").val()
                     }),
                 function(data) {
-                    console.log(data);
                     var response = JSON.parse(data);
-                    console.log("Valid Login: " + response.validlogin + "\nSession key: " + response.sessionkey);
                     if (response.validlogin === true) {
-                        window.location.replace("/");
+                        window.location.replace(response.redirection);
                     } else {
                         $("#errormessage").text("Incorrect username/password combination!");
                     }
                 });
             });
         });
-    </script>
+
+  </script>
 </head>
 <body>
 <h2 id="errormessage"></h2>
