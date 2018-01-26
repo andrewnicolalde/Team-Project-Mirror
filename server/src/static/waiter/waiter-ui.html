@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/ajax-wrapper.js"></script>
+    <script type="text/javascript" src="../js/tableretrieve-waiter.js"></script>
+    <script type="text/javascript" src="../js/menuretrieve-waiter.js"></script>
+    <script type="text/javascript" src="../js/get-order-waiter.js"></script>
+    <meta charset="UTF-8">
+    <title>Waiter UI</title>
+</head>
+<body>
+<!-- 3 Columns -->
+<div class="container">
+
+    <div class="row">
+        <!-- The waiter clicks the table to see the current order & add/subtract items & confirm -->
+        <div class="col">
+            Tables
+            <ul class="list-group" id="tables-list">
+                <!-- Loaded dynamically via jQuery script -->
+            </ul>
+        </div>
+        <div class="col">
+            Menu
+            <ul class="list-group" id="menu-list">
+                <!-- Loaded dynamically via jQuery script -->
+            </ul>
+            <p class="text-center">
+                Key:<br>
+                Gluten Free: <img src="../images/gluten-free.svg">
+                Vegetarian: <img src="../images/vegetarian-mark.svg">
+                Vegan: <img src="../images/vegan-mark.svg">
+            </p>
+        </div>
+        <div class="col">
+            Current Order
+            <ul class="list-group" id="current-order">
+                <!-- TODO: List should be scrollable. -->
+            </ul>
+            <div class="text-center">
+                <button type="button" class="btn btn-danger">Cancel Order</button>
+                <button type="button" class="btn btn-success">Confirm Order</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
