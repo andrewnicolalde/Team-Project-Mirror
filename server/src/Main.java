@@ -35,8 +35,8 @@ public class Main {
 
 
     // Uncomment this if you are pushing to Heroku
-    int port = Integer.parseInt(System.getenv("PORT"));
-    port(port);
+//    int port = Integer.parseInt(System.getenv("PORT"));
+//    port(port);
 
 
     // Setup the database connector
@@ -50,15 +50,15 @@ public class Main {
     }
 
     // Create dummy employees for testing
-    Franchise f = new Franchise("Egham", "Egham High Street",
-        "0123456789", BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()));
-    connector.createItem(f);
-    Staff staff = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), Department.WAITER, f);
-    connector.createItem(staff);
-    System.out.println("Staff ID: " + staff.getEmployeeNumber());
-    Staff staff2 = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), Department.WAITER, f);
-    connector.createItem(staff2);
-    System.out.println("Staff ID: " + staff2.getEmployeeNumber());
+//    Franchise f = new Franchise("Egham", "Egham High Street",
+//        "0123456789", BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()));
+//    connector.createItem(f);
+//    Staff staff = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), Department.WAITER, f);
+//    connector.createItem(staff);
+//    System.out.println("Staff ID: " + staff.getEmployeeNumber());
+//    Staff staff2 = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), Department.WAITER, f);
+//    connector.createItem(staff2);
+//    System.out.println("Staff ID: " + staff2.getEmployeeNumber());
 
     // End points
     // Before is used to verify the user has access to the content they are requesting.

@@ -27,11 +27,9 @@ public class Tables {
 
   public static String getTableData(Long staffId) {
     Connector connector = Connector.getInstance();
-    connector.createConnection();
     List<RestaurantTableStaff> restaurantTableStaffs = connector.query("from " +
         "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
         RestaurantTableStaff.class);
-    connector.closeConnection();
 
     TableData[] tableData = new TableData[restaurantTableStaffs.size()];
     for (int i = 0; i < tableData.length; i++) {

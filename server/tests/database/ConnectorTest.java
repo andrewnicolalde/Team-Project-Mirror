@@ -34,7 +34,6 @@ public class ConnectorTest {
   @Test
   public void createFranchiseUsingConnector() {
     Connector connector = Connector.getInstance();
-    connector.createConnection();
 
     Franchise franchise = new Franchise("London", "1 London Way",
         "0123465789", "Password");
@@ -52,14 +51,12 @@ public class ConnectorTest {
       assertEquals("Check new franchise", franchise.getName(), item.getName());
     }
 
-    connector.closeConnection();
 
   }
 
   @Test
   public void queryFranchiseUsingConnector() {
     Connector connector = Connector.getInstance();
-    connector.createConnection();
 
     Franchise franchise = new Franchise("London", "1 London Way",
         "0123456789", "Password");
@@ -71,13 +68,11 @@ public class ConnectorTest {
       assertEquals("Check query", franchise.getName(), item.getName());
     }
 
-    connector.closeConnection();
   }
 
   @Test
   public void getOneFranchiseUsingConnector() {
     Connector connector = Connector.getInstance();
-    connector.createConnection();
 
     Franchise franchise = new Franchise("London", "1 London Way",
         "0123456789", "Password");
@@ -85,7 +80,6 @@ public class ConnectorTest {
 
     Franchise result = (Franchise) connector.getOne(franchise.getName(), Franchise.class);
     assertEquals("Check get", result.getName(), franchise.getName());
-    connector.closeConnection();
   }
 
   @Test
@@ -152,7 +146,6 @@ public class ConnectorTest {
   @Test
   public void createStaffUsingConnector() {
     Connector connector = Connector.getInstance();
-    connector.createConnection();
 
     Franchise franchise = new Franchise("London", "1 London Way",
         "0123456789", "Password");
@@ -175,13 +168,11 @@ public class ConnectorTest {
           item.getFranchise().getName());
     }
 
-    connector.closeConnection();
   }
 
   @Test
   public void queryStaffUsingConnector() {
     Connector connector = Connector.getInstance();
-    connector.createConnection();
 
     Franchise franchise = new Franchise("London", "1 London Way",
         "0123456789", "Password");
@@ -196,13 +187,11 @@ public class ConnectorTest {
       assertEquals("Check query", staff.getEmployeeNumber(), item.getEmployeeNumber());
     }
 
-    connector.closeConnection();
   }
 
   @Test
   public void updateStaffUsingConnector() {
     Connector connector = Connector.getInstance();
-    connector.createConnection();
 
     Franchise franchise = new Franchise("London", "1 London Way",
         "0123456789", "Password");
@@ -218,6 +207,5 @@ public class ConnectorTest {
 
     assertEquals("Check update", temp.getDepartment(), Department.KITCHEN);
 
-    connector.closeConnection();
   }
 }

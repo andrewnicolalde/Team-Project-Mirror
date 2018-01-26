@@ -9,6 +9,7 @@ import database.tables.MenuItem;
  */
 public class MenuData {
   private Long id;
+  private String name;
   private String category;
   private String allergy_info;
   private String description;
@@ -24,6 +25,7 @@ public class MenuData {
    */
   public MenuData(MenuItem menuItem) {
     this.id = menuItem.getMenuItemId();
+    this.name = menuItem.getName();
     this.category = menuItem.getCategory().getName();
     this.allergy_info = menuItem.getAllergyInfo();
     this.description = menuItem.getDescription();
@@ -72,5 +74,9 @@ public class MenuData {
 
   public String getPicture_src() {
     return picture_src;
+  }
+
+  public String getName() {
+    return name;
   }
 }

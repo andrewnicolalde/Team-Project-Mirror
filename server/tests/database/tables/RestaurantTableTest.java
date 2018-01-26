@@ -31,15 +31,11 @@ public class RestaurantTableTest {
   public void createTableTest() {
     EntityManager entityManager;
 
-    //Create new franchise for the purpose of this test.
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    Franchise franchise = new Franchise("London", "1 London Way",
-        "0123456789", "Password");
-    entityManager.persist(franchise);
+    Franchise franchise = entityManager.find(Franchise.class, "Egham");
     entityManager.getTransaction().commit();
     entityManager.close();
-
     //Create new table.
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();

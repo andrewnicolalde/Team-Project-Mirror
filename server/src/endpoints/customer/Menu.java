@@ -18,11 +18,8 @@ public class Menu {
    */
   public static String getMenu() {
     Connector connector = Connector.getInstance();
-    connector.createConnection();
 
     List<MenuItem> menuItems = connector.query("from MenuItem", MenuItem.class);
-
-    connector.closeConnection();
 
     MenuData[] menuData = new MenuData[menuItems.size()];
 
