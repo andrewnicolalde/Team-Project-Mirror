@@ -5,6 +5,7 @@ import database.Connector;
 import database.tables.FoodOrder;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
+import database.tables.Staff;
 import database.tables.StaffSession;
 import java.util.List;
 import spark.Request;
@@ -31,27 +32,17 @@ public class Orders {
    * Returns the order menu items from the database in JSON format.
    *
    * @param tableNumber The number of the table.
-   * @param staffId The employee number for the staff member.
+   * @param staffSessionKey The employee number for the staff member.
    * @return The menu items for the table in a JSON format.
    * @author Marcus Messer
    */
-  public static String getOrderMenuItems(Long tableNumber, Long staffId) {
-
-    Connector connector = Connector.getInstance();
-    connector.createConnection();
-    List<OrderMenuItem> orderMenuItems = connector.query("from OrderMenuItem "
-        + "orderMenuItem where orderMenuItem.foodOrder.transaction.restaurantTableStaff."
-        + "restaurantTable.tableNumber = " + tableNumber + " and "
-        + "orderMenuItem.foodOrder.transaction.restaurantTableStaff.staff.employeeNumber = "
-        + staffId, OrderMenuItem.class);
-
-    connector.closeConnection();
-
-    CustomerOrderData[] customerOrderData = new CustomerOrderData[orderMenuItems.size()];
-    for (int i = 0; i < customerOrderData.length; i++) {
-      customerOrderData[i] = new CustomerOrderData(orderMenuItems.get(i));
-    }
-    return GSON.toJson(customerOrderData);
+  public static String getOrderMenuItems(Long tableNumber, String staffSessionKey) {
+    return "[{\"id\":1,\"name\":\"Taco\",\"category\":\"Main\",\"allergy_info\":\"None\"," +
+        "\"description\":\"Some meat in hard shell plus some lettuce\",\"price\":7.99,\"is_vegan\":false," +
+        "\"is_vegetarian\":false,\"is_gluten_free\":false,\"picture_src\":\"images/taco.jpg\"},{\"id\":2," +
+        "\"name\":\"Pepsi Max\",\"allergy_info\":\"None\",\"category\":\"Drinks\"," +
+        "\"description\":\"Coca cola of the diet variety\",\"price\":4.99,\"is_vegan\":true,\"is_vegetarian\":true," +
+        "\"is_gluten_free\":true,\"picture_src\":\"images/diet_coke.jpg\"}]";
   }
 
   /**
@@ -66,7 +57,6 @@ public class Orders {
   public static String addOrderMenuItem(Request request, Response response) {
     OrderMenuItemParameters omi = GSON.fromJson(request.body(), OrderMenuItemParameters.class);
     Connector connector = Connector.getInstance();
-    connector.createConnection();
 
     StaffSession tempStaff = (StaffSession) connector.getOne(request.attribute("StaffSessionKey"),
         StaffSession.class);
@@ -89,7 +79,6 @@ public class Orders {
 
     connector.createItem(orderMenuItem);
 
-    connector.closeConnection();
     return "success";
   }
 

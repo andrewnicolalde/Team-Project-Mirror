@@ -40,6 +40,7 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
    * Empty private constructor to stop creating more than one connector.
    */
   private Connector() {
+    createConnection();
   }
 
   /**
