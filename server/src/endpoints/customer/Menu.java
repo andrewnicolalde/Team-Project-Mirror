@@ -17,7 +17,7 @@ public class Menu {
    * @return The menu in JSON as a string.
    */
   public static String getMenu() {
-    Connector connector = Connector.getInstance();
+    Connector connector = new Connector();
 
     List<MenuItem> menuItems = connector.query("from MenuItem", MenuItem.class);
 
@@ -26,6 +26,8 @@ public class Menu {
     for (int i = 0; i < menuData.length; i++) {
       menuData[i] = new MenuData(menuItems.get(i));
     }
+
+    connector.closeConnection();
 
     return GSON.toJson(menuData);
   }
