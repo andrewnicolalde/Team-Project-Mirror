@@ -35,8 +35,11 @@ public class Main {
 
 
     // Uncomment this if you are pushing to Heroku
-    int port = Integer.parseInt(System.getenv("PORT"));
-    port(port);
+    if (System.getenv("PORT") != null) {
+      int port = Integer.parseInt(System.getenv("PORT"));
+      port(port);
+    }
+
 
 
     // Setup the database connector
