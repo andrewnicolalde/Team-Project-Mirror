@@ -65,13 +65,13 @@ public class Main {
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/menu", (req, res) -> Menu.getMenu());
     get("/api/authStaff/tables", Tables::getTables);
+    get("api/authStaff/kitchen", (req, res) -> KitchenOrder.getOrder());
+    get("/api/authStaff/logout", AuthenticationEmployee::logOutEmployee);
     post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
     post("/api/authStaff/getOrder", Orders::getOrder);
     post("/api/authStaff/addToOrder", Orders::addOrderMenuItem);
     post("/api/authStaff/removeFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
-    post("api/authStaff/kitchen", (req, res) -> KitchenOrder.getOrder());
-    get("/api/authStaff/logout", AuthenticationEmployee::logOutEmployee);
 
     System.out.println("Visit: http://localhost:4567");
   }

@@ -1,8 +1,7 @@
 /**
  * Preliminary method to update the page dynamically with new orders.
  */
-function updatePage() {
-  post("/api/authStaff/kitchen", function(data) {
+function updatePage(data) {
     var response = JSON.parse(data);
     var displayedOrders = [];
 
@@ -25,9 +24,23 @@ function updatePage() {
         }
       }
     }
-  });
 }
 
+/**
+ * Wrapper function to simplify interval.
+ */
+function checkPage() {
+  get("/api/authStaff/kitchen",  function(data) {
+    updatePage(data);
+  });
+
+}
+
+/**
+ * Check if an order number is being displayed on the screen.
+ * @param orderNum The order number to be checked.
+ * @returns {boolean} True if present on page, False if not.
+ */
 function orderPresent( orderNum) {
   var present = document.getElementsByClassName(orderNum);
   return present.length !== 0;
