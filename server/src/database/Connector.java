@@ -13,12 +13,6 @@ import java.util.List;
 public class Connector<T, PK> implements GenericDao<T, PK> {
 
   /**
-   * This field is a the singlton instance of the class, as there will be only one connection to
-   * the server.
-   */
-  private static Connector instance = new Connector();
-
-  /**
    * This field is used to create <code>EntityManager</code> objects.
    */
   private EntityManagerFactory entityManagerFactory;
@@ -28,27 +22,26 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
   private EntityManager entityManager;
 
   /**
-   * Gets the current instance of the connector.
-   *
-   * @return the instance of the class.
+   * This connector is used in development and production.
    */
-  public static Connector getInstance() {
-    return instance;
+  public Connector() {
+    createConnection("server.database.dev");
+//    createConnection("server.database");
   }
 
   /**
-   * Empty private constructor to stop creating more than one connector.
+   * This constrcutor is used in tests.
    */
-  private Connector() {
-    createConnection();
+  public Connector(String unit) {
+    createConnection(unit);
   }
 
   /**
    * This function creates the <code>EntityManger</code> that will be used to communicate with the
    * database.
    */
-  public void createConnection() {
-    entityManagerFactory = Persistence.createEntityManagerFactory("server.database");
+  public void createConnection(String persistenceUnit) {
+      entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnit);
   }
 
   /**

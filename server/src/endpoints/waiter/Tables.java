@@ -26,7 +26,7 @@ public class Tables {
   }
 
   public static String getTableData(Long staffId) {
-    Connector connector = Connector.getInstance();
+    Connector connector = new Connector();
     List<RestaurantTableStaff> restaurantTableStaffs = connector.query("from " +
         "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
         RestaurantTableStaff.class);
