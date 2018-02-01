@@ -38,26 +38,6 @@ public class Main {
       port(port);
     }
 
-    // Setup the database connector
-    connector = new Connector();
-
-    // Check if there are any existing sessions, and end them.
-    List<StaffSession> currentSessions = connector.query("from StaffSession", StaffSession.class);
-    for (StaffSession session : currentSessions) {
-      connector.remove(session);
-    }
-
-    // Create dummy employees for testing
-//    Franchise f = new Franchise("Egham", "Egham High Street",
-//        "0123456789", BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()));
-//    connector.createItem(f);
-//    Staff staff = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), Department.WAITER, f);
-//    connector.createItem(staff);
-//    System.out.println("Staff ID: " + staff.getEmployeeNumber());
-//    Staff staff2 = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), Department.WAITER, f);
-//    connector.createItem(staff2);
-//    System.out.println("Staff ID: " + staff2.getEmployeeNumber());
-
     // End points
     // Before is used to verify the user has access to the content they are requesting.
     before("/api/authStaff/*", AuthenticationEmployee::checkStaffSession);
@@ -65,13 +45,13 @@ public class Main {
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/menu", (req, res) -> Menu.getMenu());
     get("/api/authStaff/tables", Tables::getTables);
+    get("api/authStaff/kitchen", (req, res) -> KitchenOrder.getOrder());
+    get("/api/authStaff/logout", AuthenticationEmployee::logOutEmployee);
     post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
     post("/api/authStaff/getOrder", Orders::getOrder);
     post("/api/authStaff/addToOrder", Orders::addOrderMenuItem);
     post("/api/authStaff/removeFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
-    post("api/authStaff/kitchen", (req, res) -> KitchenOrder.getOrder());
-    get("/api/authStaff/logout", AuthenticationEmployee::logOutEmployee);
 
     System.out.println("Visit: http://localhost:4567");
   }

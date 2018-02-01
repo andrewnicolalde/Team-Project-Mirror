@@ -20,12 +20,12 @@
   <script src="js/update-kitchen.js"></script>
   <script>
     $(document).ready(function(){
-      var tid = setInterval(updatePage, 5000);
-      updatePage();
+      var tid = setInterval(checkPage, 5000);
+      checkPage();
     });
 
     function logout() {
-      $.get("/api/authStaff/logoutStaff");
+      get("/api/authStaff/logoutStaff");
     }
 
 
