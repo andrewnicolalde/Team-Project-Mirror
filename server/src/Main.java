@@ -38,6 +38,10 @@ public class Main {
       port(port);
     }
 
+    // Initialise the connection.
+    connector = new Connector();
+    connector.closeConnection();
+
     // End points
     // Before is used to verify the user has access to the content they are requesting.
     before("/api/authStaff/*", AuthenticationEmployee::checkStaffSession);
