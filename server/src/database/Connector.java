@@ -23,10 +23,14 @@ public class Connector<T, PK> implements GenericDao<T, PK> {
 
   /**
    * This connector is used in development and production.
+   * It checks if there is a port environment variable (true if on Heroku).
    */
   public Connector() {
-    createConnection("server.database.dev");
-//    createConnection("server.database");
+    if (System.getenv("PORT") != null) {
+      createConnection("server.database");
+    } else {
+      createConnection("server.database.dev");
+    }
   }
 
   /**
