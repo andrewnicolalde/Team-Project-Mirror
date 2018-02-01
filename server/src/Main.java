@@ -33,15 +33,13 @@ public class Main {
   public static void main(String[] args) {
     staticFileLocation("static"); // Lets spark know where the static files are
 
-
-    // Uncomment this if you are pushing to Heroku
-    int port = Integer.parseInt(System.getenv("PORT"));
-    port(port);
-
+    if (System.getenv("PORT") != null) {
+      int port = Integer.parseInt(System.getenv("PORT"));
+      port(port);
+    }
 
     // Setup the database connector
-    connector = Connector.getInstance();
-    connector.createConnection();
+    connector = new Connector();
 
     // Check if there are any existing sessions, and end them.
     List<StaffSession> currentSessions = connector.query("from StaffSession", StaffSession.class);

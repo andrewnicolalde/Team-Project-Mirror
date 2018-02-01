@@ -18,23 +18,26 @@ import static org.junit.Assert.fail;
 public class ConnectorTest {
 
   private EntityManagerFactory entityManagerFactory;
+  private Connector connector;
 
   @Before
   public void setUp() {
     //Create link to the database
-    entityManagerFactory = Persistence.createEntityManagerFactory("server.database");
+    entityManagerFactory = Persistence.createEntityManagerFactory("server.database.test");
+    connector = new Connector("server.database.test");
   }
 
   @After
   public void tearDown() {
     //Close link to the database
     entityManagerFactory.close();
+    connector.closeConnection();
   }
 
   @Test
   public void createFranchiseUsingConnector() {
-    Connector connector = Connector.getInstance();
 
+    connector = new Connector("server.database.test");
     Franchise franchise = new Franchise("London", "1 London Way",
         "0123465789", "Password");
     connector.createItem(franchise);
@@ -56,7 +59,6 @@ public class ConnectorTest {
 
   @Test
   public void queryFranchiseUsingConnector() {
-    Connector connector = Connector.getInstance();
 
     Franchise franchise = new Franchise("London", "1 London Way",
         "0123456789", "Password");
@@ -72,7 +74,6 @@ public class ConnectorTest {
 
   @Test
   public void getOneFranchiseUsingConnector() {
-    Connector connector = Connector.getInstance();
 
     Franchise franchise = new Franchise("London", "1 London Way",
         "0123456789", "Password");
@@ -84,8 +85,6 @@ public class ConnectorTest {
 
   @Test
   public void removeFranchiseUsingConnector() {
-    Connector connector = Connector.getInstance();
-    connector.createConnection();
 
     Franchise franchise = new Franchise("London", "1 London Way",
         "0123456789", "Password");
@@ -145,7 +144,6 @@ public class ConnectorTest {
 
   @Test
   public void createStaffUsingConnector() {
-    Connector connector = Connector.getInstance();
 
     Franchise franchise = new Franchise("London", "1 London Way",
         "0123456789", "Password");
@@ -172,7 +170,6 @@ public class ConnectorTest {
 
   @Test
   public void queryStaffUsingConnector() {
-    Connector connector = Connector.getInstance();
 
     Franchise franchise = new Franchise("London", "1 London Way",
         "0123456789", "Password");
@@ -191,7 +188,6 @@ public class ConnectorTest {
 
   @Test
   public void updateStaffUsingConnector() {
-    Connector connector = Connector.getInstance();
 
     Franchise franchise = new Franchise("London", "1 London Way",
         "0123456789", "Password");
