@@ -1,5 +1,5 @@
 /**
- * Preliminary method to update the page dynamically with new orders.
+ * Updates the page to show orders returned by the server.
  */
 function updatePage(data) {
     var response = JSON.parse(data);
