@@ -18,7 +18,7 @@ public class RestaurantTableStaffTest {
   @Before
   public void setUp() {
     //Create link to the database
-    entityManagerFactory = Persistence.createEntityManagerFactory("server.database");
+    entityManagerFactory = Persistence.createEntityManagerFactory("server.database.test");
   }
 
   @After

@@ -56,7 +56,7 @@ public class Orders {
    */
   public static String addOrderMenuItem(Request request, Response response) {
     OrderMenuItemParameters omi = GSON.fromJson(request.body(), OrderMenuItemParameters.class);
-    Connector connector = Connector.getInstance();
+    Connector connector = new Connector();
 
     StaffSession tempStaff = (StaffSession) connector.getOne(request.attribute("StaffSessionKey"),
         StaffSession.class);
