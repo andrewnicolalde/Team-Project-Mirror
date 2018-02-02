@@ -1,12 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sample Index Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./css/homepage.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <title>ARMS - Oaxaca</title>
 </head>
 <body>
-<h1>Hello World!</h1>
-<p>This is a test page to see if the static pages are working.</p>
-<a href="login.html">Login</a>
+<div class="jumbotron jumbotron-fluid bg-info text-white text-center">
+  <div class="container">
+    <h1 class="display-2">Oaxaca</h1>
+    <p class="lead"> A stylish Mexican Resturant.</p>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div id="loginbuttons" class="col-md-4 col-lg-4">
+      <a href="loginStaff.html" aria-pressed="true"><button type="button" class="btn btn-primary btn-block loginbutton">Waitor Login</button></a>
+      <a href="loginTable.html" aria-pressed="true"><button type="button" class="btn btn-primary btn-block loginbutton">Table Login</button></a>
+    </div>
+  </div>
+</div>
 </body>
 </html>
