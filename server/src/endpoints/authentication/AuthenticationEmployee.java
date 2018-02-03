@@ -121,11 +121,12 @@ public class AuthenticationEmployee {
    * @param response The HTTP response
    * @return A string representing the status
    */
-  public static String logOutEmployee(Request request, Response response) {
+  public static Response logOutEmployee(Request request, Response response) {
     StaffSession session = (StaffSession)connector.getOne(request.session().attribute(
         "StaffSessionKey"), StaffSession.class);
     connector.remove(session);
     request.session().removeAttribute("StaffSessionKey");
-    return "success";
+    response.redirect("/");
+    return response;
   }
 }
