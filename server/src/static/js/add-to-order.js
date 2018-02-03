@@ -6,7 +6,6 @@
  */
 // TODO: Add a description attribute here so that additional preparation info can be provided.
 function addToOrder(menuItemId){
-  console.log("asdfasdfasdfasdfasdfasdf");
 
   // Find active table
   var allTables = document.getElementById("tables-list").children;
