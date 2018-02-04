@@ -38,12 +38,12 @@ public class Main {
 
     // Endpoints which are meant to be connected to directly, not via AJAX requests.
     get("/logout", AuthenticationEmployee::logOutEmployee);
+    post("/loginStaff", AuthenticationEmployee::logInEmployee);
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/menu", (req, res) -> Menu.getMenu());
     get("/api/authStaff/tables", Tables::getTables);
     get("api/authStaff/kitchen", (req, res) -> KitchenOrder.getOrder());
-    post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
     post("/api/authStaff/getOrder", Orders::getOrder);
     post("/api/authStaff/addToOrder", Orders::addOrderMenuItem);
     post("/api/authStaff/removeFromOrder", Orders::removeOrderMenuItem);

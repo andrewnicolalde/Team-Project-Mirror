@@ -2,43 +2,41 @@ package endpoints.authentication;
 
 import static spark.Spark.halt;
 
-import com.google.gson.Gson;
-import database.Connector;
+import database.tables.Department;
 import database.tables.Staff;
 import database.tables.StaffSession;
 import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
 
+
+
 public class AuthenticationEmployee {
 
-  private static final Gson GSON = new Gson();
-  private static Connector connector;
+  private static EntityManagerFactory emf = Persistence.createEntityManagerFactory(
+          "server.database");
+  private static EntityManager em = emf.createEntityManager();
+
 
   /**
    * Checks if the given details correctly match an employee stored in the database.
    * @param ap An EmployeeAuthenticationParameters object which holds the given login details.
-   * @return A boolean value showing whether or not the details match an employee's.
+   * @return The staff entity, or null is the parameters are invalid.
    */
-  private static boolean isValidLoginCombination(EmployeeAuthenticationParameters ap) {
-    Staff employee = (Staff)connector.getOne(ap.getEmployeeNumber(), Staff.class);
+  private static Staff isValidLoginCombination(EmployeeAuthenticationParameters ap) {
+    Staff employee = em.find(Staff.class, ap.getEmployeeNumber());
     if (employee == null) { // If the employee does not exist, then fail
-      return false;
+      return null;
     }
 
     // Check the password hashes match
-    return BCrypt.checkpw(ap.getPassword(), employee.getPassword());
-  }
-
-  /**
-   * Checks if the username and password combination is valid and returns a session key of they are.
-   * @param eap An object holding the username and password combination
-   * @return A session key as a string, or null if the username/password combination is invalid.
-   */
-  private static String authenticate(EmployeeAuthenticationParameters eap) {
-    if (isValidLoginCombination(eap)) {
-      return BCrypt.gensalt(); // Salt is a random string of characters, perfect for a session key.
+    if (BCrypt.checkpw(ap.getPassword(), employee.getPassword())) {
+      return employee;
     } else {
       return null;
     }
@@ -53,39 +51,48 @@ public class AuthenticationEmployee {
    * @param response The response to give.
    * @return The a JSON response showing whether is was successful and if so, the session key.
    */
-  public static String logInEmployee(Request request, Response response) {
-    connector = new Connector();
-
+  public static Response logInEmployee(Request request, Response response) {
     // Convert the data from the client into an object
-    EmployeeAuthenticationParameters ap = GSON.fromJson(request.body(),
-            EmployeeAuthenticationParameters.class);
+    EmployeeAuthenticationParameters ap = new EmployeeAuthenticationParameters(
+            new Long(request.queryParams("employeeNumber")), request.queryParams("password"));
 
     // Authenticate the given details
-    String sessionKey = authenticate(ap);
+    Staff employee = isValidLoginCombination(ap);
 
-    // sessionKey will be null if the details are invalid.
-    if (sessionKey != null) {
+    // employee will be null if the details are invalid.
+    if (employee != null) {
       // Check if there are any existing sessions with the current user, and end them.
-      List<StaffSession> currentSessions = (List<StaffSession>)(List<?>)connector.query(
-              "from StaffSession where employeeNumber = " + ap.getEmployeeNumber(),
-              StaffSession.class);
+      List<StaffSession> currentSessions = em.createQuery("SELECT s FROM StaffSession s "
+              + "WHERE s.staff = :staff", StaffSession.class).setParameter(
+                      "staff", employee).getResultList();
       for (StaffSession session : currentSessions) {
-        connector.remove(session);
+        em.getTransaction().begin();
+        em.remove(session);
+        em.getTransaction().commit();
       }
 
       // Create a new session with the current user.
-      StaffSession staffSession = new StaffSession(sessionKey,
-              (Staff)connector.getOne(ap.getEmployeeNumber(), Staff.class));
-      connector.createItem(staffSession);
+      String sessionKey = BCrypt.gensalt();
+      StaffSession staffSession = new StaffSession(sessionKey, employee);
+      em.getTransaction().begin();
+      em.persist(staffSession);
+      em.getTransaction().commit();
 
       // Create the spark session and set the session key.
       request.session(true);
       request.session().attribute("StaffSessionKey", sessionKey);
 
-      return "{\"validlogin\":true,\"redirection\":\"/\"}";
+      if (staffSession.getStaff().getDepartment() == Department.WAITER) {
+        response.redirect("/waiter/waiter-ui.html");
+      } else if (staffSession.getStaff().getDepartment() == Department.KITCHEN) {
+        response.redirect("/kitchen.html");
+      } else {
+        response.redirect("/");
+      }
     } else {
-      return "{\"validlogin\":false,\"redirection\":null}";
+      response.redirect("/");
     }
+    return response;
   }
 
   /**
@@ -104,8 +111,8 @@ public class AuthenticationEmployee {
     }
 
     // Attempt to get the session from the database.
-    StaffSession session = (StaffSession)connector.getOne(request.session().attribute(
-            "StaffSessionKey"), StaffSession.class);
+    StaffSession session = em.find(StaffSession.class,
+            request.session().attribute("StaffSessionKey"));
 
     if (session == null) {
       // Has a session key but is not a valid one. Possible logged in on another device since.
@@ -122,9 +129,11 @@ public class AuthenticationEmployee {
    * @return A string representing the status
    */
   public static Response logOutEmployee(Request request, Response response) {
-    StaffSession session = (StaffSession)connector.getOne(request.session().attribute(
-        "StaffSessionKey"), StaffSession.class);
-    connector.remove(session);
+    StaffSession session = em.find(StaffSession.class,
+            request.session().attribute("StaffSessionKey"));
+    em.getTransaction().begin();
+    em.remove(session);
+    em.getTransaction().commit();
     request.session().removeAttribute("StaffSessionKey");
     response.redirect("/");
     return response;
