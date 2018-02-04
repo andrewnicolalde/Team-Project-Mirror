@@ -4,7 +4,6 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
-import database.Connector;
 import endpoints.authentication.AuthenticationEmployee;
 import endpoints.customer.Menu;
 import endpoints.kitchen.KitchenOrder;
@@ -12,8 +11,6 @@ import endpoints.order.Orders;
 import endpoints.waiter.Tables;
 
 public class Main {
-
-  private static Connector connector;
 
   /**
    * Main method sets up the api end points.
@@ -27,10 +24,6 @@ public class Main {
       int port = Integer.parseInt(System.getenv("PORT"));
       port(port);
     }
-
-    // Initialise the connection.
-    connector = new Connector();
-    connector.closeConnection();
 
     // End points
     // Before is used to verify the user has access to the content they are requesting.
