@@ -183,7 +183,6 @@ public class ConnectorTest {
     for (Staff item : result) {
       assertEquals("Check query", staff.getEmployeeNumber(), item.getEmployeeNumber());
     }
-
   }
 
   @Test
