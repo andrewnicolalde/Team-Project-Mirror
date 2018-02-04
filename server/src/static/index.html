@@ -1,13 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sample Index Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./css/homepage.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <title>ARMS - Oaxaca</title>
 </head>
 <body>
-<h1>Hello World!</h1>
-<p>This is a test page to see if the static pages are working.</p>
-<a href="loginStaff.html">Staff Login</a>
-<a href="loginTable.html">Table Login</a>
+<div class="jumbotron jumbotron-fluid bg-info text-white text-center">
+  <div class="container">
+    <h1 class="display-2">Oaxaca</h1>
+    <p class="lead"> A stylish Mexican Resturant.</p>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div id="loginbuttons" class="col-md-4 col-lg-4">
+      <button id="waiter-button" type="button" class="btn btn-primary btn-block loginbutton" data-toggle="collapse" data-target="#waiter_login">Waiter Login</button>
+      <div class="login-form collapse" id="waiter_login">
+        <form action="/loginStaff" method="post">
+          <div class="form-group">
+            <label for="employeeNumber">Staff Number</label>
+            <input id="employeeNumber" name="employeeNumber" type="text" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input id="password" name="password" type="password" class="form-control">
+          </div>
+          <button type="submit" class="btn btn-default">Sign In</button>
+        </form>
+      </div>
+      <button type="button" class="btn btn-primary btn-block loginbutton" data-toggle="collapse" data-target="#table_login">Table Login</button>
+      <div class="login-form collapse" id="table_login">
+        <form action="/loginTable" method="post">
+          <div class="form-group">
+            <label for="franchiseName">Franchise Number</label>
+            <input type="text" class="form-control" id="franchiseName">
+          </div>
+          <div class="form-group">
+            <label for="tablepwd">Password:</label>
+            <input type="password" class="form-control" id="tablepwd">
+          </div>
+          <div class="form-group">
+            <label for="tableNumber">Table Number</label>
+            <input type="text" class="form-control" id="tableNumber">
+          </div>
+          <button type="submit" class="btn btn-default">Sign In</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>

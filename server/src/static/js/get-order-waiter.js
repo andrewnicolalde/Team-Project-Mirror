@@ -17,7 +17,6 @@ function loadOrder(tableNumber){
     var currentOrderElement = document.getElementById("current-order");
     while(currentOrderElement.firstChild){
       currentOrderElement.removeChild(currentOrderElement.firstChild);
-      console.log("tried to clear stuff");
     }
 
     // Add each list item
