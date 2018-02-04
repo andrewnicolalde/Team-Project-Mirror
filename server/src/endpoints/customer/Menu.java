@@ -1,10 +1,11 @@
 package endpoints.customer;
 
 import com.google.gson.Gson;
-import database.Connector;
+import database.tables.DatabaseManager;
 import database.tables.MenuItem;
 
 import java.util.List;
+import javax.persistence.EntityManager;
 
 
 public class Menu {
@@ -17,17 +18,18 @@ public class Menu {
    * @return The menu in JSON as a string.
    */
   public static String getMenu() {
-    Connector connector = new Connector();
 
-    List<MenuItem> menuItems = connector.query("from MenuItem", MenuItem.class);
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
+    entityManager.getTransaction().begin();
+    List<MenuItem> menuItems = entityManager.createQuery("from MenuItem ", MenuItem.class).getResultList();
+    entityManager.getTransaction().commit();
 
     MenuData[] menuData = new MenuData[menuItems.size()];
 
     for (int i = 0; i < menuData.length; i++) {
       menuData[i] = new MenuData(menuItems.get(i));
     }
-
-    connector.closeConnection();
 
     return GSON.toJson(menuData);
   }

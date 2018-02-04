@@ -1,9 +1,9 @@
 package endpoints.waiter;
 
 import com.google.gson.Gson;
-import database.Connector;
-import database.tables.RestaurantTable;
+import database.tables.DatabaseManager;
 import database.tables.RestaurantTableStaff;
+import javax.persistence.EntityManager;
 import spark.Request;
 import spark.Response;
 
@@ -26,15 +26,18 @@ public class Tables {
   }
 
   public static String getTableData(Long staffId) {
-    Connector connector = new Connector();
-    List<RestaurantTableStaff> restaurantTableStaffs = connector.query("from " +
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    entityManager.getTransaction().begin();
+    List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from " +
         "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
-        RestaurantTableStaff.class);
+        RestaurantTableStaff.class).getResultList();
 
     TableData[] tableData = new TableData[restaurantTableStaffs.size()];
     for (int i = 0; i < tableData.length; i++) {
       tableData[i] = new TableData(restaurantTableStaffs.get(i));
     }
+
+    entityManager.getTransaction().commit();
 
     return GSON.toJson(tableData);
   }
