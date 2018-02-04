@@ -9,8 +9,6 @@ import endpoints.customer.Menu;
 import endpoints.kitchen.KitchenOrder;
 import endpoints.order.Orders;
 import endpoints.waiter.Tables;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 public class Main {
 

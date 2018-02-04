@@ -1,7 +1,7 @@
 package endpoints.waiter;
 
 import com.google.gson.Gson;
-import database.tables.DatabaseManager;
+import database.DatabaseManager;
 import database.tables.RestaurantTableStaff;
 import javax.persistence.EntityManager;
 import spark.Request;

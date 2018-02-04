@@ -1,4 +1,4 @@
-package database.tables;
+package database;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

@@ -1,7 +1,7 @@
 package endpoints.customer;
 
 import com.google.gson.Gson;
-import database.tables.DatabaseManager;
+import database.DatabaseManager;
 import database.tables.MenuItem;
 
 import java.util.List;
