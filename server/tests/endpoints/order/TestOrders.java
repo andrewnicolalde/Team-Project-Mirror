@@ -1,24 +1,5 @@
 package endpoints.order;
 
-import database.Connector;
-import database.tables.Category;
-import database.tables.Department;
-import database.tables.FoodOrder;
-import database.tables.Franchise;
-import database.tables.MenuItem;
-import database.tables.OrderMenuItem;
-import database.tables.OrderStatus;
-import database.tables.RestaurantTable;
-import database.tables.RestaurantTableStaff;
-import database.tables.Staff;
-import database.tables.TableStatus;
-import database.tables.Transaction;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.sql.Timestamp;
-
-import static endpoints.order.Orders.getOrderMenuItems;
 import static org.junit.Assert.assertEquals;
 
 public class TestOrders {
