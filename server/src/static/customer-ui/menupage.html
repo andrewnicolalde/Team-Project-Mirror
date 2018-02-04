@@ -55,7 +55,7 @@
         </tr>
         </thead>
         <tbody id="menu-table">
-        <tr>
+        <tr id="row1move">
           <th scope="row">1</th>
           <td class="myBtn"><a href="#">Layered buffalo chicken nachos with creamy gorgonzola
             sauce</a></td>
@@ -135,17 +135,25 @@
   </div>
 
   <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
 
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Item added!</h4>
+          <h5 class="modal-title">Item Info</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            Gluten Free: <img src="../images/gluten-free.svg">
+            Vegetarian: <img src="../images/vegetarian-mark.svg">
+            Vegan: <img src="../images/vegan-mark.svg">
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button id="addbutton" type="button" class="btn btn-primary">Add to Order</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
