@@ -54,7 +54,7 @@ public class AuthenticationEmployee {
    * @return The a JSON response showing whether is was successful and if so, the session key.
    */
   public static String logInEmployee(Request request, Response response) {
-    connector = Connector.getInstance();
+    connector = new Connector();
 
     // Convert the data from the client into an object
     EmployeeAuthenticationParameters ap = GSON.fromJson(request.body(),
@@ -125,6 +125,7 @@ public class AuthenticationEmployee {
     StaffSession session = (StaffSession)connector.getOne(request.session().attribute(
         "StaffSessionKey"), StaffSession.class);
     connector.remove(session);
+    request.session().removeAttribute("StaffSessionKey");
     return "success";
   }
 }

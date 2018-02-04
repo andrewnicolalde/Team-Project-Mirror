@@ -19,7 +19,7 @@ public class MenuItemTest {
   @Before
   public void setUp() {
     //Create link to the database
-    entityManagerFactory = Persistence.createEntityManagerFactory("server.database");
+    entityManagerFactory = Persistence.createEntityManagerFactory("server.database.test");
   }
 
   @After
@@ -45,7 +45,7 @@ public class MenuItemTest {
     entityManager.getTransaction().begin();
     MenuItem menuItem = new MenuItem("Burger", "Got meat",
         "Well it's a burger", 1.00, false, false,
-        false, category);
+        false, "picture_src", category);
     entityManager.persist(menuItem);
     entityManager.getTransaction().commit();
     entityManager.close();

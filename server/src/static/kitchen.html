@@ -16,13 +16,32 @@
 
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+  <script src="./js/ajax-wrapper.js"></script>
+  <script src="js/update-kitchen.js"></script>
+  <script>
+    $(document).ready(function(){
+      var tid = setInterval(checkPage, 5000);
+      checkPage();
+    });
+
+    function logout() {
+      get("/api/authStaff/logoutStaff");
+    }
+
+
+  </script>
 </head>
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-  <ul class="nav navbar-nav">
-    <a class="navbar-brand" href="kitchen.html">ARMS</a>
+  <ul class="nav navbar-nav mr-auto">
+    <a class="navbar-brand" href="index.html">ARMS</a>
     <li class="nav-item">
       <a class="nav-link" href="kitchen.html">Home</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" href="login.html" onclick="logout">Logout</a>
     </li>
   </ul>
 </nav>
@@ -31,13 +50,34 @@
 </div>
 <div class="container-fluid">
   <div class="row">
-    <div class="col">
-      <div class="card text-center">A card just to show.</div>
+    <div class="col 1">
+      <div class="card text-center">
+        <div class="card-header">Order No: 1</div>
+        <div class="card-body">Item: Burrito
+        <br />Requirements: No Cheese</div>
+      </div>
+      <div class="card text-center">
+        <div class="card-header">Order No: 1</div>
+        <div class="card-body">Item: Burrito
+          <br />Requirements: No Cheese</div>
+      </div>
     </div>
-    <div class="col">
-      <div  class="card text-center">Another card in other column</div>
+    <div class="col 2">
+      <div class="card text-center">
+        <div class="card-header">Order No: 2</div>
+        <div class="card-body">Item: Tacos
+          <br />Requirements: Extra Cheese</div>
+      </div>
+    </div>
+    <div class="col 3">
+      <div class="card text-center">
+        <div class="card-header">Order No: 3</div>
+        <div class="card-body">Item: Tacos
+          <br />Requirements: No Salsa</div>
+      </div>
     </div>
   </div>
+</div>
 </div>
 </body>
 </html>

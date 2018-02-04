@@ -1,6 +1,15 @@
 package endpoints.customer;
 
+import com.google.gson.Gson;
+import database.Connector;
+import database.tables.MenuItem;
+
+import java.util.List;
+
+
 public class Menu {
+
+  private static Gson GSON = new Gson();
 
   /**
    * Gets the full menu from the database and returns it in JSON.
@@ -8,11 +17,18 @@ public class Menu {
    * @return The menu in JSON as a string.
    */
   public static String getMenu() {
-    return "[{\"id\":1,\"name\":\"Taco\",\"category\":\"Main\",\"allergy_info\":\"None\"," +
-        "\"description\":\"Some meat in hard shell plus some lettuce\",\"price\":7.99,\"is_vegan\":false," +
-        "\"is_vegetarian\":false,\"is_gluten_free\":false,\"picture_src\":\"images/taco.jpg\"},{\"id\":2,\"name\":\"" +
-        "Pepsi Max\",\"allergy_info\":\"None\",\"category\":\"Drinks\",\"description\":" +
-        "\"Coca cola of the diet variety\",\"price\":4.99,\"is_vegan\":true,\"is_vegetarian\":true," +
-        "\"is_gluten_free\":true,\"picture_src\":\"images/diet_coke.jpg\"}]";
+    Connector connector = new Connector();
+
+    List<MenuItem> menuItems = connector.query("from MenuItem", MenuItem.class);
+
+    MenuData[] menuData = new MenuData[menuItems.size()];
+
+    for (int i = 0; i < menuData.length; i++) {
+      menuData[i] = new MenuData(menuItems.get(i));
+    }
+
+    connector.closeConnection();
+
+    return GSON.toJson(menuData);
   }
 }

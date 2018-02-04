@@ -5,7 +5,6 @@ import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
 import endpoints.authentication.AuthenticationEmployee;
-import endpoints.authentication.AuthenticationTable;
 import database.Connector;
 import database.tables.Department;
 import database.tables.Franchise;
@@ -14,8 +13,10 @@ import database.tables.Staff;
 import database.tables.StaffSession;
 import database.tables.TableStatus;
 import endpoints.customer.Menu;
+import endpoints.kitchen.KitchenOrder;
 import endpoints.order.Orders;
 import endpoints.waiter.Tables;
+import endpoints.kitchen.KitchenOrder;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
@@ -32,47 +33,29 @@ public class Main {
   public static void main(String[] args) {
     staticFileLocation("static"); // Lets spark know where the static files are
 
-    /*
-    // Uncomment this if you are pushing to Heroku
-    int port = Integer.parseInt(System.getenv("PORT"));
-    port(port);
-    */
-
-    // Setup the database connector
-    connector = Connector.getInstance();
-    connector.createConnection();
-
-    // Check if there are any existing sessions, and end them.
-    List<StaffSession> currentSessions = connector.query("from StaffSession", StaffSession.class);
-    for (StaffSession session : currentSessions) {
-      connector.remove(session);
+    if (System.getenv("PORT") != null) {
+      int port = Integer.parseInt(System.getenv("PORT"));
+      port(port);
     }
 
-    // Create dummy employees for testing
-    Franchise f = new Franchise("Egham", "Egham High Street",
-        "0123456789", BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()));
-    connector.createItem(f);
-    Staff staff = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), Department.WAITER, f);
-    connector.createItem(staff);
-    System.out.println("Staff ID: " + staff.getEmployeeNumber());
-    Staff staff2 = new Staff(BCrypt.hashpw("pa55w0rd", BCrypt.gensalt()), Department.WAITER, f);
-    connector.createItem(staff2);
-    System.out.println("Staff ID: " + staff2.getEmployeeNumber());
-    RestaurantTable table = new RestaurantTable(TableStatus.FREE, 1, f);
-    connector.createItem(table);
+    // Initialise the connection.
+    connector = new Connector();
+    connector.closeConnection();
 
     // End points
     // Before is used to verify the user has access to the content they are requesting.
     before("/api/authStaff/*", AuthenticationEmployee::checkStaffSession);
-    before("/api/authTable/*", AuthenticationTable::checkTableSession);
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/menu", (req, res) -> Menu.getMenu());
     get("/api/authStaff/tables", Tables::getTables);
-    post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
-    post("/api/loginTable", AuthenticationTable::logInTable);
-    get("/api/authTable/logout", AuthenticationTable::logOutTable);
+    get("api/authStaff/kitchen", (req, res) -> KitchenOrder.getOrder());
     get("/api/authStaff/logout", AuthenticationEmployee::logOutEmployee);
+    post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
+    post("/api/authStaff/getOrder", Orders::getOrder);
+    post("/api/authStaff/addToOrder", Orders::addOrderMenuItem);
+    post("/api/authStaff/removeFromOrder", Orders::removeOrderMenuItem);
+    post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
 
     System.out.println("Visit: http://localhost:4567");
   }
