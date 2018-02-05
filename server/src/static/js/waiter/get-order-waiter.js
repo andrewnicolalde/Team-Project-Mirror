@@ -28,16 +28,16 @@ function loadOrder(tableNumber){
           + response[i].price + "</li>");
       // Show dietary information
       if(response[i].is_gluten_free){ // Gluten Free
-        $("#order-item-" + i).append(" <img src='../images/gluten-free.svg'"
-            + "alt='Gluten Free'>");
+        $("#order-item-" + i).append(" <img src="
+            + "'../../images/gluten-free.svg'alt='Gluten Free'>");
       }
       if(response[i].is_vegetarian){ // Vegetarian
-        $("#order-item-" + i).append(" <img src='../images/vegetarian-mark.svg'"
-            + "alt='Vegetarian'>");
+        $("#order-item-" + i).append(" <img src="
+            + "'../../images/vegetarian-mark.svg'alt='Vegetarian'>");
       }
       if(response[i].is_vegan){
-        $("#order-item-" + i).append(" <img src='../images/vegan-mark.svg'"
-            + "alt='Vegan'>");
+        $("#order-item-" + i).append(" <img src="
+            + "'../../images/vegan-mark.svg'alt='Vegan'>");
       }
     }
   });
