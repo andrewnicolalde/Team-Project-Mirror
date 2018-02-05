@@ -1,13 +1,6 @@
 package endpoints.order;
 
 import com.google.gson.Gson;
-import database.Connector;
-import database.tables.FoodOrder;
-import database.tables.MenuItem;
-import database.tables.OrderMenuItem;
-import database.tables.Staff;
-import database.tables.StaffSession;
-import java.util.List;
 import spark.Request;
 import spark.Response;
 
@@ -37,12 +30,14 @@ public class Orders {
    * @author Marcus Messer
    */
   public static String getOrderMenuItems(Long tableNumber, String staffSessionKey) {
-    return "[{\"id\":1,\"name\":\"Taco\",\"category\":\"Main\",\"allergy_info\":\"None\"," +
-        "\"description\":\"Some meat in hard shell plus some lettuce\",\"price\":7.99,\"is_vegan\":false," +
-        "\"is_vegetarian\":false,\"is_gluten_free\":false,\"picture_src\":\"images/taco.jpg\"},{\"id\":2," +
-        "\"name\":\"Pepsi Max\",\"allergy_info\":\"None\",\"category\":\"Drinks\"," +
-        "\"description\":\"Coca cola of the diet variety\",\"price\":4.99,\"is_vegan\":true,\"is_vegetarian\":true," +
-        "\"is_gluten_free\":true,\"picture_src\":\"images/diet_coke.jpg\"}]";
+    return "[{\"id\":1,\"name\":\"Taco\",\"category\":\"Main\",\"allergy_info\":\"None\","
+            + "\"description\":\"Some meat in hard shell plus some lettuce\",\"price\":7.99,"
+            + "\"is_vegan\":false,\"is_vegetarian\":false,\"is_gluten_free\":false,"
+            + "\"picture_src\":\"images/taco.jpg\"},{\"id\":2,\"name\":\"Pepsi Max\","
+            + "\"allergy_info\":\"None\",\"category\":\"Drinks\","
+            + "\"description\":\"Coca cola of the diet variety\",\"price\":4.99,\"is_vegan\":true,"
+            + "\"is_vegetarian\":true,\"is_gluten_free\":true,"
+            + "\"picture_src\":\"images/diet_coke.jpg\"}]";
   }
 
   /**
@@ -56,29 +51,6 @@ public class Orders {
    */
   public static String addOrderMenuItem(Request request, Response response) {
     OrderMenuItemParameters omi = GSON.fromJson(request.body(), OrderMenuItemParameters.class);
-    Connector connector = new Connector();
-
-    StaffSession tempStaff = (StaffSession) connector.getOne(request.attribute("StaffSessionKey"),
-        StaffSession.class);
-
-    //TODO reintroduce when table session key exists
-//    TableSession tempTableSess = (TableSession) connector.getOne(request.attribute("TableSessionKey"),
-//        TableSession.class);
-
-    List<FoodOrder> foodOrders = connector.query("from FoodOrder foodOrder where " +
-            "foodOrder.transaction.restaurantTableStaff.restaurantTable." +
-            "tableNumber = " + omi.getTableNumber() + " and " +
-            "foodOrder.transaction.restaurantTableStaff.restaurantTable.TableSession." +
-            "tableSessionId = " + 1 + " and " +
-            "foodOrder.transaction.restaurantTableStaff.restaurantTable.franchise.franchiseId = " +
-            tempStaff.getStaff().getFranchise().getName(),
-        FoodOrder.class);
-
-    OrderMenuItem orderMenuItem = new OrderMenuItem((MenuItem) connector.getOne(
-        omi.getMenuItemId(), MenuItem.class), foodOrders.get(0), omi.getRequirements());
-
-    connector.createItem(orderMenuItem);
-
     return "success";
   }
 

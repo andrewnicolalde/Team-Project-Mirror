@@ -5,25 +5,12 @@ import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
 import endpoints.authentication.AuthenticationEmployee;
-import database.Connector;
-import database.tables.Department;
-import database.tables.Franchise;
-import database.tables.RestaurantTable;
-import database.tables.Staff;
-import database.tables.StaffSession;
-import database.tables.TableStatus;
 import endpoints.customer.Menu;
 import endpoints.kitchen.KitchenOrder;
 import endpoints.order.Orders;
 import endpoints.waiter.Tables;
-import endpoints.kitchen.KitchenOrder;
-import org.mindrot.jbcrypt.BCrypt;
-
-import java.util.List;
 
 public class Main {
-
-  private static Connector connector;
 
   /**
    * Main method sets up the api end points.
@@ -38,20 +25,18 @@ public class Main {
       port(port);
     }
 
-    // Initialise the connection.
-    connector = new Connector();
-    connector.closeConnection();
-
     // End points
     // Before is used to verify the user has access to the content they are requesting.
     before("/api/authStaff/*", AuthenticationEmployee::checkStaffSession);
+
+    // Endpoints which are meant to be connected to directly, not via AJAX requests.
+    get("/logout", AuthenticationEmployee::logOutEmployee);
+    post("/loginStaff", AuthenticationEmployee::logInEmployee);
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/menu", (req, res) -> Menu.getMenu());
     get("/api/authStaff/tables", Tables::getTables);
     get("api/authStaff/kitchen", (req, res) -> KitchenOrder.getCookingOrders());
-    get("/api/authStaff/logout", AuthenticationEmployee::logOutEmployee);
-    post("/api/loginStaff", AuthenticationEmployee::logInEmployee);
     post("/api/authStaff/getOrder", Orders::getOrder);
     post("/api/authStaff/addToOrder", Orders::addOrderMenuItem);
     post("/api/authStaff/removeFromOrder", Orders::removeOrderMenuItem);

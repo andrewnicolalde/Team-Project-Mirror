@@ -18,7 +18,7 @@ $(document).ready(function () {
       $("#tables-list").append("<li data-tablenum='" + response[i].number +
           "' id='table-" + response[i].number
           + "' class='list-group-item list-group-item-action' "
-          + "onclick=\"loadOrder(this.getAttribute('data-tablenum'))\" >"
+          + "onclick=\"setCurrentTable(event); loadOrder(this.getAttribute('data-tablenum'));\">"
           + "<span class='waiter-ui-span-bold'>Table "
           + response[i].number + ":</span> " + response[i].status + "</li>");
     }
