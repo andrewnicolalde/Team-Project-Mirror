@@ -82,11 +82,12 @@ public class TestKitchenOrders {
 //    entityManager.persist(cookingItem2);
 //    entityManager.persist(cancelledItem1);
 //
-//    entityManager.getTransaction().commit();
+//    entityManager.getTransaction().commit(); commented out due to using dev database. No need to keep adding entities.
 
-    String expected = "[{\"orderId\":1}]";
-
-    assertEquals("check getCookingOrders", expected, KitchenOrder.getCookingOrders());
+    String expected = "[{\"orderId\":1,\"orderContents\":[{\"itemId\":4,\"itemName\":\"Burrito\",\"instructions\":\"none\"},{\"itemId\":4,\"itemName\":\"Burrito\",\"instructions\":\"Extra Spicy\"}]}]";
+    String actual = KitchenOrder.getCookingOrders();
+    System.out.println(actual);
+    assertEquals("check getCookingOrders", expected, actual);
 
   }
 }

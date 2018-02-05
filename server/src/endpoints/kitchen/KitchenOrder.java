@@ -2,7 +2,10 @@ package endpoints.kitchen;
 
 import com.google.gson.Gson;
 import database.tables.FoodOrder;
+import database.tables.MenuItem;
+import database.tables.OrderMenuItem;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -16,36 +19,59 @@ import javax.persistence.Persistence;
 public class KitchenOrder {
 
   /**
-   * Queries the database for all orders that are Cooking.
+   * End point method to get all Orders and their respective items with status COOKING.
    *
-   * NOT FINISHED!
-   *
-   * @return a JSON string of the order IDs of orders cooking
+   * @return a JSON string of an array of orders containing an array of items.
    */
   public static String getCookingOrders() {
+    List<KitchenOrderData> orders = getCookingOrderData();
+    Gson gson = new Gson();
+    return gson.toJson(orders);
+  }
 
-    EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("server.database.dev");
+  /**
+   * Helper method that queries the database and packages the returned Objects into new Objects that
+   * can be converted to JSON.
+   *
+   * @return an Array of Kitchen
+   */
+  private static List<KitchenOrderData> getCookingOrderData() {
+
+    EntityManagerFactory entityManagerFactory = Persistence
+        .createEntityManagerFactory("server.database.dev"); // TODO change to production.
     EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-    List<FoodOrder> orders = entityManager.createQuery("from FoodOrder f where f.status = 3",FoodOrder.class).getResultList();
+    List items = entityManager.createQuery(
+        "select item.foodOrder, item.menuItem, item from OrderMenuItem item where item.foodOrder.status = 3")
+        .getResultList();
+    Iterator results = items.iterator();
+    List<KitchenOrderData> cookingItems = new LinkedList<>();
 
-    KitchenOrderData[] cookingOrders = new KitchenOrderData[orders.size()];
-    int i = 0;
-
-    Iterator<FoodOrder> it = orders.iterator();
-    while (it.hasNext()) {
-      FoodOrder temp = it.next();
-      System.out.println(temp.getStatus().toString());
-      cookingOrders[i] = new KitchenOrderData(temp.getOrderId());
-      i++;
+    while (results.hasNext()) {
+      Object[] row = (Object[]) results.next();
+      FoodOrder order = (FoodOrder) row[0];
+      MenuItem item = (MenuItem) row[1];
+      OrderMenuItem orderMenuItem = (OrderMenuItem) row[2];
+      KitchenOrderData found = null;
+      if ((found = containsOrder(order, cookingItems)) == null) {
+        found = new KitchenOrderData(order.getOrderId());
+        cookingItems.add(found);
+      }
+      found.addKitchenOrderItemData(item, orderMenuItem);
     }
 
-    Gson gson = new Gson();
-    return gson.toJson(cookingOrders);
+    return cookingItems;
+    }
 
-//    return "[{\"orderId\":4,\"orderContents\":" + being kept for now as a tempplate TODO remove.
-//        "[{\"orderMenuItemId\":1,\"itemName\":\"Taco\",\"requirements\":\"Extra spicy\"}," +
-//        "{\"orderMenuItemId\":3,\"itemName\":\"Burrito\",\"requirements\":\"\"}]}," +
-//        "{\"orderId\":5,\"orderContents\":[{\"orderMenuItemId\":5,\"itemName\":\"taco\",\"requirements\":\"None\"}]}]";
+  private static KitchenOrderData containsOrder(FoodOrder order, List<KitchenOrderData> list) {
+    if (list.isEmpty()) {
+      return null;
+    } else {
+      int index = -1;
+      if((index = list.indexOf(new KitchenOrderData(order.getOrderId()))) >= 0) {
+        return list.get(index);
+      }
+    }
+    return null;
   }
 }

@@ -11,4 +11,9 @@ public class KitchenOrderItemData {
   private String itemName;
   private String instructions;
 
+  public KitchenOrderItemData(Long itemId, String itemName, String instructions) {
+    this.itemId = itemId;
+    this.itemName = itemName;
+    this.instructions = instructions;
+  }
 }
