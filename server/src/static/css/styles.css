@@ -76,3 +76,7 @@ header a:hover{
 .waiter-ui-span-bold{
     font-weight: bold;
 }
+
+.nav-link {
+    display: inline;
+}
