@@ -1,6 +1,17 @@
 package endpoints.order;
 
 import com.google.gson.Gson;
+import database.DatabaseManager;
+import database.tables.FoodOrder;
+import database.tables.Franchise;
+import database.tables.MenuItem;
+import database.tables.OrderMenuItem;
+import database.tables.Staff;
+import database.tables.StaffSession;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.Order;
+import javax.swing.text.html.parser.Entity;
 import spark.Request;
 import spark.Response;
 
@@ -17,7 +28,7 @@ public class Orders {
    */
   public static String getOrder(Request request, Response response) {
     OrderRequestParameters or = GSON.fromJson(request.body(), OrderRequestParameters.class);
-    return getOrderMenuItems(or.getTableNumber(), request.attribute("StaffSessionKey"));
+    return getOrderMenuItems(or.getTableNumber(), request.session().attribute("StaffSessionKey"));
   }
 
 
@@ -30,14 +41,25 @@ public class Orders {
    * @author Marcus Messer
    */
   public static String getOrderMenuItems(Long tableNumber, String staffSessionKey) {
-    return "[{\"id\":1,\"name\":\"Taco\",\"category\":\"Main\",\"allergy_info\":\"None\","
-            + "\"description\":\"Some meat in hard shell plus some lettuce\",\"price\":7.99,"
-            + "\"is_vegan\":false,\"is_vegetarian\":false,\"is_gluten_free\":false,"
-            + "\"picture_src\":\"images/taco.jpg\"},{\"id\":2,\"name\":\"Pepsi Max\","
-            + "\"allergy_info\":\"None\",\"category\":\"Drinks\","
-            + "\"description\":\"Coca cola of the diet variety\",\"price\":4.99,\"is_vegan\":true,"
-            + "\"is_vegetarian\":true,\"is_gluten_free\":true,"
-            + "\"picture_src\":\"images/diet_coke.jpg\"}]";
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    entityManager.getTransaction().begin();
+
+    StaffSession staffSession = entityManager.find(StaffSession.class, staffSessionKey);
+
+    List<OrderMenuItem> orderMenuItems = entityManager.createQuery("from OrderMenuItem where "
+        + "OrderMenuItem .foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = "
+        + tableNumber + " and OrderMenuItem.foodOrder.transaction.restaurantTableStaff.restaurantTable."
+        + "franchise = :franchise", OrderMenuItem.class).setParameter("franchise", staffSession.getStaff().
+        getFranchise()).getResultList();
+
+    entityManager.getTransaction().commit();
+
+    CustomerOrderData[] customerOrderData = new CustomerOrderData[orderMenuItems.size()];
+
+    for (int i = 0; i < customerOrderData.length; i++) {
+      customerOrderData[i] = new CustomerOrderData(orderMenuItems.get(i));
+    }
+    return GSON.toJson(customerOrderData);
   }
 
   /**
@@ -51,6 +73,24 @@ public class Orders {
    */
   public static String addOrderMenuItem(Request request, Response response) {
     OrderMenuItemParameters omi = GSON.fromJson(request.body(), OrderMenuItemParameters.class);
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    entityManager.getTransaction().begin();
+
+    StaffSession staffSession = entityManager.find(StaffSession.class,
+        request.session().attribute("StaffSessionKey"));
+
+    FoodOrder temp = entityManager.createQuery("from FoodOrder where "
+        + "FoodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = " +
+        omi.getTableNumber() + " and FoodOrder .transaction.restaurantTableStaff."
+        + "restaurantTable.franchise = "
+        + ":franchise", FoodOrder.class).setParameter("franchise",
+        staffSession.getStaff().getFranchise()).getSingleResult();
+
+    OrderMenuItem orderMenuItem = new OrderMenuItem(entityManager.find(
+        MenuItem.class, omi.getMenuItemId()), temp, omi.getRequirements());
+
+    entityManager.persist(orderMenuItem);
+    entityManager.getTransaction().commit();
     return "success";
   }
 
@@ -66,6 +106,7 @@ public class Orders {
   public static String changeOrderStatus(Request request, Response response) {
     ChangeOrderStatusParameters cos = GSON
         .fromJson(request.body(), ChangeOrderStatusParameters.class);
+
     return "success";
   }
 
