@@ -5,11 +5,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="../js/ajax-wrapper.js"></script>
-    <script type="text/javascript" src="../js/tableretrieve-waiter.js"></script>
-    <script type="text/javascript" src="../js/menuretrieve-waiter.js"></script>
-    <script type="text/javascript" src="../js/get-order-waiter.js"></script>
-    <script type="text/javascript" src="../js/table-selector.js"></script>
-    <script type="text/javascript" src="../js/add-to-order.js"></script>
+    <script type="text/javascript" src="../js/waiter/tableretrieve-waiter.js"></script>
+    <script type="text/javascript" src="../js/waiter/menuretrieve-waiter.js"></script>
+    <script type="text/javascript" src="../js/waiter/get-order-waiter.js"></script>
+    <script type="text/javascript" src="../js/waiter/table-selector.js"></script>
+    <script type="text/javascript" src="../js/waiter/add-to-order.js"></script>
     <meta charset="UTF-8">
     <title>Waiter UI</title>
 </head>
@@ -34,13 +34,13 @@
     <div class="row">
         <!-- The waiter clicks the table to see the current order & add/subtract items & confirm -->
         <div class="col">
-            Tables
+            <p class="text-center">Tables</p>
             <ul class="list-group" id="tables-list">
                 <!-- Loaded dynamically via jQuery script -->
             </ul>
         </div>
         <div class="col">
-            Menu
+            <p class="text-center">Menu</p>
             <ul class="list-group" id="menu-list">
                 <!-- Loaded dynamically via jQuery script -->
             </ul>
@@ -52,7 +52,7 @@
             </p>
         </div>
         <div class="col">
-            Current Order
+            <p class="text-center">Current Order</p>
             <ul class="list-group" id="current-order">
                 <!-- TODO: List should be scrollable. -->
             </ul>
