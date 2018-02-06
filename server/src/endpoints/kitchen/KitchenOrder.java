@@ -29,7 +29,6 @@ public class KitchenOrder {
    */
   public static String getCookingOrders(Request request, Response response) {
     List<KitchenOrderData> orders = getCookingOrderData();
-    Gson gson = new Gson();
     return toJson(orders);
   }
 

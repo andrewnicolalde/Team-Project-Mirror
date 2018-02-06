@@ -1,5 +1,7 @@
 package endpoints.customer;
 
+import static util.JsonUtil.toJson;
+
 import com.google.gson.Gson;
 import database.DatabaseManager;
 import database.tables.MenuItem;
@@ -9,8 +11,6 @@ import javax.persistence.EntityManager;
 
 
 public class Menu {
-
-  private static Gson GSON = new Gson();
 
   /**
    * Gets the full menu from the database and returns it in JSON.
@@ -31,6 +31,6 @@ public class Menu {
       menuData[i] = new MenuData(menuItems.get(i));
     }
 
-    return GSON.toJson(menuData);
+    return toJson(menuData);
   }
 }

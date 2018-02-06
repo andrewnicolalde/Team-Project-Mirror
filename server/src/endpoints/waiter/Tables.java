@@ -1,5 +1,7 @@
 package endpoints.waiter;
 
+import static util.JsonUtil.toJson;
+
 import com.google.gson.Gson;
 import database.DatabaseManager;
 import database.tables.RestaurantTableStaff;
@@ -10,7 +12,6 @@ import spark.Response;
 import java.util.List;
 
 public class Tables {
-  private static final Gson GSON = new Gson();
 
   /**
    * Returns a string holding a list of tables.
@@ -39,6 +40,6 @@ public class Tables {
 
     entityManager.getTransaction().commit();
 
-    return GSON.toJson(tableData);
+    return toJson(tableData);
   }
 }
