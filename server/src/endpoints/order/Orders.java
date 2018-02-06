@@ -60,7 +60,7 @@ public class Orders {
   /**
    * Adds an orderMenuItem to an order. JSON input: tableNumber: An integer representing the table
    * number menuItemId: An integer representing the id of the MenuItem to add to the order.
-   * description: A string representing a description/extra details for the order.
+   * requirements: A string representing a description/extra details for the order.
    *
    * @param request A HTTP request object.
    * @param response A HTTP response object.
