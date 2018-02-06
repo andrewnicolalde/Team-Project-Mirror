@@ -2,9 +2,9 @@ package endpoints.waiter;
 
 import static util.JsonUtil.toJson;
 
-import com.google.gson.Gson;
 import database.DatabaseManager;
 import database.tables.RestaurantTableStaff;
+import database.tables.StaffSession;
 import javax.persistence.EntityManager;
 import spark.Request;
 import spark.Response;
@@ -21,14 +21,15 @@ public class Tables {
    * @return
    */
   public static String getTables(Request request, Response response) {
-    // TODO: Get tables from the database
 
-    return "[{\"number\":1,\"status\":\"Ready to order\",\"franchise\":3},{\"number\":2,\"status\":\"Eating\",\"franchise\":3}]";
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    StaffSession staffSession = entityManager.find(StaffSession.class, request.session().attribute(
+        "StaffSessionKey"));
+    return getTableData(staffSession.getStaff().getEmployeeNumber());
   }
 
   public static String getTableData(Long staffId) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
-    entityManager.getTransaction().begin();
     List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from " +
         "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
         RestaurantTableStaff.class).getResultList();
@@ -37,8 +38,6 @@ public class Tables {
     for (int i = 0; i < tableData.length; i++) {
       tableData[i] = new TableData(restaurantTableStaffs.get(i));
     }
-
-    entityManager.getTransaction().commit();
 
     return toJson(tableData);
   }

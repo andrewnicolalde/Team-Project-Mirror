@@ -18,14 +18,14 @@ function addToOrder(menuItemId){
   }
 
   // TODO: Remove this and add an actual description box in the UI
-  var description = "This is a test descripion"
+  var requirements = "This is a test descripion"
 
   // Create name-value pairs for HTTP post request, see
   // https://en.wikipedia.org/wiki/POST_(HTTP)#Use_for_submitting_web_forms
   var nameValuePairs = JSON.stringify({
     tableNumber: activeTable.getAttribute('data-tablenum'),
-    menuItemID: menuItemId,
-    description: description
+    menuItemId: menuItemId,
+    requirements: requirements
   });
 
   // Handle possible responses

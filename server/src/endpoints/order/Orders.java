@@ -1,6 +1,7 @@
 package endpoints.order;
 
 import com.google.gson.Gson;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import database.DatabaseManager;
 import database.tables.FoodOrder;
 import database.tables.Franchise;
@@ -60,7 +61,7 @@ public class Orders {
   /**
    * Adds an orderMenuItem to an order. JSON input: tableNumber: An integer representing the table
    * number menuItemId: An integer representing the id of the MenuItem to add to the order.
-   * description: A string representing a description/extra details for the order.
+   * requirements: A string representing a description/extra details for the order.
    *
    * @param request A HTTP request object.
    * @param response A HTTP response object.
@@ -71,14 +72,21 @@ public class Orders {
 
     //TODO check which franchise to add the order to.
 
-    FoodOrder temp = entityManager.createQuery("from FoodOrder foodOrder where "
+    List<FoodOrder> temp = entityManager.createQuery("from FoodOrder foodOrder where "
         + "foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = " +
-        omi.getTableNumber(), FoodOrder.class).getSingleResult();
+        omi.getTableNumber() + " and foodOrder.status = " + OrderStatus.ORDERING.ordinal() +
+        " or foodOrder.status = " + OrderStatus.READY_TO_CONFIRM.ordinal(),
+        FoodOrder.class).getResultList();
+
+    if (temp.size() == 0) {
+      return "success";
+    }
 
     entityManager.getTransaction().begin();
 
+    System.out.println("omi menu id" + omi.getMenuItemId());
     OrderMenuItem orderMenuItem = new OrderMenuItem(entityManager.find(
-        MenuItem.class, omi.getMenuItemId()), temp, omi.getRequirements());
+        MenuItem.class, omi.getMenuItemId()), temp.get(0), omi.getRequirements());
 
     entityManager.persist(orderMenuItem);
     entityManager.getTransaction().commit();
