@@ -6,13 +6,13 @@
  *                    to the kitchen with the order.
  */
 // TODO: Add a description attribute here so that additional preparation info can be provided.
-function addToOrder(menuItemId){
+function addToOrder(menuItemId) {
 
   // Find active table
   var allTables = document.getElementById("tables-list").children;
   var activeTable;
-  for(i = 0; i < allTables.length; i++){
-    if(allTables[i].classList.contains("active")){
+  for (i = 0; i < allTables.length; i++) {
+    if (allTables[i].classList.contains("active")) {
       activeTable = allTables[i];
     }
   }
@@ -29,9 +29,9 @@ function addToOrder(menuItemId){
   });
 
   // Handle possible responses
-  post("/api/authStaff/addToOrder", nameValuePairs, function(status){
+  post("/api/authStaff/addToOrder", nameValuePairs, function (status) {
     loadOrder();
-    if(status === ""){
+    if (status === "") {
       // Refresh current order table to show new change
       console.log("Add item to order failed");
       console.log(status);

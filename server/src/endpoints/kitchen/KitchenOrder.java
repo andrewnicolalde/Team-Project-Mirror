@@ -36,7 +36,7 @@ public class KitchenOrder {
    * Helper method that queries the database and packages the returned Objects into new Objects that
    * can be converted to JSON.
    *
-   * @return an Array of Kitchen
+   * @return an List of KitchenOrderData objects.
    */
   private static List<KitchenOrderData> getCookingOrderData() {
 

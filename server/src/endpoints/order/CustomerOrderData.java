@@ -8,6 +8,7 @@ import database.tables.OrderMenuItem;
  * @author Marcus Messer
  */
 public class CustomerOrderData {
+
   private Long id;
   private String name;
   private String category;
@@ -21,7 +22,6 @@ public class CustomerOrderData {
 
   /**
    * This function creates the objects that can be converted to JSON.
-   * @param orderMenuItem
    */
   public CustomerOrderData(OrderMenuItem orderMenuItem) {
     this.id = orderMenuItem.getOrderMenuItemId();

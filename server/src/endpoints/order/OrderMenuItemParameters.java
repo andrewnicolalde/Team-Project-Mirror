@@ -1,6 +1,7 @@
 package endpoints.order;
 
 public class OrderMenuItemParameters {
+
   private Long tableNumber;
   private Long menuItemId;
   private String requirements;

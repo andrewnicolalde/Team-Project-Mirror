@@ -6,7 +6,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -83,18 +82,18 @@ public class MenuItem {
   /**
    * This constructor is used to create new menu items.
    *
-   * @param name         The name of menu item.
-   * @param allergyInfo  The allergy info for the item.
-   * @param description  The description for the item.
-   * @param price        The price of the item.
-   * @param isVegan      If the item is suitable for Vegans.
+   * @param name The name of menu item.
+   * @param allergyInfo The allergy info for the item.
+   * @param description The description for the item.
+   * @param price The price of the item.
+   * @param isVegan If the item is suitable for Vegans.
    * @param isVegetarian If the item is suitable for vegetarians.
    * @param isGlutenFree If the item is gluten free.
-   * @param category     The category the item belongs in.
+   * @param category The category the item belongs in.
    */
   public MenuItem(String name, String allergyInfo, String description, Double price,
-                  Boolean isVegan, Boolean isVegetarian, Boolean isGlutenFree, String pictureSrc,
-                  Category category) {
+      Boolean isVegan, Boolean isVegetarian, Boolean isGlutenFree, String pictureSrc,
+      Category category) {
     this.name = name;
     this.allergyInfo = allergyInfo;
     this.description = description;
