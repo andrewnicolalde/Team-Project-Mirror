@@ -1,15 +1,19 @@
 package endpoints.kitchen;
 
+import static util.JsonUtil.toJson;
+
 import com.google.gson.Gson;
+import database.DatabaseManager;
 import database.tables.FoodOrder;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
+import database.tables.OrderStatus;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import spark.Request;
+import spark.Response;
 
 /**
  * Endpoint class serving fetching from the database and serving JSON.
@@ -23,10 +27,10 @@ public class KitchenOrder {
    *
    * @return a JSON string of an array of orders containing an array of items.
    */
-  public static String getCookingOrders() {
+  public static String getCookingOrders(Request request, Response response) {
     List<KitchenOrderData> orders = getCookingOrderData();
     Gson gson = new Gson();
-    return gson.toJson(orders);
+    return toJson(orders);
   }
 
   /**
@@ -37,12 +41,11 @@ public class KitchenOrder {
    */
   private static List<KitchenOrderData> getCookingOrderData() {
 
-    EntityManagerFactory entityManagerFactory = Persistence
-        .createEntityManagerFactory("server.database.dev"); // TODO change to production.
-    EntityManager entityManager = entityManagerFactory.createEntityManager();
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     List items = entityManager.createQuery(
-        "select item.foodOrder, item.menuItem, item from OrderMenuItem item where item.foodOrder.status = 3")
+        "select item.foodOrder, item.menuItem, item from OrderMenuItem item where item.foodOrder.status = "
+            + OrderStatus.COOKING.ordinal())
         .getResultList();
     Iterator results = items.iterator();
     List<KitchenOrderData> cookingItems = new LinkedList<>();
@@ -61,14 +64,14 @@ public class KitchenOrder {
     }
 
     return cookingItems;
-    }
+  }
 
   private static KitchenOrderData containsOrder(FoodOrder order, List<KitchenOrderData> list) {
     if (list.isEmpty()) {
       return null;
     } else {
       int index = -1;
-      if((index = list.indexOf(new KitchenOrderData(order.getOrderId()))) >= 0) {
+      if ((index = list.indexOf(new KitchenOrderData(order.getOrderId()))) >= 0) {
         return list.get(index);
       }
     }

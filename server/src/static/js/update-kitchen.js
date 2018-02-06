@@ -16,7 +16,7 @@ function updatePage(data) {
             column = column + "<div class='card text-center'>\n"
                 + "<div class='card-header'> Order: " + response[i].orderId + "</div>\n"
                 + "<div class='card-body'> Item: " + response[i].orderContents[j].itemName + "\n"
-                + "<br />Requirements: " + response[i].orderContents[j].requirements + "</div>\n"
+                + "<br />Instructions: " + response[i].orderContents[j].instructions + "</div>\n"
                 + "</div>\n";
           }
           column = column + "</div>";
