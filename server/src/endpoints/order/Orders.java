@@ -6,18 +6,18 @@ import database.tables.FoodOrder;
 import database.tables.Franchise;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
-import database.tables.Staff;
+import database.tables.OrderStatus;
 import database.tables.StaffSession;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.Order;
-import javax.swing.text.html.parser.Entity;
 import spark.Request;
 import spark.Response;
 
 public class Orders {
 
   private static final Gson GSON = new Gson();
+
+  private static EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
   /**
    * Returns an order as JSON. JSON input: tableNumber: an integer representing the table number
@@ -28,7 +28,8 @@ public class Orders {
    */
   public static String getOrder(Request request, Response response) {
     OrderRequestParameters or = GSON.fromJson(request.body(), OrderRequestParameters.class);
-    return getOrderMenuItems(or.getTableNumber(), request.session().attribute("StaffSessionKey"));
+    return getOrderMenuItems(or.getTableNumber(), request.session().
+        attribute("StaffSessionKey"));
   }
 
 
@@ -36,23 +37,17 @@ public class Orders {
    * Returns the order menu items from the database in JSON format.
    *
    * @param tableNumber The number of the table.
-   * @param staffSessionKey The employee number for the staff member.
+   * @param staffSessionKey The session key for the staff member.
    * @return The menu items for the table in a JSON format.
    * @author Marcus Messer
    */
   public static String getOrderMenuItems(Long tableNumber, String staffSessionKey) {
-    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
-    entityManager.getTransaction().begin();
+    //TODO check which franchise the order is part of.
 
-    StaffSession staffSession = entityManager.find(StaffSession.class, staffSessionKey);
-
-    List<OrderMenuItem> orderMenuItems = entityManager.createQuery("from OrderMenuItem where "
-        + "OrderMenuItem .foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = "
-        + tableNumber + " and OrderMenuItem.foodOrder.transaction.restaurantTableStaff.restaurantTable."
-        + "franchise = :franchise", OrderMenuItem.class).setParameter("franchise", staffSession.getStaff().
-        getFranchise()).getResultList();
-
-    entityManager.getTransaction().commit();
+    List<OrderMenuItem> orderMenuItems = entityManager
+        .createQuery("from OrderMenuItem orderMenuItem where "
+                + "orderMenuItem.foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = "
+                + tableNumber, OrderMenuItem.class).getResultList();
 
     CustomerOrderData[] customerOrderData = new CustomerOrderData[orderMenuItems.size()];
 
@@ -73,18 +68,14 @@ public class Orders {
    */
   public static String addOrderMenuItem(Request request, Response response) {
     OrderMenuItemParameters omi = GSON.fromJson(request.body(), OrderMenuItemParameters.class);
-    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
+    //TODO check which franchise to add the order to.
+
+    FoodOrder temp = entityManager.createQuery("from FoodOrder foodOrder where "
+        + "foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = " +
+        omi.getTableNumber(), FoodOrder.class).getSingleResult();
+
     entityManager.getTransaction().begin();
-
-    StaffSession staffSession = entityManager.find(StaffSession.class,
-        request.session().attribute("StaffSessionKey"));
-
-    FoodOrder temp = entityManager.createQuery("from FoodOrder where "
-        + "FoodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = " +
-        omi.getTableNumber() + " and FoodOrder .transaction.restaurantTableStaff."
-        + "restaurantTable.franchise = "
-        + ":franchise", FoodOrder.class).setParameter("franchise",
-        staffSession.getStaff().getFranchise()).getSingleResult();
 
     OrderMenuItem orderMenuItem = new OrderMenuItem(entityManager.find(
         MenuItem.class, omi.getMenuItemId()), temp, omi.getRequirements());
@@ -107,6 +98,18 @@ public class Orders {
     ChangeOrderStatusParameters cos = GSON
         .fromJson(request.body(), ChangeOrderStatusParameters.class);
 
+    //TODO check which franchise the order is part of.
+    entityManager.getTransaction().begin();
+
+    FoodOrder foodOrder = entityManager
+        .createQuery("from FoodOrder foodOrder where foodOrder.transaction"
+                + ".restaurantTableStaff.restaurantTable.tableNumber = " + cos.getTableNumber()
+            , FoodOrder.class).getSingleResult();
+
+    foodOrder.setStatus(OrderStatus.valueOf(cos.getNewOrderStatus()));
+
+    entityManager.getTransaction().commit();
+
     return "success";
   }
 
@@ -120,6 +123,25 @@ public class Orders {
    */
   public static String removeOrderMenuItem(Request request, Response response) {
     OrderMenuItemParameters omi = GSON.fromJson(request.body(), OrderMenuItemParameters.class);
+
+    //TODO Check franchise.
+    entityManager.getTransaction().begin();
+
+    OrderMenuItem orderMenuItem = entityManager
+        .createQuery("from FoodOrder foodOrder where foodOrder.transaction.restaurantTableStaff"
+                + ".restaurantTable.tableNumber = " + omi.getTableNumber(),
+            OrderMenuItem.class).getSingleResult();
+
+    entityManager.remove(orderMenuItem);
+
+    entityManager.getTransaction().commit();
+
     return "success";
+  }
+
+  private static Franchise getFranchise(String staffSessionKey) {
+    StaffSession staffSession = entityManager.find(StaffSession.class, staffSessionKey);
+
+    return staffSession.getStaff().getFranchise();
   }
 }
