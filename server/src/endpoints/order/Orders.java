@@ -1,12 +1,23 @@
 package endpoints.order;
 
 import com.google.gson.Gson;
+import database.DatabaseManager;
+import database.tables.FoodOrder;
+import database.tables.Franchise;
+import database.tables.MenuItem;
+import database.tables.OrderMenuItem;
+import database.tables.OrderStatus;
+import database.tables.StaffSession;
+import java.util.List;
+import javax.persistence.EntityManager;
 import spark.Request;
 import spark.Response;
 
 public class Orders {
 
   private static final Gson GSON = new Gson();
+
+  private static EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
   /**
    * Returns an order as JSON. JSON input: tableNumber: an integer representing the table number
@@ -17,7 +28,8 @@ public class Orders {
    */
   public static String getOrder(Request request, Response response) {
     OrderRequestParameters or = GSON.fromJson(request.body(), OrderRequestParameters.class);
-    return getOrderMenuItems(or.getTableNumber(), request.attribute("StaffSessionKey"));
+    return getOrderMenuItems(or.getTableNumber(), request.session().
+        attribute("StaffSessionKey"));
   }
 
 
@@ -25,19 +37,24 @@ public class Orders {
    * Returns the order menu items from the database in JSON format.
    *
    * @param tableNumber The number of the table.
-   * @param staffSessionKey The employee number for the staff member.
+   * @param staffSessionKey The session key for the staff member.
    * @return The menu items for the table in a JSON format.
    * @author Marcus Messer
    */
   public static String getOrderMenuItems(Long tableNumber, String staffSessionKey) {
-    return "[{\"id\":1,\"name\":\"Taco\",\"category\":\"Main\",\"allergy_info\":\"None\","
-            + "\"description\":\"Some meat in hard shell plus some lettuce\",\"price\":7.99,"
-            + "\"is_vegan\":false,\"is_vegetarian\":false,\"is_gluten_free\":false,"
-            + "\"picture_src\":\"images/taco.jpg\"},{\"id\":2,\"name\":\"Pepsi Max\","
-            + "\"allergy_info\":\"None\",\"category\":\"Drinks\","
-            + "\"description\":\"Coca cola of the diet variety\",\"price\":4.99,\"is_vegan\":true,"
-            + "\"is_vegetarian\":true,\"is_gluten_free\":true,"
-            + "\"picture_src\":\"images/diet_coke.jpg\"}]";
+    //TODO check which franchise the order is part of.
+
+    List<OrderMenuItem> orderMenuItems = entityManager
+        .createQuery("from OrderMenuItem orderMenuItem where "
+                + "orderMenuItem.foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = "
+                + tableNumber, OrderMenuItem.class).getResultList();
+
+    CustomerOrderData[] customerOrderData = new CustomerOrderData[orderMenuItems.size()];
+
+    for (int i = 0; i < customerOrderData.length; i++) {
+      customerOrderData[i] = new CustomerOrderData(orderMenuItems.get(i));
+    }
+    return GSON.toJson(customerOrderData);
   }
 
   /**
@@ -51,6 +68,20 @@ public class Orders {
    */
   public static String addOrderMenuItem(Request request, Response response) {
     OrderMenuItemParameters omi = GSON.fromJson(request.body(), OrderMenuItemParameters.class);
+
+    //TODO check which franchise to add the order to.
+
+    FoodOrder temp = entityManager.createQuery("from FoodOrder foodOrder where "
+        + "foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = " +
+        omi.getTableNumber(), FoodOrder.class).getSingleResult();
+
+    entityManager.getTransaction().begin();
+
+    OrderMenuItem orderMenuItem = new OrderMenuItem(entityManager.find(
+        MenuItem.class, omi.getMenuItemId()), temp, omi.getRequirements());
+
+    entityManager.persist(orderMenuItem);
+    entityManager.getTransaction().commit();
     return "success";
   }
 
@@ -66,6 +97,19 @@ public class Orders {
   public static String changeOrderStatus(Request request, Response response) {
     ChangeOrderStatusParameters cos = GSON
         .fromJson(request.body(), ChangeOrderStatusParameters.class);
+
+    //TODO check which franchise the order is part of.
+    entityManager.getTransaction().begin();
+
+    FoodOrder foodOrder = entityManager
+        .createQuery("from FoodOrder foodOrder where foodOrder.transaction"
+                + ".restaurantTableStaff.restaurantTable.tableNumber = " + cos.getTableNumber()
+            , FoodOrder.class).getSingleResult();
+
+    foodOrder.setStatus(OrderStatus.valueOf(cos.getNewOrderStatus()));
+
+    entityManager.getTransaction().commit();
+
     return "success";
   }
 
@@ -79,6 +123,25 @@ public class Orders {
    */
   public static String removeOrderMenuItem(Request request, Response response) {
     OrderMenuItemParameters omi = GSON.fromJson(request.body(), OrderMenuItemParameters.class);
+
+    //TODO Check franchise.
+    entityManager.getTransaction().begin();
+
+    OrderMenuItem orderMenuItem = entityManager
+        .createQuery("from FoodOrder foodOrder where foodOrder.transaction.restaurantTableStaff"
+                + ".restaurantTable.tableNumber = " + omi.getTableNumber(),
+            OrderMenuItem.class).getSingleResult();
+
+    entityManager.remove(orderMenuItem);
+
+    entityManager.getTransaction().commit();
+
     return "success";
+  }
+
+  private static Franchise getFranchise(String staffSessionKey) {
+    StaffSession staffSession = entityManager.find(StaffSession.class, staffSessionKey);
+
+    return staffSession.getStaff().getFranchise();
   }
 }
