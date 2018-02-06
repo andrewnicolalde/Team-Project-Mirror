@@ -68,6 +68,7 @@ public class AuthenticationTable {
       return response;
     }
 
+    // Delete any old sessions
     List<TableSession> sessions = em.createQuery("SELECT s FROM TableSession s WHERE "
         + "s.restaurantTable = :table", TableSession.class).setParameter("table", table)
         .getResultList();
@@ -78,8 +79,12 @@ public class AuthenticationTable {
       em.getTransaction().commit();
     }
 
+    // Create a new session
     String sessionKey = BCrypt.gensalt();
     TableSession session = new TableSession(sessionKey, table);
+    em.getTransaction().begin();
+    em.persist(session);
+    em.getTransaction().commit();
 
     response.redirect("customer-ui/customerdisplay.html");
     return response;
