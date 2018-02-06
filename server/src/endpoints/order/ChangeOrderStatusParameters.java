@@ -1,6 +1,7 @@
 package endpoints.order;
 
 public class ChangeOrderStatusParameters {
+
   private Long tableNumber;
   private String newOrderStatus;
 

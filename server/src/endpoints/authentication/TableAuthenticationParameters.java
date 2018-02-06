@@ -1,6 +1,7 @@
 package endpoints.authentication;
 
 class TableAuthenticationParameters {
+
   private String name;
   private String password;
   private int tableNumber;

@@ -6,7 +6,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -17,6 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name = "ORDER_MENU_ITEM")
 public class OrderMenuItem {
+
   /**
    * This field is the primary key of the entity.
    */
@@ -54,8 +54,8 @@ public class OrderMenuItem {
   /**
    * This constrcutor create new entities.
    *
-   * @param menuItem     The menu item that the order is related to do.
-   * @param foodOrder    The order that the menu item is related to.
+   * @param menuItem The menu item that the order is related to do.
+   * @param foodOrder The order that the menu item is related to.
    * @param instructions The instructions that the customers enter.
    */
   public OrderMenuItem(MenuItem menuItem, FoodOrder foodOrder, String instructions) {
