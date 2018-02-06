@@ -2,6 +2,7 @@ package endpoints.authentication;
 
 import static spark.Spark.halt;
 
+import database.DatabaseManager;
 import database.tables.Department;
 import database.tables.Staff;
 import database.tables.StaffSession;
@@ -16,17 +17,13 @@ import spark.Response;
 
 public class AuthenticationEmployee {
 
-  private static EntityManagerFactory emf = Persistence.createEntityManagerFactory(
-          "server.database");
-  private static EntityManager em = emf.createEntityManager();
-
-
   /**
    * Checks if the given details correctly match an employee stored in the database.
    * @param ap An EmployeeAuthenticationParameters object which holds the given login details.
    * @return The staff entity, or null is the parameters are invalid.
    */
   private static Staff isValidLoginCombination(EmployeeAuthenticationParameters ap) {
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
     Staff employee = em.find(Staff.class, ap.getEmployeeNumber());
     if (employee == null) { // If the employee does not exist, then fail
       return null;
@@ -47,6 +44,8 @@ public class AuthenticationEmployee {
    * @return The response object passed in.
    */
   public static Response logInEmployee(Request request, Response response) {
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
+
     // Convert the data from the client into an object
     EmployeeAuthenticationParameters ap = new EmployeeAuthenticationParameters(
             new Long(request.queryParams("employeeNumber")), request.queryParams("password"));
@@ -98,6 +97,7 @@ public class AuthenticationEmployee {
    * @param response The HTTP response.
    */
   public static void checkStaffSession(Request request, Response response) {
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
     // Check if session has a StaffSessionKey
     if (request.session().attribute("StaffSessionKey") == null) {
       // Not authenticated.
@@ -124,6 +124,7 @@ public class AuthenticationEmployee {
    * @return A string representing the status
    */
   public static Response logOutEmployee(Request request, Response response) {
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
     StaffSession session = em.find(StaffSession.class,
             request.session().attribute("StaffSessionKey"));
     em.getTransaction().begin();
