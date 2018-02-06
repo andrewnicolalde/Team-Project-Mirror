@@ -1,6 +1,7 @@
 package endpoints.waiter;
 
-import com.google.gson.Gson;
+import static util.JsonUtil.toJson;
+
 import database.DatabaseManager;
 import database.tables.RestaurantTableStaff;
 import database.tables.StaffSession;
@@ -11,14 +12,12 @@ import spark.Response;
 
 public class Tables {
 
-  private static final Gson GSON = new Gson();
   private static final EntityManager ENTITY_MANAGER = DatabaseManager.getInstance().getEntityManager();
 
   /**
    * Returns a string holding a list of tables. No JSON as it is a get request.
    */
   public static String getTables(Request request, Response response) {
-    // TODO: Get tables from the database
 
     StaffSession staffSession = ENTITY_MANAGER.find(StaffSession.class, request.session().attribute(
         "StaffSessionKey"));
@@ -35,6 +34,6 @@ public class Tables {
       tableData[i] = new TableData(restaurantTableStaffs.get(i));
     }
 
-    return GSON.toJson(tableData);
+    return toJson(tableData);
   }
 }
