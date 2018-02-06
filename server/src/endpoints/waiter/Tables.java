@@ -4,36 +4,30 @@ import com.google.gson.Gson;
 import database.DatabaseManager;
 import database.tables.RestaurantTableStaff;
 import database.tables.StaffSession;
+import java.util.List;
 import javax.persistence.EntityManager;
-import javax.xml.crypto.Data;
 import spark.Request;
 import spark.Response;
 
-import java.util.List;
-
 public class Tables {
+
   private static final Gson GSON = new Gson();
+  private static final EntityManager ENTITY_MANAGER = DatabaseManager.getInstance().getEntityManager();
 
   /**
-   * Returns a string holding a list of tables.
-   * No JSON as it is a get request.
-   * @param request
-   * @param response
-   * @return
+   * Returns a string holding a list of tables. No JSON as it is a get request.
    */
   public static String getTables(Request request, Response response) {
     // TODO: Get tables from the database
 
-    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
-    StaffSession staffSession = entityManager.find(StaffSession.class, request.session().attribute(
+    StaffSession staffSession = ENTITY_MANAGER.find(StaffSession.class, request.session().attribute(
         "StaffSessionKey"));
     return getTableData(staffSession.getStaff().getEmployeeNumber());
   }
 
-  public static String getTableData(Long staffId) {
-    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+  public static String getTableData(Long staffId) {EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from " +
-        "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
+            "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
         RestaurantTableStaff.class).getResultList();
 
     TableData[] tableData = new TableData[restaurantTableStaffs.size()];

@@ -1,9 +1,6 @@
 package database.tables;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -44,10 +41,11 @@ public class Franchise {
 
   /**
    * This constructor is used by the server to create entries in the table.
-   *  @param name          The name of the restaurant.
-   * @param address       The address of the restaurant.
+   *
+   * @param name The name of the restaurant.
+   * @param address The address of the restaurant.
    * @param contactNumber The contact number for the restaurant.
-   * @param password      The password for the restaurant.
+   * @param password The password for the restaurant.
    */
   public Franchise(String name, String address, String contactNumber, String password) {
     this.name = name;
