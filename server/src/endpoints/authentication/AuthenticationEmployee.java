@@ -14,8 +14,6 @@ import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
 
-
-
 public class AuthenticationEmployee {
 
   private static EntityManagerFactory emf = Persistence.createEntityManagerFactory(
@@ -44,12 +42,9 @@ public class AuthenticationEmployee {
 
   /**
    * Authenticates the log in request, and redirects them if successful.
-   * JSON input:
-   *     employeeNumber: The employee number of the user trying to log in with.
-   *     password: The password of the user trying to log in.
    * @param request The HTTP request
    * @param response The response to give.
-   * @return The a JSON response showing whether is was successful and if so, the session key.
+   * @return The response object passed in.
    */
   public static Response logInEmployee(Request request, Response response) {
     // Convert the data from the client into an object
