@@ -6,36 +6,36 @@
  * @param tableNumber The number of the table who's current order is to be displayed
  *                    in the Current Order column.
  */
-function loadOrder(tableNumber){
+function loadOrder(tableNumber) {
   var tableNumberToSend = JSON.stringify({tableNumber: tableNumber});
-  post("/api/authStaff/getOrder", tableNumberToSend, function(data){
+  post("/api/authStaff/getOrder", tableNumberToSend, function (data) {
 
     // Parse JSON
     var response = JSON.parse(data);
 
     // Remove any existing elements in the current order list
     var currentOrderElement = document.getElementById("current-order");
-    while(currentOrderElement.firstChild){
+    while (currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
 
     // Add each list item
-    for(i = 0; i < response.length; i++) {
+    for (i = 0; i < response.length; i++) {
       $("#current-order").append("<li class='list-group-item list-group-item-action'"
-          + "id= \"order-item-"+ i +"\">"
+          + "id= \"order-item-" + i + "\">"
           + "<span class='waiter-ui-span-bold'>"
           + response[i].name + ": </span> "
           + response[i].price + "</li>");
       // Show dietary information
-      if(response[i].is_gluten_free){ // Gluten Free
+      if (response[i].is_gluten_free) { // Gluten Free
         $("#order-item-" + i).append(" <img src="
             + "'../../images/gluten-free.svg'alt='Gluten Free'>");
       }
-      if(response[i].is_vegetarian){ // Vegetarian
+      if (response[i].is_vegetarian) { // Vegetarian
         $("#order-item-" + i).append(" <img src="
             + "'../../images/vegetarian-mark.svg'alt='Vegetarian'>");
       }
-      if(response[i].is_vegan){
+      if (response[i].is_vegan) {
         $("#order-item-" + i).append(" <img src="
             + "'../../images/vegan-mark.svg'alt='Vegan'>");
       }

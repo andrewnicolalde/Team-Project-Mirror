@@ -1,7 +1,6 @@
 package endpoints.order;
 
 import com.google.gson.Gson;
-import com.sun.org.apache.xpath.internal.operations.Or;
 import database.DatabaseManager;
 import database.tables.FoodOrder;
 import database.tables.Franchise;
@@ -47,8 +46,8 @@ public class Orders {
 
     List<OrderMenuItem> orderMenuItems = entityManager
         .createQuery("from OrderMenuItem orderMenuItem where "
-                + "orderMenuItem.foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = "
-                + tableNumber, OrderMenuItem.class).getResultList();
+            + "orderMenuItem.foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = "
+            + tableNumber, OrderMenuItem.class).getResultList();
 
     CustomerOrderData[] customerOrderData = new CustomerOrderData[orderMenuItems.size()];
 
@@ -73,13 +72,13 @@ public class Orders {
     //TODO check which franchise to add the order to.
 
     List<FoodOrder> temp = entityManager.createQuery("from FoodOrder foodOrder where "
-        + "foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = " +
-        omi.getTableNumber() + " and foodOrder.status = " + OrderStatus.ORDERING.ordinal() +
-        " or foodOrder.status = " + OrderStatus.READY_TO_CONFIRM.ordinal(),
+            + "foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = " +
+            omi.getTableNumber() + " and foodOrder.status = " + OrderStatus.ORDERING.ordinal() +
+            " or foodOrder.status = " + OrderStatus.READY_TO_CONFIRM.ordinal(),
         FoodOrder.class).getResultList();
 
     if (temp.size() == 0) {
-      return "success";
+      return "failed";
     }
 
     entityManager.getTransaction().begin();
