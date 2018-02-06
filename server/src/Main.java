@@ -4,12 +4,15 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
+import database.DatabaseManager;
 import endpoints.authentication.AuthenticationEmployee;
 import endpoints.authentication.AuthenticationTable;
 import endpoints.customer.Menu;
 import endpoints.kitchen.KitchenOrder;
 import endpoints.order.Orders;
 import endpoints.waiter.Tables;
+
+import javax.persistence.EntityManager;
 
 public class Main {
 
@@ -44,6 +47,9 @@ public class Main {
     post("/api/authStaff/addToOrder", Orders::addOrderMenuItem);
     post("/api/authStaff/removeFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
+
+    // Load the Em now so it does not take so long later
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
 
     System.out.println("Visit: http://localhost:4567");
   }
