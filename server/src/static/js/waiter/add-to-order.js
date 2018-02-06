@@ -30,7 +30,7 @@ function addToOrder(menuItemId){
 
   // Handle possible responses
   post("/api/authStaff/addToOrder", nameValuePairs, function(status){
-    loadOrder();
+    loadOrder(activeTable.getAttribute('data-tablenum'));
     if(status === ""){
       // Refresh current order table to show new change
       console.log("Add item to order failed");
