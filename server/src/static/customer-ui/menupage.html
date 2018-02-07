@@ -81,24 +81,13 @@
         <tr>
           <th></th>
           <th>Item</th>
-          <th>Quantity</th>
           <th>Price</th>
         </tr>
         </thead>
         <tbody>
         <tr>
           <th scope="row">1</th>
-          <td class="myBtn"><a href="#">Grilled Fish Tacos with Chipotle-Lime Dressing</a></td>
-          <td>
-              <div class="dropdown">
-                  <button onclick="myFunction()" class="dropbtn">Dropdown</button>
-                  <div id="myDropdown" class="dropdown-content">
-                      <a href="#">Link 1</a>
-                      <a href="#">Link 2</a>
-                      <a href="#">Link 3</a>
-                  </div>
-              </div>
-          </td>
+          <td id="mybutton"><a href="#">Grilled Fish Tacos with Chipotle-Lime Dressing</a></td>
           <td>£12.00</td>
         </tr>
         <tr>
@@ -161,6 +150,30 @@
             Gluten Free: <img src="../images/gluten-free.svg">
             Vegetarian: <img src="../images/vegetarian-mark.svg">
             Vegan: <img src="../images/vegan-mark.svg">
+        </div>
+        <div class="modal-footer">
+          <button id="addbutton" type="button" class="btn btn-primary">Add to Order</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal2" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Item Info</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Gluten Free: <img src="../images/gluten-free.svg">
+          Vegetarian: <img src="../images/vegetarian-mark.svg">
+          Vegan: <img src="../images/vegan-mark.svg">
         </div>
         <div class="modal-footer">
           <button id="addbutton" type="button" class="btn btn-primary">Add to Order</button>
