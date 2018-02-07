@@ -18,3 +18,12 @@ function verifyBrowserSupport() {
   return Boolean(true);
 }
 
+function registerServiceWorker() {
+  return navigator.serviceWorker.register('/js/notification-worker.js')
+  .then(function (registration) {
+    console.log("Registration successful");
+    return registration;})
+  .catch(function (reason) {
+    console.error("Unable to register: ", reason);
+  });
+}
