@@ -8,11 +8,17 @@ $(document).ready(function () {
         //parse JSON
         var response = JSON.parse(data);
         for (i = 0; i < response.length; i++) {
-            $("#table-body").append("<tr>" +
+            $("#table-body").append("<tr data-toggle=\"collapse\" data-target=\"#row\"" + (i + 1) + " class=\"clickable\">" +
                 "<th scope=\"row\">" + (i + 1) + "</th>" +
                 "<td>" + response[i].name + "</td>" +
                 "<td>" + response[i].price + "</td>" +
-                "</tr>");
+                "</tr>" +
+                "<tr>" +
+                "<td colspan=4>" +
+                "<div id=\"row\"" + (i + 1) + " class=\"collapse\">" + response[i].details + "</div>" +
+                "</td>" +
+                "</tr>"
+            );
         }
     });
 });
