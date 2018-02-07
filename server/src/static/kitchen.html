@@ -26,8 +26,11 @@
       checkPage();
 
       if (verifyBrowserSupport()) {
-        var notifyWorker = registerServiceWorker('/js/notification-worker.js');
-        doSomething();
+
+        var subscription = subscribeUserToPush();
+        if (subscription != null) {
+          sendSubscriptionToBackEnd(subscription);
+        }
       }
     });
   </script>

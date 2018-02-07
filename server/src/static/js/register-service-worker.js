@@ -59,16 +59,70 @@ function askPermission() {
   });
 }
 
+/**
+ * Check permissions and show a test notification.
+ */
 function doSomething() {
   if (Notification.permission === "granted") {
     var notification = new Notification("Hello World!");
   } else {
     var result = askPermission();
     if (result === "granted") {
-      subscribeUserToPush();
+      // nothing right now.
     } else {
       // Do nothing right now permission was denied.
     }
   }
 }
 
+/**
+ * Subscribes the client to a push service. Uses our VAPID public key.
+ * Credit Matt Gaunt, Google.
+ * @return {Promise<ServiceWorkerRegistration>}
+ */
+function subscribeUserToPush() {
+  return navigator.serviceWorker.register('/js/notification-worker.js')
+  .then(function(registration) {
+    var enc = new TextEncoder("utf-8");
+    const subscribeOptions = {
+      userVisibleOnly: true,
+      applicationServerKey: enc.encode(
+          'BE4fhya6e_JedY-5R7cRMXj973kghfY3YTk0Bzi8AWXGc8f1JHD3GBmWsg1J8DvMW3uLG5nf6ycDjbFO0n5u7n4'
+      )
+    };
+
+    return registration.pushManager.subscribe(subscribeOptions);
+  })
+  .then(function(pushSubscription) {
+    console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
+    return pushSubscription;
+  });
+}
+
+/**
+ * Send the subscription object to the server so we can issue push notifications.
+ * Credit Matt Gaunt, Google.
+ * @param subscription
+ * @return {Promise<Response>}
+ */
+function sendSubscriptionToBackEnd(subscription) {
+  return fetch('/api/save-subscription/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(subscription)
+  })
+  .then(function(response) {
+    if (!response.ok) {
+      throw new Error('Bad status code from server.');
+    }
+
+    return response.json();
+  })
+  .then(function(responseData) {
+    if (!(responseData.data && responseData.data.success)) {
+      throw new Error('Bad response from server.');
+    }
+  });
+}
