@@ -26,7 +26,8 @@
       checkPage();
 
       if (verifyBrowserSupport()) {
-        registerServiceWorker();
+        var notifyWorker = registerServiceWorker('/js/notification-worker.js');
+        doSomething();
       }
     });
   </script>
@@ -34,9 +35,12 @@
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <ul class="nav navbar-nav mr-auto">
-    <a class="navbar-brand" href="index.html">ARMS</a>
+    <a class="navbar-brand" href="/">ARMS</a>
     <li class="nav-item">
-      <a class="nav-link" href="kitchen.html">Home</a>
+      <a class="nav-link" href="/waiter/waiter-ui.html">Waiter</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/kitchen.html">Home</a>
     </li>
   </ul>
   <ul class="navbar-nav">
