@@ -16,7 +16,7 @@ body{
     text-decoration: blink;
     display: inline-block;
     font-size: 10px;
-    position: absolute; 
+    position: absolute;
     top: 0;
     right:0;
 }
