@@ -1,6 +1,8 @@
 .jumbotron{
 	background-color: grey;
-    color:white;
+  color:white;
+  height:90%;
+  margin-bottom: 1%;
 }
 
 .btn-group {
@@ -16,6 +18,9 @@
   top: 0;
   right: 0;
 }
+.btn-block {
+  margin-bottom: 20px;
+}
 
 #loginbuttons {
   margin: auto;
@@ -24,10 +29,29 @@
   text-align: center;
 }
 
-.loginbutton {
+.login-form {
   margin-bottom: 20px;
 }
 
-.login-form {
-  margin-bottom: 20px;
+.main-content {
+  margin-top: 1%;
+  height: 90%;
+}
+
+.card {
+  min-height: 80%;
+}
+
+.card-block {
+  margin:1%;
+}
+
+a:hover {
+  text-decoration: none;
+  color: white;
+}
+
+a:active {
+  text-decoration: none;
+  color: white;
 }
