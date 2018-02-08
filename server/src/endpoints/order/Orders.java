@@ -3,6 +3,7 @@ package endpoints.order;
 import com.google.gson.Gson;
 import database.DatabaseManager;
 import database.tables.FoodOrder;
+import database.tables.Franchise;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
@@ -14,6 +15,8 @@ import spark.Response;
 public class Orders {
 
   private static final Gson GSON = new Gson();
+
+  private static final EntityManager ENTITY_MANAGER = DatabaseManager.getInstance().getEntityManager();
 
   /**
    * Returns an order as JSON. JSON input: tableNumber: an integer representing the table number
@@ -103,6 +106,7 @@ public class Orders {
         .fromJson(request.body(), ChangeOrderStatusParameters.class);
 
     //TODO check which franchise the order is part of.
+    ENTITY_MANAGER.getTransaction().begin();
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
@@ -132,6 +136,7 @@ public class Orders {
     OrderMenuItemParameters omi = GSON.fromJson(request.body(), OrderMenuItemParameters.class);
 
     //TODO Check franchise.
+    ENTITY_MANAGER.getTransaction().begin();
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     entityManager.getTransaction().begin();
