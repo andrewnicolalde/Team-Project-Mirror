@@ -130,11 +130,9 @@ public class Orders {
 
     entityManager.getTransaction().begin();
 
-    List<FoodOrder> foodOrders = entityManager.createQuery("SELECT f FROM FoodOrder f WHERE f" +
-        ".transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNumber AND f" +
-        ".status = :status", FoodOrder.class).setParameter("tableNumber", cos.getTableNumber())
-        .setParameter
-        ("status", OrderStatus.READY_TO_CONFIRM.ordinal()).getResultList();
+    List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder where "
+        + "foodOrder.id = :id", FoodOrder.class)
+        .setParameter("id", cos.getFoodOrderId()).getResultList();
 
     entityManager.getTransaction().commit();
     entityManager.close();
