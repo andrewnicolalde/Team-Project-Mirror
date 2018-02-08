@@ -2,12 +2,12 @@
  * This function returns the selected table.
  * @returns The web element representing the current table
  */
-function getActiveTable() {
-    var allTables = document.getElementById("orders-list").children;
+function getActiveOrder() {
+    var allOrders = document.getElementById("orders-list").children;
     var activeTable;
-    for (i = 0; i < allTables.length; i++) {
-        if (allTables[i].classList.contains("active")) {
-            activeTable = allTables[i];
+    for (i = 0; i < allOrders.length; i++) {
+        if (allOrders[i].classList.contains("active")) {
+            activeTable = allOrders[i];
         }
     }
     return activeTable;
@@ -22,9 +22,7 @@ function getActiveTable() {
  */
 // TODO: Add a description attribute here so that additional preparation info can be provided.
 function addToOrder(menuItemId) {
-
-    // Find active table
-    var activeTable = getActiveTable();
+    var activeOrder = getActiveOrder();
 
     // TODO: Remove this and add an actual description box in the UI
     var requirements = "This is a test descripion"
@@ -32,7 +30,7 @@ function addToOrder(menuItemId) {
     // Create name-value pairs for HTTP post request, see
     // https://en.wikipedia.org/wiki/POST_(HTTP)#Use_for_submitting_web_forms
     var nameValuePairs = JSON.stringify({
-        tableNumber: activeTable.getAttribute('data-tablenum'),
+        orderNumber: activeTable.getAttribute('data-ordernum'),
         menuItemId: menuItemId,
         requirements: requirements
     });
@@ -53,12 +51,11 @@ function addToOrder(menuItemId) {
  * Table's current order. It also clears the Current Order column of any existing
  * entries before adding the selected Table's entries to the Current Order column.
  *
- * @param tableNumber The number of the table who's current order is to be displayed
- *                    in the Current Order column.
+ * @param orderNumber The number of the order to load.
  */
-function loadOrder(tableNumber) {
-    var tableNumberToSend = JSON.stringify({tableNumber: tableNumber});
-    post("/api/authStaff/getOrder", tableNumberToSend, function (data) {
+function loadOrder(orderNumber) {
+    var orderNumberToSend = JSON.stringify({orderNumber: orderNumber});
+    post("/api/authStaff/getOrder", orderNumberToSend, function (data) {
 
         // Parse JSON
         var response = JSON.parse(data);
@@ -138,30 +135,10 @@ function loadMenu() {
  */
 function loadTables() {
     get("/api/authStaff/tables", function (data) {
-        //Callback function
-        console.log(data)
-
-        // Parse the json into objects
         var response = JSON.parse(data);
         for (i = 0; i < response.length; i++) {
-            loadOrders(response[i].number);
+            loadOrderList(response[i].number);
         }
-        /*
-
-        for (i = 0; i < response.length; i++) {
-            var orders = loadOrders(response[i].number)
-            for (j = 0; j < orders.length; j++) {
-                $("#tables-list").append("<li data-tablenum='" + response[i].number
-                    + "' data-ordernum='" + order[j].foodOrderId
-                    + "' id='table-" + response[i].number
-                    + "' class='list-group-item list-group-item-action' "
-                    + "onclick=\"setCurrentTable(event); loadOrder(this.getAttribute('data-tablenum'));\">"
-                    + "<span class='waiter-ui-span-bold'>Table "
-                    + response[i].number + ":</span> " + orders[j].orderStatus + "</li>");
-            }
-
-        }
-        */
     });
 }
 
@@ -169,19 +146,18 @@ function loadTables() {
  * Loads the orders for a given table number.
  * @param tableNumber The table which the orders should be from.
  */
-function loadOrders(tableNumber) {
+function loadOrderList(tableNumber) {
     post("/api/authStaff/getOrderList", JSON.stringify({
         tableNumber: tableNumber
     }), function (data) {
-        console.log(data)
         var orders = JSON.parse(data);
         for (i = 0; i < orders.length; i++) {
             $("#orders-list").append(
                 "<li"
                 + " id='table-" + orders[i].foodOrderId + "'"
-                + " data-tablenum='" + tableNumber + "'"
+                + " data-ordernum='" + orders[i].foodOrderId + "'"
                 + " class='list-group-item list-group-item-action'"
-                + " onclick=\"setCurrentTable(event); loadOrder(this.getAttribute('data-tablenum'));\">"
+                + " onclick=\"setCurrentOrder(event); loadOrder(this.getAttribute('data-ordernum'));\">"
                 + "<span class='waiter-ui-span-bold'>Table </span>" + tableNumber + ": " + orders[i].orderStatus
                 + "</li>"
             );
@@ -195,24 +171,24 @@ function loadOrders(tableNumber) {
  *
  * @param event The event which was triggered by the clicked element
  */
-function setCurrentTable(event) {
-    // Reset all Tables to non-active
-    var allTables = document.getElementById("orders-list").children;
-    for (i = 0; i < allTables.length; i++) {
-        allTables[i].className = "list-group-item list-group-item-action";
+function setCurrentOrder(event) {
+    // Reset all orders to non-active
+    var allOrders = document.getElementById("orders-list").children;
+    for (i = 0; i < allOrders.length; i++) {
+        allOrders[i].className = "list-group-item list-group-item-action";
     }
 
     // Set active element
-    var activeTable = document.getElementById(event.currentTarget.id);
-    activeTable.className += " active";
+    var activeOrder = document.getElementById(event.currentTarget.id);
+    activeOrder.className += " active";
 }
 
 
 function changeOrderStatus(orderStatus) {
-    var activeTable = getActiveTable();
+    var activeOrder = getActiveOrder();
     post("/api/authStaff/changeOrderStatus",
         JSON.stringify({
-            tableNumber: activeTable.getAttribute('data-tablenum'),
+            orderNumber: activeOrder.getAttribute('data-ordernum'),
             newOrderStatus: orderStatus
         }),
         loadTables
