@@ -7,6 +7,7 @@ import database.tables.Franchise;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
+import database.tables.StaffSession;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -25,8 +26,26 @@ public class Orders {
    */
   public static String getOrder(Request request, Response response) {
     OrderRequestParameters or = GSON.fromJson(request.body(), OrderRequestParameters.class);
-    return getOrderMenuItems(or.getTableNumber(), request.session().
-        attribute("StaffSessionKey"));
+    return getOrderMenuItems(or.getTableNumber(), request.session()
+        .attribute("StaffSessionKey"));
+  }
+
+  public static String getOrderList(Request request, Response response) {
+    OrderRequestParameters orderRequestParameters = GSON.fromJson(request.body(),
+        OrderRequestParameters.class);
+
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
+        + "where foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNo",
+        FoodOrder.class).setParameter("tableNo", orderRequestParameters.getTableNumber())
+        .getResultList();
+
+    OrderListData[] orderListData = new OrderListData[foodOrders.size()];
+    for (int i = 0; i < orderListData.length; i++) {
+      orderListData[i] = new OrderListData(foodOrders.get(i));
+    }
+
+    return GSON.toJson(orderListData);
   }
 
   /**
@@ -37,7 +56,7 @@ public class Orders {
    * @return The menu items for the table in a JSON format.
    * @author Marcus Messer
    */
-  public static String getOrderMenuItems(Long tableNumber, String staffSessionKey) {
+  public static String getOrderMenuItems(int tableNumber, String staffSessionKey) {
     //TODO check which franchise the order is part of.
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
@@ -111,12 +130,9 @@ public class Orders {
 
     entityManager.getTransaction().begin();
 
-    FoodOrder foodOrder = entityManager
-        .createQuery("from FoodOrder foodOrder where foodOrder.transaction"
-                + ".restaurantTableStaff.restaurantTable.tableNumber = " + cos.getTableNumber()
-            , FoodOrder.class).getSingleResult();
-
-    foodOrder.setStatus(OrderStatus.valueOf(cos.getNewOrderStatus()));
+    List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder where "
+        + "foodOrder.id = :id", FoodOrder.class)
+        .setParameter("id", cos.getFoodOrderId()).getResultList();
 
     entityManager.getTransaction().commit();
     entityManager.close();

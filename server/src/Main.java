@@ -38,6 +38,7 @@ public class Main {
     get("/api/authStaff/menu", (req, res) -> Menu.getMenu());
     get("/api/authStaff/tables", Tables::getTables);
     get("api/authStaff/kitchen", KitchenOrder::getCookingOrders);
+    post("api/authStaff/getOrderList", Orders::getOrderList);
     post("/api/authStaff/getOrder", Orders::getOrder);
     post("/api/authStaff/addToOrder", Orders::addOrderMenuItem);
     post("/api/authStaff/removeFromOrder", Orders::removeOrderMenuItem);
