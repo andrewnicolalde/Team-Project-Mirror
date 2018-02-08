@@ -167,6 +167,7 @@ function loadOrderList(tableNumber) {
           + " class='list-group-item list-group-item-action'"
           + " onclick=\"setCurrentOrder(event); loadOrder(this.getAttribute('data-ordernum'));\">"
           + "<span class='waiter-ui-span-bold'>Table </span>" + tableNumber
+          + "<span> - Order </span>" + orders[i].foodOrderId
           + ": " + orders[i].orderStatus
           + "</li>"
       );
