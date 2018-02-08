@@ -3,7 +3,7 @@
  * @returns The web element representing the current table
  */
 function getActiveTable() {
-    var allTables = document.getElementById("tables-list").children;
+    var allTables = document.getElementById("orders-list").children;
     var activeTable;
     for (i = 0; i < allTables.length; i++) {
         if (allTables[i].classList.contains("active")) {
@@ -139,21 +139,51 @@ function loadMenu() {
 function loadTables() {
     get("/api/authStaff/tables", function (data) {
         //Callback function
+        console.log(data)
 
         // Parse the json into objects
         var response = JSON.parse(data);
-
-        /*
-        *  Loop through response and append items to a list
-        *  Or do whatever you'd like with them.
-        */
         for (i = 0; i < response.length; i++) {
-            $("#tables-list").append("<li data-tablenum='" + response[i].number +
-                "' id='table-" + response[i].number
-                + "' class='list-group-item list-group-item-action' "
-                + "onclick=\"setCurrentTable(event); loadOrder(this.getAttribute('data-tablenum'));\">"
-                + "<span class='waiter-ui-span-bold'>Table "
-                + response[i].number + ":</span> " + response[i].status + "</li>");
+            loadOrders(response[i].number);
+        }
+        /*
+
+        for (i = 0; i < response.length; i++) {
+            var orders = loadOrders(response[i].number)
+            for (j = 0; j < orders.length; j++) {
+                $("#tables-list").append("<li data-tablenum='" + response[i].number
+                    + "' data-ordernum='" + order[j].foodOrderId
+                    + "' id='table-" + response[i].number
+                    + "' class='list-group-item list-group-item-action' "
+                    + "onclick=\"setCurrentTable(event); loadOrder(this.getAttribute('data-tablenum'));\">"
+                    + "<span class='waiter-ui-span-bold'>Table "
+                    + response[i].number + ":</span> " + orders[j].orderStatus + "</li>");
+            }
+
+        }
+        */
+    });
+}
+
+/**
+ * Loads the orders for a given table number.
+ * @param tableNumber The table which the orders should be from.
+ */
+function loadOrders(tableNumber) {
+    post("/api/authStaff/getOrderList", JSON.stringify({
+        tableNumber: tableNumber
+    }), function (data) {
+        console.log(data)
+        var orders = JSON.parse(data);
+        for (i = 0; i < orders.length; i++) {
+            $("#orders-list").append(
+                "<li"
+                + " id='table-" + orders[i].foodOrderId + "'"
+                + " class='list-group-item list-group-item-action'"
+                + " onclick=\"setCurrentTable(event); loadOrder(this.getAttribute('data-tablenum'));\">"
+                + "<span class='waiter-ui-span-bold'>Table </span>" + tableNumber + ": " + orders[i].orderStatus
+                + "</li>"
+            );
         }
     });
 }
@@ -166,7 +196,7 @@ function loadTables() {
  */
 function setCurrentTable(event) {
     // Reset all Tables to non-active
-    var allTables = document.getElementById("tables-list").children;
+    var allTables = document.getElementById("orders-list").children;
     for (i = 0; i < allTables.length; i++) {
         allTables[i].className = "list-group-item list-group-item-action";
     }
@@ -191,5 +221,5 @@ function changeOrderStatus(orderStatus) {
 // Loads the menu and tables when the page loads.
 $(document).ready(function () {
     loadMenu();
-    loadTables();
+    loadTables()
 });

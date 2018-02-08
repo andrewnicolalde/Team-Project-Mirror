@@ -56,7 +56,7 @@ public class Orders {
    * @return The menu items for the table in a JSON format.
    * @author Marcus Messer
    */
-  public static String getOrderMenuItems(Long tableNumber, String staffSessionKey) {
+  public static String getOrderMenuItems(int tableNumber, String staffSessionKey) {
     //TODO check which franchise the order is part of.
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
