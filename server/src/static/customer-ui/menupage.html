@@ -4,19 +4,24 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../js/ajax-wrapper.js"></script>
+  <!--<script type="text/javascript" src="../js/getmenu-customer.js"></script> not currently functional.-->
+    <script type="text/javascript" src="../js/addToOrderTable-Customer.js"></script>
   <script src="../js/popup.js"></script>
-  <link rel="stylesheet" href="homepagestyle.css">
+
+  <link rel="stylesheet" href="../css/homepage.css">
+
+
 </head>
 <body>
 <nav class="nav justify-content-end flex-md-row">
   <a class="navbar-brand">Oaxaca</a>
-  <a class="nav-link active" href="customerdisplay.html">Home<span class="sr-only">(current)</span></a>
-  <a class="nav-link" href="">Basket</a>
-  <a class="nav-link" href="">About</a>
+  <a class="nav-link active" href="customerdisplay.html">Home</a>
+  <a class="nav-link" href="">Menu<span class="sr-only">(current)</span></a>
+  <a class="nav-link" href="basket.html">Basket</a>
 </nav>
 
 <div class="jumbotron jumbotron-fluid bg-info text-white text-center">
@@ -52,21 +57,21 @@
           <th>Price</th>
         </tr>
         </thead>
-        <tbody>
-        <tr>
+        <tbody id="menu-table">
+        <tr id="row1move" class="name">
           <th scope="row">1</th>
-          <td class="myBtn"><a href="#">Layered buffalo chicken nachos with creamy gorgonzola
-            sauce</a></td>
-          <td>£5.00</td>
+          <td class="myBtn">Layered buffalo chicken nachos with creamy gorgonzola
+            sauce</td>
+          <td >£5.00</td>
         </tr>
         <tr>
           <th scope="row">2</th>
-          <td class="myBtn"><a href="#">Jalapeño chicken wraps</a></td>
+          <td class="myBtn ">Jalapeño chicken wraps</td>
           <td>£4.00</td>
         </tr>
         <tr>
           <th scope="row">3</th>
-          <td class="myBtn"><a href="#">Queso fundido with chorizo</a></td>
+          <td class="myBtn">Queso fundido with chorizo</td>
           <td>£2.50</td>
         </tr>
         </tbody>
@@ -85,17 +90,17 @@
         <tbody>
         <tr>
           <th scope="row">1</th>
-          <td class="myBtn"><a href="#">Grilled Fish Tacos with Chipotle-Lime Dressing</a></td>
+          <td id="mybutton">Grilled Fish Tacos with Chipotle-Lime Dressing</td>
           <td>£12.00</td>
         </tr>
         <tr>
           <th scope="row">2</th>
-          <td class="myBtn"><a href="#">Chili Rellenos Casserole</a></td>
+          <td class="myBtn">Chili Rellenos Casserole</td>
           <td>£10.00</td>
         </tr>
         <tr>
           <th scope="row">3</th>
-          <td class="myBtn"><a href="#">Ronaldo's Beef Carnitas</a></td>
+          <td class="myBtn">Ronaldo's Beef Carnitas</td>
           <td>£9.50</td>
         </tr>
         </tbody>
@@ -114,17 +119,17 @@
         <tbody>
         <tr>
           <th scope="row">1</th>
-          <td class="myBtn"><a href="#">Tres Leches Cake</a></td>
+          <td class="myBtn add-r">Tres Leches Cake</td>
           <td>£6.00</td>
         </tr>
         <tr>
           <th scope="row">2</th>
-          <td class="myBtn"><a href="#">Frozen Margarita Pie</a></td>
+          <td class="myBtn">Frozen Margarita Pie</td>
           <td>£3.00</td>
         </tr>
         <tr>
           <th scope="row">3</th>
-          <td class="myBtn"><a href="#">Flan</a></td>
+          <td class="myBtn">Flan</td>
           <td>£4.50</td>
         </tr>
         </tbody>
@@ -132,22 +137,76 @@
     </div>
   </div>
 
+  <div class="col-md-4 col-lg-4">
+    <div class="col-md-4 col-lg-4">
+      <h3 class="text-center" style="font-style: italic;">SELECTED</h3>
+    </div>
+    <table class="table table-hover cart">
+      <thead>
+      <tr>
+        <th></th>
+        <th>Item</th>
+        <th>Price</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+    <button id="addbutton" type="button" class="btn btn-primary add-row">Add to Order</button>
+</div>
+
+
+
   <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
 
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Item added!</h4>
+          <h5 class="modal-title">Item Info</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            Gluten Free: <img src="../images/gluten-free.svg">
+            Vegetarian: <img src="../images/vegetarian-mark.svg">
+            Vegan: <img src="../images/vegan-mark.svg">
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button id="addbutton" type="button" class="btn btn-primary">Add to Order</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="modal fade" id="modal2" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Item Info</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Gluten Free: <img src="../images/gluten-free.svg">
+          Vegetarian: <img src="../images/vegetarian-mark.svg">
+          Vegan: <img src="../images/vegan-mark.svg">
+        </div>
+        <div class="modal-footer">
+          <button id="addbutton" type="button" class="btn btn-primary add-row">Add to Order</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
