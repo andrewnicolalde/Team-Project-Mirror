@@ -9,7 +9,7 @@ $(document).ready(function(){
           $(".name").clone().appendTo(".cart");
         });
 
-        // Find and add selected table rows to cart table
+        // Find and remove selected table rows
         $(".add-order").click(function(){
             $("table tbody").find('input[name="record"]').each(function(){
             	if($(this).is(":checked")){
