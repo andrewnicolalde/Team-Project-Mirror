@@ -5,7 +5,8 @@ $(document).ready(function(){
             var markup = "<tr><td></td><td>" + name + "</td><td>" + price + "</td></tr>";
             $("table.cart tbody").append(markup);
         });
-    $("td").click(function () {
+
+    /*$("td").click(function () {
           $(".name").clone().appendTo(".cart");
         });
 
@@ -16,5 +17,5 @@ $(document).ready(function(){
                     $(".name").clone().appendTo(".cart");
                 }
             });
-        });
+        });*/
     });

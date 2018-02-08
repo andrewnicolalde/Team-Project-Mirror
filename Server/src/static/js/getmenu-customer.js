@@ -26,5 +26,5 @@ $(document).ready(function() {
             "<td>" + response[i].menuItems.price + "</td>" +
             "</tr>");
     }
-  }
-}
+  });
+});
