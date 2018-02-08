@@ -17,7 +17,8 @@ public class Orders {
 
   private static final Gson GSON = new Gson();
 
-  private static final EntityManager ENTITY_MANAGER = DatabaseManager.getInstance().getEntityManager();
+  private static final EntityManager ENTITY_MANAGER = DatabaseManager.getInstance()
+      .getEntityManager();
 
   /**
    * Returns an order as JSON. JSON input: tableNumber: an integer representing the table number
@@ -28,8 +29,8 @@ public class Orders {
    */
   public static String getOrder(Request request, Response response) {
     OrderRequestParameters or = GSON.fromJson(request.body(), OrderRequestParameters.class);
-    return getOrderMenuItems(or.getTableNumber(), request.session().
-        attribute("StaffSessionKey"));
+    return getOrderMenuItems(or.getTableNumber(), request.session()
+        .attribute("StaffSessionKey"));
   }
 
 
@@ -46,8 +47,8 @@ public class Orders {
 
     List<OrderMenuItem> orderMenuItems = ENTITY_MANAGER
         .createQuery("from OrderMenuItem orderMenuItem where "
-            + "orderMenuItem.foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = "
-            + tableNumber, OrderMenuItem.class).getResultList();
+            + "orderMenuItem.foodOrder.transaction.restaurantTableStaff.restaurantTable."
+            + "tableNumber = " + tableNumber, OrderMenuItem.class).getResultList();
 
     CustomerOrderData[] customerOrderData = new CustomerOrderData[orderMenuItems.size()];
 
@@ -72,9 +73,9 @@ public class Orders {
     //TODO check which franchise to add the order to.
 
     List<FoodOrder> temp = ENTITY_MANAGER.createQuery("from FoodOrder foodOrder where "
-            + "foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = " +
-            omi.getTableNumber() + " and foodOrder.status = " + OrderStatus.ORDERING.ordinal() +
-            " or foodOrder.status = " + OrderStatus.READY_TO_CONFIRM.ordinal(),
+            + "foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = "
+            + omi.getTableNumber() + " and foodOrder.status = " + OrderStatus.ORDERING.ordinal()
+            + " or foodOrder.status = " + OrderStatus.READY_TO_CONFIRM.ordinal(),
         FoodOrder.class).getResultList();
 
     if (temp.size() == 0) {
@@ -106,10 +107,18 @@ public class Orders {
     //TODO check which franchise the order is part of.
     ENTITY_MANAGER.getTransaction().begin();
 
+    /*
+
     FoodOrder foodOrder = ENTITY_MANAGER
         .createQuery("from FoodOrder foodOrder where foodOrder.transaction"
-                + ".restaurantTableStaff.restaurantTable.tableNumber = " + cos.getTableNumber()
-            , FoodOrder.class).getSingleResult();
+                + ".restaurantTableStaff.restaurantTable.tableNumber = " + cos.getTableNumber(),
+            FoodOrder.class).getSingleResult();
+    */
+    List<FoodOrder> foodOrders = ENTITY_MANAGER.createQuery("SELECT f FROM FoodOrder f WHERE f" +
+        ".transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNumber AND f" +
+        ".status = :status", FoodOrder.class).setParameter("tableNumber", cos.getTableNumber())
+        .setParameter
+        ("status", OrderStatus.READY_TO_CONFIRM.ordinal()).getResultList();
 
     foodOrder.setStatus(OrderStatus.valueOf(cos.getNewOrderStatus()));
 
