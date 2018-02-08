@@ -30,14 +30,14 @@ function addToOrder(menuItemId) {
   // Create name-value pairs for HTTP post request, see
   // https://en.wikipedia.org/wiki/POST_(HTTP)#Use_for_submitting_web_forms
   var nameValuePairs = JSON.stringify({
-    orderNumber: activeTable.getAttribute('data-ordernum'),
+    orderNumber: activeOrder.getAttribute('data-ordernum'),
     menuItemId: menuItemId,
     requirements: requirements
   });
 
   // Handle possible responses
   post("/api/authStaff/addToOrder", nameValuePairs, function (status) {
-    loadOrder(activeTable.getAttribute('data-tablenum'));
+    loadOrder(activeOrder.getAttribute('data-ordernum'));
     if (status === "") {
       // Refresh current order table to show new change
       console.log("Add item to order failed");
