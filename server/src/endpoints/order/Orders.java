@@ -3,11 +3,9 @@ package endpoints.order;
 import com.google.gson.Gson;
 import database.DatabaseManager;
 import database.tables.FoodOrder;
-import database.tables.Franchise;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
-import database.tables.StaffSession;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -16,8 +14,6 @@ import spark.Response;
 public class Orders {
 
   private static final Gson GSON = new Gson();
-
-  private static final EntityManager ENTITY_MANAGER = DatabaseManager.getInstance().getEntityManager();
 
   /**
    * Returns an order as JSON. JSON input: tableNumber: an integer representing the table number
@@ -44,7 +40,8 @@ public class Orders {
   public static String getOrderMenuItems(Long tableNumber, String staffSessionKey) {
     //TODO check which franchise the order is part of.
 
-    List<OrderMenuItem> orderMenuItems = ENTITY_MANAGER
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    List<OrderMenuItem> orderMenuItems = entityManager
         .createQuery("from OrderMenuItem orderMenuItem where "
             + "orderMenuItem.foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = "
             + tableNumber, OrderMenuItem.class).getResultList();
@@ -71,7 +68,9 @@ public class Orders {
 
     //TODO check which franchise to add the order to.
 
-    List<FoodOrder> temp = ENTITY_MANAGER.createQuery("from FoodOrder foodOrder where "
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
+    List<FoodOrder> temp = entityManager.createQuery("from FoodOrder foodOrder where "
             + "foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = " +
             omi.getTableNumber() + " and foodOrder.status = " + OrderStatus.ORDERING.ordinal() +
             " or foodOrder.status = " + OrderStatus.READY_TO_CONFIRM.ordinal(),
@@ -81,12 +80,12 @@ public class Orders {
       return "failed";
     }
 
-    ENTITY_MANAGER.getTransaction().begin();
-    OrderMenuItem orderMenuItem = new OrderMenuItem(ENTITY_MANAGER.find(
+    entityManager.getTransaction().begin();
+    OrderMenuItem orderMenuItem = new OrderMenuItem(entityManager.find(
         MenuItem.class, omi.getMenuItemId()), temp.get(0), omi.getRequirements());
 
-    ENTITY_MANAGER.persist(orderMenuItem);
-    ENTITY_MANAGER.getTransaction().commit();
+    entityManager.persist(orderMenuItem);
+    entityManager.getTransaction().commit();
     return "success";
   }
 
@@ -104,16 +103,19 @@ public class Orders {
         .fromJson(request.body(), ChangeOrderStatusParameters.class);
 
     //TODO check which franchise the order is part of.
-    ENTITY_MANAGER.getTransaction().begin();
 
-    FoodOrder foodOrder = ENTITY_MANAGER
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
+    entityManager.getTransaction().begin();
+
+    FoodOrder foodOrder = entityManager
         .createQuery("from FoodOrder foodOrder where foodOrder.transaction"
                 + ".restaurantTableStaff.restaurantTable.tableNumber = " + cos.getTableNumber()
             , FoodOrder.class).getSingleResult();
 
     foodOrder.setStatus(OrderStatus.valueOf(cos.getNewOrderStatus()));
 
-    ENTITY_MANAGER.getTransaction().commit();
+    entityManager.getTransaction().commit();
 
     return "success";
   }
@@ -130,23 +132,19 @@ public class Orders {
     OrderMenuItemParameters omi = GSON.fromJson(request.body(), OrderMenuItemParameters.class);
 
     //TODO Check franchise.
-    ENTITY_MANAGER.getTransaction().begin();
 
-    OrderMenuItem orderMenuItem = ENTITY_MANAGER
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    entityManager.getTransaction().begin();
+
+    OrderMenuItem orderMenuItem = entityManager
         .createQuery("from FoodOrder foodOrder where foodOrder.transaction.restaurantTableStaff"
                 + ".restaurantTable.tableNumber = " + omi.getTableNumber(),
             OrderMenuItem.class).getSingleResult();
 
-    ENTITY_MANAGER.remove(orderMenuItem);
+    entityManager.remove(orderMenuItem);
 
-    ENTITY_MANAGER.getTransaction().commit();
+    entityManager.getTransaction().commit();
 
     return "success";
-  }
-
-  private static Franchise getFranchise(String staffSessionKey) {
-    StaffSession staffSession = ENTITY_MANAGER.find(StaffSession.class, staffSessionKey);
-
-    return staffSession.getStaff().getFranchise();
   }
 }
