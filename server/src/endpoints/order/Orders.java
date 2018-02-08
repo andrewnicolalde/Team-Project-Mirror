@@ -16,8 +16,6 @@ public class Orders {
 
   private static final Gson GSON = new Gson();
 
-  private static final EntityManager ENTITY_MANAGER = DatabaseManager.getInstance().getEntityManager();
-
   /**
    * Returns an order as JSON. JSON input: tableNumber: an integer representing the table number
    *
@@ -30,7 +28,6 @@ public class Orders {
     return getOrderMenuItems(or.getTableNumber(), request.session().
         attribute("StaffSessionKey"));
   }
-
 
   /**
    * Returns the order menu items from the database in JSON format.
@@ -48,6 +45,8 @@ public class Orders {
         .createQuery("from OrderMenuItem orderMenuItem where "
             + "orderMenuItem.foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = "
             + tableNumber, OrderMenuItem.class).getResultList();
+
+    entityManager.close();
 
     CustomerOrderData[] customerOrderData = new CustomerOrderData[orderMenuItems.size()];
 
@@ -85,10 +84,11 @@ public class Orders {
 
     entityManager.getTransaction().begin();
     OrderMenuItem orderMenuItem = new OrderMenuItem(entityManager.find(
-        MenuItem.class, omi.getMenuItemId()), temp.get(0), omi.getRequirements());
+        MenuItem.class, omi.getMenuItemId()), temp.get(0), omi.getInstructions());
 
     entityManager.persist(orderMenuItem);
     entityManager.getTransaction().commit();
+    entityManager.close();
     return "success";
   }
 
@@ -106,7 +106,6 @@ public class Orders {
         .fromJson(request.body(), ChangeOrderStatusParameters.class);
 
     //TODO check which franchise the order is part of.
-    ENTITY_MANAGER.getTransaction().begin();
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
@@ -120,6 +119,7 @@ public class Orders {
     foodOrder.setStatus(OrderStatus.valueOf(cos.getNewOrderStatus()));
 
     entityManager.getTransaction().commit();
+    entityManager.close();
 
     return "success";
   }
@@ -136,8 +136,6 @@ public class Orders {
     OrderMenuItemParameters omi = GSON.fromJson(request.body(), OrderMenuItemParameters.class);
 
     //TODO Check franchise.
-    ENTITY_MANAGER.getTransaction().begin();
-
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     entityManager.getTransaction().begin();
 
@@ -149,6 +147,7 @@ public class Orders {
     entityManager.remove(orderMenuItem);
 
     entityManager.getTransaction().commit();
+    entityManager.close();
 
     return "success";
   }
