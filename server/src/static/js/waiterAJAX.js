@@ -3,14 +3,14 @@
  * @returns The web element representing the current table
  */
 function getActiveOrder() {
-    var allOrders = document.getElementById("orders-list").children;
-    var activeTable;
-    for (i = 0; i < allOrders.length; i++) {
-        if (allOrders[i].classList.contains("active")) {
-            activeTable = allOrders[i];
-        }
+  var allOrders = document.getElementById("orders-list").children;
+  var activeTable;
+  for (i = 0; i < allOrders.length; i++) {
+    if (allOrders[i].classList.contains("active")) {
+      activeTable = allOrders[i];
     }
-    return activeTable;
+  }
+  return activeTable;
 }
 
 /**
@@ -22,28 +22,28 @@ function getActiveOrder() {
  */
 // TODO: Add a description attribute here so that additional preparation info can be provided.
 function addToOrder(menuItemId) {
-    var activeOrder = getActiveOrder();
+  var activeOrder = getActiveOrder();
 
-    // TODO: Remove this and add an actual description box in the UI
-    var requirements = "This is a test descripion"
+  // TODO: Remove this and add an actual description box in the UI
+  var requirements = "This is a test descripion"
 
-    // Create name-value pairs for HTTP post request, see
-    // https://en.wikipedia.org/wiki/POST_(HTTP)#Use_for_submitting_web_forms
-    var nameValuePairs = JSON.stringify({
-        orderNumber: activeTable.getAttribute('data-ordernum'),
-        menuItemId: menuItemId,
-        requirements: requirements
-    });
+  // Create name-value pairs for HTTP post request, see
+  // https://en.wikipedia.org/wiki/POST_(HTTP)#Use_for_submitting_web_forms
+  var nameValuePairs = JSON.stringify({
+    orderNumber: activeTable.getAttribute('data-ordernum'),
+    menuItemId: menuItemId,
+    requirements: requirements
+  });
 
-    // Handle possible responses
-    post("/api/authStaff/addToOrder", nameValuePairs, function(status){
-        loadOrder(activeTable.getAttribute('data-tablenum'));
-        if(status === ""){
-            // Refresh current order table to show new change
-            console.log("Add item to order failed");
-            console.log(status);
-        }
-    });
+  // Handle possible responses
+  post("/api/authStaff/addToOrder", nameValuePairs, function (status) {
+    loadOrder(activeTable.getAttribute('data-tablenum'));
+    if (status === "") {
+      // Refresh current order table to show new change
+      console.log("Add item to order failed");
+      console.log(status);
+    }
+  });
 }
 
 /**
@@ -54,40 +54,40 @@ function addToOrder(menuItemId) {
  * @param orderNumber The number of the order to load.
  */
 function loadOrder(orderNumber) {
-    var orderNumberToSend = JSON.stringify({orderNumber: orderNumber});
-    post("/api/authStaff/getOrder", orderNumberToSend, function (data) {
+  var orderNumberToSend = JSON.stringify({orderNumber: orderNumber});
+  post("/api/authStaff/getOrder", orderNumberToSend, function (data) {
 
-        // Parse JSON
-        var response = JSON.parse(data);
+    // Parse JSON
+    var response = JSON.parse(data);
 
-        // Remove any existing elements in the current order list
-        var currentOrderElement = document.getElementById("current-order");
-        while (currentOrderElement.firstChild) {
-            currentOrderElement.removeChild(currentOrderElement.firstChild);
-        }
+    // Remove any existing elements in the current order list
+    var currentOrderElement = document.getElementById("current-order");
+    while (currentOrderElement.firstChild) {
+      currentOrderElement.removeChild(currentOrderElement.firstChild);
+    }
 
-        // Add each list item
-        for (i = 0; i < response.length; i++) {
-            $("#current-order").append("<li class='list-group-item list-group-item-action'"
-                + "id= \"order-item-" + i + "\">"
-                + "<span class='waiter-ui-span-bold'>"
-                + response[i].name + ": </span> "
-                + response[i].price + "</li>");
-            // Show dietary information
-            if (response[i].is_gluten_free) { // Gluten Free
-                $("#order-item-" + i).append(" <img src="
-                    + "'../images/gluten-free.svg'alt='Gluten Free'>");
-            }
-            if (response[i].is_vegetarian) { // Vegetarian
-                $("#order-item-" + i).append(" <img src="
-                    + "'../images/vegetarian-mark.svg'alt='Vegetarian'>");
-            }
-            if (response[i].is_vegan) {
-                $("#order-item-" + i).append(" <img src="
-                    + "'../images/vegan-mark.svg'alt='Vegan'>");
-            }
-        }
-    });
+    // Add each list item
+    for (i = 0; i < response.length; i++) {
+      $("#current-order").append("<li class='list-group-item list-group-item-action'"
+          + "id= \"order-item-" + i + "\">"
+          + "<span class='waiter-ui-span-bold'>"
+          + response[i].name + ": </span> "
+          + response[i].price + "</li>");
+      // Show dietary information
+      if (response[i].is_gluten_free) { // Gluten Free
+        $("#order-item-" + i).append(" <img src="
+            + "'../images/gluten-free.svg'alt='Gluten Free'>");
+      }
+      if (response[i].is_vegetarian) { // Vegetarian
+        $("#order-item-" + i).append(" <img src="
+            + "'../images/vegetarian-mark.svg'alt='Vegetarian'>");
+      }
+      if (response[i].is_vegan) {
+        $("#order-item-" + i).append(" <img src="
+            + "'../images/vegan-mark.svg'alt='Vegan'>");
+      }
+    }
+  });
 }
 
 /**
@@ -99,34 +99,34 @@ function loadOrder(orderNumber) {
  * Obviously a customer would want to see more than that.
  */
 function loadMenu() {
-    // Send get request to server for menu JSON
-    get("/api/authStaff/menu", function (data) {
-        // Parse JSON
-        var response = JSON.parse(data);
+  // Send get request to server for menu JSON
+  get("/api/authStaff/menu", function (data) {
+    // Parse JSON
+    var response = JSON.parse(data);
 
-        // Add items to menu list
-        for (i = 0; i < response.length; i++) {
-            $("#menu-list").append("<li class='list-group-item list-group-item-action'"
-                + "id= \"menu-item-" + i + "\""
-                + "data-menuItemNum='" + response[i].id + "'"
-                + "onclick='addToOrder(this.getAttribute(\"data-menuItemNum\"))'>"
-                + "<span class='waiter-ui-span-bold'>"
-                + response[i].name + ": </span> " + response[i].price + "</li>");
-            // Show dietary information
-            if (response[i].is_gluten_free) { // Gluten Free
-                $("#menu-item-" + i).append(
-                    " <img src='../images/gluten-free.svg' alt='Gluten Free'>");
-            }
-            if (response[i].is_vegetarian) { // Vegetarian
-                $("#menu-item-" + i).append(
-                    " <img src='../images/vegetarian-mark.svg' alt='Vegetarian'>");
-            }
-            if (response[i].is_vegan) {
-                $("#menu-item-" + i).append(
-                    " <img src='../images/vegan-mark.svg' alt='Vegan'>");
-            }
-        }
-    });
+    // Add items to menu list
+    for (i = 0; i < response.length; i++) {
+      $("#menu-list").append("<li class='list-group-item list-group-item-action'"
+          + "id= \"menu-item-" + i + "\""
+          + "data-menuItemNum='" + response[i].id + "'"
+          + "onclick='addToOrder(this.getAttribute(\"data-menuItemNum\"))'>"
+          + "<span class='waiter-ui-span-bold'>"
+          + response[i].name + ": </span> " + response[i].price + "</li>");
+      // Show dietary information
+      if (response[i].is_gluten_free) { // Gluten Free
+        $("#menu-item-" + i).append(
+            " <img src='../images/gluten-free.svg' alt='Gluten Free'>");
+      }
+      if (response[i].is_vegetarian) { // Vegetarian
+        $("#menu-item-" + i).append(
+            " <img src='../images/vegetarian-mark.svg' alt='Vegetarian'>");
+      }
+      if (response[i].is_vegan) {
+        $("#menu-item-" + i).append(
+            " <img src='../images/vegan-mark.svg' alt='Vegan'>");
+      }
+    }
+  });
 }
 
 /**
@@ -134,12 +134,16 @@ function loadMenu() {
  * (i.e. Table 1) in the Tables column in waiter-ui.html
  */
 function loadTables() {
-    get("/api/authStaff/tables", function (data) {
-        var response = JSON.parse(data);
-        for (i = 0; i < response.length; i++) {
-            loadOrderList(response[i].number);
-        }
-    });
+  get("/api/authStaff/tables", function (data) {
+    var response = JSON.parse(data);
+    var currentOrderElement = document.getElementById("orders-list");
+    while (currentOrderElement.firstChild) {
+      currentOrderElement.removeChild(currentOrderElement.firstChild);
+    }
+    for (i = 0; i < response.length; i++) {
+      loadOrderList(response[i].number);
+    }
+  });
 }
 
 /**
@@ -147,22 +151,27 @@ function loadTables() {
  * @param tableNumber The table which the orders should be from.
  */
 function loadOrderList(tableNumber) {
-    post("/api/authStaff/getOrderList", JSON.stringify({
-        tableNumber: tableNumber
-    }), function (data) {
-        var orders = JSON.parse(data);
-        for (i = 0; i < orders.length; i++) {
-            $("#orders-list").append(
-                "<li"
-                + " id='table-" + orders[i].foodOrderId + "'"
-                + " data-ordernum='" + orders[i].foodOrderId + "'"
-                + " class='list-group-item list-group-item-action'"
-                + " onclick=\"setCurrentOrder(event); loadOrder(this.getAttribute('data-ordernum'));\">"
-                + "<span class='waiter-ui-span-bold'>Table </span>" + tableNumber + ": " + orders[i].orderStatus
-                + "</li>"
-            );
-        }
-    });
+  post("/api/authStaff/getOrderList", JSON.stringify({
+    tableNumber: tableNumber
+  }), function (data) {
+    var orders = JSON.parse(data);
+    var currentOrderElement = document.getElementById("orders-list");
+    while (currentOrderElement.firstChild) {
+      currentOrderElement.removeChild(currentOrderElement.firstChild);
+    }
+    for (i = 0; i < orders.length; i++) {
+      $("#orders-list").append(
+          "<li"
+          + " id='table-" + orders[i].foodOrderId + "'"
+          + " data-ordernum='" + orders[i].foodOrderId + "'"
+          + " class='list-group-item list-group-item-action'"
+          + " onclick=\"setCurrentOrder(event); loadOrder(this.getAttribute('data-ordernum'));\">"
+          + "<span class='waiter-ui-span-bold'>Table </span>" + tableNumber
+          + ": " + orders[i].orderStatus
+          + "</li>"
+      );
+    }
+  });
 }
 
 /**
@@ -172,31 +181,30 @@ function loadOrderList(tableNumber) {
  * @param event The event which was triggered by the clicked element
  */
 function setCurrentOrder(event) {
-    // Reset all orders to non-active
-    var allOrders = document.getElementById("orders-list").children;
-    for (i = 0; i < allOrders.length; i++) {
-        allOrders[i].className = "list-group-item list-group-item-action";
-    }
+  // Reset all orders to non-active
+  var allOrders = document.getElementById("orders-list").children;
+  for (i = 0; i < allOrders.length; i++) {
+    allOrders[i].className = "list-group-item list-group-item-action";
+  }
 
-    // Set active element
-    var activeOrder = document.getElementById(event.currentTarget.id);
-    activeOrder.className += " active";
+  // Set active element
+  var activeOrder = document.getElementById(event.currentTarget.id);
+  activeOrder.className += " active";
 }
 
-
 function changeOrderStatus(orderStatus) {
-    var activeOrder = getActiveOrder();
-    post("/api/authStaff/changeOrderStatus",
-        JSON.stringify({
-            orderNumber: activeOrder.getAttribute('data-ordernum'),
-            newOrderStatus: orderStatus
-        }),
-        loadTables
-    );
+  var activeOrder = getActiveOrder();
+  post("/api/authStaff/changeOrderStatus",
+      JSON.stringify({
+        orderNumber: activeOrder.getAttribute('data-ordernum'),
+        newOrderStatus: orderStatus
+      }),
+      loadTables
+  );
 }
 
 // Loads the menu and tables when the page loads.
 $(document).ready(function () {
-    loadMenu();
-    loadTables()
+  loadMenu();
+  loadTables()
 });
