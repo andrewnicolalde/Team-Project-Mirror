@@ -12,19 +12,20 @@ import spark.Response;
 
 public class Tables {
 
-  private static final EntityManager ENTITY_MANAGER = DatabaseManager.getInstance().getEntityManager();
-
   /**
    * Returns a string holding a list of tables. No JSON as it is a get request.
    */
   public static String getTables(Request request, Response response) {
 
-    StaffSession staffSession = ENTITY_MANAGER.find(StaffSession.class, request.session().attribute(
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    StaffSession staffSession = entityManager.find(StaffSession.class, request.session().attribute(
         "StaffSessionKey"));
     return getTableData(staffSession.getStaff().getEmployeeNumber());
   }
 
-  public static String getTableData(Long staffId) {EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+  public static String getTableData(Long staffId) {
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
     List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from " +
             "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
         RestaurantTableStaff.class).getResultList();

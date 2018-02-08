@@ -24,6 +24,7 @@ public class AuthenticationEmployee {
   private static Staff isValidLoginCombination(EmployeeAuthenticationParameters ap) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
     Staff employee = em.find(Staff.class, ap.getEmployeeNumber());
+    em.close();
     if (employee == null) { // If the employee does not exist, then fail
       return null;
     }
@@ -88,6 +89,7 @@ public class AuthenticationEmployee {
     } else {
       response.redirect("/");
     }
+    em.close();
     return response;
   }
 
@@ -134,6 +136,7 @@ public class AuthenticationEmployee {
     em.getTransaction().commit();
     request.session().removeAttribute("StaffSessionKey");
     response.redirect("/");
+    em.close();
     return response;
   }
 }

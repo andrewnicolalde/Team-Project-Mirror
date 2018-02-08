@@ -7,6 +7,8 @@ import database.DatabaseManager;
 import database.tables.MenuItem;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 
 public class Menu {
@@ -21,10 +23,14 @@ public class Menu {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
-    entityManager.getTransaction().begin();
     List<MenuItem> menuItems = entityManager.createQuery("from MenuItem ", MenuItem.class)
         .getResultList();
-    entityManager.getTransaction().commit();
+
+    entityManager.close();
+
+    if (menuItems == null) {
+      return "";
+    }
 
     MenuData[] menuData = new MenuData[menuItems.size()];
 
