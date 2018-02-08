@@ -18,6 +18,9 @@
   top: 0;
   right: 0;
 }
+.btn-block {
+  margin-bottom: 20px;
+}
 
 #loginbuttons {
   margin: auto;
