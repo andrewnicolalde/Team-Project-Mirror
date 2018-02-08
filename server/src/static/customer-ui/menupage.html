@@ -12,6 +12,23 @@
   <script type="text/javascript" src="../js/getmenu-customer.js"></script>
   <script src="../js/popup.js"></script>
   <link rel="stylesheet" href="homepagestyle.css">
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+        $(document).on('click', '.add-row', function () {
+            var name = $("#item").val();
+            var email = $("#price").val();
+            var markup = "<tr><td><input type='checkbox' name='record'></td><td>" + name + "</td><td>" + email + "</td></tr>";
+            $("table tbody").append(markup);
+        });
+
+
+  </script>
+
+
 </head>
 <body>
 <nav class="nav justify-content-end flex-md-row">
@@ -116,7 +133,7 @@
         <tbody>
         <tr>
           <th scope="row">1</th>
-          <td class="myBtn"><a href="#">Tres Leches Cake</a></td>
+          <td class="myBtn add-r"><a href="#">Tres Leches Cake</a></td>
           <td>£6.00</td>
         </tr>
         <tr>
@@ -133,6 +150,22 @@
       </table>
     </div>
   </div>
+
+  <div class="col-md-4 col-lg-4">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th></th>
+        <th>Item</th>
+        <th>Price</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+</div>
 
   <!-- Modal -->
   <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
@@ -176,7 +209,7 @@
           Vegan: <img src="../images/vegan-mark.svg">
         </div>
         <div class="modal-footer">
-          <button id="addbutton" type="button" class="btn btn-primary">Add to Order</button>
+          <button id="addbutton" type="button" class="btn btn-primary add-row">Add to Order</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
