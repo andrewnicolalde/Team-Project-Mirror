@@ -26,9 +26,10 @@ public class Orders {
    */
   public static String getOrder(Request request, Response response) {
     OrderRequestParameters or = GSON.fromJson(request.body(), OrderRequestParameters.class);
-    return getOrderMenuItems(or.getTableNumber(), request.session().
-        attribute("StaffSessionKey"));
+    return getOrderMenuItems(or.getTableNumber(), request.session()
+        .attribute("StaffSessionKey"));
   }
+
 
   /**
    * Returns the order menu items from the database in JSON format.
