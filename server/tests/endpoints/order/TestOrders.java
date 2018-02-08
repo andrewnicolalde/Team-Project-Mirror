@@ -1,6 +1,5 @@
 package endpoints.order;
 
-import static endpoints.order.Orders.getOrderMenuItems;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
