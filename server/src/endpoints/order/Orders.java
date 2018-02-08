@@ -30,6 +30,23 @@ public class Orders {
         .attribute("StaffSessionKey"));
   }
 
+  public static String getOrderList(Request request, Response response) {
+    OrderRequestParameters orderRequestParameters = GSON.fromJson(request.body(),
+        OrderRequestParameters.class);
+
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
+        + "where foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNo",
+        FoodOrder.class).setParameter("tableNo", orderRequestParameters.getTableNumber())
+        .getResultList();
+
+    OrderListData[] orderListData = new OrderListData[foodOrders.size()];
+    for (int i = 0; i < orderListData.length; i++) {
+      orderListData[i] = new OrderListData(foodOrders.get(i));
+    }
+
+    return GSON.toJson(orderListData);
+  }
 
   /**
    * Returns the order menu items from the database in JSON format.
@@ -113,12 +130,11 @@ public class Orders {
 
     entityManager.getTransaction().begin();
 
-    FoodOrder foodOrder = entityManager
-        .createQuery("from FoodOrder foodOrder where foodOrder.transaction"
-                + ".restaurantTableStaff.restaurantTable.tableNumber = " + cos.getTableNumber()
-            , FoodOrder.class).getSingleResult();
-
-    foodOrder.setStatus(OrderStatus.valueOf(cos.getNewOrderStatus()));
+    List<FoodOrder> foodOrders = entityManager.createQuery("SELECT f FROM FoodOrder f WHERE f" +
+        ".transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNumber AND f" +
+        ".status = :status", FoodOrder.class).setParameter("tableNumber", cos.getTableNumber())
+        .setParameter
+        ("status", OrderStatus.READY_TO_CONFIRM.ordinal()).getResultList();
 
     entityManager.getTransaction().commit();
     entityManager.close();
