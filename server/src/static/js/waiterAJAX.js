@@ -179,6 +179,7 @@ function loadOrders(tableNumber) {
             $("#orders-list").append(
                 "<li"
                 + " id='table-" + orders[i].foodOrderId + "'"
+                + " data-tablenum='" + tableNumber + "'"
                 + " class='list-group-item list-group-item-action'"
                 + " onclick=\"setCurrentTable(event); loadOrder(this.getAttribute('data-tablenum'));\">"
                 + "<span class='waiter-ui-span-bold'>Table </span>" + tableNumber + ": " + orders[i].orderStatus
