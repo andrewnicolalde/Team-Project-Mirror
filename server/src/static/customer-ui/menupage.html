@@ -9,29 +9,11 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../js/ajax-wrapper.js"></script>
   <script type="text/javascript" src="../js/getmenu-customer.js"></script>
+    <script type="text/javascript" src="../js/addToOrderTable-Customer.js"></script>
   <script src="../js/popup.js"></script>
 
   <link rel="stylesheet" href="homepagestyle.css">
 
-  <script type="text/javascript">
-    $(document).ready(function(){
-        $(".add-row").click(function(){
-            var name = $("#name").val();
-            var price = $("#price").val();
-            var markup = "<tr><td></td><td>" + name + "</td><td>" + price + "</td></tr>";
-            $("table.cart tbody").append(markup);
-        });
-
-        // Find and remove selected table rows
-        $(".delete-row").click(function(){
-            $("table tbody").find('input[name="record"]').each(function(){
-            	if($(this).is(":checked")){
-                    $(this).parents("tr").remove();
-                }
-            });
-        });
-    });
-</script>
 
 </head>
 <body>
@@ -78,13 +60,13 @@
         <tbody id="menu-table">
         <tr id="row1move">
           <th scope="row">1</th>
-          <td class="myBtn add-row"><a href="#">Layered buffalo chicken nachos with creamy gorgonzola
-            sauce</a></td>
-          <td>£5.00</td>
+          <td class="myBtn add-row name">Layered buffalo chicken nachos with creamy gorgonzola
+            sauce</td>
+          <td class ="price">£5.00</td>
         </tr>
         <tr>
           <th scope="row">2</th>
-          <td class="myBtn"><a href="#">Jalapeño chicken wraps</a></td>
+          <td class="myBtn name">Jalapeño chicken wraps</td>
           <td>£4.00</td>
         </tr>
         <tr>
