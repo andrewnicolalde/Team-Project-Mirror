@@ -1,32 +1,29 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!--scripts-->
     <script src="../js/ajax-wrapper.js"></script>
     <script src="../js/retrieveorder-customer.js"></script>
-
-    <nav class="nav justify-content-end flex-md-row">
-        <a class="navbar-brand">Oaxaca</a>
-        <a class="nav-link active" href="customerdisplay.html">Home</a>
-        <a class="nav-link" href="menupage.html">Menu</a>
-        <a class="nav-link" href="">Basket<span class="sr-only">(current)</span></a>
-    </nav>
-
     <title>Oaxaca | Basket</title>
 </head>
 <body>
+<nav class="nav justify-content-end flex-md-row">
+  <a class="navbar-brand">Oaxaca</a>
+  <a class="nav-link active" href="customerdisplay.html">Home</a>
+  <a class="nav-link" href="menupage.html">Menu</a>
+  <a class="nav-link" href="">Basket<span class="sr-only">(current)</span></a>
+</nav>
 <div class="container">
     <h2>Basket</h2>
     <table class="table table-hover">
-        <!--names of the columns of the table, to be displayed in table head (thead)-->
+        <!--names of the columns of the table-->
         <thead>
         <tr>
             <th scope="col">#</th>
@@ -37,8 +34,6 @@
         </thead>
         <tbody id="table-body">
         <!--tr to /tr is one table row-->
-        <!--th is the row number-->
-        <!--td are the columns in a row-->
         <tr>
             <th scope="row">1</th>
             <td>Taco</td>
@@ -59,7 +54,6 @@
         </tr>
         </tbody>
     </table>
-    <!--buttons load on the right hand side of the page-->
     <div class="pull-right">
         <a href="#" class="btn btn-success" style="float: right;">Call waiter</a>
         <a href="#" class="btn" style="float: right;">Back to menu</a>

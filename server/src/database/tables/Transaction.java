@@ -1,5 +1,6 @@
 package database.tables;
 
+import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,8 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.sql.Timestamp;
-
 import org.hibernate.annotations.GenericGenerator;
 
 
@@ -30,22 +29,21 @@ public class Transaction {
   private Long transactionId;
 
   /**
-   * This field stores the paid status of the order as a
-   * Boolean.
+   * This field stores the paid status of the order as a Boolean.
    */
   @Column(name = "isPaid")
   private Boolean isPaid;
 
   /**
-   * This field stores the combined price of every Menu_Item in every order
-   * belonging to this transaction.
+   * This field stores the combined price of every Menu_Item in every order belonging to this
+   * transaction.
    */
   @Column(name = "total")
   private Double total;
 
   /**
-   * This field stores the precise time at which a database.tables.Transaction was paid for
-   * as a <code>java.sql.Timestamp</code>
+   * This field stores the precise time at which a database.tables.Transaction was paid for as a
+   * <code>java.sql.Timestamp</code>
    */
   @Column(name = "datetimePaid")
   private Timestamp datetimePaid;
@@ -60,16 +58,16 @@ public class Transaction {
   /**
    * This constructor allows us to create Transactions.
    *
-   * @param isPaid               This field stores the paid status of the order as a Boolean.
-   * @param total                This field stores the combined price of every Menu_Item in every
-   *                             order belonging to this transaction.
-   * @param datetimePaid         This field stores the precise time at which a Transaction was paid
-   *                             for as a <code>java.sql.Timestamp</code>
+   * @param isPaid This field stores the paid status of the order as a Boolean.
+   * @param total This field stores the combined price of every Menu_Item in every order belonging
+   * to this transaction.
+   * @param datetimePaid This field stores the precise time at which a Transaction was paid for as a
+   * <code>java.sql.Timestamp</code>
    * @param restaurantTableStaff This field stores link to the employee who is in charge of the
-   *                             transaction
+   * transaction
    */
   public Transaction(Boolean isPaid, Double total, Timestamp datetimePaid,
-                     RestaurantTableStaff restaurantTableStaff) {
+      RestaurantTableStaff restaurantTableStaff) {
     this.isPaid = isPaid;
     this.total = total;
     this.datetimePaid = datetimePaid;

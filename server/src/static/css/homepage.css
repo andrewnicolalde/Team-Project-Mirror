@@ -19,6 +19,20 @@ body{
     position: absolute;
     top: 0;
     right:0;
+
+#loginbuttons {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+  text-align: center;
+}
+
+.loginbutton {
+  margin-bottom: 20px;
+}
+
+.login-form {
+  margin-bottom: 20px;
 }
 
 .btn{

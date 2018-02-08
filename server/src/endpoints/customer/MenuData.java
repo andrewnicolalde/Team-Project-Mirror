@@ -8,6 +8,7 @@ import database.tables.MenuItem;
  * @author Marcus Messer
  */
 public class MenuData {
+
   private Long id;
   private String name;
   private String category;
@@ -21,6 +22,7 @@ public class MenuData {
 
   /**
    * This constructor create new menu data items that can be converted into JSON.
+   *
    * @param menuItem the item from the database.
    */
   public MenuData(MenuItem menuItem) {

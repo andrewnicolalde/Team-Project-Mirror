@@ -38,7 +38,7 @@ public class TableSession {
    * This constructor is used to create new sessions.
    *
    * @param tableSessionId The random hash for the session.
-   * @param tableId        The table in the session.
+   * @param tableId The table in the session.
    */
   public TableSession(String tableSessionId, RestaurantTable tableId) {
     this.tableSessionId = tableSessionId;

@@ -1,6 +1,7 @@
 package endpoints.authentication;
 
 class EmployeeAuthenticationParameters {
+
   private Long employeeNumber;
   private String password;
 
