@@ -2,17 +2,12 @@ package endpoints.order;
 
 public class ChangeOrderStatusParameters {
 
-  private Long tableNumber;
   private String newOrderStatus;
-  private Long foodOrderId;
+  private Long orderNumber;
 
-  public ChangeOrderStatusParameters(Long tableNumber, String newOrderStatus) {
-    this.tableNumber = tableNumber;
+  public ChangeOrderStatusParameters(Long orderNumber, String newOrderStatus) {
     this.newOrderStatus = newOrderStatus;
-  }
-
-  public Long getTableNumber() {
-    return tableNumber;
+    this.orderNumber = orderNumber;
   }
 
   public String getNewOrderStatus() {
@@ -20,6 +15,6 @@ public class ChangeOrderStatusParameters {
   }
 
   public Long getFoodOrderId() {
-    return foodOrderId;
+    return orderNumber;
   }
 }
