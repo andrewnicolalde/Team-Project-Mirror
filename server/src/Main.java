@@ -4,6 +4,7 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
+import database.DatabaseManager;
 import endpoints.authentication.AuthenticationEmployee;
 import endpoints.customer.Menu;
 import endpoints.kitchen.KitchenOrder;
@@ -43,5 +44,7 @@ public class Main {
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
 
     System.out.println("Visit: http://localhost:4567");
+
+    DatabaseManager.getInstance();
   }
 }
