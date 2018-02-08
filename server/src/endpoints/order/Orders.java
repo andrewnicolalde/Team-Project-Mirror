@@ -83,7 +83,7 @@ public class Orders {
 
     ENTITY_MANAGER.getTransaction().begin();
     OrderMenuItem orderMenuItem = new OrderMenuItem(ENTITY_MANAGER.find(
-        MenuItem.class, omi.getMenuItemId()), temp.get(0), omi.getRequirements());
+        MenuItem.class, omi.getMenuItemId()), temp.get(0), omi.getInstructions());
 
     ENTITY_MANAGER.persist(orderMenuItem);
     ENTITY_MANAGER.getTransaction().commit();
