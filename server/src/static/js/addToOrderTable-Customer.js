@@ -1,5 +1,6 @@
 $(document).ready(function () {
-  loadOrder();
+  //TODO make generic/ get the ordernumber from the server.
+  loadOrder(2);
   loadMenu();
   /*$(".add-row").click(function () {
     var name = $(".name").val();
@@ -54,6 +55,7 @@ function loadMenu() {
   });
 }
 
+// TODO make generic so it updates the right order number not just 2
 function addToOrder(menuItemId) {
   // Create name-value pairs for HTTP post request, see
   // https://en.wikipedia.org/wiki/POST_(HTTP)#Use_for_submitting_web_forms
@@ -65,7 +67,7 @@ function addToOrder(menuItemId) {
 
   // Handle possible responses
   post("/api/authStaff/addToOrder", nameValuePairs, function (status) {
-    loadOrder();
+    loadOrder(2);
     if (status === "") {
       // Refresh current order table to show new change
       console.log("Add item to order failed");
@@ -74,8 +76,9 @@ function addToOrder(menuItemId) {
   });
 }
 
-function loadOrder() {
-  var orderNumberToSend = JSON.stringify({orderNumber: 2});
+// TODO make generic.
+function loadOrder(orderNumber) {
+  var orderNumberToSend = JSON.stringify({orderNumber: orderNumber});
   post("/api/authStaff/getOrder", orderNumberToSend, function (data) {
 
     // Parse JSON
@@ -109,4 +112,19 @@ function loadOrder() {
       }
     }
   });
+}
+
+// TODO make generic, get the ordernumber.
+function changeOrderStatus(orderStatus) {
+  post("/api/authStaff/changeOrderStatus",
+      JSON.stringify({
+        orderNumber: 2,
+        newOrderStatus: orderStatus
+      }),
+      confirmPopup()
+  );
+}
+
+function confirmPopup() {
+  alert("The waiter will come soon to confirm your order!");
 }

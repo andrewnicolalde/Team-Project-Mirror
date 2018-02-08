@@ -48,8 +48,10 @@
     <div class="col">
       <h5 class="text-center">Current Order</h5>
       <div class="text-center">
-        <button type="button" class="btn btn-success">Confirm Order</button>
-        <button type="button" class="btn btn-danger">Cancel Order</button>
+        <button type="button" class="btn btn-success"
+                onclick="changeOrderStatus('READY_TO_CONFIRM')">Confirm Order</button>
+        <button type="button" class="btn btn-danger"
+                onclick="changeOrderStatus('CANCELLED')">Cancel Order</button>
       </div>
       <ul class="list-group" id="current-order">
         <!-- TODO: List should be scrollable. -->
