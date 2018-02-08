@@ -2,18 +2,14 @@ package endpoints.order;
 
 public class OrderMenuItemParameters {
 
-  private Long tableNumber;
   private Long menuItemId;
   private String instructions;
+  private Long orderId;
 
-  public OrderMenuItemParameters(Long tableNumber, Long menuItemId, String instructions) {
-    this.tableNumber = tableNumber;
+  public OrderMenuItemParameters(Long menuItemId, String instructions, Long orderId) {
     this.menuItemId = menuItemId;
     this.instructions = instructions;
-  }
-
-  public Long getTableNumber() {
-    return tableNumber;
+    this.orderId = orderId;
   }
 
   public Long getMenuItemId() {
@@ -22,5 +18,9 @@ public class OrderMenuItemParameters {
 
   public String getInstructions() {
     return instructions;
+  }
+
+  public Long getOrderId() {
+    return orderId;
   }
 }

@@ -3,11 +3,9 @@ package endpoints.order;
 import com.google.gson.Gson;
 import database.DatabaseManager;
 import database.tables.FoodOrder;
-import database.tables.Franchise;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
-import database.tables.StaffSession;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -24,12 +22,33 @@ public class Orders {
    * @param response A HTTP response object.
    * @return A string containing JSON which holds the current order.
    */
-  public static String getOrder(Request request, Response response) {
-    OrderRequestParameters or = GSON.fromJson(request.body(), OrderRequestParameters.class);
-    return getOrderMenuItems(or.getTableNumber(), request.session()
-        .attribute("StaffSessionKey"));
+  public static String getOrderItems(Request request, Response response) {
+    OrderMenuItemListParameters omiList = GSON.fromJson(request.body(),
+        OrderMenuItemListParameters.class);
+
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    List<OrderMenuItem> orderMenuItems = entityManager
+        .createQuery("from OrderMenuItem orderMenuItem where "
+            + "orderMenuItem.foodOrder.id = :orderId", OrderMenuItem.class).setParameter("orderId",
+            omiList.getOrderNumber()).getResultList();
+
+    entityManager.close();
+
+    CustomerOrderData[] customerOrderData = new CustomerOrderData[orderMenuItems.size()];
+
+    for (int i = 0; i < customerOrderData.length; i++) {
+      customerOrderData[i] = new CustomerOrderData(orderMenuItems.get(i));
+    }
+    return GSON.toJson(customerOrderData);
   }
 
+  /**
+   * Returns a list of orders for a table in JSON.
+   * JSON input:
+   * @param request A HTTP request object.
+   * @param response A HTTP response object.
+   * @return A string containing the JSON for the orders on a table.
+   */
   public static String getOrderList(Request request, Response response) {
     OrderRequestParameters orderRequestParameters = GSON.fromJson(request.body(),
         OrderRequestParameters.class);
@@ -49,33 +68,6 @@ public class Orders {
   }
 
   /**
-   * Returns the order menu items from the database in JSON format.
-   *
-   * @param tableNumber The number of the table.
-   * @param staffSessionKey The session key for the staff member.
-   * @return The menu items for the table in a JSON format.
-   * @author Marcus Messer
-   */
-  public static String getOrderMenuItems(int tableNumber, String staffSessionKey) {
-    //TODO check which franchise the order is part of.
-
-    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
-    List<OrderMenuItem> orderMenuItems = entityManager
-        .createQuery("from OrderMenuItem orderMenuItem where "
-            + "orderMenuItem.foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = "
-            + tableNumber, OrderMenuItem.class).getResultList();
-
-    entityManager.close();
-
-    CustomerOrderData[] customerOrderData = new CustomerOrderData[orderMenuItems.size()];
-
-    for (int i = 0; i < customerOrderData.length; i++) {
-      customerOrderData[i] = new CustomerOrderData(orderMenuItems.get(i));
-    }
-    return GSON.toJson(customerOrderData);
-  }
-
-  /**
    * Adds an orderMenuItem to an order. JSON input: tableNumber: An integer representing the table
    * number menuItemId: An integer representing the id of the MenuItem to add to the order.
    * requirements: A string representing a description/extra details for the order.
@@ -91,19 +83,13 @@ public class Orders {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
-    List<FoodOrder> temp = entityManager.createQuery("from FoodOrder foodOrder where "
-            + "foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = " +
-            omi.getTableNumber() + " and foodOrder.status = " + OrderStatus.ORDERING.ordinal() +
-            " or foodOrder.status = " + OrderStatus.READY_TO_CONFIRM.ordinal(),
-        FoodOrder.class).getResultList();
-
-    if (temp.size() == 0) {
-      return "failed";
-    }
+    FoodOrder foodOrder = entityManager.createQuery("from FoodOrder foodOrder where "
+            + " foodOrder.id = :orderId",
+        FoodOrder.class).setParameter("orderId", omi.getOrderId()).getSingleResult();
 
     entityManager.getTransaction().begin();
     OrderMenuItem orderMenuItem = new OrderMenuItem(entityManager.find(
-        MenuItem.class, omi.getMenuItemId()), temp.get(0), omi.getInstructions());
+        MenuItem.class, omi.getMenuItemId()), foodOrder, omi.getInstructions());
 
     entityManager.persist(orderMenuItem);
     entityManager.getTransaction().commit();
@@ -124,15 +110,15 @@ public class Orders {
     ChangeOrderStatusParameters cos = GSON
         .fromJson(request.body(), ChangeOrderStatusParameters.class);
 
-    //TODO check which franchise the order is part of.
-
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     entityManager.getTransaction().begin();
 
-    List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder where "
+    FoodOrder foodOrder = entityManager.createQuery("from FoodOrder foodOrder where "
         + "foodOrder.id = :id", FoodOrder.class)
-        .setParameter("id", cos.getFoodOrderId()).getResultList();
+        .setParameter("id", cos.getFoodOrderId()).getSingleResult();
+
+    foodOrder.setStatus(OrderStatus.valueOf(cos.getNewOrderStatus()));
 
     entityManager.getTransaction().commit();
     entityManager.close();
@@ -151,14 +137,12 @@ public class Orders {
   public static String removeOrderMenuItem(Request request, Response response) {
     OrderMenuItemParameters omi = GSON.fromJson(request.body(), OrderMenuItemParameters.class);
 
-    //TODO Check franchise.
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     entityManager.getTransaction().begin();
 
     OrderMenuItem orderMenuItem = entityManager
-        .createQuery("from FoodOrder foodOrder where foodOrder.transaction.restaurantTableStaff"
-                + ".restaurantTable.tableNumber = " + omi.getTableNumber(),
-            OrderMenuItem.class).getSingleResult();
+        .createQuery("from FoodOrder foodOrder where foodOrder.id = :orderId",
+            OrderMenuItem.class).setParameter("orderId", omi.getOrderId()).getSingleResult();
 
     entityManager.remove(orderMenuItem);
 
