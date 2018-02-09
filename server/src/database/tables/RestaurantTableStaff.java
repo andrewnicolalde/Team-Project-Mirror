@@ -6,7 +6,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -27,7 +26,8 @@ public class RestaurantTableStaff {
   private Long restaurntTableStaffId;
 
   /**
-   * This field is used to map the relationship between this table and the <code>Staff</code> table.
+   * This field is used to map the relationship between this table and the <code>Staff</code>
+   * table.
    */
   @ManyToOne
   @JoinColumn(name = "employeeNumber")
@@ -51,7 +51,7 @@ public class RestaurantTableStaff {
   /**
    * This constructor is used to create new entities in this table.
    *
-   * @param staff           This is the staff member that will be serving the table.
+   * @param staff This is the staff member that will be serving the table.
    * @param restaurantTable This is the table that will be served by the staff member.
    */
   public RestaurantTableStaff(Staff staff, RestaurantTable restaurantTable) {

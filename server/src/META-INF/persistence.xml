@@ -5,7 +5,7 @@
 
   <persistence-unit name="server.database">
     <description>
-      Persistence unit for ARMS Hibernate JPA.
+      Persistence unit for ARMS Hibernate JPA. Used for prod.
     </description>
 
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
@@ -24,6 +24,53 @@
 
       <!--<property name="hibernate.show_sql" value="true"/>-->
       <property name="hibernate.hbm2ddl.auto" value="update"/>
+    </properties>
+
+  </persistence-unit>
+
+  <persistence-unit name="server.database.dev">
+    <description>
+      Persistence unit for ARMS Hibernate JPA. Used for dev.
+    </description>
+
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+
+    <properties>
+      <property name="hibernate.archive.autodetection" value="class"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>
+      <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+      <property name="hibernate.connection.url"
+        value="jdbc:postgresql://cs2810-dev.cikqu0q5fvi4.eu-west-2.rds.amazonaws.com/arms"/>
+      <property name="hibernate.connection.username" value="dev"/>
+      <property name="hibernate.connection.password"
+        value="c6si4jTVUwYneW4WdNjArQGoIZlnzt4u57akF6EsYeXPturegl8lB7IVMaLxrgsACZIQLbxC"/>
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+    </properties>
+
+  </persistence-unit>
+
+
+  <persistence-unit name="server.database.test">
+    <description>
+      Persistence unit for ARMS Hibernate JPA. Used for tests.
+    </description>
+
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+
+    <properties>
+      <property name="hibernate.archive.autodetection" value="class"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>
+      <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+      <property name="hibernate.connection.url"
+        value="jdbc:postgresql://cs2810-arms.cikqu0q5fvi4.eu-west-2.rds.amazonaws.com/arms"/>
+      <property name="hibernate.connection.username" value="auberixliTest"/>
+      <property name="hibernate.connection.password"
+        value="tJCoA1JuoDszJoVHHZGfP8f3BY0mhIDqsBt7maQg900okF1EvoKJ9hTeg23tT81Sx9e6NpJ5eEDUZrv8uHcbllg2xlM74Uq85LrI"/>
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
     </properties>
 
   </persistence-unit>

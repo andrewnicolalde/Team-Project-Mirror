@@ -1,5 +1,6 @@
 package database.tables;
 
+import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,8 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.sql.Timestamp;
-
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -35,15 +34,13 @@ public class FoodOrder {
   private OrderStatus status;
 
   /**
-   * This field stores the timeConfirmed of the order as a
-   * <code>java.sql.Timestamp</code>.
+   * This field stores the timeConfirmed of the order as a <code>java.sql.Timestamp</code>.
    */
   @Column(name = "timeConfirmed")
   private Timestamp timeConfirmed;
 
   /**
-   * This field is a type Long foreign key referencing the
-   * transactionId of Transaction.
+   * This field is a type Long foreign key referencing the transactionId of Transaction.
    */
   @ManyToOne
   @JoinColumn(name = "transactionId")
@@ -52,11 +49,11 @@ public class FoodOrder {
   /**
    * This constructor allows us to create new Orders.
    *
-   * @param status        This field stores the status of the order as a String.
+   * @param status This field stores the status of the order as a String.
    * @param timeConfirmed This field stores the timeConfirmed of the order as a
-   *                      <code>java.sql.Timestamp</code>.
-   * @param transaction   This field is a type Long foreign key referencing the
-   *                      transaction of Transaction.
+   * <code>java.sql.Timestamp</code>.
+   * @param transaction This field is a type Long foreign key referencing the transaction of
+   * Transaction.
    */
   public FoodOrder(OrderStatus status, Timestamp timeConfirmed, Transaction transaction) {
     this.status = status;

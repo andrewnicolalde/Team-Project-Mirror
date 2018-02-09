@@ -1,26 +1,57 @@
-body{
-
-}
-
 .jumbotron{
 	background-color: grey;
-    color:white;
+  color:white;
+  height:90%;
+  margin-bottom: 1%;
 }
 
 .btn-group {
-	background-color: white;
-    border: 2px solid black;
-    color: grey;
-    padding: 6px 10px;
-    text-align: center;
-    text-decoration: blink;
-    display: inline-block;
-    font-size: 10px;
-    position: absolute; 
-    top: 0;
-    right:0;
+  background-color: white;
+  border: 2px solid black;
+  color: grey;
+  padding: 6px 10px;
+  text-align: center;
+  text-decoration: blink;
+  display: inline-block;
+  font-size: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.btn-block {
+  margin-bottom: 20px;
 }
 
-.btn{
-	color: black;
+#loginbuttons {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+  text-align: center;
+}
+
+.login-form {
+  margin-bottom: 20px;
+}
+
+.main-content {
+  margin-top: 1%;
+  height: 90%;
+}
+
+.card {
+  min-height: 80%;
+}
+
+.card-block {
+  margin:1%;
+}
+
+a:hover {
+  text-decoration: none;
+  color: white;
+}
+
+a:active {
+  text-decoration: none;
+  color: white;
 }
