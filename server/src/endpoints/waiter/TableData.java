@@ -8,6 +8,7 @@ import database.tables.RestaurantTableStaff;
  * @author Marcus Messer
  */
 public class TableData {
+
   private int number;
   private String status;
   private String franchise;

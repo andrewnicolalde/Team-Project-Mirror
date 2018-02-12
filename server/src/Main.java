@@ -4,6 +4,7 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
+import database.DatabaseManager;
 import endpoints.authentication.AuthenticationEmployee;
 import endpoints.customer.Menu;
 import endpoints.kitchen.KitchenOrder;
@@ -36,12 +37,15 @@ public class Main {
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/menu", (req, res) -> Menu.getMenu());
     get("/api/authStaff/tables", Tables::getTables);
-    get("api/authStaff/kitchen", (req, res) -> KitchenOrder.getOrder());
-    post("/api/authStaff/getOrder", Orders::getOrder);
+    get("api/authStaff/kitchen", KitchenOrder::getCookingOrders);
+    post("api/authStaff/getOrderList", Orders::getOrderList);
+    post("/api/authStaff/getOrder", Orders::getOrderItems);
     post("/api/authStaff/addToOrder", Orders::addOrderMenuItem);
     post("/api/authStaff/removeFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
 
     System.out.println("Visit: http://localhost:4567");
+
+    DatabaseManager.getInstance();
   }
 }
