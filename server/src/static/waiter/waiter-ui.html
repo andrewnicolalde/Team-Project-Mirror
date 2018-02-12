@@ -8,11 +8,7 @@
         crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript" src="../js/ajax-wrapper.js"></script>
-  <script type="text/javascript" src="../js/waiter/tableretrieve-waiter.js"></script>
-  <script type="text/javascript" src="../js/waiter/menuretrieve-waiter.js"></script>
-  <script type="text/javascript" src="../js/waiter/get-order-waiter.js"></script>
-  <script type="text/javascript" src="../js/waiter/table-selector.js"></script>
-  <script type="text/javascript" src="../js/waiter/add-to-order.js"></script>
+  <script type="text/javascript" src="../js/waiterAJAX.js"></script>
   <meta charset="UTF-8">
   <title>Waiter UI</title>
 </head>
@@ -38,7 +34,7 @@
     <!-- The waiter clicks the table to see the current order & add/subtract items & confirm -->
     <div class="col">
       <h5 class="text-center">Tables</h5>
-      <ul class="list-group" id="tables-list">
+      <ul class="list-group" id="orders-list">
         <!-- Loaded dynamically via jQuery script -->
       </ul>
     </div>
@@ -60,8 +56,11 @@
         <!-- TODO: List should be scrollable. -->
       </ul>
       <div class="text-center">
-        <button type="button" class="btn btn-danger">Cancel Order</button>
-        <button type="button" class="btn btn-success">Confirm Order</button>
+        <button id="confirm_button" type="button" class="btn btn-success"
+                onclick="changeOrderStatus('COOKING')">Confirm
+          Order</button>
+        <button id="cancel_button" type="button" class="btn btn-danger"
+                onclick="changeOrderStatus('CANCELLED')">Cancel Order</button>
       </div>
     </div>
   </div>
