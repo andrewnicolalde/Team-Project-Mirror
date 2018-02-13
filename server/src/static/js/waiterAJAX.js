@@ -92,7 +92,7 @@ function loadOrder(orderNumber) {
 
 /**
  * This function is responsible for retrieving and displaying the menu
- * item elements in the menu column in waiter-ui.html.
+ * item elements in the Menu column in waiter.html.
  *
  * Note: This script should be used only for the waiter's UI. This is because this script
  * only displays the name of each menu item & its price, along with dietary info.
