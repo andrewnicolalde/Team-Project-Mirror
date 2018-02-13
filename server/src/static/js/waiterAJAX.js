@@ -131,7 +131,7 @@ function loadMenu() {
 
 /**
  * This function is responsible for retrieving and displaying the tables
- * (i.e. Table 1) in the Tables column in waiter.html
+ * (i.e. Table 1) in the Tables column in waiter-ui.html
  */
 function loadTables() {
   get("/api/authStaff/tables", function (data) {

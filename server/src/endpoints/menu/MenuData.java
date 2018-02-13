@@ -1,4 +1,4 @@
-package endpoints.customer;
+package endpoints.menu;
 
 import database.tables.MenuItem;
 

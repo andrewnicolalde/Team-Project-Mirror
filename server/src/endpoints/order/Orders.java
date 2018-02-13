@@ -23,8 +23,8 @@ public class Orders {
    * @return A string containing JSON which holds the current order.
    */
   public static String getOrderItems(Request request, Response response) {
-    OrderMenuItemListParameters omiList = GSON.fromJson(request.body(),
-        OrderMenuItemListParameters.class);
+    ListOrderMenuItemParams omiList = GSON.fromJson(request.body(),
+        ListOrderMenuItemParams.class);
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     List<OrderMenuItem> orderMenuItems = entityManager
@@ -34,12 +34,12 @@ public class Orders {
 
     entityManager.close();
 
-    CustomerOrderData[] customerOrderData = new CustomerOrderData[orderMenuItems.size()];
+    OrderData[] orderData = new OrderData[orderMenuItems.size()];
 
-    for (int i = 0; i < customerOrderData.length; i++) {
-      customerOrderData[i] = new CustomerOrderData(orderMenuItems.get(i));
+    for (int i = 0; i < orderData.length; i++) {
+      orderData[i] = new OrderData(orderMenuItems.get(i));
     }
-    return GSON.toJson(customerOrderData);
+    return GSON.toJson(orderData);
   }
 
   /**
@@ -59,13 +59,13 @@ public class Orders {
         FoodOrder.class).setParameter("tableNo", orderRequestParameters.getTableNumber())
         .getResultList();
 
-    OrderListData[] orderListData = new OrderListData[foodOrders.size()];
-    for (int i = 0; i < orderListData.length; i++) {
-      orderListData[i] = new OrderListData(foodOrders.get(i));
+    ListOrderData[] listOrderData = new ListOrderData[foodOrders.size()];
+    for (int i = 0; i < listOrderData.length; i++) {
+      listOrderData[i] = new ListOrderData(foodOrders.get(i));
     }
 
 
-    return GSON.toJson(orderListData);
+    return GSON.toJson(listOrderData);
   }
 
   /**
@@ -108,8 +108,8 @@ public class Orders {
    * @return A string saying either "success" or "failed"
    */
   public static String changeOrderStatus(Request request, Response response) {
-    ChangeOrderStatusParameters cos = GSON
-        .fromJson(request.body(), ChangeOrderStatusParameters.class);
+    ChangeStatusParams cos = GSON
+        .fromJson(request.body(), ChangeStatusParams.class);
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 

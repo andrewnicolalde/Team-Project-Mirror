@@ -2,13 +2,13 @@ package endpoints.order;
 
 import database.tables.FoodOrder;
 
-public class OrderListData {
+public class ListOrderData {
 
   private Long foodOrderId;
   private String orderStatus;
   private String timeConfirmed;
 
-  public OrderListData(FoodOrder foodOrder) {
+  public ListOrderData(FoodOrder foodOrder) {
     foodOrderId = foodOrder.getOrderId();
     orderStatus = foodOrder.getStatus().name();
     timeConfirmed = foodOrder.getTimeConfirmed().toString();

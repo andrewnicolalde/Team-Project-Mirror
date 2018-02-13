@@ -1,10 +1,10 @@
 package endpoints.order;
 
-public class OrderMenuItemListParameters {
+public class ListOrderMenuItemParams {
 
   private Long orderNumber;
 
-  public OrderMenuItemListParameters(Long orderId) {
+  public ListOrderMenuItemParams(Long orderId) {
     this.orderNumber = orderId;
   }
 

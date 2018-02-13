@@ -1,14 +1,11 @@
-package endpoints.customer;
+package endpoints.menu;
 
 import static util.JsonUtil.toJson;
 
-import com.google.gson.Gson;
 import database.DatabaseManager;
 import database.tables.MenuItem;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 
 public class Menu {
