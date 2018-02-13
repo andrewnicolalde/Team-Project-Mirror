@@ -7,6 +7,8 @@
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+  <link rel="stylesheet"
+        href="css/kitchen.css">
 
   <!-- jQuery library -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -27,6 +29,7 @@
   </script>
 </head>
 <body>
+
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <ul class="nav navbar-nav mr-auto">
     <a class="navbar-brand" href="index.html">ARMS</a>
@@ -40,14 +43,32 @@
     </li>
   </ul>
 </nav>
-<div class="container-fluid">
-  <h2>Current Orders</h2>
-</div>
-<div class="container-fluid">
-  <div class="row">
 
+<div class = row>
+  <!--Sidebar-->
+  <div class="col-4">
+    <nav id="sidebar">
+      <!--Sidebar Header-->
+      <div class ="sidebar-header">
+        <h3>Order Numbers</h3>
+      </div>
+    </nav>
   </div>
+
+
+  <div class="col8">
+    <div class="container-fluid">
+      <h2>Current Orders</h2>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+
+      </div>
+    </div>
+  </div>
+
 </div>
-</div>
+
 </body>
 </html>
