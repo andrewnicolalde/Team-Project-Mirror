@@ -17,7 +17,7 @@ function getActiveOrder() {
  * This function is responsible for adding menu items to the current order
  * of the currently active table.
  * @param menuItemId the ID of the menu item to be added to the order
- * @param description Any requirements such as cooking preferences to be sent
+ * @param description Any instructions such as cooking preferences to be sent
  *                    to the kitchen with the order.
  */
 // TODO: Add a description attribute here so that additional preparation info can be provided.
@@ -25,14 +25,14 @@ function addToOrder(menuItemId) {
   var activeOrder = getActiveOrder();
 
   // TODO: Remove this and add an actual description box in the UI
-  var requirements = "This is a test descripion"
+  var instructions = "This is a test descripion"
 
   // Create name-value pairs for HTTP post request, see
   // https://en.wikipedia.org/wiki/POST_(HTTP)#Use_for_submitting_web_forms
   var nameValuePairs = JSON.stringify({
     orderNumber: activeOrder.getAttribute('data-ordernum'),
     menuItemId: menuItemId,
-    requirements: requirements
+    instructions: instructions
   });
 
   // Handle possible responses
