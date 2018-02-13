@@ -1,4 +1,4 @@
-package endpoints.kitchen;
+package endpoints.order;
 
 /**
  * Wrapper class for OrderMenuItem and MenuItem to be more easily serializable into JSON.

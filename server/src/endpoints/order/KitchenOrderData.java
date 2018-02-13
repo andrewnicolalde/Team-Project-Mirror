@@ -1,4 +1,4 @@
-package endpoints.kitchen;
+package endpoints.order;
 
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;

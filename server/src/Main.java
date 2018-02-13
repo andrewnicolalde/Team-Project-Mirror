@@ -6,10 +6,10 @@ import static spark.Spark.staticFileLocation;
 
 import database.DatabaseManager;
 import endpoints.authentication.AuthenticationEmployee;
-import endpoints.customer.Menu;
-import endpoints.kitchen.KitchenOrder;
+import endpoints.menu.Menu;
+import endpoints.order.KitchenOrder;
 import endpoints.order.Orders;
-import endpoints.waiter.Tables;
+import endpoints.tables.Tables;
 
 public class Main {
 
