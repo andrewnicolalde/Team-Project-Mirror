@@ -1,5 +1,8 @@
 #sidebar {
-    min-width: 250px;
-    max-width: 250px;
+    min-width: 200px;
+    max-width: 200px;
     height: 100vh;
+    background-color: #17a2b8;
+    text-color: white;
 }
+
