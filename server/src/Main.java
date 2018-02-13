@@ -6,10 +6,13 @@ import static spark.Spark.staticFileLocation;
 
 import database.DatabaseManager;
 import endpoints.authentication.AuthenticationEmployee;
+import endpoints.authentication.AuthenticationTable;
 import endpoints.customer.Menu;
 import endpoints.kitchen.KitchenOrder;
 import endpoints.order.Orders;
 import endpoints.waiter.Tables;
+
+import javax.persistence.EntityManager;
 
 public class Main {
 
@@ -29,10 +32,12 @@ public class Main {
     // End points
     // Before is used to verify the user has access to the content they are requesting.
     before("/api/authStaff/*", AuthenticationEmployee::checkStaffSession);
+    before("/api/authTable/*", AuthenticationTable::checkTableSession);
 
     // Endpoints which are meant to be connected to directly, not via AJAX requests.
     get("/logout", AuthenticationEmployee::logOutEmployee);
     post("/loginStaff", AuthenticationEmployee::logInEmployee);
+    post("/loginTable", AuthenticationTable::logInTable);
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/menu", (req, res) -> Menu.getMenu());
@@ -43,6 +48,9 @@ public class Main {
     post("/api/authStaff/addToOrder", Orders::addOrderMenuItem);
     post("/api/authStaff/removeFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
+
+    // Load the Em now so it does not take so long later
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
 
     System.out.println("Visit: http://localhost:4567");
 
