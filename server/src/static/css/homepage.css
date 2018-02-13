@@ -29,6 +29,10 @@
   text-align: center;
 }
 
+#menubutton1 {
+    color: white;
+}
+
 .login-form {
   margin-bottom: 20px;
 }
