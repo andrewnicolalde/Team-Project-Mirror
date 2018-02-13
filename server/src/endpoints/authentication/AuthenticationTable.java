@@ -11,6 +11,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
 
+import static spark.Spark.halt;
+
 public class AuthenticationTable {
 
   /**
@@ -86,11 +88,25 @@ public class AuthenticationTable {
     em.persist(session);
     em.getTransaction().commit();
 
+    // Assign the session key to the session.
+    request.session().attribute("TableSessionKey", sessionKey);
+
     response.redirect("customer-ui/customerdisplay.html");
     return response;
   }
 
   public static void checkTableSession(Request request, Response response) {
-    return;
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
+    // Check if the session has a TableSessionKey
+    if (request.session().attribute("TableSessionKey") == null) {
+      halt(401, "error_401");
+    }
+
+    TableSession session = em.find(TableSession.class, request.session()
+        .attribute("TableSessionKey"));
+
+    if (session == null) {
+      halt(401, "error_401");
+    }
   }
 }
