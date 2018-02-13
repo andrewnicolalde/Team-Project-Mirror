@@ -1,11 +1,11 @@
 package endpoints.order;
 
-public class ChangeOrderStatusParameters {
+public class ChangeStatusParams {
 
   private String newOrderStatus;
   private Long orderNumber;
 
-  public ChangeOrderStatusParameters(Long orderNumber, String newOrderStatus) {
+  public ChangeStatusParams(Long orderNumber, String newOrderStatus) {
     this.newOrderStatus = newOrderStatus;
     this.orderNumber = orderNumber;
   }
