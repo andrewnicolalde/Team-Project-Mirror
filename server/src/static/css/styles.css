@@ -1,56 +1,56 @@
-body{
-    font: 15px/1.5 Arial, Helcetica;
-    padding: 0;
-    margin: 0;
-    min-height: 600px;
-    background-color: #63dddd;
+body {
+  font: 15px/1.5 Arial, Helcetica;
+  padding: 0;
+  margin: 0;
+  min-height: 600px;
+  background-color: #63dddd;
 }
 
 /*Global*/
-.container{
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
+.container {
+  width: 80%;
+  margin: auto;
+  overflow: hidden;
 }
 
-ul{
-    margin: 0;
-    padding: 0;
+ul {
+  margin: 0;
+  padding: 0;
 }
 
 /*Header*/
-header{
-    background: #696969;
-    color: #eac800;
-    padding-top: 30px;
-    min-height: 70px;
-    border-bottom: #eac800 3px solid;
+header {
+  background: #696969;
+  color: #eac800;
+  padding-top: 30px;
+  min-height: 70px;
+  border-bottom: #eac800 3px solid;
 }
 
-header a{
-    color: #eac800;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: 16px;
+header a {
+  color: #eac800;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 16px;
 }
 
-header li{
-    float: left;
-    display: inline;
-    padding :0 20px 0 20px;
+header li {
+  float: left;
+  display: inline;
+  padding: 0 20px 0 20px;
 }
 
-header #branding{
-    float: left;
+header #branding {
+  float: left;
 }
 
-header #branding h1{
-    margin: 0;
+header #branding h1 {
+  margin: 0;
 }
 
-header nav{
-    float: right;
-    margin-top: 10px;
+header nav {
+  float: right;
+  margin-top: 10px;
 }
 
 /*header .highlight, header .current a{
@@ -58,25 +58,25 @@ header nav{
 	font-weight: bold;
 }*/
 
-header a:hover{
-    color: #cccccc;
-    font-weight: bold;
+header a:hover {
+  color: #cccccc;
+  font-weight: bold;
 }
 
 /*food*/
-#food{
-    min-height: 600px;
-    min-width: 800px;
-    background-image: : url('foodj.JPEG') no-repeat;
-    text-align: center;
-    color: #ffffff;
+#food {
+  min-height: 600px;
+  min-width: 800px;
+  background-image:: url('foodj.JPEG') no-repeat;
+  text-align: center;
+  color: #ffffff;
 }
 
 /*waiter-ui.html Tables column*/
-.waiter-ui-span-bold{
-    font-weight: bold;
+.waiter-ui-span-bold {
+  font-weight: bold;
 }
 
 .nav-link {
-    display: inline;
+  display: inline;
 }

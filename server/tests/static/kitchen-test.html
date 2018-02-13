@@ -48,9 +48,9 @@
           + "      </div>\n"
           + "     </div>\n");
       updatePage("[{\"orderId\":1,\"orderContents\":" +
-          "[{\"orderMenuItemId\":1,\"itemName\":\"Taco\",\"requirements\":\"Extra spicy\"}," +
-          "{\"orderMenuItemId\":3,\"itemName\":\"Burrito\",\"requirements\":\"\"}]}," +
-          "{\"orderId\":2,\"orderContents\":[{\"orderMenuItemId\":5,\"itemName\":\"taco\",\"requirements\":\"None\"}]}]");
+          "[{\"orderMenuItemId\":1,\"itemName\":\"Taco\",\"instructions\":\"Extra spicy\"}," +
+          "{\"orderMenuItemId\":3,\"itemName\":\"Burrito\",\"instructions\":\"\"}]}," +
+          "{\"orderId\":2,\"orderContents\":[{\"orderMenuItemId\":5,\"itemName\":\"taco\",\"instructions\":\"None\"}]}]");
       assert.deepEqual($('.col', fixture).length, 2, "checking the array is being filled.");
     });
 

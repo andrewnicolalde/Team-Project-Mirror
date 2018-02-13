@@ -8,12 +8,11 @@ import database.tables.Staff;
 import database.tables.StaffSession;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
+
+
 
 public class AuthenticationEmployee {
 
@@ -25,6 +24,7 @@ public class AuthenticationEmployee {
   private static Staff isValidLoginCombination(EmployeeAuthenticationParameters ap) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
     Staff employee = em.find(Staff.class, ap.getEmployeeNumber());
+    em.close();
     if (employee == null) { // If the employee does not exist, then fail
       return null;
     }
@@ -48,7 +48,7 @@ public class AuthenticationEmployee {
 
     // Convert the data from the client into an object
     EmployeeAuthenticationParameters ap = new EmployeeAuthenticationParameters(
-            new Long(request.queryParams("employeeNumber")), request.queryParams("password"));
+        new Long(request.queryParams("employeeNumber")), request.queryParams("password"));
 
     // Authenticate the given details
     Staff employee = isValidLoginCombination(ap);
@@ -57,8 +57,8 @@ public class AuthenticationEmployee {
     if (employee != null) {
       // Check if there are any existing sessions with the current user, and end them.
       List<StaffSession> currentSessions = em.createQuery("SELECT s FROM StaffSession s "
-              + "WHERE s.staff = :staff", StaffSession.class).setParameter(
-                      "staff", employee).getResultList();
+          + "WHERE s.staff = :staff", StaffSession.class).setParameter(
+          "staff", employee).getResultList();
       for (StaffSession session : currentSessions) {
         em.getTransaction().begin();
         em.remove(session);
@@ -86,6 +86,7 @@ public class AuthenticationEmployee {
     } else {
       response.redirect("/");
     }
+    em.close();
     return response;
   }
 
@@ -107,7 +108,7 @@ public class AuthenticationEmployee {
 
     // Attempt to get the session from the database.
     StaffSession session = em.find(StaffSession.class,
-            request.session().attribute("StaffSessionKey"));
+        request.session().attribute("StaffSessionKey"));
 
     if (session == null) {
       // Has a session key but is not a valid one. Possible logged in on another device since.
@@ -117,8 +118,8 @@ public class AuthenticationEmployee {
   }
 
   /**
-   * Logs out the employee.
-   * No JSON input as it just uses the session details.
+   * Logs out the employee. No JSON input as it just uses the session details.
+   *
    * @param request The HTTP request
    * @param response The HTTP response
    * @return A string representing the status
@@ -126,12 +127,13 @@ public class AuthenticationEmployee {
   public static Response logOutEmployee(Request request, Response response) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
     StaffSession session = em.find(StaffSession.class,
-            request.session().attribute("StaffSessionKey"));
+        request.session().attribute("StaffSessionKey"));
     em.getTransaction().begin();
     em.remove(session);
     em.getTransaction().commit();
     request.session().removeAttribute("StaffSessionKey");
     response.redirect("/");
+    em.close();
     return response;
   }
 }

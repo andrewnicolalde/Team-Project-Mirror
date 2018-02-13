@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Get Tables</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="./js/ajax-wrapper.js"></script>
-    <script>
-        $(document).ready(function () {
-            get("/api/authStaff/tables", function(data) {
-                //Callback function
+  <meta charset="UTF-8">
+  <title>Get Tables</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="./js/ajax-wrapper.js"></script>
+  <script>
+    $(document).ready(function () {
+      get("/api/authStaff/tables", function (data) {
+        //Callback function
 
-                // Parse the json into objects
-                var response = JSON.parse(data);
+        // Parse the json into objects
+        var response = JSON.parse(data);
 
-                // Loop through response and append items to a list (Or do what ever you like to them
-                for (i = 0; i < response.length; i++) {
-                    $("#tables_list").append("<li>" + response[i].number + ": " + response[i].status + "</li>");
-                }
-            });
-        });
-    </script>
+        // Loop through response and append items to a list (Or do what ever you like to them
+        for (i = 0; i < response.length; i++) {
+          $("#tables_list").append("<li>" + response[i].number + ": " + response[i].status
+              + "</li>");
+        }
+      });
+    });
+  </script>
 </head>
 <body>
 <h1>Tables</h1>

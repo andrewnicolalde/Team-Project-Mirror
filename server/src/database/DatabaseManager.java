@@ -13,16 +13,14 @@ public class DatabaseManager {
   }
 
   private EntityManagerFactory entityManagerFactory;
-  private EntityManager entityManager;
 
   private DatabaseManager() {
     if (entityManagerFactory == null) {
       entityManagerFactory = Persistence.createEntityManagerFactory("server.database.dev");
-      entityManager = entityManagerFactory.createEntityManager();
     }
   }
 
   public EntityManager getEntityManager() {
-    return entityManager;
+    return entityManagerFactory.createEntityManager();
   }
 }
