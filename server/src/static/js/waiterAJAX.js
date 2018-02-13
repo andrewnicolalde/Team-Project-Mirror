@@ -92,7 +92,7 @@ function loadOrder(orderNumber) {
 
 /**
  * This function is responsible for retrieving and displaying the menu
- * item elements in the Menu column in waiter-ui.html.
+ * item elements in the Menu column in waiter.html.
  *
  * Note: This script should be used only for the waiter's UI. This is because this script
  * only displays the name of each menu item & its price, along with dietary info.
@@ -131,7 +131,7 @@ function loadMenu() {
 
 /**
  * This function is responsible for retrieving and displaying the tables
- * (i.e. Table 1) in the Tables column in waiter-ui.html
+ * (i.e. Table 1) in the Tables column in waiter.html
  */
 function loadTables() {
   get("/api/authStaff/tables", function (data) {
