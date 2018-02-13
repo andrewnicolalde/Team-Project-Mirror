@@ -12,7 +12,7 @@
 <body>
 
 <div class="jumbotron jumbotron-fluid bg-info text-white text-center">
-  <div class="container">
+  <div class="container-fluid">
     <h1 class="display-2">Oaxaca</h1>
     <p class="lead"> A stylish Mexican Resturant.</p>
   </div>
@@ -20,53 +20,11 @@
 
 <div class="container">
   <div class="row">
-    <div id="menubutton" class="col-md-12 col-lg-12">
+    <div id="menubutton" class="col-md-6 col-lg-6">
       <!-- FIXME: Use sensible paths. This does nothing right now -->
-      <button type="button" class="btn btn-large btn-block btn-outline-info text-center">
-        <!-- TODO: Make this page. -->
-        <a href="menupage.html" aria-pressed="true"><h1 class="display-2 text-center">Start Order</h1></a></button>
+        <a href="menupage.html" class="btn btn-large btn-block btn-info text-center" role="button"><h1 id="menubutton1" class="display-2 text-center">Start Order</h1></a>
     </div>
-  </div>
-</div>
-
-<div class="container main-content">
-  <div class="row">
-    <div class="col-md-2 col-lg-2">
-      <div class="card">
-        <img src="../images/grilledfishtacos.jpg" class="card-img-top img-fluid">
-        <div class="card-block">
-          <p class="card-text text-muted">"I love this beautifully crafted dish that reminds me of
-            my childhood"</p>
-          <p class="card-text text-muted">
-            <small class="text-muted">-Matt Davies<br/>(Customer)</small>
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-2 col-lg-2">
-      <div class="card">
-        <img src="../images/chilirellenoscasserole.jpg" class="card-img-top img-fluid">
-        <div class="card-block">
-          <p class="card-text text-muted">"The chilli rellones casserole is delicious and would
-            highly recommend."</p>
-          <p class="card-text text-muted">
-            <small class="text-muted">-James Collins<br/>(Customer)</small>
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-2 col-lg-2">
-      <div class="card">
-        <img src="../images/ronaldo.jpg" class="card-img-top img-fluid">
-        <div class="card-block">
-          <p class="card-text text-muted">"Simple, authentic some text here and traditional"</p>
-          <p class="card-text text-muted">
-            <small class="text-muted">-Ken Smith<br/>(Customer)</small>
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-6 col-md-6">
+    <div class="col-lg-5 col-md-5" style="padding-top: 60;">
       <div id="arrows" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
           <li data-target="#arrows" data-slide-to="0" class="active"></li>
@@ -94,6 +52,46 @@
           <span class="sr-only">Next</span>
         </a>
       </div>
+  </div>
+</div>
+
+<div class="container-fluid main-content">
+  <div class="row">
+    <div class="col-md-4 col-lg-4">
+      <div class="card">
+        <img src="../images/grilledfishtacos.jpg" class="card-img-top img-fluid">
+        <div class="card-block">
+          <p class="card-text text-muted">"I love this beautifully crafted dish that reminds me of
+            my childhood"</p>
+          <p class="card-text text-muted">
+            <small class="text-muted">-Matt Davies<br/>(Customer)</small>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 col-lg-4">
+      <div class="card">
+        <img src="../images/chilirellenoscasserole.jpg" class="card-img-top img-fluid">
+        <div class="card-block">
+          <p class="card-text text-muted">"The chilli rellones casserole is delicious and would
+            recommend."</p>
+          <p class="card-text text-muted">
+            <small class="text-muted">-James Collins<br/>(Customer)</small>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 col-lg-4">
+      <div class="card">
+        <img src="../images/ronaldo.jpg" class="card-img-top img-fluid">
+        <div class="card-block">
+          <p class="card-text text-muted">"Simple, authentic some text here and traditional"</p>
+          <p class="card-text text-muted">
+            <small class="text-muted">-Ken Smith<br/>(Customer)</small>
+          </p>
+        </div>
+      </div>
+    </div>
     </div>
   </div>
 </div>
