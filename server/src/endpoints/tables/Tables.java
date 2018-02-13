@@ -1,7 +1,5 @@
 package endpoints.tables;
 
-import static util.JsonUtil.toJson;
-
 import database.DatabaseManager;
 import database.tables.RestaurantTableStaff;
 import database.tables.StaffSession;
@@ -9,6 +7,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
 import spark.Response;
+import util.JsonUtil;
 
 public class Tables {
 
@@ -35,6 +34,6 @@ public class Tables {
       tableData[i] = new TableData(restaurantTableStaffs.get(i));
     }
 
-    return toJson(tableData);
+    return JsonUtil.getInstance().toJson(tableData);
   }
 }

@@ -80,9 +80,9 @@ public class AuthenticationEmployee {
       request.session().attribute("StaffSessionKey", sessionKey);
 
       if (staffSession.getStaff().getDepartment() == Department.WAITER) {
-        response.redirect("/waiter/waiter.html");
+        response.redirect("/staff/waiter.html");
       } else if (staffSession.getStaff().getDepartment() == Department.KITCHEN) {
-        response.redirect("/kitchen.html");
+        response.redirect("/staff/kitchen.html");
       } else {
         response.redirect("/");
       }

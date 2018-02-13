@@ -1,7 +1,5 @@
 package endpoints.order;
 
-import static util.JsonUtil.toJson;
-
 import database.DatabaseManager;
 import database.tables.FoodOrder;
 import database.tables.MenuItem;
@@ -13,6 +11,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
 import spark.Response;
+import util.JsonUtil;
 
 /**
  * Endpoint class serving fetching from the database and serving JSON.
@@ -28,7 +27,7 @@ public class KitchenOrder {
    */
   public static String getCookingOrders(Request request, Response response) {
     List<KitchenOrderData> orders = getCookingOrderData();
-    return toJson(orders);
+    return JsonUtil.getInstance().toJson(orders);
   }
 
   /**

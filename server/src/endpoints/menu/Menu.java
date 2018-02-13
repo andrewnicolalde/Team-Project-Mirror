@@ -1,11 +1,10 @@
 package endpoints.menu;
 
-import static util.JsonUtil.toJson;
-
 import database.DatabaseManager;
 import database.tables.MenuItem;
 import java.util.List;
 import javax.persistence.EntityManager;
+import util.JsonUtil;
 
 
 public class Menu {
@@ -35,6 +34,6 @@ public class Menu {
       menuData[i] = new MenuData(menuItems.get(i));
     }
 
-    return toJson(menuData);
+    return JsonUtil.getInstance().toJson(menuData);
   }
 }
