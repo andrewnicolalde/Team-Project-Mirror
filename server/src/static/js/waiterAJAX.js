@@ -17,8 +17,6 @@ function getActiveOrder() {
  * This function is responsible for adding menu items to the current order
  * of the currently active table.
  * @param menuItemId the ID of the menu item to be added to the order
- * @param description Any instructions such as cooking preferences to be sent
- *                    to the kitchen with the order.
  */
 // TODO: Add a description attribute here so that additional preparation info can be provided.
 function addToOrder(menuItemId) {
