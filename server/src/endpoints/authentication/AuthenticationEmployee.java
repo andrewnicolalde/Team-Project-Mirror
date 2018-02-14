@@ -45,7 +45,7 @@ public class AuthenticationEmployee {
    * Authenticates the log in request, and redirects them if successful.
    * @param request The HTTP request
    * @param response The response to give.
-   * @return The a JSON response showing whether is was successful and if so, the session key.
+   * @return A JSON response showing whether is was successful and if so, the session key.
    */
   public static Response logInEmployee(Request request, Response response) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
