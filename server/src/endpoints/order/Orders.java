@@ -11,10 +11,13 @@ import spark.Request;
 import spark.Response;
 import util.JsonUtil;
 
+/**
+ * This class is used to to communicate between the front end and back end in regards to orders.
+ */
 public class Orders {
 
   /**
-   * Returns an order as JSON. JSON input: tableNumber: an integer representing the table number
+   * Returns an order as JSON. JSON input: foodOrderId: The ID for the food order being listed.
    *
    * @param request A HTTP request object.
    * @param response A HTTP response object.
@@ -41,20 +44,20 @@ public class Orders {
   }
 
   /**
-   * Returns a list of orders for a table in JSON. JSON input:
+   * Returns a list of orders for a table in JSON. JSON input: tableNumber
    *
    * @param request A HTTP request object.
    * @param response A HTTP response object.
    * @return A string containing the JSON for the orders on a table.
    */
   public static String getOrderList(Request request, Response response) {
-    OrderRequestParameters orderRequestParameters = JsonUtil.getInstance().fromJson(request.body(),
-        OrderRequestParameters.class);
+    OrderRequestParams orderRequestParams = JsonUtil.getInstance().fromJson(request.body(),
+        OrderRequestParams.class);
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
             + "where foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNo",
-        FoodOrder.class).setParameter("tableNo", orderRequestParameters.getTableNumber())
+        FoodOrder.class).setParameter("tableNo", orderRequestParams.getTableNumber())
         .getResultList();
 
     ListOrderData[] listOrderData = new ListOrderData[foodOrders.size()];
@@ -66,8 +69,7 @@ public class Orders {
   }
 
   /**
-   * Adds an orderMenuItem to an order. JSON input: tableNumber: An integer representing the table
-   * number menuItemId: An integer representing the id of the MenuItem to add to the order.
+   * Adds an orderMenuItem to an order. JSON input: foodOrderId, menuItemId
    * requirements: A string representing a description/extra details for the order.
    *
    * @param request A HTTP request object.
@@ -75,8 +77,8 @@ public class Orders {
    * @return A string saying either "success" or "failed"
    */
   public static String addOrderMenuItem(Request request, Response response) {
-    OrderMenuItemParameters omi = JsonUtil.getInstance()
-        .fromJson(request.body(), OrderMenuItemParameters.class);
+    OrderMenuItemParams omi = JsonUtil.getInstance()
+        .fromJson(request.body(), OrderMenuItemParams.class);
 
     //TODO check which franchise to add the order to.
 
@@ -97,7 +99,7 @@ public class Orders {
   }
 
   /**
-   * Changes the order status JSON input: tableNumber: An integer representing the table number.
+   * Changes the order status JSON input: foodOrderId,
    * newOrderStatus: A string representing the new order status. This can be CANCELLED, ORDERING,
    * READY_TO_CONFIRM, COOKING, READY_TO_DELIVER or DELIVERED.
    *
@@ -126,16 +128,15 @@ public class Orders {
   }
 
   /**
-   * Removes an item from an order JSON input: tableNumber: An integer representing the table
-   * number. menuItemId: An integer representing the id of the MenuItem to remove from the order.
+   * Removes an item from an order JSON input: foodOrderId
    *
    * @param request A HTTP request object.
    * @param response A HTTP response object.
    * @return A string saying either "success" or "failed"
    */
   public static String removeOrderMenuItem(Request request, Response response) {
-    OrderMenuItemParameters omi = JsonUtil.getInstance()
-        .fromJson(request.body(), OrderMenuItemParameters.class);
+    OrderMenuItemParams omi = JsonUtil.getInstance()
+        .fromJson(request.body(), OrderMenuItemParams.class);
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     entityManager.getTransaction().begin();

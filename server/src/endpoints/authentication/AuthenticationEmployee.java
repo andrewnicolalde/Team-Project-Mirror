@@ -12,7 +12,11 @@ import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
 
-
+/**
+ * This class authenticates a staff member to use the system.
+ *
+ * @author Toby Such
+ */
 public class AuthenticationEmployee {
 
   /**

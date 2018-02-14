@@ -2,6 +2,11 @@ package endpoints.order;
 
 import database.tables.FoodOrder;
 
+/**
+ * This class coverts results from the database into usable Java Objects.
+ *
+ * @author Marcus Messer
+ */
 public class ListOrderData {
 
   private Long foodOrderId;

@@ -6,7 +6,12 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import util.JsonUtil;
 
-
+/**
+ * This class returns the menu items in a JSON format.
+ *
+ * @author Marcus Messer
+ *
+ */
 public class Menu {
 
   /**

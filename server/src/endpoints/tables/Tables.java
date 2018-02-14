@@ -9,11 +9,11 @@ import spark.Request;
 import spark.Response;
 import util.JsonUtil;
 
+/**
+ * This class gets the list of tables from the database.
+ */
 public class Tables {
 
-  /**
-   * Returns a string holding a list of tables. No JSON as it is a get request.
-   */
   public static String getTables(Request request, Response response) {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
@@ -22,7 +22,7 @@ public class Tables {
     return getTableData(staffSession.getStaff().getEmployeeNumber());
   }
 
-  public static String getTableData(Long staffId) {
+  private static String getTableData(Long staffId) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from " +
