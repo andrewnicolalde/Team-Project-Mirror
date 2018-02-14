@@ -10,10 +10,21 @@ font-family: "Menlo", "Monaco", "Consolas","Liberation Mono","Courier New", "mon
     color: white;
 }
 
-.orderNumbers {
-    list-style-type: none;
+.sideHeader{
+    text-align: center;
+    padding-top: 20px;
+
 }
 
-.orderNumber li {
+.orderNumbers {
+    list-style-type: none;
+    padding: 0px;
+    text-align: center;
+}
+
+.orderNumbers li {
     width: 100%;
+    height: 30px;
+    text-align: center;
+    margin-top: 7px;
 }
