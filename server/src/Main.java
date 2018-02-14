@@ -6,6 +6,7 @@ import static spark.Spark.staticFileLocation;
 
 import database.DatabaseManager;
 import endpoints.authentication.AuthenticationEmployee;
+import endpoints.authentication.AuthenticationTable;
 import endpoints.menu.Menu;
 import endpoints.order.KitchenOrder;
 import endpoints.order.Orders;
@@ -29,10 +30,12 @@ public class Main {
     // End points
     // Before is used to verify the user has access to the content they are requesting.
     before("/api/authStaff/*", AuthenticationEmployee::checkStaffSession);
+    before("/api/authTable/*", AuthenticationTable::checkTableSession);
 
     // Endpoints which are meant to be connected to directly, not via AJAX requests.
     get("/logout", AuthenticationEmployee::logOutEmployee);
     post("/loginStaff", AuthenticationEmployee::logInEmployee);
+    post("/loginTable", AuthenticationTable::logInTable);
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/getMenu", (req, res) -> Menu.getMenu());
@@ -44,8 +47,8 @@ public class Main {
     post("/api/authStaff/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
 
-    DatabaseManager.getInstance();
-
     System.out.println("Visit: http://localhost:4567");
+
+    DatabaseManager.getInstance();
   }
 }

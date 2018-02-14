@@ -42,10 +42,7 @@ public class AuthenticationEmployee {
   }
 
   /**
-   * Authenticates the log in request, and redirects them if successful. JSON input: employeeNumber:
-   * The employee number of the user trying to log in with. password: The password of the user
-   * trying to log in.
-   *
+   * Authenticates the log in request, and redirects them if successful.
    * @param request The HTTP request
    * @param response The response to give.
    * @return The a JSON response showing whether is was successful and if so, the session key.
@@ -98,9 +95,9 @@ public class AuthenticationEmployee {
   }
 
   /**
-   * Checks if the request has a valid staff session key. Will halt if not. No JSON input as it is
-   * intended to run before most get/posty requests - it just checks the session details.
-   *
+   * Checks if the request has a valid staff session key. Will halt if not.
+   * No JSON input as it is intended to run before most get/posty requests - it just checks the
+   * session details.
    * @param request The HTTP request.
    * @param response The HTTP response.
    */
