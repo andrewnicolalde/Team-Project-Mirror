@@ -36,7 +36,7 @@ function addToOrder(menuItemId) {
   });
 
   // Handle possible responses
-  post("/api/authStaff/addToOrder", nameValuePairs, function (status) {
+  post("/api/authStaff/addItemToOrder", nameValuePairs, function (status) {
     loadOrder(activeOrder.getAttribute('data-ordernum'));
     if (status === "") {
       // Refresh current order table to show new change
@@ -55,7 +55,7 @@ function addToOrder(menuItemId) {
  */
 function loadOrder(orderNumber) {
   var orderNumberToSend = JSON.stringify({orderNumber: orderNumber});
-  post("/api/authStaff/getOrder", orderNumberToSend, function (data) {
+  post("/api/authStaff/getOrderItems", orderNumberToSend, function (data) {
 
     // Parse JSON
     var response = JSON.parse(data);
@@ -100,7 +100,7 @@ function loadOrder(orderNumber) {
  */
 function loadMenu() {
   // Send get request to server for menu JSON
-  get("/api/authStaff/menu", function (data) {
+  get("/api/authStaff/getMenu", function (data) {
     // Parse JSON
     var response = JSON.parse(data);
 
@@ -134,7 +134,7 @@ function loadMenu() {
  * (i.e. Table 1) in the Tables column in waiter-ui.html
  */
 function loadTables() {
-  get("/api/authStaff/tables", function (data) {
+  get("/api/authStaff/getTables", function (data) {
     var response = JSON.parse(data);
     var currentOrderElement = document.getElementById("orders-list");
     while (currentOrderElement.firstChild) {

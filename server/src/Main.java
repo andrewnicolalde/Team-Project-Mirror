@@ -35,17 +35,17 @@ public class Main {
     post("/loginStaff", AuthenticationEmployee::logInEmployee);
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
-    get("/api/authStaff/menu", (req, res) -> Menu.getMenu());
-    get("/api/authStaff/tables", Tables::getTables);
+    get("/api/authStaff/getMenu", (req, res) -> Menu.getMenu());
+    get("/api/authStaff/getTables", Tables::getTables);
     get("api/authStaff/kitchen", KitchenOrder::getCookingOrders);
     post("api/authStaff/getOrderList", Orders::getOrderList);
-    post("/api/authStaff/getOrder", Orders::getOrderItems);
-    post("/api/authStaff/addToOrder", Orders::addOrderMenuItem);
-    post("/api/authStaff/removeFromOrder", Orders::removeOrderMenuItem);
+    post("/api/authStaff/getOrderItems", Orders::getOrderItems);
+    post("/api/authStaff/addItemToOrder", Orders::addOrderMenuItem);
+    post("/api/authStaff/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
 
-    System.out.println("Visit: http://localhost:4567");
-
     DatabaseManager.getInstance();
+
+    System.out.println("Visit: http://localhost:4567");
   }
 }
