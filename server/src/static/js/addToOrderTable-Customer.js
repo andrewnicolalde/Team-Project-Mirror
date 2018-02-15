@@ -121,10 +121,13 @@ function changeOrderStatus(orderStatus) {
         orderNumber: 2,
         newOrderStatus: orderStatus
       }),
-      confirmPopup()
+      $("#confirm-order-button").click(function(){
+        $("#myModal").modal();
+      });
   );
 }
 
 function confirmPopup() {
   alert("The waiter will come soon to confirm your order!");
 }
+

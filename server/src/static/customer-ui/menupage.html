@@ -48,10 +48,8 @@
     <div class="col">
       <h5 class="text-center">Current Order</h5>
       <div class="text-center">
-        <button type="button" class="btn btn-success"
+        <button type="button" class="btn btn-success" id="confirm-order-button"
                 onclick="changeOrderStatus('READY_TO_CONFIRM')">Confirm Order</button>
-        <button type="button" class="btn btn-danger"
-                onclick="changeOrderStatus('CANCELLED')">Cancel Order</button>
       </div>
       <ul class="list-group" id="current-order">
         <!-- TODO: List should be scrollable. -->
@@ -60,6 +58,29 @@
     </div>
 
 
+  </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Item Info</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Gluten Free: <img src="../images/gluten-free.svg">
+        Vegetarian: <img src="../images/vegetarian-mark.svg">
+        Vegan: <img src="../images/vegan-mark.svg">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary add-row">Add to Order</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
   </div>
 </div>
 <!--
