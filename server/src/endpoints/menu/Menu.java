@@ -1,16 +1,17 @@
-package endpoints.customer;
+package endpoints.menu;
 
-import static util.JsonUtil.toJson;
-
-import com.google.gson.Gson;
 import database.DatabaseManager;
 import database.tables.MenuItem;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import util.JsonUtil;
 
-
+/**
+ * This class returns the menu items in a JSON format.
+ *
+ * @author Marcus Messer
+ *
+ */
 public class Menu {
 
   /**
@@ -38,6 +39,6 @@ public class Menu {
       menuData[i] = new MenuData(menuItems.get(i));
     }
 
-    return toJson(menuData);
+    return JsonUtil.getInstance().toJson(menuData);
   }
 }

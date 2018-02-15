@@ -3,7 +3,7 @@ package endpoints.customer;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static endpoints.customer.Menu.getMenu;
+import static endpoints.menu.Menu.getMenu;
 
 public class TestMenu {
   @Test
