@@ -7,12 +7,10 @@ import static spark.Spark.staticFileLocation;
 import database.DatabaseManager;
 import endpoints.authentication.AuthenticationEmployee;
 import endpoints.authentication.AuthenticationTable;
-import endpoints.customer.Menu;
-import endpoints.kitchen.KitchenOrder;
+import endpoints.menu.Menu;
+import endpoints.order.KitchenOrder;
 import endpoints.order.Orders;
-import endpoints.waiter.Tables;
-
-import javax.persistence.EntityManager;
+import endpoints.tables.Tables;
 
 public class Main {
 
@@ -40,17 +38,14 @@ public class Main {
     post("/loginTable", AuthenticationTable::logInTable);
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
-    get("/api/authStaff/menu", (req, res) -> Menu.getMenu());
-    get("/api/authStaff/tables", Tables::getTables);
+    get("/api/authStaff/getMenu", (req, res) -> Menu.getMenu());
+    get("/api/authStaff/getTables", Tables::getTables);
     get("api/authStaff/kitchen", KitchenOrder::getCookingOrders);
     post("api/authStaff/getOrderList", Orders::getOrderList);
-    post("/api/authStaff/getOrder", Orders::getOrderItems);
-    post("/api/authStaff/addToOrder", Orders::addOrderMenuItem);
-    post("/api/authStaff/removeFromOrder", Orders::removeOrderMenuItem);
+    post("/api/authStaff/getOrderItems", Orders::getOrderItems);
+    post("/api/authStaff/addItemToOrder", Orders::addOrderMenuItem);
+    post("/api/authStaff/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
-
-    // Load the Em now so it does not take so long later
-    EntityManager em = DatabaseManager.getInstance().getEntityManager();
 
     System.out.println("Visit: http://localhost:4567");
 

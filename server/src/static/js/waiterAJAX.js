@@ -18,23 +18,23 @@ function getActiveOrder() {
  * of the currently active table.
  * @param menuItemId the ID of the menu item to be added to the order
  */
-// TODO: Add a description attribute here so that additional preparation info can be provided.
+
 function addToOrder(menuItemId) {
   var activeOrder = getActiveOrder();
 
-  // TODO: Remove this and add an actual description box in the UI
-  var instructions = "This is a test descripion"
+  // TODO: Remove this and add an actual way to add instructions.
+  var requirements = "These are test instructions";
 
   // Create name-value pairs for HTTP post request, see
   // https://en.wikipedia.org/wiki/POST_(HTTP)#Use_for_submitting_web_forms
   var nameValuePairs = JSON.stringify({
     orderNumber: activeOrder.getAttribute('data-ordernum'),
     menuItemId: menuItemId,
-    instructions: instructions
+    requirements: requirements
   });
 
   // Handle possible responses
-  post("/api/authStaff/addToOrder", nameValuePairs, function (status) {
+  post("/api/authStaff/addItemToOrder", nameValuePairs, function (status) {
     loadOrder(activeOrder.getAttribute('data-ordernum'));
     if (status === "") {
       // Refresh current order table to show new change
@@ -53,7 +53,7 @@ function addToOrder(menuItemId) {
  */
 function loadOrder(orderNumber) {
   var orderNumberToSend = JSON.stringify({orderNumber: orderNumber});
-  post("/api/authStaff/getOrder", orderNumberToSend, function (data) {
+  post("/api/authStaff/getOrderItems", orderNumberToSend, function (data) {
 
     // Parse JSON
     var response = JSON.parse(data);
@@ -90,15 +90,11 @@ function loadOrder(orderNumber) {
 
 /**
  * This function is responsible for retrieving and displaying the menu
- * item elements in the Menu column in waiter-ui.html.
- *
- * Note: This script should be used only for the waiter's UI. This is because this script
- * only displays the name of each menu item & its price, along with dietary info.
- * Obviously a customer would want to see more than that.
+ * item elements in the Menu column in waiter.html.
  */
 function loadMenu() {
   // Send get request to server for menu JSON
-  get("/api/authStaff/menu", function (data) {
+  get("/api/authStaff/getMenu", function (data) {
     // Parse JSON
     var response = JSON.parse(data);
 
@@ -132,7 +128,7 @@ function loadMenu() {
  * (i.e. Table 1) in the Tables column in waiter-ui.html
  */
 function loadTables() {
-  get("/api/authStaff/tables", function (data) {
+  get("/api/authStaff/getTables", function (data) {
     var response = JSON.parse(data);
     var currentOrderElement = document.getElementById("orders-list");
     while (currentOrderElement.firstChild) {

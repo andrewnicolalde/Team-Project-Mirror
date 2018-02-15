@@ -1,5 +1,8 @@
 package endpoints.authentication;
 
+/**
+ * This class converts JSON from the table authentication into usable Java Objects
+ */
 class TableAuthenticationParameters {
 
   private String name;
