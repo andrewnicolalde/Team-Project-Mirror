@@ -12,12 +12,16 @@ import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
 
-
-
+/**
+ * This class authenticates a staff member to use the system.
+ *
+ * @author Toby Such
+ */
 public class AuthenticationEmployee {
 
   /**
    * Checks if the given details correctly match an employee stored in the database.
+   *
    * @param ap An EmployeeAuthenticationParameters object which holds the given login details.
    * @return The staff entity, or null is the parameters are invalid.
    */
@@ -41,7 +45,7 @@ public class AuthenticationEmployee {
    * Authenticates the log in request, and redirects them if successful.
    * @param request The HTTP request
    * @param response The response to give.
-   * @return The response object passed in.
+   * @return A JSON response showing whether is was successful and if so, the session key.
    */
   public static Response logInEmployee(Request request, Response response) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
@@ -77,9 +81,9 @@ public class AuthenticationEmployee {
       request.session().attribute("StaffSessionKey", sessionKey);
 
       if (staffSession.getStaff().getDepartment() == Department.WAITER) {
-        response.redirect("/waiter/waiter-ui.html");
+        response.redirect("/staff/waiter.html");
       } else if (staffSession.getStaff().getDepartment() == Department.KITCHEN) {
-        response.redirect("/kitchen.html");
+        response.redirect("/staff/kitchen.html");
       } else {
         response.redirect("/");
       }

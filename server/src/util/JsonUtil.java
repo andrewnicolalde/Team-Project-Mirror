@@ -9,5 +9,15 @@ import spark.ResponseTransformer;
  * credit DZone.com
  */
 public class JsonUtil {
-  public static String toJson(Object object){ return new Gson().toJson(object); }
+
+  private static Gson instance = null;
+
+  private JsonUtil(){ /* Do nothing, only here to prevent instantiation */ }
+
+  public static Gson getInstance() {
+    if (instance == null) {
+      instance = new Gson();
+    }
+    return instance;
+  }
 }
