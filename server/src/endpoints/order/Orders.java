@@ -6,6 +6,11 @@ import database.tables.FoodOrder;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
+import database.tables.RestaurantTableStaff;
+import database.tables.TableSession;
+import database.tables.TableStatus;
+import database.tables.Transaction;
+import java.sql.Timestamp;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -70,8 +75,8 @@ public class Orders {
   }
 
   /**
-   * Adds an orderMenuItem to an order. JSON input: foodOrderId, menuItemId
-   * requirements: A string representing a description/extra details for the order.
+   * Adds an orderMenuItem to an order. JSON input: foodOrderId, menuItemId requirements: A string
+   * representing a description/extra details for the order.
    *
    * @param request A HTTP request object.
    * @param response A HTTP response object.
@@ -100,9 +105,9 @@ public class Orders {
   }
 
   /**
-   * Changes the order status JSON input: foodOrderId,
-   * newOrderStatus: A string representing the new order status. This can be CANCELLED, ORDERING,
-   * READY_TO_CONFIRM, COOKING, READY_TO_DELIVER or DELIVERED.
+   * Changes the order status JSON input: foodOrderId, newOrderStatus: A string representing the new
+   * order status. This can be CANCELLED, ORDERING, READY_TO_CONFIRM, COOKING, READY_TO_DELIVER or
+   * DELIVERED.
    *
    * @param request A HTTP request object.
    * @param response A HTTP response object.
@@ -152,5 +157,72 @@ public class Orders {
     entityManager.close();
 
     return "success";
+  }
+
+  /**
+   * This method gets the current transaction for a table. If one doesn't exist it creates a new
+   * one.
+   *
+   * @param request A HTML request.
+   * @param response A HTML response.
+   * @return A transactionId in the form of a string.
+   */
+  public static String getTransactionId(Request request, Response response) {
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
+    TableSession tableSession = entityManager.find(TableSession.class,
+        request.session().attribute("TableSessionId"));
+
+    Transaction transaction = entityManager.createQuery("from Transaction transaction where "
+        + "transaction.restaurantTableStaff.restaurantTable = :tableNo AND "
+        + "transaction.isPaid = false ", Transaction.class).setParameter("tableNo",
+        tableSession.getRestaurantTable().getTableNumber()).getSingleResult();
+
+    if (transaction == null) {
+      entityManager.getTransaction().begin();
+      RestaurantTableStaff temp = entityManager.createQuery("from RestaurantTableStaff tableStaff "
+          + "where tableStaff.restaurantTable = :table", RestaurantTableStaff.class).setParameter(
+          "table", tableSession.getRestaurantTable()).getSingleResult();
+      transaction = new Transaction(false, null, null, temp);
+      entityManager.persist(transaction);
+      entityManager.getTransaction().commit();
+    }
+
+    entityManager.close();
+    return transaction.getTransactionId().toString();
+  }
+
+  /**
+   * This method gets the current foodOrderId for the table. If one doesn't exist it creates it.
+   * @param request A HTML request.
+   * @param response A HTML response.
+   * @return A foodOrderId in the form of a string.
+   */
+  public static String getOrderID(Request request, Response response) {
+    OrderIdParams orderIdParms = JsonUtil.getInstance().fromJson(request.body(), OrderIdParams.class);
+
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
+    FoodOrder foodOrder = entityManager.createQuery("from FoodOrder foodOrder where "
+        + "foodOrder.transaction.id = :transactionId and foodOrder.status = :ordering or "
+            + "foodOrder.status = :confirm" ,
+        FoodOrder.class).setParameter("transactionId", orderIdParms.getTransactionId())
+        .setParameter("ordering", OrderStatus.ORDERING).setParameter("confirm",
+            OrderStatus.READY_TO_CONFIRM).getSingleResult();
+
+    if (foodOrder == null) {
+      entityManager.getTransaction().begin();
+
+      foodOrder = new FoodOrder(OrderStatus.ORDERING, null, entityManager.find(Transaction.class,
+          orderIdParms.getTransactionId()));
+
+      entityManager.persist(foodOrder);
+
+      entityManager.getTransaction().commit();
+    }
+
+    entityManager.close();
+
+    return foodOrder.getOrderId().toString();
   }
 }
