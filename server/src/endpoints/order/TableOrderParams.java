@@ -5,11 +5,11 @@ package endpoints.order;
  *
  * @author Marcus Messer
  */
-public class OrderRequestParams {
+public class TableOrderParams {
 
   private int tableNumber;
 
-  public OrderRequestParams(int tableNumber) {
+  public TableOrderParams(int tableNumber) {
     this.tableNumber = tableNumber;
   }
 

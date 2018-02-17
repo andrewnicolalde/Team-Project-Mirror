@@ -1,6 +1,5 @@
 package endpoints.order;
 
-import com.google.gson.Gson;
 import database.DatabaseManager;
 import database.tables.FoodOrder;
 import database.tables.MenuItem;
@@ -51,14 +50,39 @@ public class Orders {
    * @param response A HTTP response object.
    * @return A string containing the JSON for the orders on a table.
    */
-  public static String getOrderList(Request request, Response response) {
-    OrderRequestParams orderRequestParams = JsonUtil.getInstance().fromJson(request.body(),
-        OrderRequestParams.class);
+  public static String getOrdersByTable(Request request, Response response) {
+    TableOrderParams tableOrderParams = JsonUtil.getInstance().fromJson(request.body(),
+        TableOrderParams.class);
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
             + "where foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNo",
-        FoodOrder.class).setParameter("tableNo", orderRequestParams.getTableNumber())
+        FoodOrder.class).setParameter("tableNo", tableOrderParams.getTableNumber())
+        .getResultList();
+
+    ListOrderData[] listOrderData = new ListOrderData[foodOrders.size()];
+    for (int i = 0; i < listOrderData.length; i++) {
+      listOrderData[i] = new ListOrderData(foodOrders.get(i));
+    }
+
+    return JsonUtil.getInstance().toJson(listOrderData);
+  }
+
+  /**
+   * Returns a list of orders for a particular status ie. Cooking in JSON. JSON input: orderStatus.
+   *
+   * @param request A HTTP request object.
+   * @param response A HTTP response object.
+   * @return A String containing the JSON for the orders that have a status.
+   */
+  public static String getOrdersByStatus(Request request, Response response) {
+    StatusOrderParams statusOrderParams = JsonUtil.getInstance().fromJson(request.body(),
+        StatusOrderParams.class);
+
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
+            + "where foodOrder.orderId = :orderStatus",
+        FoodOrder.class).setParameter("orderStatus", statusOrderParams.getOrderStatus())
         .getResultList();
 
     ListOrderData[] listOrderData = new ListOrderData[foodOrders.size()];
