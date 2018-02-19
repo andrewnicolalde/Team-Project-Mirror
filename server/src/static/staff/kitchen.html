@@ -8,7 +8,7 @@
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
   <link rel="stylesheet"
-        href="css/kitchen.css">
+        href="../css/kitchen.css">
 
   <!-- jQuery library -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -21,11 +21,7 @@
   <script src="../js/ajax-wrapper.js"></script>
   <script src="../js/update-kitchen.js"></script>
   <script>
-    $(document).ready(function () {
-      var tid = setInterval(checkPage, 15000);
 
-      checkPage();
-    });
   </script>
 </head>
 <body>
@@ -55,59 +51,14 @@
       </div>
 
       <!--Sidebar items-->
-      <ul class="orderNumbers">
-          <li class="red">Order 4</li>
-          <li class="red">Order 5</li>
-          <li class="yellow">Order 6</li>
-          <li class ="yellow">Order 7</li>
-          <li class="green">Order 8</li>
-          <li class ="green">Order 9</li>
+      <ul class="order-list">
+
       </ul>
     </nav>
   </div>
-
-
-  <div class="col5">
-      <div class="container-fluid">
-      <h2>Orders 1</h2>
-
-
-      <div class="container-fluid">
-      <div class="row">
-
-      </div>
-      </div>
-
-
-  </div>
-
-    <div class="col5">
-        <div class="container-fluid">
-        <h2>Orders 2</h2>
-        </div>
-
-        <div class="container-fluid">
-        <div class="row">
-
-        </div>
-        </div>
-
-
-    </div>
-    <div class="col5">
-        <div class="container-fluid">
-        <h2>Orders 3</h2>
-        </div>
-
-        -<div class="container-fluid">
-        <div class="row">
-
-        </div>
-        </div>
-
-
-    </div>
-
+<script type="text/javascript">
+  getCookingOrders();
+</script>
 
 </div>
 

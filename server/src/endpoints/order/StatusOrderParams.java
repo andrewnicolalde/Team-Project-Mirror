@@ -1,5 +1,7 @@
 package endpoints.order;
 
+import database.tables.OrderStatus;
+
 /**
  * Converts JSON from front end to a useful Java Object.
  *
@@ -7,13 +9,17 @@ package endpoints.order;
  */
 public class StatusOrderParams {
 
-  private int orderStatus;
+  private OrderStatus orderStatus;
 
-  public StatusOrderParams(int orderStatus) {
+  public StatusOrderParams(OrderStatus orderStatus) {
     this.orderStatus = orderStatus;
   }
 
-  public int getOrderStatus() {
+  public OrderStatus getOrderStatus() {
     return orderStatus;
+  }
+
+  public String toString() {
+    return orderStatus.toString();
   }
 }

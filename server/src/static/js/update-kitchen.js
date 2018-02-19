@@ -1,42 +1,61 @@
 /**
- * Updates the page to show orders returned by the server.
+ * The document ready function for the kitchen page.
+ * Sets up all the pages jQuery functions.
  */
-function updatePage(data) {
-  var response = JSON.parse(data);
-  var displayedOrders = [];
+$(document).ready(function () {
+  //var tid = setInterval(checkPage, 15000);
 
-  for (var i = 0; i < response.length; i++) {
-    // check if in temp array, -1 means its not.
-    if (displayedOrders.indexOf(response[i].orderId) === -1) {
-      // if its not check if its on the page.
-      if (!orderPresent(response[i].orderId)) {
-        displayedOrders.push(response[i].orderId);
-        var column = "<div class='col " + response[i].orderId + "'>\n";
-        for (var j = 0; j < response[i].orderContents.length; j++) {
-          column = column + "<div class='card text-center'>\n"
-              + "<div class='card-header'> Order: " + response[i].orderId
-              + "</div>\n"
-              + "<div class='card-body'> Item: "
-              + response[i].orderContents[j].itemName + "\n"
-              + "<br />Instructions: "
-              + response[i].orderContents[j].instructions + "</div>\n"
-              + "</div>\n";
+  //checkPage();
+});
 
-        }
-        column = column + "</div>";
-        $(".row").append(column);
-      }
-    }
-  }
+function getCookingOrders() {
+  var statusCooking = "COOKING";
+  post("/api/authStaff/getOrdersByStatus",
+      JSON.stringify({ orderStatus:statusCooking }),
+      function (data) {
+        displayOrders(data);
+  });
 }
 
 /**
- * Wrapper function to simplify interval.
+ * Takes JSON of all orders that are cooking. Appends the least important ones
+ * to the sidebar.
+ * @param data JSON of cooking orders. TODO Ordered by timeconfirmed??
  */
-function checkPage() {
-  get("/api/authStaff/kitchen", function (data) {
-    updatePage(data);
-  });
+function displayOrders(data) {
+
+  var response = JSON.parse(data);
+
+  if (response.length > 4) {
+    for (var i = 4; i < response.length; i++) {
+      $(".order-list").append("<li class='" + response[i].foodOrderId + "'>\n"
+      + "<h6>Order No: " + response[i].foodOrderId + "</h6>"
+      + "</li>");
+    }
+  }
+  for (var j = 0; j < response.length && j < 4; j++) {
+    getOrderItems(response[j].foodOrderId);
+  }
+  // Do something with the first 4.
+  // Add the rest to the sidebar.
+}
+
+function getOrderItems(foodOrderId) {
+  // get the order items.
+  post("/api/authStaff/getOrderItems",
+      JSON.stringify({orderId:foodOrderId}),
+      function (data) {
+        dispayOrderItems(data, foodOrderId);
+      });
+}
+
+function displayOrderItems(data, foodOrderId) {
+  var response = JSON.parse(data);
+
+  var column = "<div class='col" + foodOrderId + "'>Order "+ foodOrderId;
+  for (var i = 0; i < response.length; i++) {
+    // Add cards etc.
+  }
 
 }
 

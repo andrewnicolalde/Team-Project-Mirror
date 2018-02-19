@@ -31,7 +31,7 @@ public class Orders {
     List<OrderMenuItem> orderMenuItems = entityManager
         .createQuery("from OrderMenuItem orderMenuItem where "
             + "orderMenuItem.foodOrder.id = :orderId", OrderMenuItem.class).setParameter("orderId",
-            omiList.getOrderNumber()).getResultList();
+            omiList.getOrderId()).getResultList();
 
     entityManager.close();
 
@@ -81,7 +81,7 @@ public class Orders {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
-            + "where foodOrder.orderId = :orderStatus",
+            + "where foodOrder.status = :orderStatus",
         FoodOrder.class).setParameter("orderStatus", statusOrderParams.getOrderStatus())
         .getResultList();
 
