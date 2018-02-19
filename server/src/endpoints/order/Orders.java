@@ -81,7 +81,7 @@ public class Orders {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
-            + "where foodOrder.orderId = :orderStatus",
+            + "where foodOrder.status = :orderStatus",
         FoodOrder.class).setParameter("orderStatus", statusOrderParams.getOrderStatus())
         .getResultList();
 
