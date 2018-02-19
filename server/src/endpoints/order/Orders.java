@@ -35,12 +35,12 @@ public class Orders {
 
     entityManager.close();
 
-    OrderData[] orderData = new OrderData[orderMenuItems.size()];
+    OrderItemsData[] orderItemsData = new OrderItemsData[orderMenuItems.size()];
 
-    for (int i = 0; i < orderData.length; i++) {
-      orderData[i] = new OrderData(orderMenuItems.get(i));
+    for (int i = 0; i < orderItemsData.length; i++) {
+      orderItemsData[i] = new OrderItemsData(orderMenuItems.get(i));
     }
-    return JsonUtil.getInstance().toJson(orderData);
+    return JsonUtil.getInstance().toJson(orderItemsData);
   }
 
   /**
@@ -60,12 +60,12 @@ public class Orders {
         FoodOrder.class).setParameter("tableNo", tableOrderParams.getTableNumber())
         .getResultList();
 
-    ListOrderData[] listOrderData = new ListOrderData[foodOrders.size()];
-    for (int i = 0; i < listOrderData.length; i++) {
-      listOrderData[i] = new ListOrderData(foodOrders.get(i));
+    OrderData[] orderData = new OrderData[foodOrders.size()];
+    for (int i = 0; i < orderData.length; i++) {
+      orderData[i] = new OrderData(foodOrders.get(i));
     }
 
-    return JsonUtil.getInstance().toJson(listOrderData);
+    return JsonUtil.getInstance().toJson(orderData);
   }
 
   /**
@@ -85,12 +85,12 @@ public class Orders {
         FoodOrder.class).setParameter("orderStatus", statusOrderParams.getOrderStatus())
         .getResultList();
 
-    ListOrderData[] listOrderData = new ListOrderData[foodOrders.size()];
-    for (int i = 0; i < listOrderData.length; i++) {
-      listOrderData[i] = new ListOrderData(foodOrders.get(i));
+    OrderData[] orderData = new OrderData[foodOrders.size()];
+    for (int i = 0; i < orderData.length; i++) {
+      orderData[i] = new OrderData(foodOrders.get(i));
     }
 
-    return JsonUtil.getInstance().toJson(listOrderData);
+    return JsonUtil.getInstance().toJson(orderData);
   }
 
   /**

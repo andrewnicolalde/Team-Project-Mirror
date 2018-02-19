@@ -145,7 +145,7 @@ function loadTables() {
  * @param tableNumber The table which the orders should be from.
  */
 function loadOrderList(tableNumber) {
-  post("/api/authStaff/getOrderList", JSON.stringify({
+  post("/api/authStaff/getOrdersByTable", JSON.stringify({
     tableNumber: tableNumber
   }), function (data) {
     var orders = JSON.parse(data);
