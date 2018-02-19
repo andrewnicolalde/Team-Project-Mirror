@@ -8,12 +8,8 @@
 
 /* Remove any padding or margin to remove gap between the sidebar and the side.*/
 .container-fluid{
-  padding: 0px;
-  margin: 0px;
-}
-
-.sidebar-right{
-  float: right;
+  padding: 0;
+  margin: 0;
 }
 
 .sideHeader{
@@ -23,13 +19,13 @@
 
 }
 
-.orderNumbers {
+.order-list {
     list-style-type: none;
-    padding: 0px;
+    padding: 0;
     text-align: center;
 }
 
-.orderNumbers li {
+.order-list li {
     width: 100%;
     height: 45px;
     text-align: center;

@@ -78,7 +78,7 @@ public class OrderItemsData {
     return instructions;
   }
 
-  public void setInstructions(String instructions) {
-    this.instructions = instructions;
+  public Long getId() {
+    return id;
   }
 }
