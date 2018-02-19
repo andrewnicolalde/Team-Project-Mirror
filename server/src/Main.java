@@ -8,7 +8,6 @@ import database.DatabaseManager;
 import endpoints.authentication.AuthenticationEmployee;
 import endpoints.authentication.AuthenticationTable;
 import endpoints.menu.Menu;
-import endpoints.order.KitchenOrder;
 import endpoints.order.Orders;
 import endpoints.tables.Tables;
 
@@ -40,8 +39,8 @@ public class Main {
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/getMenu", (req, res) -> Menu.getMenu());
     get("/api/authStaff/getTables", Tables::getTables);
-    get("api/authStaff/kitchen", KitchenOrder::getCookingOrders);
-    post("api/authStaff/getOrderList", Orders::getOrderList);
+    post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
+    post("/api/authStaff/getOrdersByStatus", Orders::getOrdersByStatus);
     post("/api/authStaff/getOrderItems", Orders::getOrderItems);
     post("/api/authStaff/addItemToOrder", Orders::addOrderMenuItem);
     post("/api/authStaff/removeItemFromOrder", Orders::removeOrderMenuItem);
