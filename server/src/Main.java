@@ -46,6 +46,8 @@ public class Main {
     post("/api/authStaff/addItemToOrder", Orders::addOrderMenuItem);
     post("/api/authStaff/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
+    post("/api/authStaff/getTransactionId", Orders::getTransactionId);
+    post("/api/authStaff/getOrderId", Orders::getOrderId);
 
     System.out.println("Visit: http://localhost:4567");
 

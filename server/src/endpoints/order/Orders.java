@@ -1,6 +1,5 @@
 package endpoints.order;
 
-import com.google.gson.Gson;
 import database.DatabaseManager;
 import database.tables.FoodOrder;
 import database.tables.MenuItem;
@@ -8,9 +7,7 @@ import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
 import database.tables.RestaurantTableStaff;
 import database.tables.TableSession;
-import database.tables.TableStatus;
 import database.tables.Transaction;
-import java.sql.Timestamp;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -169,27 +166,28 @@ public class Orders {
    */
   public static String getTransactionId(Request request, Response response) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
-
-    TableSession tableSession = entityManager.find(TableSession.class,
-        request.session().attribute("TableSessionId"));
+  // TODO implement after table session has properly been implemented.
+  //  TableSession tableSession = entityManager.find(TableSession.class,
+  //      request.session().attribute("TableSessionId"));
 
     Transaction transaction = entityManager.createQuery("from Transaction transaction where "
-        + "transaction.restaurantTableStaff.restaurantTable = :tableNo AND "
-        + "transaction.isPaid = false ", Transaction.class).setParameter("tableNo",
-        tableSession.getRestaurantTable().getTableNumber()).getSingleResult();
+        + "transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNo AND "
+        + "transaction.isPaid = false ", Transaction.class).setParameter("tableNo", 1).getSingleResult();
 
     if (transaction == null) {
       entityManager.getTransaction().begin();
       RestaurantTableStaff temp = entityManager.createQuery("from RestaurantTableStaff tableStaff "
           + "where tableStaff.restaurantTable = :table", RestaurantTableStaff.class).setParameter(
-          "table", tableSession.getRestaurantTable()).getSingleResult();
+          "table", 1).getSingleResult();
       transaction = new Transaction(false, null, null, temp);
       entityManager.persist(transaction);
       entityManager.getTransaction().commit();
     }
 
     entityManager.close();
-    return transaction.getTransactionId().toString();
+
+    TransactionIdData transactionIdData = new TransactionIdData(transaction.getTransactionId());
+    return JsonUtil.getInstance().toJson(transactionIdData);
   }
 
   /**
@@ -198,15 +196,17 @@ public class Orders {
    * @param response A HTML response.
    * @return A foodOrderId in the form of a string.
    */
-  public static String getOrderID(Request request, Response response) {
-    OrderIdParams orderIdParms = JsonUtil.getInstance().fromJson(request.body(), OrderIdParams.class);
+  public static String getOrderId(Request request, Response response) {
+    OrderIdParams orderIdParams = JsonUtil.getInstance().fromJson(request.body(), OrderIdParams.class);
+
+    System.out.println(orderIdParams.getTransactionId());
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     FoodOrder foodOrder = entityManager.createQuery("from FoodOrder foodOrder where "
         + "foodOrder.transaction.id = :transactionId and foodOrder.status = :ordering or "
             + "foodOrder.status = :confirm" ,
-        FoodOrder.class).setParameter("transactionId", orderIdParms.getTransactionId())
+        FoodOrder.class).setParameter("transactionId", orderIdParams.getTransactionId())
         .setParameter("ordering", OrderStatus.ORDERING).setParameter("confirm",
             OrderStatus.READY_TO_CONFIRM).getSingleResult();
 
@@ -214,7 +214,7 @@ public class Orders {
       entityManager.getTransaction().begin();
 
       foodOrder = new FoodOrder(OrderStatus.ORDERING, null, entityManager.find(Transaction.class,
-          orderIdParms.getTransactionId()));
+          orderIdParams.getTransactionId()));
 
       entityManager.persist(foodOrder);
 
@@ -223,6 +223,8 @@ public class Orders {
 
     entityManager.close();
 
-    return foodOrder.getOrderId().toString();
+    OrderIdData orderIdData = new OrderIdData(foodOrder.getOrderId());
+
+    return JsonUtil.getInstance().toJson(orderIdData);
   }
 }
