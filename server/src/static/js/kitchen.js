@@ -3,9 +3,9 @@
  * Sets up all the pages jQuery functions.
  */
 $(document).ready(function () {
-  //var tid = setInterval(checkPage, 15000);
+  var tid = setInterval(getCookingOrders, 5000);
 
-  //checkPage();
+  getCookingOrders();
 });
 
 function getCookingOrders() {
@@ -26,37 +26,50 @@ function displayOrders(data) {
 
   var response = JSON.parse(data);
 
+  // If there are more than 4 orders. Add the last ones to the sidebar.
   if (response.length > 4) {
     for (var i = 4; i < response.length; i++) {
-      $(".order-list").append("<li class='" + response[i].foodOrderId + "'>\n"
-      + "<h6>Order No: " + response[i].foodOrderId + "</h6>"
-      + "</li>");
+      if(!orderPresent(response[i].foodOrderId)){
+        $(".order-list").append("<li class='" + response[i].foodOrderId + "'>\n"
+        + "<h6>Order No: " + response[i].foodOrderId + "</h6>"
+        + "</li>");
+      }
     }
   }
+  // Add the first 4 to the page in lists of items.
   for (var j = 0; j < response.length && j < 4; j++) {
-    getOrderItems(response[j].foodOrderId);
+    if(!orderPresent(response[j].foodOrderId)){
+      $(".row").append("<div class='col " + response[j].foodOrderId + " text-center'>"
+          + "<h2>Order " + response[j].foodOrderId +"</h2></div>");
+      getOrderItems(response[j].foodOrderId);
+    }
   }
-  // Do something with the first 4.
-  // Add the rest to the sidebar.
 }
 
+/**
+ * Gets the items from the order from the database. Displays them.
+ * @param foodOrderId The ID of the Order which we are getting the items of.
+ */
 function getOrderItems(foodOrderId) {
   // get the order items.
   post("/api/authStaff/getOrderItems",
       JSON.stringify({orderId:foodOrderId}),
       function (data) {
-        dispayOrderItems(data, foodOrderId);
+        displayOrderItems(data, foodOrderId);
       });
 }
 
-function displayOrderItems(data, foodOrderId) {
+/**
+ * Add the Order Items to the DOM to be displayed.
+ * @param data The JSON returned by the post request.
+ * @param foodOrder The ID of the order. To add the elements to the right column.
+ */
+function displayOrderItems(data, foodOrder) {
   var response = JSON.parse(data);
 
-  var column = "<div class='col" + foodOrderId + "'>Order "+ foodOrderId;
   for (var i = 0; i < response.length; i++) {
-    // Add cards etc.
+    $("." +foodOrder).append("<div class='card'>" + response[i].name +"<br> "+ response[i].instructions +"</div>");
   }
-
 }
 
 /**
@@ -66,5 +79,5 @@ function displayOrderItems(data, foodOrderId) {
  */
 function orderPresent(orderNum) {
   var present = document.getElementsByClassName(orderNum);
-  return present.length !== 0;
+  return Boolean(present.length !== 0);
 }

@@ -6,6 +6,16 @@
     color: white;
 }
 
+/* Remove any padding or margin to remove gap between the sidebar and the side.*/
+.container-fluid{
+  padding: 0px;
+  margin: 0px;
+}
+
+.sidebar-right{
+  float: right;
+}
+
 .sideHeader{
     text-align: center;
     padding-top: 20px;

@@ -19,6 +19,7 @@ public class OrderItemsData {
   private Boolean is_vegetarian;
   private Boolean is_gluten_free;
   private String picture_src;
+  private String instructions;
 
   /**
    * This function creates the objects that can be converted to JSON.
@@ -34,6 +35,7 @@ public class OrderItemsData {
     this.is_vegetarian = orderMenuItem.getMenuItem().getVegitarrenan();
     this.is_gluten_free = orderMenuItem.getMenuItem().getGlutenFree();
     this.picture_src = orderMenuItem.getMenuItem().getPictureSrc();
+    this.instructions = orderMenuItem.getInstructions();
   }
 
   public String getName() {
@@ -70,5 +72,13 @@ public class OrderItemsData {
 
   public String getPicture_src() {
     return picture_src;
+  }
+
+  public String getInstructions() {
+    return instructions;
+  }
+
+  public void setInstructions(String instructions) {
+    this.instructions = instructions;
   }
 }
