@@ -18,7 +18,6 @@ function getActiveOrder() {
  * of the currently active table.
  * @param menuItemId the ID of the menu item to be added to the order
  */
-
 function addToOrder(menuItemId) {
   var activeOrder = getActiveOrder();
 
@@ -198,7 +197,7 @@ function changeOrderStatus(orderStatus) {
         orderNumber: activeOrder.getAttribute('data-ordernum'),
         newOrderStatus: orderStatus
       }),
-      loadTables
+      loadTables()
   );
 }
 
@@ -220,5 +219,5 @@ function confirmCancelOrder(){
 // Loads the menu and tables when the page loads.
 $(document).ready(function () {
   loadMenu();
-  loadTables()
+  loadTables();
 });
