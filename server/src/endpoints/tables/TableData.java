@@ -1,4 +1,4 @@
-package endpoints.waiter;
+package endpoints.tables;
 
 import database.tables.RestaurantTableStaff;
 

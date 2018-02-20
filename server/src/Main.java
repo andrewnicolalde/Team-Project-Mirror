@@ -6,10 +6,10 @@ import static spark.Spark.staticFileLocation;
 
 import database.DatabaseManager;
 import endpoints.authentication.AuthenticationEmployee;
-import endpoints.customer.Menu;
-import endpoints.kitchen.KitchenOrder;
+import endpoints.authentication.AuthenticationTable;
+import endpoints.menu.Menu;
 import endpoints.order.Orders;
-import endpoints.waiter.Tables;
+import endpoints.tables.Tables;
 
 public class Main {
 
@@ -29,19 +29,21 @@ public class Main {
     // End points
     // Before is used to verify the user has access to the content they are requesting.
     before("/api/authStaff/*", AuthenticationEmployee::checkStaffSession);
+    before("/api/authTable/*", AuthenticationTable::checkTableSession);
 
     // Endpoints which are meant to be connected to directly, not via AJAX requests.
     get("/logout", AuthenticationEmployee::logOutEmployee);
     post("/loginStaff", AuthenticationEmployee::logInEmployee);
+    post("/loginTable", AuthenticationTable::logInTable);
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
-    get("/api/authStaff/menu", (req, res) -> Menu.getMenu());
-    get("/api/authStaff/tables", Tables::getTables);
-    get("api/authStaff/kitchen", KitchenOrder::getCookingOrders);
-    post("api/authStaff/getOrderList", Orders::getOrderList);
-    post("/api/authStaff/getOrder", Orders::getOrderItems);
-    post("/api/authStaff/addToOrder", Orders::addOrderMenuItem);
-    post("/api/authStaff/removeFromOrder", Orders::removeOrderMenuItem);
+    get("/api/authStaff/getMenu", (req, res) -> Menu.getMenu());
+    get("/api/authStaff/getTables", Tables::getTables);
+    post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
+    post("/api/authStaff/getOrdersByStatus", Orders::getOrdersByStatus);
+    post("/api/authStaff/getOrderItems", Orders::getOrderItems);
+    post("/api/authStaff/addItemToOrder", Orders::addOrderMenuItem);
+    post("/api/authStaff/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
 
     System.out.println("Visit: http://localhost:4567");
