@@ -152,6 +152,10 @@ public class Orders {
 
     foodOrder.setStatus(OrderStatus.valueOf(cos.getNewOrderStatus()));
 
+    if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.COOKING) {
+      foodOrder.setTimeConfirmed(new Timestamp(System.currentTimeMillis()));
+    }
+
     entityManager.getTransaction().commit();
     entityManager.close();
 
@@ -231,12 +235,16 @@ public class Orders {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
-    FoodOrder foodOrder = entityManager.createQuery("from FoodOrder foodOrder where "
-        + "foodOrder.transaction.id = :transactionId and foodOrder.status = :ordering or "
-            + "foodOrder.status = :confirm" ,
-        FoodOrder.class).setParameter("transactionId", orderIdParams.getTransactionId())
-        .setParameter("ordering", OrderStatus.ORDERING).setParameter("confirm",
-            OrderStatus.READY_TO_CONFIRM).getSingleResult();
+    FoodOrder foodOrder;
+    try {
+      foodOrder = entityManager.createQuery("from FoodOrder foodOrder where "
+              + "foodOrder.transaction.id = :transactionId and foodOrder.status = :ordering",
+          FoodOrder.class).setParameter("transactionId", orderIdParams.getTransactionId())
+          .setParameter("ordering", OrderStatus.ORDERING).getSingleResult();
+    } catch (Exception e) {
+      e.printStackTrace();
+      foodOrder = null;
+    }
 
     if (foodOrder == null) {
       entityManager.getTransaction().begin();
