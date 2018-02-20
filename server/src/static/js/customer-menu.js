@@ -1,6 +1,7 @@
 $(document).ready(function () {
+  getTransactionId();
   //TODO make generic/ get the ordernumber from the server.
-  loadOrder(2);
+  loadOrder(localStorage.getItem("orderId"));
   loadMenu();
   /*$(".add-row").click(function () {
     var name = $(".name").val();
@@ -23,6 +24,26 @@ $(document).ready(function () {
     });
   });*/
 });
+
+function getTransactionId() {
+  get("/api/authStaff/getTransactionId", function (data) {
+    var response = JSON.parse(data);
+
+    var transactionId = response.transactionId;
+
+    getOrderId(transactionId);
+  });
+}
+
+function getOrderId(transactionId) {
+  post("/api/authStaff/getOrderId", JSON.stringify({
+    transactionId: transactionId
+  }), function (data) {
+    var response = JSON.parse(data);
+
+    localStorage.setItem("orderId", response.orderId);
+  });
+}
 
 function loadMenu() {
   // Send get request to server for menu JSON
@@ -55,19 +76,18 @@ function loadMenu() {
   });
 }
 
-// TODO make generic so it updates the right order number not just 2
 function addToOrder(menuItemId) {
   // Create name-value pairs for HTTP post request, see
   // https://en.wikipedia.org/wiki/POST_(HTTP)#Use_for_submitting_web_forms
   var nameValuePairs = JSON.stringify({
-    orderNumber: 2,
+    orderNumber: localStorage.getItem("orderId"),
     menuItemId: menuItemId,
     instructions: "none"
   });
 
   // Handle possible responses
   post("/api/authStaff/addItemToOrder", nameValuePairs, function (status) {
-    loadOrder(2);
+    loadOrder(localStorage.getItem("orderId"));
     if (status === "") {
       // Refresh current order table to show new change
       console.log("Add item to order failed");
@@ -118,7 +138,7 @@ function loadOrder(orderNumber) {
 function changeOrderStatus(orderStatus) {
   post("/api/authStaff/changeOrderStatus",
       JSON.stringify({
-        orderNumber: 2,
+        orderNumber: localStorage.getItem("orderId"),
         newOrderStatus: orderStatus
       }),
       confirmPopup()
