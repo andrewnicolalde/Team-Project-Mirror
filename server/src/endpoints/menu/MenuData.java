@@ -11,7 +11,7 @@ public class MenuData {
 
   private Long id;
   private String name;
-  private Long categoryId;
+  private String category;
   private String ingredients;
   private String description;
   private Double calories;
@@ -29,7 +29,7 @@ public class MenuData {
   public MenuData(MenuItem menuItem) {
     this.id = menuItem.getMenuItemId();
     this.name = menuItem.getName();
-    this.categoryId = menuItem.getCategory().getCategoryId();
+    this.category = menuItem.getCategory().getName();
     this.ingredients = menuItem.getIngredients();
     this.description = menuItem.getDescription();
     this.calories = menuItem.getCalories();
@@ -44,8 +44,8 @@ public class MenuData {
     return id;
   }
 
-  public Long getCategoryId() {
-    return categoryId;
+  public String getCategory() {
+    return category;
   }
 
   public String getIngredients() {

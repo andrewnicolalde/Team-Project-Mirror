@@ -9,59 +9,23 @@
 </head>
 <body>
 <div id="qunit"></div>
-<div id="qunit-fixture">
-    <table class="table table-hover" id="orders">
-        <!--tr to /tr is one table row-->
-        <!--th is the row number-->
-        <!--td are the columns in a row-->
-        <tr>
-            <th scope="row">1</th>
-            <td>Taco</td>
-            <td>£3</td>
-            <td>5</td>
-        </tr>
-    </table>
-</div>
+<div id="qunit-fixture"></div>
 <script src="https://code.jquery.com/qunit/qunit-2.5.0.js"></script>
 
 <script>
     //test 1
-    QUnit.test("Test appending a div.", function (assert) {
+    QUnit.test("Test appending a div.", function(assert){
         var fixture = $("#qunit-fixture");
         fixture.append("<div>something</div>");
         assert.deepEqual($("div", fixture).length, 1, "success: div added.");
     });
 
-    //test 2
-    QUnit.test("test if new row can be added to the fixture", function (assert) {
-        var fixture = $("#qunit-fixture");
-        fixture.append("<tr>" +
-            "<th scope=\"row\">" + 4 + "</th>" +
-            "<td>" + "cheesy tacos" + "</td>" +
-            "<td>" + 3.49 + "</td>" +
-            "</tr>");
-        assert.deepEqual(fixture.length, 1, "the column should have been added to fixture");
-    });
-
-    //test 3
-    QUnit.test("test if multiple new rows can be added to the table", function (assert) {
-        var fixture = $("#qunit-fixture");
-        $('#orders').append(
-            "<tr>" +
-            "<th scope=\"row\">" + 2 + "</th>" +
-            "<td>" + "cheesy tacos" + "</td>" +
-            "<td>" + 3.49 + "</td>" +
-            "</tr>");
-        $('#orders').append(
-            "<tr>" +
-            "<th scope=\"row\">" + 3 + "</th>" +
-            "<td>" + "lime and beer" + "</td>" +
-            "<td>" + 3.99 + "</td>" +
-            "</tr>");
-        assert.deepEqual(document.getElementById('orders').rows.length, 3, "there should be a total of 3 columns in the table");
-    });
     // TODO: continue testing
-
+    //test 2
+    /*QUnit.test("test if an order can be retrieved", function(assert){
+        var fixture = $("#qunit-fixture");
+        fixture.append()
+    });*/
 </script>
 </body>
 </html>

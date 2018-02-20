@@ -91,7 +91,7 @@ public class AuthenticationTable {
     // Assign the session key to the session.
     request.session().attribute("TableSessionKey", sessionKey);
 
-    response.redirect("customer/home.html");
+    response.redirect("customer-ui/customerdisplay.html");
     return response;
   }
 

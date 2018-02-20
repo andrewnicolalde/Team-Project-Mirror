@@ -1,6 +1,5 @@
 package database.tables;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -29,16 +28,12 @@ public class Category {
    */
   private String name;
 
-  @Column(unique = true)
-  private Long displayOrder;
-
   public Category() {
     //Empty Body
   }
 
-  public Category(String name, Long displayOrder) {
+  public Category(String name) {
     this.name = name;
-    this.displayOrder = displayOrder;
   }
 
   public Long getCategoryId() {
@@ -55,13 +50,5 @@ public class Category {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public Long getDisplayOrder() {
-    return displayOrder;
-  }
-
-  public void setDisplayOrder(Long displayOrder) {
-    this.displayOrder = displayOrder;
   }
 }

@@ -46,14 +46,6 @@ public class Main {
     post("/api/authStaff/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
 
-    get("/api/authTable/getMenu", (req, res) -> Menu.getMenu());
-    get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());
-    get("/api/authTable/getTransactionId", Orders::getTransactionId);
-    post("/api/authTable/getOrderId", Orders::getOrderId);
-    post("/api/authTable/getOrderItems", Orders::getOrderItems);
-    post("/api/authTable/addItemToOrder", Orders::addOrderMenuItem);
-    post("/api/authTable/changeOrderStatus", Orders::changeOrderStatus);
-
     System.out.println("Visit: http://localhost:4567");
 
     DatabaseManager.getInstance();
