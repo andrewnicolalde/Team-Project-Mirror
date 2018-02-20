@@ -12,7 +12,7 @@ public class OrderItemsData {
   private Long id;
   private String name;
   private String category;
-  private String allergy_info;
+  private String ingredients;
   private String description;
   private Double price;
   private Boolean is_vegan;
@@ -27,7 +27,7 @@ public class OrderItemsData {
     this.id = orderMenuItem.getOrderMenuItemId();
     this.name = orderMenuItem.getMenuItem().getName();
     this.category = orderMenuItem.getMenuItem().getCategory().getName();
-    this.allergy_info = orderMenuItem.getMenuItem().getAllergyInfo();
+    this.ingredients = orderMenuItem.getMenuItem().getIngredients();
     this.description = orderMenuItem.getMenuItem().getDescription();
     this.price = orderMenuItem.getMenuItem().getPrice();
     this.is_vegan = orderMenuItem.getMenuItem().getVegan();
@@ -44,8 +44,8 @@ public class OrderItemsData {
     return category;
   }
 
-  public String getAllergy_info() {
-    return allergy_info;
+  public String getIngredients() {
+    return ingredients;
   }
 
   public String getDescription() {

@@ -29,7 +29,7 @@ public class MenuData {
     this.id = menuItem.getMenuItemId();
     this.name = menuItem.getName();
     this.category = menuItem.getCategory().getName();
-    this.ingredients = menuItem.getingredients();
+    this.ingredients = menuItem.getIngredients();
     this.description = menuItem.getDescription();
     this.price = menuItem.getPrice();
     this.is_vegan = menuItem.getVegan();

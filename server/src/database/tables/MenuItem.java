@@ -113,12 +113,12 @@ public class MenuItem {
     this.name = name;
   }
 
-  public String getingredients() {
+  public String getIngredients() {
     return ingredients;
   }
 
-  public void setingredients(String allegyInfo) {
-    this.ingredients = allegyInfo;
+  public void setingredients(String ingredients) {
+    this.ingredients = ingredients;
   }
 
   public String getDescription() {
