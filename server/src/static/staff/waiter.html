@@ -55,14 +55,17 @@
     </div>-->
     <div class="col">
       <div class="text-center">
+        <!-- Needed to left align the order items for whatever reason !-->
+      </div>
       <h5 class="text-center">Current Order</h5>
-      <div class="text-center pb-auto">
+      <div class="text-center">
         <button id="confirm_button" type="button" class="btn btn-success"
                 onclick="changeOrderStatus('COOKING')">Confirm
           Order</button>
         <button id="cancel_button" type="button" class="btn btn-danger"
                 onclick="confirmCancelOrder()">Cancel Order</button>
       </div>
+      <div style="padding-bottom: 10px"><!--Empty Div to give space after buttons!--></div>
       <ul class="list-group" id="current-order">
         <!-- TODO: List should be scrollable. -->
       </ul>
