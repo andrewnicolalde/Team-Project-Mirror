@@ -1,6 +1,7 @@
 package endpoints.order;
 
 import database.tables.FoodOrder;
+import java.sql.Timestamp;
 
 /**
  * This class coverts results from the database into usable Java Objects.
@@ -11,12 +12,12 @@ public class OrderData {
 
   private Long foodOrderId;
   private String orderStatus;
-  private String timeConfirmed;
+  private Timestamp timeConfirmed;
 
   public OrderData(FoodOrder foodOrder) {
     foodOrderId = foodOrder.getOrderId();
     orderStatus = foodOrder.getStatus().name();
-    timeConfirmed = foodOrder.getTimeConfirmed().toString();
+    timeConfirmed = foodOrder.getTimeConfirmed();
   }
 
   public Long getFoodOrderId() {
@@ -27,7 +28,7 @@ public class OrderData {
     return orderStatus;
   }
 
-  public String getTimeConfirmed() {
+  public Timestamp getTimeConfirmed() {
     return timeConfirmed;
   }
 }
