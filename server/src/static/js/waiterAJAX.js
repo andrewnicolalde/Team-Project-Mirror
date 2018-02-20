@@ -71,19 +71,6 @@ function loadOrder(orderNumber) {
           + "<span class='waiter-ui-span-bold'>"
           + response[i].name + ": </span> "
           + response[i].price + "</li>");
-      // Show dietary information
-      if (response[i].is_gluten_free) { // Gluten Free
-        $("#order-item-" + i).append(" <img src="
-            + "'../images/gluten-free.svg'alt='Gluten Free'>");
-      }
-      if (response[i].is_vegetarian) { // Vegetarian
-        $("#order-item-" + i).append(" <img src="
-            + "'../images/vegetarian-mark.svg'alt='Vegetarian'>");
-      }
-      if (response[i].is_vegan) {
-        $("#order-item-" + i).append(" <img src="
-            + "'../images/vegan-mark.svg'alt='Vegan'>");
-      }
     }
   });
 }
@@ -207,8 +194,8 @@ function changeOrderStatus(orderStatus) {
  * the cancel order function is pressed. It serves the purpose of ensuring that
  * a waiter does not cancel an order by mistake.
  */
-function confirmCancelOrder(){
-  if(getActiveOrder() == null){
+function confirmCancelOrder() {
+  if (getActiveOrder() == null) {
     bootbox.alert("There is no order selected");
   } else {
     bootbox.confirm("Are you sure you want to cancel this order?", function () {

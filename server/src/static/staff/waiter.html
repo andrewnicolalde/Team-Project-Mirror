@@ -54,10 +54,9 @@
       </p>
     </div>-->
     <div class="col">
+      <div class="text-center">
+      </div>
       <h5 class="text-center">Current Order</h5>
-      <ul class="list-group" id="current-order">
-        <!-- TODO: List should be scrollable. -->
-      </ul>
       <div class="text-center">
         <button id="confirm_button" type="button" class="btn btn-success"
                 onclick="changeOrderStatus('COOKING')">Confirm
@@ -65,6 +64,9 @@
         <button id="cancel_button" type="button" class="btn btn-danger"
                 onclick="confirmCancelOrder()">Cancel Order</button>
       </div>
+      <ul class="list-group" id="current-order">
+        <!-- TODO: List should be scrollable. -->
+      </ul>
     </div>
   </div>
 </div>
