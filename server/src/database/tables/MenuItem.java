@@ -145,7 +145,7 @@ public class MenuItem {
     isVegan = vegan;
   }
 
-  public Boolean getVegitarrenan() {
+  public Boolean getVegetarian() {
     return isVegetarian;
   }
 

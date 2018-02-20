@@ -33,7 +33,7 @@ public class MenuData {
     this.description = menuItem.getDescription();
     this.price = menuItem.getPrice();
     this.is_vegan = menuItem.getVegan();
-    this.is_vegetarian = menuItem.getVegitarrenan();
+    this.is_vegetarian = menuItem.getVegetarian();
     this.is_gluten_free = menuItem.getGlutenFree();
     this.picture_src = menuItem.getPictureSrc();
   }
