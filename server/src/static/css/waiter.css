@@ -1,0 +1,16 @@
+/*waiter.html Tables column*/
+.span-bold {
+  font-weight: bold;
+}
+
+/* Adapted from https://stackoverflow.com/questions/24166568/set-bootstrap-modal-body-height-by-percentage */
+.modal-dialog,
+.modal-content {
+  height: 90%;
+  width: 100%;
+}
+
+.modal-body {
+  max-height: calc(100% - 120px);
+  overflow-y: scroll;
+}

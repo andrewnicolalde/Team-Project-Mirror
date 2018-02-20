@@ -36,7 +36,7 @@ function loadMenu() {
           + "id= \"menu-item-" + i + "\""
           + "data-menuItemNum='" + response[i].id + "'"
           + "onclick='addToOrder(this.getAttribute(\"data-menuItemNum\"))'>"
-          + "<span class='waiter-ui-span-bold'>"
+          + "<span class='span-bold'>"
           + response[i].name + ": </span> " + response[i].price + "</li>");
       // Show dietary information
       if (response[i].is_gluten_free) { // Gluten Free
@@ -94,7 +94,7 @@ function loadOrder(orderNumber) {
     for (i = 0; i < response.length; i++) {
       $("#current-order").append("<li class='list-group-item list-group-item-action'"
           + "id= \"order-item-" + i + "\">"
-          + "<span class='waiter-ui-span-bold'>"
+          + "<span class='span-bold'>"
           + response[i].name + ": </span> "
           + response[i].price + "</li>");
       // Show dietary information
