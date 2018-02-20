@@ -14,6 +14,7 @@ public class MenuData {
   private String category;
   private String ingredients;
   private String description;
+  private Double calories;
   private Double price;
   private Boolean is_vegan;
   private Boolean is_vegetarian;
@@ -31,6 +32,7 @@ public class MenuData {
     this.category = menuItem.getCategory().getName();
     this.ingredients = menuItem.getIngredients();
     this.description = menuItem.getDescription();
+    this.calories = menuItem.getCalories();
     this.price = menuItem.getPrice();
     this.is_vegan = menuItem.getVegan();
     this.is_vegetarian = menuItem.getVegitarrenan();
@@ -80,5 +82,9 @@ public class MenuData {
 
   public String getName() {
     return name;
+  }
+
+  public Double getCalories() {
+    return calories;
   }
 }

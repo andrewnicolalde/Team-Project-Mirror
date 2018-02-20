@@ -46,6 +46,11 @@ public class MenuItem {
   private Double price;
 
   /**
+   * This field stores the calories for the item.
+   */
+  private Double calories;
+
+  /**
    * This field states if the item is suitable for vegans.
    */
   private Boolean isVegan;
@@ -81,22 +86,24 @@ public class MenuItem {
 
   /**
    * This constructor is used to create new menu items.
-   *
-   * @param name The name of menu item.
+   *  @param name The name of menu item.
    * @param ingredients The ingredients info for the item.
    * @param description The description for the item.
+   * @param calories The amount of calories for the item.
    * @param price The price of the item.
    * @param isVegan If the item is suitable for Vegans.
    * @param isVegetarian If the item is suitable for vegetarians.
    * @param isGlutenFree If the item is gluten free.
    * @param category The category the item belongs in.
    */
-  public MenuItem(String name, String ingredients, String description, Double price,
+  public MenuItem(String name, String ingredients, String description, Double calories,
+      Double price,
       Boolean isVegan, Boolean isVegetarian, Boolean isGlutenFree, String pictureSrc,
       Category category) {
     this.name = name;
     this.ingredients = ingredients;
     this.description = description;
+    this.calories = calories;
     this.price = price;
     this.isVegan = isVegan;
     this.isGlutenFree = isGlutenFree;
@@ -183,5 +190,13 @@ public class MenuItem {
 
   public void setPictureSrc(String pictureSrc) {
     this.pictureSrc = pictureSrc;
+  }
+
+  public Double getCalories() {
+    return calories;
+  }
+
+  public void setCalories(Double calories) {
+    this.calories = calories;
   }
 }

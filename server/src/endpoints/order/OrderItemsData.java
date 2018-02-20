@@ -14,6 +14,7 @@ public class OrderItemsData {
   private String category;
   private String ingredients;
   private String description;
+  private Double calories;
   private Double price;
   private Boolean is_vegan;
   private Boolean is_vegetarian;
@@ -29,6 +30,7 @@ public class OrderItemsData {
     this.category = orderMenuItem.getMenuItem().getCategory().getName();
     this.ingredients = orderMenuItem.getMenuItem().getIngredients();
     this.description = orderMenuItem.getMenuItem().getDescription();
+    this.calories = orderMenuItem.getMenuItem().getCalories();
     this.price = orderMenuItem.getMenuItem().getPrice();
     this.is_vegan = orderMenuItem.getMenuItem().getVegan();
     this.is_vegetarian = orderMenuItem.getMenuItem().getVegitarrenan();
@@ -70,5 +72,9 @@ public class OrderItemsData {
 
   public String getPicture_src() {
     return picture_src;
+  }
+
+  public Double getCalories() {
+    return calories;
   }
 }
