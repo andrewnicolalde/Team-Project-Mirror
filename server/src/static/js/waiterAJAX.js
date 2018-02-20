@@ -148,7 +148,12 @@ function loadOrderList(tableNumber) {
           + " id='table-" + orders[i].foodOrderId + "'"
           + " data-ordernum='" + orders[i].foodOrderId + "'"
           + " class='list-group-item list-group-item-action'"
-          + " onclick=\"setActiveOrder(event); loadOrder(this.getAttribute('data-ordernum'));\">"
+          + " onclick=\""
+            + "setActiveOrder(event); "
+            + "loadOrder(this.getAttribute('data-ordernum'));"
+            + "document.getElementById('confirm_button').style.visibility = 'visible';"
+            + "document.getElementById('cancel_button').style.visibility = 'visible';"
+            + "\">"
           + "<span class='waiter-ui-span-bold'>Table </span>" + tableNumber
           + "<span> - Order </span>" + orders[i].foodOrderId
           + ": " + orders[i].orderStatus
