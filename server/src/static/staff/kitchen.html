@@ -7,8 +7,7 @@
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
-  <link rel="stylesheet"
-        href="css/kitchen.css">
+  <link rel="stylesheet" href="../css/kitchen.css">
 
   <!-- jQuery library -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -19,30 +18,15 @@
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
   <script src="../js/ajax-wrapper.js"></script>
-  <script src="../js/update-kitchen.js"></script>
-  <script src="js/register-service-worker.js"></script>
-  <script>
-    $(document).ready(function () {
-      var tid = setInterval(checkPage, 15000);
-
-      checkPage();
-
-      if (verifyBrowserSupport()) {
-
-        var subscription = subscribeUserToPush();
-        if (subscription != null) {
-          sendSubscriptionToBackEnd(subscription);
-        }
-      }
-    });
-  </script>
+  <script src="../js/kitchen.js"></script>
 </head>
 <body>
+
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <ul class="nav navbar-nav mr-auto">
     <a class="navbar-brand" href="../index.html">ARMS</a>
     <li class="nav-item">
-      <a class="nav-link" href="/kitchen.html">Home</a>
+      <a class="nav-link" href="kitchen.html">Home</a>
     </li>
   </ul>
   <ul class="navbar-nav">
@@ -53,31 +37,27 @@
 </nav>
 
 
-<div class = "row">
-  <!--Sidebar-->
-  <div class="col-3">
-    <nav id="sidebar">
-      <!--Sidebar Header-->
-      <div class ="sidebar-header">
-        <h4 class = "sideHeader display-5">Order Numbers</h4>
-      </div>
+<div class="container-fluid">
+  <div class="row">
+    <!--Sidebar-->
+    <div class="col-3">
+      <nav id="sidebar">
+        <!--Sidebar Header-->
+        <div class="sidebar-header">
+          <h4 class="sideHeader display-5">Order Numbers</h4>
+        </div>
 
-      <!--Sidebar items-->
-      <ul class="orderNumbers">
-          <li class="red">Order 4</li>
-          <li class="red">Order 5</li>
-          <li class="yellow">Order 6</li>
-          <li class ="yellow">Order 7</li>
-          <li class="green">Order 8</li>
-          <li class ="green">Order 9</li>
-      </ul>
-    </nav>
+        <!--Sidebar items-->
+        <ul class="order-list" id="sidebar-orders">
+
+        </ul>
+      </nav>
+    </div>
+    <div class="row" id="row">
+
+    </div>
+
   </div>
-
-
-
-
-
 </div>
 
 </body>

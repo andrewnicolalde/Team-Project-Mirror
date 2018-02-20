@@ -7,13 +7,13 @@ package endpoints.order;
  */
 public class ListOrderMenuItemParams {
 
-  private Long orderNumber;
+  private Long orderId;
 
   public ListOrderMenuItemParams(Long orderId) {
-    this.orderNumber = orderId;
+    this.orderId = orderId;
   }
 
-  public Long getOrderNumber() {
-    return orderNumber;
+  public Long getOrderId() {
+    return orderId;
   }
 }

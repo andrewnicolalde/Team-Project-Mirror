@@ -4,56 +4,48 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.5.0.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script type="text/javascript" src="../../src/static/js/update-kitchen.js"></script>
+  <script type="text/javascript" src="../../src/static/js/kitchen.js"></script>
   <script src="https://code.jquery.com/qunit/qunit-2.5.0.js"></script>
   <script src="../../src/static/js/ajax-wrapper.js"></script>
   <title>Kitchen-Test</title>
 </head>
 <body>
-  <div id="qunit"></div>
-  <div id="qunit-fixture"></div>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+<script>
+  QUnit.module("Check if order is present on the page");
+  QUnit.test("Test adding a div", function (assert) {
+    var fixture = $("#qunit-fixture");
+    fixture.append("<div class='1'>Some card test</div>");
+    assert.deepEqual($("div", fixture).length, 1, "We expect to have one div");
+  });
+  QUnit.test("Test finding an order number on the page", function (assert) {
+    var fixture = $("#qunit-fixture");
+    fixture.append("<div class=\"col 1\">\n"
+        + "      <div class=\"card text-center\">\n"
+        + "        <div class=\"card-header\">Order No: 1</div>\n"
+        + "        <div class=\"card-body\">Item: Burrito\n"
+        + "        <br />Requirements: No Cheese</div>\n"
+        + "      </div>\n"
+        + "     </div>\n");
+    assert.deepEqual(orderPresent("1"), true, "checks if an order number is on the page");
+  });
 
-  <script>
-    QUnit.module("Check if order is present on the page");
-    QUnit.test( "Test adding a div", function( assert ) {
-      var fixture = $("#qunit-fixture");
-      fixture.append("<div class='1'>Some card test</div>");
-      assert.deepEqual( $("div", fixture).length, 1, "We expect to have one div" );
-    });
-    QUnit.test( "Test finding an order number on the page", function ( assert ) {
-      var fixture = $("#qunit-fixture");
-      fixture.append("<div class=\"col 1\">\n"
-          + "      <div class=\"card text-center\">\n"
-          + "        <div class=\"card-header\">Order No: 1</div>\n"
-          + "        <div class=\"card-body\">Item: Burrito\n"
-          + "        <br />Requirements: No Cheese</div>\n"
-          + "      </div>\n"
-          + "     </div>\n");
-      assert.deepEqual( orderPresent("1"), true, "checks if an order number is on the page");
-    });
+  QUnit.module("Check display orders (No Items)");
+  QUnit.test("Display a single order", function (assert) {
+    var fixture = $("#qunit-fixture");
+    fixture.append("<div class='row'></div>");
+    displayOrders(
+        "[{\"foodOrderId\": 2, \"orderStatus\": \"COOKING\", \"timeConfirmed\": \"2018-02-08 22:30:53.389\"}]");
+    assert.deepEqual($(".row").length, 1, "Should have append a single col to the row.");
+  });
+  QUnit.test("Add orders over number 4 to sidebar list.", function (assert) {
+    var fixture = $("#qunit-fixture");
+    fixture.append("<ul class='orders'></ul>");
+    displayOrders("[{\"foodOrderId\": 2, \"orderStatus\": \"COOKING\", \"timeConfirmed\": \"2018-02-08 20:30:53.389\"}, {\"foodOrderId\": 3, \"orderStatus\": \"COOKING\", \"timeConfirmed\": \"2018-02-08 20:35:53.389\"}, {\"foodOrderId\": 4, \"orderStatus\": \"COOKING\", \"timeConfirmed\": \"2018-02-08 20:40:53.389\"}, {\"foodOrderId\": 5, \"orderStatus\": \"COOKING\", \"timeConfirmed\": \"2018-02-08 21:00:53.389\"}, {\"foodOrderId\": 6, \"orderStatus\": \"COOKING\", \"timeConfirmed\": \"2018-02-08 21:05:53.389\"}, {\"foodOrderId\": 7, \"orderStatus\": \"COOKING\", \"timeConfirmed\": \"2018-02-08 21:07:53.389\"}, {\"foodOrderId\": 8, \"orderStatus\": \"COOKING\", \"timeConfirmed\": \"2018-02-08 21:10:53.389\"}]");
+    assert.deepEqual($(".orders").length, 3, "Should have the last three orders in the list.")
+  });
 
-    QUnit.module("Update page");
-    QUnit.test( "Adding a present order to temp array", function ( assert) {
-      var fixture = $("#qunit-fixture");
-      fixture.append("<div class='row'><div class=\"col 1\">\n"
-          + "      <div class=\"card text-center\">\n"
-          + "        <div class=\"card-header\">Order No: 1</div>\n"
-          + "        <div class=\"card-body\">Item: Burrito\n"
-          + "        <br />Requirements: No Cheese</div>\n"
-          + "      </div>\n"
-          + "<div class=\"card text-center\">\n"
-          + "        <div class=\"card-header\">Order No: 1</div>\n"
-          + "        <div class=\"card-body\">Item: Burrito\n"
-          + "        <br />Requirements: No Cheese</div>\n"
-          + "      </div>\n"
-          + "     </div>\n");
-      updatePage("[{\"orderId\":1,\"orderContents\":" +
-          "[{\"orderMenuItemId\":1,\"itemName\":\"Taco\",\"instructions\":\"Extra spicy\"}," +
-          "{\"orderMenuItemId\":3,\"itemName\":\"Burrito\",\"instructions\":\"\"}]}," +
-          "{\"orderId\":2,\"orderContents\":[{\"orderMenuItemId\":5,\"itemName\":\"taco\",\"instructions\":\"None\"}]}]");
-      assert.deepEqual($('.col', fixture).length, 2, "checking the array is being filled.");
-    });
-
-  </script>
+</script>
 </body>
 </html>

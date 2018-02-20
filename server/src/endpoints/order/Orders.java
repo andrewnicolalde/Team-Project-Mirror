@@ -33,7 +33,7 @@ public class Orders {
     List<OrderMenuItem> orderMenuItems = entityManager
         .createQuery("from OrderMenuItem orderMenuItem where "
             + "orderMenuItem.foodOrder.id = :orderId", OrderMenuItem.class).setParameter("orderId",
-            omiList.getOrderNumber()).getResultList();
+            omiList.getOrderId()).getResultList();
 
     entityManager.close();
 

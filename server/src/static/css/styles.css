@@ -40,10 +40,6 @@ header li {
   padding: 0 20px 0 20px;
 }
 
-header #branding {
-  float: left;
-}
-
 header #branding h1 {
   margin: 0;
 }
@@ -53,23 +49,9 @@ header nav {
   margin-top: 10px;
 }
 
-/*header .highlight, header .current a{
-	color: #eac800;
-	font-weight: bold;
-}*/
-
 header a:hover {
   color: #cccccc;
   font-weight: bold;
-}
-
-/*food*/
-#food {
-  min-height: 600px;
-  min-width: 800px;
-  background-image:: url('foodj.JPEG') no-repeat;
-  text-align: center;
-  color: #ffffff;
 }
 
 /*waiter.html Tables column*/
