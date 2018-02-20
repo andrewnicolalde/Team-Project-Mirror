@@ -21,16 +21,30 @@
 
 <div class="row">
   <div class="col-sm-7">
-    <div id="menu" class="menu">
+    <div id="menu" class="column">
       <h5 class="text-center">Menu</h5>
-      <button type="button" class="grid-item btn btn-block">Appetizers</button>
-      <button type="button" class="grid-item btn btn-block">Mains</button>
-      <button type="button" class="grid-item btn btn-block">Desserts</button>
+      <div class="category">
+        <button id="category-1-button" type="button" class="btn btn-block" data-toggle="collapse" data-target="#category-1">Appetizers</button>
+        <div id="category-1" class="collapse">
+          <ul id="menuitems-1" class="menuitems list-group">
+            <li id="menuitem-1" class="menuitem list-group-item list-group-item-action">
+              <span class="span-bold">Burrito</span> - £7.99
+              <br>
+              A original tasty mexican treat!
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="category">
+        <button type="button" class="btn btn-block">Mains</button>
+      </div>
+      <div class="category">
+        <button type="button" class="btn btn-block">Desserts</button>
+      </div>
     </div>
   </div>
-
   <div class="col-sm-5">
-    <div id="basket" class="basket">
+    <div id="basket" class="column">
       <h5 class="text-center">Basket</h5>
       <ul id="order" class="list-group">
         <li id="1" class="list-group-item list-group-item-action">Burrito</li>
