@@ -3,23 +3,29 @@
  */
 function updatePage(data) {
   var response = JSON.parse(data);
+  var displayedOrders = [];
 
   for (var i = 0; i < response.length; i++) {
-    // if its not check if its on the page.
-    if (!orderPresent(response[i].orderId)) {
-      var column = "<div class='col " + response[i].orderId + "'>\n";
-      for (var j = 0; j < response[i].orderContents.length; j++) {
-        column = column + "<div class='card text-center'>\n"
-            + "<div class='card-header'> Order: " + response[i].orderId
-            + "</div>\n"
-            + "<div class='card-body'> Item: "
-            + response[i].orderContents[j].itemName + "\n"
-            + "<br />Instructions: "
-            + response[i].orderContents[j].instructions + "</div>\n"
-            + "</div>\n";
+    // check if in temp array, -1 means its not.
+    if (displayedOrders.indexOf(response[i].orderId) === -1) {
+      // if its not check if its on the page.
+      if (!orderPresent(response[i].orderId)) {
+        displayedOrders.push(response[i].orderId);
+        var column = "<div class='col " + response[i].orderId + "'>\n";
+        for (var j = 0; j < response[i].orderContents.length; j++) {
+          column = column + "<div class='card text-center'>\n"
+              + "<div class='card-header'> Order: " + response[i].orderId
+              + "</div>\n"
+              + "<div class='card-body'> Item: "
+              + response[i].orderContents[j].itemName + "\n"
+              + "<br />Instructions: "
+              + response[i].orderContents[j].instructions + "</div>\n"
+              + "</div>\n";
+
+        }
+        column = column + "</div>";
+        $(".row").append(column);
       }
-      column = column + "</div>";
-      $(".row").append(column);
     }
   }
 }

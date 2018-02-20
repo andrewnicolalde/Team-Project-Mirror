@@ -1,4 +1,4 @@
-package endpoints.customer;
+package endpoints.menu;
 
 import database.tables.MenuItem;
 
@@ -12,8 +12,9 @@ public class MenuData {
   private Long id;
   private String name;
   private String category;
-  private String allergy_info;
+  private String ingredients;
   private String description;
+  private Double calories;
   private Double price;
   private Boolean is_vegan;
   private Boolean is_vegetarian;
@@ -29,11 +30,12 @@ public class MenuData {
     this.id = menuItem.getMenuItemId();
     this.name = menuItem.getName();
     this.category = menuItem.getCategory().getName();
-    this.allergy_info = menuItem.getAllergyInfo();
+    this.ingredients = menuItem.getIngredients();
     this.description = menuItem.getDescription();
+    this.calories = menuItem.getCalories();
     this.price = menuItem.getPrice();
     this.is_vegan = menuItem.getVegan();
-    this.is_vegetarian = menuItem.getVegitarrenan();
+    this.is_vegetarian = menuItem.getVegetarian();
     this.is_gluten_free = menuItem.getGlutenFree();
     this.picture_src = menuItem.getPictureSrc();
   }
@@ -46,8 +48,8 @@ public class MenuData {
     return category;
   }
 
-  public String getAllergy_info() {
-    return allergy_info;
+  public String getIngredients() {
+    return ingredients;
   }
 
   public String getDescription() {
@@ -80,5 +82,9 @@ public class MenuData {
 
   public String getName() {
     return name;
+  }
+
+  public Double getCalories() {
+    return calories;
   }
 }

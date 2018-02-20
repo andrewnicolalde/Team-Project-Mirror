@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>QUnit Example</title>
+    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.5.0.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+<script src="https://code.jquery.com/qunit/qunit-2.5.0.js"></script>
+
+<script>
+    //test 1
+    QUnit.test("Test appending a div.", function(assert){
+        var fixture = $("#qunit-fixture");
+        fixture.append("<div>something</div>");
+        assert.deepEqual($("div", fixture).length, 1, "success: div added.");
+    });
+
+    // TODO: continue testing
+    //test 2
+    /*QUnit.test("test if an order can be retrieved", function(assert){
+        var fixture = $("#qunit-fixture");
+        fixture.append()
+    });*/
+</script>
+</body>
+</html>

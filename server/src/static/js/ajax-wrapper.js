@@ -1,3 +1,10 @@
+/**
+ * This function wraps a get request and allows unauthorized requests to be
+ * redirected.
+ *
+ * @param url The url that the request originates from
+ * @param callback If the function is successful or not
+ */
 function get(url, callback) {
   $.ajax({
     type: "GET",
@@ -14,6 +21,14 @@ function get(url, callback) {
   });
 }
 
+/**
+ * This function wraps a post request and allows unauthorized requests to be
+ * redirected.
+ *
+ * @param url The url that the request is being sent from.
+ * @param data The data that is in the post request.
+ * @param callback If the request is successful or not.
+ */
 function post(url, data, callback) {
   $.ajax({
     type: "POST",

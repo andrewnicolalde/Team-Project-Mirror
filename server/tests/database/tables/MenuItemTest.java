@@ -44,7 +44,7 @@ public class MenuItemTest {
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
     MenuItem menuItem = new MenuItem("Burger", "Got meat",
-        "Well it's a burger", 1.00, false, false,
+        "Well it's a burger",500.00, 1.00, false, false,
         false, "picture_src", category);
     entityManager.persist(menuItem);
     entityManager.getTransaction().commit();
@@ -61,11 +61,11 @@ public class MenuItemTest {
     for (MenuItem item : result) {
       assertEquals("Check id", item.getMenuItemId(), menuItem.getMenuItemId());
       assertEquals("Check name", item.getName(), menuItem.getName());
-      assertEquals("Check allergy info", item.getAllergyInfo(), menuItem.getAllergyInfo());
+      assertEquals("Check ingredients info", item.getIngredients(), menuItem.getIngredients());
       assertEquals("Check desc", item.getDescription(), menuItem.getDescription());
       assertEquals("Check price", item.getPrice(), menuItem.getPrice());
       assertEquals("Check isVegan", item.getVegan(), menuItem.getVegan());
-      assertEquals("Check veg", item.getVegitarrenan(), menuItem.getVegitarrenan());
+      assertEquals("Check veg", item.getVegetarian(), menuItem.getVegetarian());
       assertEquals("Check gluten", item.getGlutenFree(), menuItem.getGlutenFree());
       assertEquals("Check category", item.getCategory().getCategoryId(),
           menuItem.getCategory().getCategoryId());
