@@ -13,11 +13,11 @@ function loadMenu() {
     for (var i=0; i<categories.length; i++) {
       var c = categories[i];
       $("#categories").append("<div class='category'>\n"
-                            + "<button id='category-" + c.categoryId + "-button' type='button' class='btn btn-block' data-toggle='collapse' data-target='#category-" + c.categoryId + "'>" + c.name + "</button>\n"
-                            + "<div id='category-" + c.categoryId + "' class='collapse'>\n"
-                            + "<ul id='category-" + c.categoryId + "-list' class='menuitems list-group collapse'>\n"
-                            + "</ul>\n"
-                            + "</div>\n"
+                              + "<button id='category-" + c.categoryId + "-button' type='button' class='btn btn-block' data-toggle='collapse' data-target='#category-" + c.categoryId + "'>" + c.name + "</button>\n"
+                              + "<div id='category-" + c.categoryId + "' class='collapse'>\n"
+                                + "<ul id='category-" + c.categoryId + "-list' class='menuitems list-group collapse'>\n"
+                                + "</ul>\n"
+                              + "</div>\n"
                             + "</div>");
     }
 
@@ -26,8 +26,11 @@ function loadMenu() {
       menu = JSON.parse(menuData);
       for(var i=0; i<menu.length; i++) {
         var menuItem = menu[i];
-
-        console.log(menuItem.name + ":" + menuItem.category);
+        $("#category-" + menuItem.categoryId + "-list").append("<li id='menuitem-" + menuItem.id + "' class='menuitem list-group-item list-group-item-action'>\n"
+                                                               + "<span class='span-bold'>" + menuItem.name + "</span> - £" + menuItem.price + "\n"
+                                                               + "<br>\n"
+                                                               + menuItem.description + "\n"
+                                                             + "</li>");
       }
     });
   });
