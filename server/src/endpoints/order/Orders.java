@@ -200,7 +200,7 @@ public class Orders {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
   // TODO implement after table session has properly been implemented.
     TableSession tableSession = entityManager.find(TableSession.class,
-        request.session().attribute("TableSessionId"));
+        request.session().attribute("TableSessionKey"));
 
     Transaction transaction = entityManager.createQuery("from Transaction transaction where "
         + "transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNo AND "

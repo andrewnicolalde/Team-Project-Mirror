@@ -38,7 +38,6 @@ public class Main {
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/getMenu", (req, res) -> Menu.getMenu());
-    get("/api/authTable/getMenu", (req, res) -> Menu.getMenu());
     get("/api/authStaff/getTables", Tables::getTables);
     post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
     post("/api/authStaff/getOrdersByStatus", Orders::getOrdersByStatus);
@@ -47,8 +46,12 @@ public class Main {
     post("/api/authStaff/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
 
+    get("/api/authTable/getMenu", (req, res) -> Menu.getMenu());
     get("/api/authTable/getTransactionId", Orders::getTransactionId);
     post("/api/authTable/getOrderId", Orders::getOrderId);
+    post("/api/authTable/getOrderItems", Orders::getOrderItems);
+    post("/api/authTable/addItemToOrder", Orders::addOrderMenuItem);
+    post("/api/authTable/changeOrderStatus", Orders::changeOrderStatus);
 
     System.out.println("Visit: http://localhost:4567");
 
