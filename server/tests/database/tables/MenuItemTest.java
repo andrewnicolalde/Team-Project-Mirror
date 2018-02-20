@@ -44,7 +44,7 @@ public class MenuItemTest {
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
     MenuItem menuItem = new MenuItem("Burger", "Got meat",
-        "Well it's a burger", 1.00, false, false,
+        "Well it's a burger",500.00, 1.00, false, false,
         false, "picture_src", category);
     entityManager.persist(menuItem);
     entityManager.getTransaction().commit();
