@@ -5,7 +5,7 @@
 function getActiveOrder() {
   var allOrders = document.getElementById("orders-list").children;
   var activeTable;
-  for (i = 0; i < allOrders.length; i++) {
+  for (var i = 0; i < allOrders.length; i++) {
     if (allOrders[i].classList.contains("active")) {
       activeTable = allOrders[i];
     }
@@ -65,7 +65,7 @@ function loadOrder(orderNumber) {
     }
 
     // Add each list item
-    for (i = 0; i < response.length; i++) {
+    for (var i = 0; i < response.length; i++) {
       $("#current-order").append("<li class='list-group-item list-group-item-action'"
           + "id= \"order-item-" + i + "\">"
           + "<span class='waiter-ui-span-bold'>"
@@ -99,7 +99,7 @@ function loadMenu() {
     var response = JSON.parse(data);
 
     // Add items to menu list
-    for (i = 0; i < response.length; i++) {
+    for (var i = 0; i < response.length; i++) {
       $("#menu-list").append("<li class='list-group-item list-group-item-action'"
           + "id= \"menu-item-" + i + "\""
           + "data-menuItemNum='" + response[i].id + "'"
@@ -134,7 +134,7 @@ function loadTables() {
     while (currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
-    for (i = 0; i < response.length; i++) {
+    for (var i = 0; i < response.length; i++) {
       loadOrderList(response[i].number);
     }
   });
@@ -153,13 +153,13 @@ function loadOrderList(tableNumber) {
     while (currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
-    for (i = 0; i < orders.length; i++) {
+    for (var i = 0; i < orders.length; i++) {
       $("#orders-list").append(
           "<li"
           + " id='table-" + orders[i].foodOrderId + "'"
           + " data-ordernum='" + orders[i].foodOrderId + "'"
           + " class='list-group-item list-group-item-action'"
-          + " onclick=\"setCurrentOrder(event); loadOrder(this.getAttribute('data-ordernum'));\">"
+          + " onclick=\"setActiveOrder(event); loadOrder(this.getAttribute('data-ordernum'));\">"
           + "<span class='waiter-ui-span-bold'>Table </span>" + tableNumber
           + "<span> - Order </span>" + orders[i].foodOrderId
           + ": " + orders[i].orderStatus
@@ -175,10 +175,10 @@ function loadOrderList(tableNumber) {
  *
  * @param event The event which was triggered by the clicked element
  */
-function setCurrentOrder(event) {
+function setActiveOrder(event) {
   // Reset all orders to non-active
   var allOrders = document.getElementById("orders-list").children;
-  for (i = 0; i < allOrders.length; i++) {
+  for (var i = 0; i < allOrders.length; i++) {
     allOrders[i].className = "list-group-item list-group-item-action";
   }
 
@@ -187,6 +187,10 @@ function setCurrentOrder(event) {
   activeOrder.className += " active";
 }
 
+/**
+ * This function updates the status of an order in the database.
+ * @param orderStatus The status you are making the order
+ */
 function changeOrderStatus(orderStatus) {
   var activeOrder = getActiveOrder();
   post("/api/authStaff/changeOrderStatus",
@@ -196,6 +200,21 @@ function changeOrderStatus(orderStatus) {
       }),
       loadTables
   );
+}
+
+/**
+ * This function wraps changeOrderStatus. It is triggered as an onclick when
+ * the cancel order function is pressed. It serves the purpose of ensuring that
+ * a waiter does not cancel an order by mistake.
+ */
+function confirmCancelOrder(){
+  if(getActiveOrder() == null){
+    bootbox.alert("There is no order selected");
+  } else {
+    bootbox.confirm("Are you sure you want to cancel this order?", function () {
+      changeOrderStatus('CANCELLED');
+    });
+  }
 }
 
 // Loads the menu and tables when the page loads.
