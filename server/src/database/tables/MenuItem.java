@@ -31,9 +31,9 @@ public class MenuItem {
   private String name;
 
   /**
-   * This field holds the information about the allergy information.
+   * This field holds the information about the ingredients information.
    */
-  private String allergyInfo;
+  private String ingredients;
 
   /**
    * This field holds the description of the menu item.
@@ -83,7 +83,7 @@ public class MenuItem {
    * This constructor is used to create new menu items.
    *
    * @param name The name of menu item.
-   * @param allergyInfo The allergy info for the item.
+   * @param ingredients The ingredients info for the item.
    * @param description The description for the item.
    * @param price The price of the item.
    * @param isVegan If the item is suitable for Vegans.
@@ -91,11 +91,11 @@ public class MenuItem {
    * @param isGlutenFree If the item is gluten free.
    * @param category The category the item belongs in.
    */
-  public MenuItem(String name, String allergyInfo, String description, Double price,
+  public MenuItem(String name, String ingredients, String description, Double price,
       Boolean isVegan, Boolean isVegetarian, Boolean isGlutenFree, String pictureSrc,
       Category category) {
     this.name = name;
-    this.allergyInfo = allergyInfo;
+    this.ingredients = ingredients;
     this.description = description;
     this.price = price;
     this.isVegan = isVegan;
@@ -113,12 +113,12 @@ public class MenuItem {
     this.name = name;
   }
 
-  public String getAllergyInfo() {
-    return allergyInfo;
+  public String getingredients() {
+    return ingredients;
   }
 
-  public void setAllergyInfo(String allegyInfo) {
-    this.allergyInfo = allegyInfo;
+  public void setingredients(String allegyInfo) {
+    this.ingredients = allegyInfo;
   }
 
   public String getDescription() {
