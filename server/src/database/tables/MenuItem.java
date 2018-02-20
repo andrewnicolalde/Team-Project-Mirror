@@ -124,7 +124,7 @@ public class MenuItem {
     return ingredients;
   }
 
-  public void setingredients(String ingredients) {
+  public void setIngredients(String ingredients) {
     this.ingredients = ingredients;
   }
 
@@ -152,12 +152,12 @@ public class MenuItem {
     isVegan = vegan;
   }
 
-  public Boolean getVegitarrenan() {
+  public Boolean getVegetarian() {
     return isVegetarian;
   }
 
-  public void setVegitarrenan(Boolean vegitarrenan) {
-    isVegetarian = vegitarrenan;
+  public void setVegetarian(Boolean vegetarian) {
+    isVegetarian = vegetarian;
   }
 
   public Boolean getGlutenFree() {

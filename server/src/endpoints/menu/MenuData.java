@@ -35,7 +35,7 @@ public class MenuData {
     this.calories = menuItem.getCalories();
     this.price = menuItem.getPrice();
     this.is_vegan = menuItem.getVegan();
-    this.is_vegetarian = menuItem.getVegitarrenan();
+    this.is_vegetarian = menuItem.getVegetarian();
     this.is_gluten_free = menuItem.getGlutenFree();
     this.picture_src = menuItem.getPictureSrc();
   }
@@ -48,7 +48,7 @@ public class MenuData {
     return category;
   }
 
-  public String getingredients() {
+  public String getIngredients() {
     return ingredients;
   }
 

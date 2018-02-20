@@ -33,7 +33,7 @@ public class OrderItemsData {
     this.calories = orderMenuItem.getMenuItem().getCalories();
     this.price = orderMenuItem.getMenuItem().getPrice();
     this.is_vegan = orderMenuItem.getMenuItem().getVegan();
-    this.is_vegetarian = orderMenuItem.getMenuItem().getVegitarrenan();
+    this.is_vegetarian = orderMenuItem.getMenuItem().getVegetarian();
     this.is_gluten_free = orderMenuItem.getMenuItem().getGlutenFree();
     this.picture_src = orderMenuItem.getMenuItem().getPictureSrc();
   }
