@@ -40,14 +40,15 @@ public class Main {
     get("/api/authStaff/getMenu", (req, res) -> Menu.getMenu());
     get("/api/authTable/getMenu", (req, res) -> Menu.getMenu());
     get("/api/authStaff/getTables", Tables::getTables);
-    get("/api/authStaff/getTransactionId", Orders::getTransactionId);
     post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
     post("/api/authStaff/getOrdersByStatus", Orders::getOrdersByStatus);
     post("/api/authStaff/getOrderItems", Orders::getOrderItems);
     post("/api/authStaff/addItemToOrder", Orders::addOrderMenuItem);
     post("/api/authStaff/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
-    post("/api/authStaff/getOrderId", Orders::getOrderId);
+
+    get("/api/authTable/getTransactionId", Orders::getTransactionId);
+    post("/api/authTable/getOrderId", Orders::getOrderId);
 
     System.out.println("Visit: http://localhost:4567");
 

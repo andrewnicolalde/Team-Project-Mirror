@@ -199,12 +199,13 @@ public class Orders {
   public static String getTransactionId(Request request, Response response) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
   // TODO implement after table session has properly been implemented.
-  //  TableSession tableSession = entityManager.find(TableSession.class,
-  //      request.session().attribute("TableSessionId"));
+    TableSession tableSession = entityManager.find(TableSession.class,
+        request.session().attribute("TableSessionId"));
 
     Transaction transaction = entityManager.createQuery("from Transaction transaction where "
         + "transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNo AND "
-        + "transaction.isPaid = false ", Transaction.class).setParameter("tableNo", 1).getSingleResult();
+        + "transaction.isPaid = false ", Transaction.class).setParameter("tableNo",
+        tableSession.getRestaurantTable().getTableNumber()).getSingleResult();
 
     if (transaction == null) {
       entityManager.getTransaction().begin();

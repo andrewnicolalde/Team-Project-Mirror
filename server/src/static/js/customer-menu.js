@@ -6,7 +6,7 @@ $(document).ready(function () {
 });
 
 function getTransactionId() {
-  get("/api/authStaff/getTransactionId", function (data) {
+  get("/api/authTable/getTransactionId", function (data) {
     var response = JSON.parse(data);
 
     var transactionId = response.transactionId;
@@ -16,7 +16,7 @@ function getTransactionId() {
 }
 
 function getOrderId(transactionId) {
-  post("/api/authStaff/getOrderId", JSON.stringify({
+  post("/api/authTable/getOrderId", JSON.stringify({
     transactionId: transactionId
   }), function (data) {
     var response = JSON.parse(data);
