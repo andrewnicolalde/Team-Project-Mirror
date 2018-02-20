@@ -26,26 +26,64 @@ function displayOrders(data) {
 
   var response = JSON.parse(data);
 
+  var currentOrderElement = document.getElementById("sidebar-orders");
+  while (currentOrderElement.firstChild) {
+    currentOrderElement.removeChild(currentOrderElement.firstChild);
+  }
+
   // If there are more than 4 orders. Add the last ones to the sidebar.
   if (response.length > 4) {
     for (var i = 4; i < response.length; i++) {
-      if(!orderPresent(response[i].foodOrderId)){
-        $(".order-list").append("<li class='" + response[i].foodOrderId + "'>\n"
-        + "<h6>Order No: " + response[i].foodOrderId + "</h6>"
+      var sideId = response[i].foodOrderId;
+      if(!orderPresent(sideId)){
+        $("#sidebar-orders").append("<li id='" + sideId + "'>\n"
+        + "<h5>Order No: " + sideId + "</h5>"
         + "</li>");
       }
     }
   }
   // Add the first 4 to the page in lists of items.
   for (var j = 0; j < response.length && j < 4; j++) {
-    if(!orderPresent(response[j].foodOrderId)){
-      $(".row").append("<div class='col " + response[j].foodOrderId + " text-center'>"
-          + "<h2>Order " + response[j].foodOrderId +"</h2></div>");
-      getOrderItems(response[j].foodOrderId);
+    var Id = response[j].foodOrderId;
+    if(!orderPresent(Id)){
+
+      $("#row").append("<div class='col text-center' id='"+ Id +"'>"
+          + "<ul class='list-group' id='list-"+ Id +"'>"
+          + "<li class='list-group-item'> "
+          + "<h2>Order " + Id + "</h2> "
+          + "<button type='button' class='btn' data-orderId='"+ Id +"' onclick='orderDone(this.getAttribute(\"data-orderId\"))'>Done</button>"
+          + "</li>"
+          + "</ul>"
+          + "</div>");
+      getOrderItems(Id);
     }
   }
 }
 
+function orderDone(orderId) {
+  // post to api/authStaff/changeOrderStatus
+  var statusReady = "READY_TO_DELIVER";
+  post("/api/authStaff/changeOrderStatus",
+      JSON.stringify({
+        orderNumber:orderId,
+        newOrderStatus:statusReady
+      }), function (data) {
+        removeFromScreen(data, orderId);
+      });
+}
+
+function removeFromScreen(data,Id) {
+  //var response = JSON.parse(data);
+
+  if (data !== "success") {
+    throw new Error();
+  } else {
+    var parent = document.getElementById("row");
+    var child = document.getElementById(Id);
+    parent.removeChild(child);
+    getCookingOrders();
+  }
+}
 /**
  * Gets the items from the order from the database. Displays them.
  * @param foodOrderId The ID of the Order which we are getting the items of.
@@ -68,7 +106,7 @@ function displayOrderItems(data, foodOrder) {
   var response = JSON.parse(data);
 
   for (var i = 0; i < response.length; i++) {
-    $("." +foodOrder).append("<div class='card'>" + response[i].name +"<br> "+ response[i].instructions +"</div>");
+    $("#list-" +foodOrder).append("<li class='list-group-item'>Item: " + response[i].name +"<br>Instructions: "+ response[i].instructions +"</li>");
   }
 }
 
@@ -78,6 +116,6 @@ function displayOrderItems(data, foodOrder) {
  * @returns {boolean} True if present on page, False if not.
  */
 function orderPresent(orderNum) {
-  var present = document.getElementsByClassName(orderNum);
-  return Boolean(present.length !== 0);
+
+  return Boolean(document.getElementById(orderNum) !== null);
 }

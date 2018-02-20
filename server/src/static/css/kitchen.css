@@ -35,6 +35,10 @@
     box-shadow: 1px 1px 1px 1px grey;
 }
 
+.col-3 {
+  max-width: 20%;
+}
+
 /*Colour coded list elements according to priority.*/
 
 .red {
