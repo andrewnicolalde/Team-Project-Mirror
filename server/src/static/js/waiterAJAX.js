@@ -70,7 +70,7 @@ function loadOrder(orderNumber) {
           + "id= \"order-item-" + i + "\">"
           + "<span class='waiter-ui-span-bold'>"
           + response[i].name + ": </span> "
-          + "£" + response[i].price + "</li>");
+          + "<span style='float: right'> £" + response[i].price + "</spanst></li>");
     }
   });
 }
