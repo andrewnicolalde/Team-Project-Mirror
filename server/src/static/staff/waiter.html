@@ -35,7 +35,7 @@
   </ul>
 </nav>
 <!-- 3 Columns -->
-<div class="container">
+<div class="container-fluid">
   <!-- Iframe and popup help from w3schools and Dwza from StackOverFlow !-->
   <div id="menuModel" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -54,41 +54,33 @@
 
   <div class="row">
     <!-- The waiter clicks the table to see the current order & add/subtract items & confirm -->
-    <div class="col">
+    <div class="col-sm-4">
       <h5 class="text-center">Tables</h5>
       <ul class="list-group" id="orders-list">
         <!-- Loaded dynamically via jQuery script -->
       </ul>
     </div>
-    <div class="col">
-      <h5 class="text-center">Menu</h5>
-      <ul class="list-group" id="menu-list">
-        <!-- Loaded dynamically via jQuery script -->
-      </ul>
-      <p class="text-center">
-        Key:<br>
-        Gluten Free: <img src="../images/gluten-free.svg">
-        Vegetarian: <img src="../images/vegetarian-mark.svg">
-        Vegan: <img src="../images/vegan-mark.svg">
-      </p>
-    </div>
-    <div class="col">
-      <h5 class="text-center">Current Order</h5>
-      <ul class="list-group" id="current-order">
-        <!-- TODO: List should be scrollable. -->
-      </ul>
+    <div class="col-sm-8">
       <div class="text-center">
-        <button id="confirm_button" type="button" class="btn btn-success"
+        <!-- Needed to left align the order items for whatever reason !-->
+      </div>
+      <h5 class="text-center">Current Order</h5>
+      <div class="text-center">
+        <button style="visibility: hidden" id="confirm_button" type="button" class="btn btn-success"
                 onclick="changeOrderStatus('COOKING')">Confirm
           Order
         </button>
-        <button id="edit_button" type="button" class="btn btn-info"
+        <button style="visibility: hidden" id="edit_button" type="button" class="btn btn-info"
                 data-toggle="modal" data-target="#menuModel">Edit Order
         </button>
-        <button id="cancel_button" type="button" class="btn btn-danger"
+        <button style="visibility: hidden" id="cancel_button" type="button" class="btn btn-danger"
                 onclick="confirmCancelOrder('menuFrame')">Cancel Order
         </button>
       </div>
+      <div style="padding-bottom: 10px"><!--Empty Div to give space after buttons!--></div>
+      <ul class="list-group" id="current-order">
+        <!-- TODO: List should be scrollable. -->
+      </ul>
     </div>
   </div>
 </div>

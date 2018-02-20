@@ -70,20 +70,9 @@ function loadOrder(orderNumber) {
           + "id= \"order-item-" + i + "\">"
           + "<span class='span-bold'>"
           + response[i].name + ": </span> "
-          + response[i].price + "</li>");
-      // Show dietary information
-      if (response[i].is_gluten_free) { // Gluten Free
-        $("#order-item-" + i).append(" <img src="
-            + "'../images/gluten-free.svg'alt='Gluten Free'>");
-      }
-      if (response[i].is_vegetarian) { // Vegetarian
-        $("#order-item-" + i).append(" <img src="
-            + "'../images/vegetarian-mark.svg'alt='Vegetarian'>");
-      }
-      if (response[i].is_vegan) {
-        $("#order-item-" + i).append(" <img src="
-            + "'../images/vegan-mark.svg'alt='Vegan'>");
-      }
+          + "<span style='float: right'> £" + response[i].price + "</span>"
+          + "<h6> Instructions: " + response[i].instructions + "</h6>"
+          + "</li>");
     }
   });
 }
@@ -159,7 +148,13 @@ function loadOrderList(tableNumber) {
           + " id='table-" + orders[i].foodOrderId + "'"
           + " data-ordernum='" + orders[i].foodOrderId + "'"
           + " class='list-group-item list-group-item-action'"
-          + " onclick=\"setActiveOrder(event); loadOrder(this.getAttribute('data-ordernum'));\">"
+          + " onclick=\""
+            + "setActiveOrder(event); "
+            + "loadOrder(this.getAttribute('data-ordernum'));"
+            + "document.getElementById('confirm_button').style.visibility = 'visible';"
+            + "document.getElementById('edit_button').style.visibility = 'visible';"
+            + "document.getElementById('cancel_button').style.visibility = 'visible';"
+            + "\">"
           + "<span class='span-bold'>Table </span>" + tableNumber
           + "<span> - Order </span>" + orders[i].foodOrderId
           + ": " + orders[i].orderStatus
@@ -207,8 +202,8 @@ function changeOrderStatus(orderStatus) {
  * the cancel order function is pressed. It serves the purpose of ensuring that
  * a waiter does not cancel an order by mistake.
  */
-function confirmCancelOrder(){
-  if(getActiveOrder() == null){
+function confirmCancelOrder() {
+  if (getActiveOrder() == null) {
     bootbox.alert("There is no order selected");
   } else {
     bootbox.confirm("Are you sure you want to cancel this order?", function () {
