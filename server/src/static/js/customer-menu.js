@@ -12,7 +12,13 @@ function loadMenu() {
 
     for (var i=0; i<categories.length; i++) {
       var c = categories[i];
-      $("#menu").append("<button id=\"" + c.name + "-button\" type=\"button\" class=\"btn btn-block\" data-toggle=\"collapse\" data-target=\"#menu_" + c.name +"\">" + c.name + "</button>");
+      $("#categories").append("<div class='category'>\n"
+                            + "<button id='category-" + c.categoryId + "-button' type='button' class='btn btn-block' data-toggle='collapse' data-target='#category-" + c.categoryId + "'>" + c.name + "</button>\n"
+                            + "<div id='category-" + c.categoryId + "' class='collapse'>\n"
+                            + "<ul id='category-" + c.categoryId + "-list' class='menuitems list-group collapse'>\n"
+                            + "</ul>\n"
+                            + "</div>\n"
+                            + "</div>");
     }
 
     // Load menu
