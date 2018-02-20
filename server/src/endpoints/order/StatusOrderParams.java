@@ -1,5 +1,7 @@
 package endpoints.order;
 
+import database.tables.OrderStatus;
+
 /**
  * Converts JSON from front end to a useful Java Object.
  *

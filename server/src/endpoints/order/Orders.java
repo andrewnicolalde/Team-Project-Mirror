@@ -5,6 +5,8 @@ import database.tables.FoodOrder;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
+import database.tables.RestaurantTableStaff;
+import database.tables.Transaction;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;

@@ -52,7 +52,7 @@ public class OrderMenuItem {
   }
 
   /**
-   * This constrcutor create new entities.
+   * This constructor create new entities.
    *
    * @param menuItem The menu item that the order is related to do.
    * @param foodOrder The order that the menu item is related to.
