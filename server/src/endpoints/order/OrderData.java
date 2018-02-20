@@ -1,74 +1,33 @@
 package endpoints.order;
 
-import database.tables.OrderMenuItem;
+import database.tables.FoodOrder;
 
 /**
- * This class is used to map the query results into something GSON can convert into JSON.
+ * This class coverts results from the database into usable Java Objects.
  *
  * @author Marcus Messer
  */
 public class OrderData {
 
-  private Long id;
-  private String name;
-  private String category;
-  private String allergy_info;
-  private String description;
-  private Double price;
-  private Boolean is_vegan;
-  private Boolean is_vegetarian;
-  private Boolean is_gluten_free;
-  private String picture_src;
+  private Long foodOrderId;
+  private String orderStatus;
+  private String timeConfirmed;
 
-  /**
-   * This function creates the objects that can be converted to JSON.
-   */
-  public OrderData(OrderMenuItem orderMenuItem) {
-    this.id = orderMenuItem.getOrderMenuItemId();
-    this.name = orderMenuItem.getMenuItem().getName();
-    this.category = orderMenuItem.getMenuItem().getCategory().getName();
-    this.allergy_info = orderMenuItem.getMenuItem().getAllergyInfo();
-    this.description = orderMenuItem.getMenuItem().getDescription();
-    this.price = orderMenuItem.getMenuItem().getPrice();
-    this.is_vegan = orderMenuItem.getMenuItem().getVegan();
-    this.is_vegetarian = orderMenuItem.getMenuItem().getVegetarian();
-    this.is_gluten_free = orderMenuItem.getMenuItem().getGlutenFree();
-    this.picture_src = orderMenuItem.getMenuItem().getPictureSrc();
+  public OrderData(FoodOrder foodOrder) {
+    foodOrderId = foodOrder.getOrderId();
+    orderStatus = foodOrder.getStatus().name();
+    timeConfirmed = foodOrder.getTimeConfirmed().toString();
   }
 
-  public String getName() {
-    return name;
+  public Long getFoodOrderId() {
+    return foodOrderId;
   }
 
-  public String getCategory() {
-    return category;
+  public String getOrderStatus() {
+    return orderStatus;
   }
 
-  public String getAllergy_info() {
-    return allergy_info;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public Double getPrice() {
-    return price;
-  }
-
-  public Boolean getIs_vegan() {
-    return is_vegan;
-  }
-
-  public Boolean getIs_vegetarian() {
-    return is_vegetarian;
-  }
-
-  public Boolean getIs_gluten_free() {
-    return is_gluten_free;
-  }
-
-  public String getPicture_src() {
-    return picture_src;
+  public String getTimeConfirmed() {
+    return timeConfirmed;
   }
 }

@@ -1,5 +1,6 @@
 package endpoints.order;
 
+import com.google.gson.Gson;
 import database.DatabaseManager;
 import database.tables.FoodOrder;
 import database.tables.MenuItem;
@@ -7,7 +8,9 @@ import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
 import database.tables.RestaurantTableStaff;
 import database.tables.TableSession;
+import database.tables.TableStatus;
 import database.tables.Transaction;
+import java.sql.Timestamp;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -38,12 +41,12 @@ public class Orders {
 
     entityManager.close();
 
-    OrderData[] orderData = new OrderData[orderMenuItems.size()];
+    OrderItemsData[] orderItemsData = new OrderItemsData[orderMenuItems.size()];
 
-    for (int i = 0; i < orderData.length; i++) {
-      orderData[i] = new OrderData(orderMenuItems.get(i));
+    for (int i = 0; i < orderItemsData.length; i++) {
+      orderItemsData[i] = new OrderItemsData(orderMenuItems.get(i));
     }
-    return JsonUtil.getInstance().toJson(orderData);
+    return JsonUtil.getInstance().toJson(orderItemsData);
   }
 
   /**
@@ -53,27 +56,52 @@ public class Orders {
    * @param response A HTTP response object.
    * @return A string containing the JSON for the orders on a table.
    */
-  public static String getOrderList(Request request, Response response) {
-    OrderRequestParams orderRequestParams = JsonUtil.getInstance().fromJson(request.body(),
-        OrderRequestParams.class);
+  public static String getOrdersByTable(Request request, Response response) {
+    TableOrderParams tableOrderParams = JsonUtil.getInstance().fromJson(request.body(),
+        TableOrderParams.class);
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
             + "where foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNo",
-        FoodOrder.class).setParameter("tableNo", orderRequestParams.getTableNumber())
+        FoodOrder.class).setParameter("tableNo", tableOrderParams.getTableNumber())
         .getResultList();
 
-    ListOrderData[] listOrderData = new ListOrderData[foodOrders.size()];
-    for (int i = 0; i < listOrderData.length; i++) {
-      listOrderData[i] = new ListOrderData(foodOrders.get(i));
+    OrderData[] orderData = new OrderData[foodOrders.size()];
+    for (int i = 0; i < orderData.length; i++) {
+      orderData[i] = new OrderData(foodOrders.get(i));
     }
 
-    return JsonUtil.getInstance().toJson(listOrderData);
+    return JsonUtil.getInstance().toJson(orderData);
   }
 
   /**
-   * Adds an orderMenuItem to an order. JSON input: foodOrderId, menuItemId requirements: A string
-   * representing a description/extra details for the order.
+   * Returns a list of orders for a particular status ie. Cooking in JSON. JSON input: orderStatus.
+   *
+   * @param request A HTTP request object.
+   * @param response A HTTP response object.
+   * @return A String containing the JSON for the orders that have a status.
+   */
+  public static String getOrdersByStatus(Request request, Response response) {
+    StatusOrderParams statusOrderParams = JsonUtil.getInstance().fromJson(request.body(),
+        StatusOrderParams.class);
+
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
+            + "where foodOrder.status = :orderStatus",
+        FoodOrder.class).setParameter("orderStatus", statusOrderParams.getOrderStatus())
+        .getResultList();
+
+    OrderData[] orderData = new OrderData[foodOrders.size()];
+    for (int i = 0; i < orderData.length; i++) {
+      orderData[i] = new OrderData(foodOrders.get(i));
+    }
+
+    return JsonUtil.getInstance().toJson(orderData);
+  }
+
+  /**
+   * Adds an orderMenuItem to an order. JSON input: foodOrderId, menuItemId
+   * requirements: A string representing a description/extra details for the order.
    *
    * @param request A HTTP request object.
    * @param response A HTTP response object.
@@ -102,9 +130,9 @@ public class Orders {
   }
 
   /**
-   * Changes the order status JSON input: foodOrderId, newOrderStatus: A string representing the new
-   * order status. This can be CANCELLED, ORDERING, READY_TO_CONFIRM, COOKING, READY_TO_DELIVER or
-   * DELIVERED.
+   * Changes the order status JSON input: foodOrderId,
+   * newOrderStatus: A string representing the new order status. This can be CANCELLED, ORDERING,
+   * READY_TO_CONFIRM, COOKING, READY_TO_DELIVER or DELIVERED.
    *
    * @param request A HTTP request object.
    * @param response A HTTP response object.
@@ -179,7 +207,7 @@ public class Orders {
       RestaurantTableStaff temp = entityManager.createQuery("from RestaurantTableStaff tableStaff "
           + "where tableStaff.restaurantTable = :table", RestaurantTableStaff.class).setParameter(
           "table", 1).getSingleResult();
-      transaction = new Transaction(false, null, null, temp);
+      transaction = new Transaction(false, null, null, false, temp);
       entityManager.persist(transaction);
       entityManager.getTransaction().commit();
     }
