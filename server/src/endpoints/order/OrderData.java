@@ -16,7 +16,7 @@ public class OrderData {
 
   public OrderData(FoodOrder foodOrder) {
     foodOrderId = foodOrder.getOrderId();
-    orderStatus = foodOrder.getStatus().name();
+    orderStatus = foodOrder.getStatus().toString();
     timeConfirmed = foodOrder.getTimeConfirmed();
   }
 
