@@ -10,11 +10,17 @@ function loadMenu() {
   get("/api/authTable/getCategories", function (categoryData) {
     categories = JSON.parse(categoryData);
 
+    for (var i=0; i<categories.length; i++) {
+      var c = categories[i];
+      $("#menu").append("<button id=\"" + c.name + "-button\" type=\"button\" class=\"btn btn-block\" data-toggle=\"collapse\" data-target=\"#menu_" + c.name +"\">" + c.name + "</button>");
+    }
+
     // Load menu
     get("/api/authTable/getMenu", function(menuData){
       menu = JSON.parse(menuData);
       for(var i=0; i<menu.length; i++) {
-        menuItem = menu[i];
+        var menuItem = menu[i];
+
         console.log(menuItem.name + ":" + menuItem.category);
       }
     });

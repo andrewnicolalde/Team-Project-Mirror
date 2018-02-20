@@ -1,0 +1,17 @@
+.menu {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+}
+
+.category {
+  margin: 5px 5%;
+  grid-column-start: 1;
+  grid-column-end: 5;
+}
+
+.basket {
+  padding-left: 10%;
+  border-left: solid lightgrey;
+  grid-column-start: 5;
+  grid-column-end: 6;
+}

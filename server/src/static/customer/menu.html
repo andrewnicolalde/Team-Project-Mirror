@@ -10,25 +10,24 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../js/ajax-wrapper.js"></script>
   <script type="text/javascript" src="../js/customer-menu.js"></script>
-  <link rel="stylesheet" href="../css/homepage.css">
+  <link rel="stylesheet" href="../css/menu.css">
 </head>
 <body>
-<nav class="nav justify-content-end flex-md-row">
-  <a class="navbar-brand">Oaxaca</a>
-  <a class="nav-link active" href="home.html">Home</a>
-  <a class="nav-link" href="">Menu<span class="sr-only">(current)</span></a>
-  <a class="nav-link" href="basket.html">Basket</a>
-</nav>
-
 <div class="jumbotron jumbotron-fluid bg-info text-white text-center">
   <div class="container">
     <h1 class="display-2">Menu</h1>
   </div>
 </div>
 
-<div id="menu" class="container-fluid">
-
+<div class="menu">
+  <div id="menu" class="category">
+    <button type="button" class="grid-item btn btn-block">Appetizers</button>
+    <button type="button" class="grid-item btn btn-block">Mains</button>
+    <button type="button" class="grid-item btn btn-block">Desserts</button>
+  </div>
+  <div id="basket" class="basket">
+    <p>Basket Item</p>
+  </div>
 </div>
-
 </body>
 </html>
