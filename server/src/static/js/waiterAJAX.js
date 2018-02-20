@@ -5,7 +5,7 @@
 function getActiveOrder() {
   var allOrders = document.getElementById("orders-list").children;
   var activeTable;
-  for (i = 0; i < allOrders.length; i++) {
+  for (var i = 0; i < allOrders.length; i++) {
     if (allOrders[i].classList.contains("active")) {
       activeTable = allOrders[i];
     }
@@ -65,7 +65,7 @@ function loadOrder(orderNumber) {
     }
 
     // Add each list item
-    for (i = 0; i < response.length; i++) {
+    for (var i = 0; i < response.length; i++) {
       $("#current-order").append("<li class='list-group-item list-group-item-action'"
           + "id= \"order-item-" + i + "\">"
           + "<span class='waiter-ui-span-bold'>"
@@ -99,7 +99,7 @@ function loadMenu() {
     var response = JSON.parse(data);
 
     // Add items to menu list
-    for (i = 0; i < response.length; i++) {
+    for (var i = 0; i < response.length; i++) {
       $("#menu-list").append("<li class='list-group-item list-group-item-action'"
           + "id= \"menu-item-" + i + "\""
           + "data-menuItemNum='" + response[i].id + "'"
@@ -134,7 +134,7 @@ function loadTables() {
     while (currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
-    for (i = 0; i < response.length; i++) {
+    for (var i = 0; i < response.length; i++) {
       loadOrderList(response[i].number);
     }
   });
@@ -153,7 +153,7 @@ function loadOrderList(tableNumber) {
     while (currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
-    for (i = 0; i < orders.length; i++) {
+    for (var i = 0; i < orders.length; i++) {
       $("#orders-list").append(
           "<li"
           + " id='table-" + orders[i].foodOrderId + "'"
@@ -178,7 +178,7 @@ function loadOrderList(tableNumber) {
 function setActiveOrder(event) {
   // Reset all orders to non-active
   var allOrders = document.getElementById("orders-list").children;
-  for (i = 0; i < allOrders.length; i++) {
+  for (var i = 0; i < allOrders.length; i++) {
     allOrders[i].className = "list-group-item list-group-item-action";
   }
 
