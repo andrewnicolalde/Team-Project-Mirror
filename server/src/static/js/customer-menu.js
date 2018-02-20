@@ -4,18 +4,20 @@ $(document).ready(function () {
 });
 
 function loadMenu() {
-  get("/api/authTable/getMenu", function(data){
-    response = JSON.parse(data);
-    categories = [];
-    for(var i=0; i<response.length; i++) {
-      menuItem = response[i];
-      console.log(menuItem.name + ":" + menuItem.category);
-      // Add the category to the list if it is not there already
-      if (categories.indexOf(menuItem.category) < 0) {
-        categories.push(menuItem.category);
+  // Load categories
+  var categories = null;
+
+  get("/api/authTable/getCategories", function (categoryData) {
+    categories = JSON.parse(categoryData);
+
+    // Load menu
+    get("/api/authTable/getMenu", function(menuData){
+      menu = JSON.parse(menuData);
+      for(var i=0; i<menu.length; i++) {
+        menuItem = menu[i];
+        console.log(menuItem.name + ":" + menuItem.category);
       }
-    }
-    console.log(categories);
+    });
   });
 }
 

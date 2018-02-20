@@ -47,6 +47,7 @@ public class Main {
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
 
     get("/api/authTable/getMenu", (req, res) -> Menu.getMenu());
+    get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());
     get("/api/authTable/getTransactionId", Orders::getTransactionId);
     post("/api/authTable/getOrderId", Orders::getOrderId);
     post("/api/authTable/getOrderItems", Orders::getOrderItems);
