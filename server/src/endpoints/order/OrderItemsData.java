@@ -15,6 +15,7 @@ public class OrderItemsData {
   private String name;
   private String category;
   private String ingredients;
+  private String instructions;
   private String description;
   private Double calories;
   private String price;
@@ -31,6 +32,7 @@ public class OrderItemsData {
     this.name = orderMenuItem.getMenuItem().getName();
     this.category = orderMenuItem.getMenuItem().getCategory().getName();
     this.ingredients = orderMenuItem.getMenuItem().getIngredients();
+    this.instructions = orderMenuItem.getInstructions();
     this.description = orderMenuItem.getMenuItem().getDescription();
     this.calories = orderMenuItem.getMenuItem().getCalories();
     DecimalFormat priceFormat = new DecimalFormat("#.00");
@@ -79,5 +81,9 @@ public class OrderItemsData {
 
   public Double getCalories() {
     return calories;
+  }
+
+  public String getInstructions() {
+    return instructions;
   }
 }
