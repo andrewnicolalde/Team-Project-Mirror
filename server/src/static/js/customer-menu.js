@@ -70,7 +70,7 @@ function loadOrder() {
                          + "<span class='span-right'>£" + item.price + "</span>\n"
                          + "<br>\n"
                          + item.instructions
-                         + "<span class='span-right'><i class='fa fa-edit fa-lg edit'></i><i class='fa fa-times fa-lg remove'></i></span>"
+                         + "<span class='span-right'><i class='fa fa-edit fa-lg edit'></i><i class='fa fa-times fa-lg remove' onclick='removeOrderMenuItem(" + item.id + ");'></i></span>"
                        + "</li>");
       total += parseFloat(item.price);
     }
@@ -80,4 +80,15 @@ function loadOrder() {
                        + "<span class='span-right'>£" + total.toFixed(2) + "</span>\n"
                      + "</li>");
   });
+}
+
+function removeOrderMenuItem(itemId) {
+  var dataToSend = JSON.stringify({orderMenuItemId: itemId});
+  post("/api/authTable/removeItemFromOrder", dataToSend, function(data) {
+    if (data === "success") {
+      var parent = document.getElementById("order");
+      var child = document.getElementById("ordermenuitem-" + itemId);
+      parent.removeChild(child);
+    }
+  })
 }
