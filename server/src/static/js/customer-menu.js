@@ -177,6 +177,22 @@ function showItemModal(itemId) {
       document.getElementById("ingredients").innerText = item.ingredients;
       document.getElementById("picture").setAttribute("src", "../images/" + item.picture_src);
 
+      // Remove any content info symbols that are already there
+      var node = document.getElementById("content-info");
+      while(node.firstChild) {
+        node.removeChild(node.firstChild);
+      }
+
+      if (item.is_gluten_free) {
+        $("#content-info").append("<img src='../images/gluten-free.svg' alt='Gluten Free'>");
+      }
+      if (item.is_vegetarian) {
+        $("#content-info").append("<img src='../images/vegetarian-mark.svg' alt='Vegetarian'>");
+      }
+      if (item.is_vegan) {
+        $("#content-info").append("<img src='../images/vegan-mark.svg' alt='Vegan'>");
+      }
+
       modal.style.display = "block";
       break;
     }
