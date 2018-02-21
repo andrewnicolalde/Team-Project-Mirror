@@ -1,6 +1,7 @@
 var basket = [];
 var menuItems = [];
 
+// Hides the modal if the user clicks off of it.
 window.onclick = function(event) {
   var modal = document.getElementById("addToOrderModal");
   if (event.target === modal) {

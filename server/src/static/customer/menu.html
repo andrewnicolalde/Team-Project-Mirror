@@ -40,9 +40,18 @@
 <!-- Add to order modal - contents is changed by js -->
 <div id="addToOrderModal" class="modal">
   <div class="modal-content">
-    <h3>Chicken Tortilla Soup</h3>
-    <p>A hearty Central American soup with complex flavours and textures. </p>
-    <p>£6.99</p>
+    <h3 class="span-faint"><span id="name" class="span-bold">Chicken Tortilla Soup</span> - <span id="category">Appetizers</span></h3>
+    <div class="row">
+      <div class="col-sm-4 information">
+        <p id="description">A hearty Central American soup with complex flavours and textures. </p>
+        <p>Price: £<span id="price">6.99</span></p>
+        <p>Calories: <span id="calories">100</span>kcal</p>
+        <p>Ingredients: <span id="ingredients">Chicken, Tortilla and Soup</span></p>
+      </div>
+      <div class="col-sm-6">
+        <img id="picture" src="../images/ChickenTortillaSoup.jpg">
+      </div>
+    </div>
   </div>
 </div>
 
