@@ -67,7 +67,7 @@ header a:hover {
 #food {
   min-height: 600px;
   min-width: 800px;
-  background-image:: url('foodj.JPEG') no-repeat;
+  background-image: url('food.JPEG') no-repeat;
   text-align: center;
   color: #ffffff;
 }
