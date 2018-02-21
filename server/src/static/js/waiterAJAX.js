@@ -204,8 +204,11 @@ function confirmCancelOrder() {
   if (getActiveOrder() == null) {
     bootbox.alert("There is no order selected");
   } else {
-    bootbox.confirm("Are you sure you want to cancel this order?", function () {
-      changeOrderStatus('CANCELLED');
+    bootbox.confirm("Are you sure you want to cancel this order?", function (result) {
+      if(result){ // If the user hit okay (result == true)
+        changeOrderStatus('CANCELLED');
+      }
+      // Otherwise do nothing
     });
   }
 }
