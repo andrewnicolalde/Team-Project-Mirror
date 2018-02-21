@@ -159,6 +159,15 @@ function showItemModal(itemId) {
     if (menuItems[i].id === itemId) {
       var item = menuItems[i];
       var modal = document.getElementById("addToOrderModal");
+      console.log(item);
+      document.getElementById("name").innerText = item.name;
+      document.getElementById("category").innerText = item.category;
+      document.getElementById("description").innerText = item.description;
+      document.getElementById("price").innerText = item.price;
+      document.getElementById("calories").innerText = item.calories;
+      document.getElementById("ingredients").innerText = item.ingredients;
+      document.getElementById("picture").setAttribute("src", "../images/" + item.picture_src);
+
       modal.style.display = "block";
       break;
     }

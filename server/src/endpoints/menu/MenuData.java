@@ -14,6 +14,7 @@ public class MenuData {
   private Long id;
   private String name;
   private Long categoryId;
+  private String category;
   private String ingredients;
   private String description;
   private Double calories;
@@ -32,6 +33,7 @@ public class MenuData {
     this.id = menuItem.getMenuItemId();
     this.name = menuItem.getName();
     this.categoryId = menuItem.getCategory().getCategoryId();
+    this.category = menuItem.getCategory().getName();
     this.ingredients = menuItem.getIngredients();
     this.description = menuItem.getDescription();
     this.calories = menuItem.getCalories();
@@ -49,6 +51,10 @@ public class MenuData {
 
   public Long getCategoryId() {
     return categoryId;
+  }
+
+  public String getCategory() {
+    return category;
   }
 
   public String getIngredients() {
@@ -73,10 +79,6 @@ public class MenuData {
 
   public Boolean getIs_gluten_free() {
     return is_gluten_free;
-  }
-
-  public void setIs_gluten_free(Boolean is_gluten_free) {
-    this.is_gluten_free = is_gluten_free;
   }
 
   public String getPicture_src() {
