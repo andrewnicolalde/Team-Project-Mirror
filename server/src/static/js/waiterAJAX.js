@@ -61,7 +61,6 @@ function loadTables() {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
     for (var i = 0; i < response.length; i++) {
-      console.log("Table: " + i);
       loadOrderList(response[i].number);
     }
   });
@@ -78,7 +77,6 @@ function loadOrderList(tableNumber) {
     var orders = JSON.parse(data);
 
     for (var i = 0; i < orders.length; i++) {
-      console.log("orders: " + i);
       $("#orders-list").append(
           "<li"
           + " id='table-" + orders[i].foodOrderId + "'"
@@ -114,6 +112,20 @@ function setActiveOrder(event) {
     allOrders[i].className = "list-group-item list-group-item-action";
   }
 
+  //Checks to see if the order has been deselected or cancelled.
+  if (event == null){
+    //Hides buttons
+    document.getElementById('confirm_button').style.visibility = 'hidden';
+    document.getElementById('delivered_button').style.visibility = 'hidden';
+    document.getElementById('edit_button').style.visibility = 'hidden';
+    document.getElementById('cancel_button').style.visibility = 'hidden';
+    //Remove current order
+    var currentOrderElement = document.getElementById("current-order");
+    while (currentOrderElement.firstChild) {
+      currentOrderElement.removeChild(currentOrderElement.firstChild);
+    }
+    return;
+  }
   // Set active element
   var activeOrder = document.getElementById(event.currentTarget.id);
   activeOrder.className += " active";
@@ -146,6 +158,7 @@ function confirmCancelOrder() {
     bootbox.confirm("Are you sure you want to cancel this order?", function (result) {
       if(result){ // If the user hit okay (result == true)
         changeOrderStatus('CANCELLED');
+        setActiveOrder(null);
       }
       // Otherwise do nothing
     });
