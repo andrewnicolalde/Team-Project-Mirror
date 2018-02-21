@@ -37,7 +37,7 @@ function displayOrders(data) {
       var sideId = response[i].foodOrderId;
       if(!orderPresent(sideId)){
         $("#sidebar-orders").append("<li id='" + sideId + "'>\n"
-        + "<h5>Order No: " + sideId + "</h5>"
+        + "<h4>Order No: " + sideId + "</h4>"
         + "</li>");
       }
     }
@@ -47,11 +47,12 @@ function displayOrders(data) {
     var Id = response[j].foodOrderId;
     if(!orderPresent(Id)){
 
-      $("#row").append("<div class='col text-center' id='"+ Id +"'>"
+      $("#row").append("<div class='col' id='"+ Id +"'>"
           + "<ul class='list-group' id='list-"+ Id +"'>"
           + "<li class='list-group-item'> "
           + "<h2>Order " + Id + "</h2> "
-          + "<button type='button' class='btn' data-orderId='"+ Id +"' onclick='orderDone(this.getAttribute(\"data-orderId\"))'>Done</button>"
+          + "<div>20:12.12"
+          + "<button type='button' class='btn btn-success' data-orderId='"+ Id +"' onclick='orderDone(this.getAttribute(\"data-orderId\"))'>Done</button></div>"
           + "</li>"
           + "</ul>"
           + "</div>");
@@ -106,7 +107,7 @@ function displayOrderItems(data, foodOrder) {
   var response = JSON.parse(data);
 
   for (var i = 0; i < response.length; i++) {
-    $("#list-" +foodOrder).append("<li class='list-group-item'>Item: " + response[i].name +"<br>Instructions: "+ response[i].instructions +"</li>");
+    $("#list-" +foodOrder).append("<li class='list-group-item'><b>" + response[i].name +"</b><br>"+ response[i].instructions +"</li>");
   }
 }
 
