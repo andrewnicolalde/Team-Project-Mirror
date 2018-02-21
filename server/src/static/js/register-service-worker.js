@@ -63,16 +63,18 @@ function askPermission() {
  * Check permissions and show a test notification.
  */
 function doSomething() {
-  if (Notification.permission === "granted") {
-    var notification = new Notification("Hello World!");
-  } else {
+  if (!(Notification.permission === "granted")) {
     var result = askPermission();
     if (result === "granted") {
       // nothing right now.
     } else {
-      // Do nothing right now permission was denied.
+      // return an error.
+      return new Error();
     }
+  } else {
+    // Do nothing we want to register a worker either way.
   }
+    var registration = registerServiceWorker("../js/notification-worker.js")
 }
 
 /**
