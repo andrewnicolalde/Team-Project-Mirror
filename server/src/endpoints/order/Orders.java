@@ -67,6 +67,7 @@ public class Orders {
       orderData[i] = new OrderData(foodOrders.get(i));
     }
 
+    entityManager.close();
     return JsonUtil.getInstance().toJson(orderData);
   }
 
@@ -92,6 +93,7 @@ public class Orders {
       orderData[i] = new OrderData(foodOrders.get(i));
     }
 
+    entityManager.close();
     return JsonUtil.getInstance().toJson(orderData);
   }
 
