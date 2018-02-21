@@ -125,6 +125,7 @@ function loadTables() {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
     for (var i = 0; i < response.length; i++) {
+      console.log("Table: " + i);
       loadOrderList(response[i].number);
     }
   });
@@ -139,11 +140,9 @@ function loadOrderList(tableNumber) {
     tableNumber: tableNumber
   }), function (data) {
     var orders = JSON.parse(data);
-    var currentOrderElement = document.getElementById("orders-list");
-    while (currentOrderElement.firstChild) {
-      currentOrderElement.removeChild(currentOrderElement.firstChild);
-    }
+
     for (var i = 0; i < orders.length; i++) {
+      console.log("orders: " + i);
       $("#orders-list").append(
           "<li"
           + " id='table-" + orders[i].foodOrderId + "'"
