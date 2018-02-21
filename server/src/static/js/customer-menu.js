@@ -38,7 +38,7 @@ function loadMenu() {
 
 
 function loadOrder() {
-  var postData = {orderNumber: localStorage.getItem("orderId")};
+  var postData = {orderNumber: sessionStorage.getItem("orderId")};
   post("/api/authTable/getOrderItems", JSON.stringify(postData), function(data) {
     var orderMenuItems = JSON.parse(data);
     for (var i=0; i<orderMenuItems.length; i++) {

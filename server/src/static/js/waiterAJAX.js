@@ -52,6 +52,8 @@ function addToOrder(menuItemId) {
  * @param orderNumber The number of the order to load.
  */
 function loadOrder(orderNumber) {
+  sessionStorage.setItem("orderId", orderNumber);
+
   var orderNumberToSend = JSON.stringify({orderNumber: orderNumber});
   post("/api/authStaff/getOrderItems", orderNumberToSend, function (data) {
 
