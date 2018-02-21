@@ -1,133 +1,81 @@
 $(document).ready(function () {
-  //TODO make generic/ get the ordernumber from the server.
-  loadOrder(2);
+  getTransactionId();
   loadMenu();
-  /*$(".add-row").click(function () {
-    var name = $(".name").val();
-    var price = $(".price").val();
-    var markup = "<tr><td></td><td>" + name + "</td><td>" + price
-        + "</td></tr>";
-    $("table.cart tbody").append(markup);
-  });*/
-
-  /*$("td").click(function () {
-    $(".name").clone().appendTo(".cart");
-  });*/
-
-  // Find and remove selected table rows
-  /*$(".add-order").click(function () {
-    $("table tbody").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        $(".name").clone().appendTo(".cart");
-      }
-    });
-  });*/
 });
 
 function loadMenu() {
-  // Send get request to server for menu JSON
-  get("/api/authStaff/getMenu", function (data) {
-    // Parse JSON
+  // Load categories
+  var categories = null;
+
+  get("/api/authTable/getCategories", function (categoryData) {
+    categories = JSON.parse(categoryData);
+
+    for (var i=0; i<categories.length; i++) {
+      var c = categories[i];
+      $("#categories").append("<div class='category'>\n"
+                              + "<button id='category-" + c.categoryId + "-button' type='button' class='btn btn-block' data-toggle='collapse' data-target='#category-" + c.categoryId + "'>" + c.name + "</button>\n"
+                              + "<div id='category-" + c.categoryId + "' class='collapse'>\n"
+                                + "<ul id='category-" + c.categoryId + "-list' class='menuitems list-group collapse'>\n"
+                                + "</ul>\n"
+                              + "</div>\n"
+                            + "</div>");
+    }
+
+    // Load menu
+    get("/api/authTable/getMenu", function(menuData){
+      menu = JSON.parse(menuData);
+      for(var i=0; i<menu.length; i++) {
+        var menuItem = menu[i];
+        $("#category-" + menuItem.categoryId + "-list").append("<li id='menuitem-" + menuItem.id + "' class='menuitem list-group-item list-group-item-action'>\n"
+                                                               + "<span class='span-bold'>" + menuItem.name + "</span> - £" + menuItem.price + "\n"
+                                                               + "<br>\n"
+                                                               + menuItem.description + "\n"
+                                                             + "</li>");
+      }
+    });
+  });
+}
+
+function getTransactionId() {
+  get("/api/authTable/getTransactionId", function (data) {
     var response = JSON.parse(data);
 
-    // Add items to menu list
-    for (i = 0; i < response.length; i++) {
-      $("#menu-list").append("<li class='list-group-item list-group-item-action'"
-          + "id= \"menu-item-" + i + "\""
-          + "data-menuItemNum='" + response[i].id + "'"
-          + "onclick='addToOrder(this.getAttribute(\"data-menuItemNum\"))'>"
-          + "<span class='waiter-ui-span-bold'>"
-          + response[i].name + ": </span> " + response[i].price + "</li>");
-      // Show dietary information
-      if (response[i].is_gluten_free) { // Gluten Free
-        $("#menu-item-" + i).append(
-            " <img src='../images/gluten-free.svg' alt='Gluten Free'>");
-      }
-      if (response[i].is_vegetarian) { // Vegetarian
-        $("#menu-item-" + i).append(
-            " <img src='../images/vegetarian-mark.svg' alt='Vegetarian'>");
-      }
-      if (response[i].is_vegan) {
-        $("#menu-item-" + i).append(
-            " <img src='../images/vegan-mark.svg' alt='Vegan'>");
-      }
-    }
+    var transactionId = response.transactionId;
+
+    getOrderId(transactionId);
   });
 }
 
-// TODO make generic so it updates the right order number not just 2
-function addToOrder(menuItemId) {
-  // Create name-value pairs for HTTP post request, see
-  // https://en.wikipedia.org/wiki/POST_(HTTP)#Use_for_submitting_web_forms
-  var nameValuePairs = JSON.stringify({
-    orderNumber: 2,
-    menuItemId: menuItemId,
-    instructions: "none"
-  });
-
-  // Handle possible responses
-  post("/api/authStaff/addItemToOrder", nameValuePairs, function (status) {
-    loadOrder(2);
-    if (status === "") {
-      // Refresh current order table to show new change
-      console.log("Add item to order failed");
-      console.log(status);
-    }
-  });
-}
-
-// TODO make generic.
-function loadOrder(orderNumber) {
-  var orderNumberToSend = JSON.stringify({orderNumber: orderNumber});
-  post("/api/authStaff/getOrderItems", orderNumberToSend, function (data) {
-
-    // Parse JSON
+function getOrderId(transactionId) {
+  post("/api/authTable/getOrderId", JSON.stringify({
+    transactionId: transactionId
+  }), function (data) {
     var response = JSON.parse(data);
 
-    // Remove any existing elements in the current order list
-    var currentOrderElement = document.getElementById("current-order");
-    while (currentOrderElement.firstChild) {
-      currentOrderElement.removeChild(currentOrderElement.firstChild);
-    }
-
-    // Add each list item
-    for (i = 0; i < response.length; i++) {
-      $("#current-order").append("<li class='list-group-item list-group-item-action'"
-          + "id= \"order-item-" + i + "\">"
-          + "<span class='waiter-ui-span-bold'>"
-          + response[i].name + ": </span> "
-          + response[i].price + "</li>");
-      // Show dietary information
-      if (response[i].is_gluten_free) { // Gluten Free
-        $("#order-item-" + i).append(" <img src="
-            + "'../images/gluten-free.svg'alt='Gluten Free'>");
-      }
-      if (response[i].is_vegetarian) { // Vegetarian
-        $("#order-item-" + i).append(" <img src="
-            + "'../images/vegetarian-mark.svg'alt='Vegetarian'>");
-      }
-      if (response[i].is_vegan) {
-        $("#order-item-" + i).append(" <img src="
-            + "'../images/vegan-mark.svg'alt='Vegan'>");
-      }
-    }
+    localStorage.setItem("orderId", response.orderId);
+    // Load order now, when the orderId has definitely been set.
+    loadOrder();
   });
 }
 
-// TODO make generic, get the ordernumber.
-function changeOrderStatus(orderStatus) {
-  post("/api/authStaff/changeOrderStatus",
-      JSON.stringify({
-        orderNumber: 2,
-        newOrderStatus: orderStatus
-      }),
-      $("#confirm-order-button").click(function(){
-        $("#myModal").modal();
-      });
-  );
+function loadOrder() {
+  var postData = {orderNumber: localStorage.getItem("orderId")};
+  post("/api/authTable/getOrderItems", JSON.stringify(postData), function(data) {
+    var orderMenuItems = JSON.parse(data);
+    var total = 0.0;
+    for (var i=0; i<orderMenuItems.length; i++) {
+      var item = orderMenuItems[i];
+      $("#order").append("<li id='ordermenuitem-" + item.id + "' class='list-group-item list-group-item-action'>\n"
+                         + "<span class='span-bold'>" + item.name + "</span>"
+                         + "<span class='span-price'>£" + item.price + "</span>\n"
+                         + "<br>\n"
+                         + item.instructions + "\n"
+                       + "</li>");
+      total += parseFloat(item.price);
+    }
+    $("#order").append("<li id='total-price' class='list-group-item list-group-item-info'>\n"
+                       + "<span class='span-bold'>Total:</span>"
+                       + "<span class='span-price'>£" + total.toFixed(2) + "</span>\n"
+                     + "</li>");
+  });
 }
-
-function confirmPopup() {
-  alert("The waiter will come soon to confirm your order!");
-}
-
