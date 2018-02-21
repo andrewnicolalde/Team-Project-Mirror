@@ -67,15 +67,17 @@ function loadOrder() {
       var item = orderMenuItems[i];
       $("#order").append("<li id='ordermenuitem-" + item.id + "' class='list-group-item list-group-item-action'>\n"
                          + "<span class='span-bold'>" + item.name + "</span>"
-                         + "<span class='span-price'>£" + item.price + "</span>\n"
+                         + "<span class='span-right'>£" + item.price + "</span>\n"
                          + "<br>\n"
-                         + item.instructions + "\n"
+                         + item.instructions
+                         + "<span class='span-right'><i class='fa fa-edit fa-lg edit'></i><i class='fa fa-times fa-lg remove'></i></span>"
                        + "</li>");
       total += parseFloat(item.price);
     }
+
     $("#order").append("<li id='total-price' class='list-group-item list-group-item-info'>\n"
                        + "<span class='span-bold'>Total:</span>"
-                       + "<span class='span-price'>£" + total.toFixed(2) + "</span>\n"
+                       + "<span class='span-right'>£" + total.toFixed(2) + "</span>\n"
                      + "</li>");
   });
 }

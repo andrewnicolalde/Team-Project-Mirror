@@ -24,6 +24,16 @@
   font-weight: bold;
 }
 
-.span-price {
+.span-right {
   float: right;
+}
+
+.remove {
+  margin-left: 3px;
+  color: red;
+}
+
+.edit {
+  margin-right: 3px;
+  color: #b322ff;
 }
