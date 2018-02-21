@@ -65,13 +65,7 @@ function loadOrder() {
     var total = 0.0;
     for (var i=0; i<orderMenuItems.length; i++) {
       var item = orderMenuItems[i];
-      $("#order").append("<li id='ordermenuitem-" + item.id + "' class='list-group-item list-group-item-action'>\n"
-                         + "<span class='span-bold'>" + item.name + "</span>"
-                         + "<span class='span-right'>£" + item.price + "</span>\n"
-                         + "<br>\n"
-                         + item.instructions
-                         + "<span class='span-right'><i class='fa fa-edit fa-lg edit'></i><i class='fa fa-times fa-lg remove' onclick='removeOrderMenuItem(" + item.id + ");'></i></span>"
-                       + "</li>");
+      addItemToBasket(item);
       total += parseFloat(item.price);
     }
 
@@ -82,6 +76,16 @@ function loadOrder() {
   });
 }
 
+function addItemToBasket(item) {
+  $("#order").append("<li id='ordermenuitem-" + item.id + "' class='list-group-item list-group-item-action'>\n"
+                     + "<span class='span-bold'>" + item.name + "</span>"
+                     + "<span class='span-right'>£" + item.price + "</span>\n"
+                     + "<br>\n"
+                     + item.instructions
+                     + "<span class='span-right'><i class='fa fa-edit fa-lg edit'></i><i class='fa fa-times fa-lg remove' onclick='removeOrderMenuItem(" + item.id + ");'></i></span>"
+                   + "</li>");
+}
+
 function removeOrderMenuItem(itemId) {
   var dataToSend = JSON.stringify({orderMenuItemId: itemId});
   post("/api/authTable/removeItemFromOrder", dataToSend, function(data) {
@@ -89,6 +93,21 @@ function removeOrderMenuItem(itemId) {
       var parent = document.getElementById("order");
       var child = document.getElementById("ordermenuitem-" + itemId);
       parent.removeChild(child);
+    }
+  })
+}
+
+function addToOrder(itemId, instructions) {
+  var dataToSend = JSON.stringify({
+    menuItemId: itemId,
+    instructions: instructions,
+    orderNumber: localStorage.getItem("orderId")
+  });
+
+  post("/api/authTable/addItemToOrder", dataToSend, function(data) {
+    if (data !== "failure") {
+      var item = JSON.parse(data);
+      addItemToBasket(item);
     }
   })
 }

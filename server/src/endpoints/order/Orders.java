@@ -107,7 +107,7 @@ public class Orders {
    *
    * @param request A HTTP request object.
    * @param response A HTTP response object.
-   * @return A string saying either "success" or "failed"
+   * @return A JSON string representing the MenuItem, or "failure"
    */
   public static String addOrderMenuItem(Request request, Response response) {
     OrderMenuItemParams omi = JsonUtil.getInstance()
