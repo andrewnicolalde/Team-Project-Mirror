@@ -2,6 +2,8 @@ package endpoints.menu;
 
 import database.tables.MenuItem;
 
+import java.text.DecimalFormat;
+
 /**
  * This class is to map the query result into some GSON can convert into JSON.
  *
@@ -11,11 +13,11 @@ public class MenuData {
 
   private Long id;
   private String name;
-  private String category;
+  private Long categoryId;
   private String ingredients;
   private String description;
   private Double calories;
-  private Double price;
+  private String price;
   private Boolean is_vegan;
   private Boolean is_vegetarian;
   private Boolean is_gluten_free;
@@ -29,11 +31,12 @@ public class MenuData {
   public MenuData(MenuItem menuItem) {
     this.id = menuItem.getMenuItemId();
     this.name = menuItem.getName();
-    this.category = menuItem.getCategory().getName();
+    this.categoryId = menuItem.getCategory().getCategoryId();
     this.ingredients = menuItem.getIngredients();
     this.description = menuItem.getDescription();
     this.calories = menuItem.getCalories();
-    this.price = menuItem.getPrice();
+    DecimalFormat priceFormat = new DecimalFormat("#.00");
+    this.price = priceFormat.format(menuItem.getPrice());
     this.is_vegan = menuItem.getVegan();
     this.is_vegetarian = menuItem.getVegetarian();
     this.is_gluten_free = menuItem.getGlutenFree();
@@ -44,8 +47,8 @@ public class MenuData {
     return id;
   }
 
-  public String getCategory() {
-    return category;
+  public Long getCategoryId() {
+    return categoryId;
   }
 
   public String getIngredients() {
@@ -56,7 +59,7 @@ public class MenuData {
     return description;
   }
 
-  public Double getPrice() {
+  public String getPrice() {
     return price;
   }
 

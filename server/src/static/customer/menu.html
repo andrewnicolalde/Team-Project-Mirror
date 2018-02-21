@@ -3,229 +3,37 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <title>Oaxaca - Menu</title>
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../js/ajax-wrapper.js"></script>
-  <!--<script type="text/javascript" src="../js/getmenu-customer.js"></script> not currently functional.-->
   <script type="text/javascript" src="../js/customer-menu.js"></script>
-  <!--<script src="../js/popup.js"></script>-->
-  <link rel="stylesheet" href="../css/homepage.css">
+  <link rel="stylesheet" href="../css/menu.css">
 </head>
 <body>
-<nav class="nav justify-content-end flex-md-row">
-  <a class="navbar-brand">Oaxaca</a>
-  <a class="nav-link active" href="home.html">Home</a>
-  <a class="nav-link" href="">Menu<span class="sr-only">(current)</span></a>
-  <a class="nav-link" href="basket.html">Basket</a>
-</nav>
-
 <div class="jumbotron jumbotron-fluid bg-info text-white text-center">
   <div class="container">
     <h1 class="display-2">Menu</h1>
   </div>
 </div>
 
-<div class="container">
-  <div class="row">
-
-
-    <div class="col">
-      <h5 class="text-center" style="font-style: italic;">MAINS</h5>
-      <p class="text-center">
-        Gluten Free: <img src="../images/gluten-free.svg">
-        Vegetarian: <img src="../images/vegetarian-mark.svg">
-        Vegan: <img src="../images/vegan-mark.svg">
-      </p>
-      <ul class="list-group" id="menu-list">
-        <!-- Loaded dynamically via jQuery script -->
-      </ul>
-
-    </div>
-
-    <div class="col">
-      <h5 class="text-center">Current Order</h5>
-      <div class="text-center">
-        <button type="button" class="btn btn-success"
-                onclick="changeOrderStatus('READY_TO_CONFIRM')">Confirm Order</button>
-        <button type="button" class="btn btn-danger"
-                onclick="changeOrderStatus('CANCELLED')">Cancel Order</button>
+<div class="row">
+  <div class="col-sm-7">
+    <div id="menu" class="column">
+      <h5 class="text-center">Menu</h5>
+      <div id="categories">
       </div>
-      <ul class="list-group" id="current-order">
-        <!-- TODO: List should be scrollable. -->
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <div id="basket" class="column">
+      <h5 class="text-center">Basket</h5>
+      <ul id="order" class="list-group">
       </ul>
-
     </div>
-
-
   </div>
 </div>
-<!--
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-4 col-lg-4">
-      <table class="table table-hover">
-        <thead>
-        <tr>
-          <th></th>
-          <th>Item</th>
-          <th>Price</th>
-        </tr>
-        </thead>
-        <tbody id="menu-table">
-        <tr >
-          <th scope="row">1</th>
-          <td class="myBtn">Layered buffalo chicken nachos with creamy gorgonzola
-            sauce</td>
-          <td >£5.00</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td class="myBtn ">Jalapeño chicken wraps</td>
-          <td>£4.00</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td class="myBtn">Queso fundido with chorizo</td>
-          <td>£2.50</td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="col-md-4 col-lg-4">
-      <table class="table table-hover">
-        <thead>
-        <tr>
-          <th></th>
-          <th>Item</th>
-          <th>Price</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td class="myBtn">Grilled Fish Tacos with Chipotle-Lime Dressing</td>
-          <td>£12.00</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td class="myBtn">Chili Rellenos Casserole</td>
-          <td>£10.00</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td class="myBtn">Ronaldo's Beef Carnitas</td>
-          <td>£9.50</td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="col-md-4 col-lg-4">
-      <table class="table table-hover">
-        <thead>
-        <tr>
-          <th></th>
-          <th>Item</th>
-          <th>Price</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td class="myBtn">Tres Leches Cake</td>
-          <td>£6.00</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td class="myBtn">Frozen Margarita Pie</td>
-          <td>£3.00</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td class="myBtn">Flan</td>
-          <td>£4.50</td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="col-md-4 col-lg-4">
-    <div class="col-md-4 col-lg-4">
-      <h3 class="text-center" style="font-style: italic;">SELECTED</h3>
-    </div>
-    <table class="table table-hover cart">
-      <thead>
-      <tr>
-        <th></th>
-        <th>Item</th>
-        <th>Price</th>
-      </tr>
-      </thead>
-      <tbody>
-
-      </tbody>
-    </table>
-  </div>
-    <button  type="button" class="btn btn-primary">Confirm Order</button>
-</div>
-
--->
-
-
-<!-- Modal -->
-<!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-   <div class="modal-dialog" role="document">
-
-     &lt;!&ndash; Modal content&ndash;&gt;
-     <div class="modal-content">
-       <div class="modal-header">
-         <h5 class="modal-title">Item Info</h5>
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-           <span aria-hidden="true">&times;</span>
-         </button>
-       </div>
-       <div class="modal-body">
-           Gluten Free: <img src="../images/gluten-free.svg">
-           Vegetarian: <img src="../images/vegetarian-mark.svg">
-           Vegan: <img src="../images/vegan-mark.svg">
-       </div>
-       <div class="modal-footer">
-         <button type="button" class="btn btn-primary add-row">Add to Order</button>
-         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-       </div>
-     </div>
-   </div>
- </div>
-
- <div class="modal fade" id="modal2" tabindex="-1" role="dialog">
-   <div class="modal-dialog" role="document">
-
-     &lt;!&ndash; Modal content&ndash;&gt;
-     <div class="modal-content">
-       <div class="modal-header">
-         <h5 class="modal-title">Item Info</h5>
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-           <span aria-hidden="true">&times;</span>
-         </button>
-       </div>
-       <div class="modal-body">
-         Gluten Free: <img src="../images/gluten-free.svg">
-         Vegetarian: <img src="../images/vegetarian-mark.svg">
-         Vegan: <img src="../images/vegan-mark.svg">
-       </div>
-       <div class="modal-footer">
-         <button type="button" class="btn btn-primary add-row">Add to Order</button>
-         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-       </div>
-     </div>
-   </div>
- </div>
--->
 </body>
 </html>

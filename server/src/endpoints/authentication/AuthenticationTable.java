@@ -91,7 +91,7 @@ public class AuthenticationTable {
     // Assign the session key to the session.
     request.session().attribute("TableSessionKey", sessionKey);
 
-    response.redirect("customer-ui/customerdisplay.html");
+    response.redirect("customer/home.html");
     return response;
   }
 
@@ -99,14 +99,22 @@ public class AuthenticationTable {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
     // Check if the session has a TableSessionKey
     if (request.session().attribute("TableSessionKey") == null) {
-      halt(401, "error_401");
+      if (request.session().attribute("StaffSessionKey") == null) {
+        halt(401, "error_401");
+      }
     }
 
-    TableSession session = em.find(TableSession.class, request.session()
-        .attribute("TableSessionKey"));
+    try {
+      TableSession session = em.find(TableSession.class, request.session()
+          .attribute("TableSessionKey"));
 
-    if (session == null) {
-      halt(401, "error_401");
+      if (session == null) {
+        halt(401, "error_401");
+      }
+    } catch (Exception e) {
+      if (request.session().attribute("StaffSessionKey") == null) {
+        halt(401, "error_401");
+      }
     }
   }
 }

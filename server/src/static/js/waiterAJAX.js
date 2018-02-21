@@ -18,7 +18,6 @@ function getActiveOrder() {
  * of the currently active table.
  * @param menuItemId the ID of the menu item to be added to the order
  */
-
 function addToOrder(menuItemId) {
   var activeOrder = getActiveOrder();
 
@@ -52,6 +51,8 @@ function addToOrder(menuItemId) {
  * @param orderNumber The number of the order to load.
  */
 function loadOrder(orderNumber) {
+  sessionStorage.setItem("orderId", orderNumber);
+
   var orderNumberToSend = JSON.stringify({orderNumber: orderNumber});
   post("/api/authStaff/getOrderItems", orderNumberToSend, function (data) {
 
@@ -68,7 +69,7 @@ function loadOrder(orderNumber) {
     for (var i = 0; i < response.length; i++) {
       $("#current-order").append("<li class='list-group-item list-group-item-action'"
           + "id= \"order-item-" + i + "\">"
-          + "<span class='waiter-ui-span-bold'>"
+          + "<span class='span-bold'>"
           + response[i].name + ": </span> "
           + "<span style='float: right'> £" + response[i].price + "</span>"
           + "<h6> Instructions: " + response[i].instructions + "</h6>"
@@ -93,7 +94,7 @@ function loadMenu() {
           + "id= \"menu-item-" + i + "\""
           + "data-menuItemNum='" + response[i].id + "'"
           + "onclick='addToOrder(this.getAttribute(\"data-menuItemNum\"))'>"
-          + "<span class='waiter-ui-span-bold'>"
+          + "<span class='span-bold'>"
           + response[i].name + ": </span> " + response[i].price + "</li>");
       // Show dietary information
       if (response[i].is_gluten_free) { // Gluten Free
@@ -152,9 +153,10 @@ function loadOrderList(tableNumber) {
             + "setActiveOrder(event); "
             + "loadOrder(this.getAttribute('data-ordernum'));"
             + "document.getElementById('confirm_button').style.visibility = 'visible';"
+            + "document.getElementById('edit_button').style.visibility = 'visible';"
             + "document.getElementById('cancel_button').style.visibility = 'visible';"
             + "\">"
-          + "<span class='waiter-ui-span-bold'>Table </span>" + tableNumber
+          + "<span class='span-bold'>Table </span>" + tableNumber
           + "<span> - Order </span>" + orders[i].foodOrderId
           + ": " + orders[i].orderStatus
           + "</li>"
@@ -192,7 +194,7 @@ function changeOrderStatus(orderStatus) {
         orderNumber: activeOrder.getAttribute('data-ordernum'),
         newOrderStatus: orderStatus
       }),
-      loadTables
+      loadTables()
   );
 }
 
@@ -205,8 +207,11 @@ function confirmCancelOrder() {
   if (getActiveOrder() == null) {
     bootbox.alert("There is no order selected");
   } else {
-    bootbox.confirm("Are you sure you want to cancel this order?", function () {
-      changeOrderStatus('CANCELLED');
+    bootbox.confirm("Are you sure you want to cancel this order?", function (result) {
+      if(result){ // If the user hit okay (result == true)
+        changeOrderStatus('CANCELLED');
+      }
+      // Otherwise do nothing
     });
   }
 }
@@ -214,5 +219,5 @@ function confirmCancelOrder() {
 // Loads the menu and tables when the page loads.
 $(document).ready(function () {
   loadMenu();
-  loadTables()
+  loadTables();
 });
