@@ -1,6 +1,7 @@
 package endpoints.order;
 
 import database.tables.OrderMenuItem;
+import java.text.DecimalFormat;
 
 /**
  * This class is used to map the query results into something GSON can convert into JSON.
@@ -9,13 +10,15 @@ import database.tables.OrderMenuItem;
  */
 public class OrderItemsData {
 
+
   private Long id;
   private String name;
   private String category;
   private String ingredients;
+  private String instructions;
   private String description;
   private Double calories;
-  private Double price;
+  private String price;
   private Boolean is_vegan;
   private Boolean is_vegetarian;
   private Boolean is_gluten_free;
@@ -30,9 +33,11 @@ public class OrderItemsData {
     this.name = orderMenuItem.getMenuItem().getName();
     this.category = orderMenuItem.getMenuItem().getCategory().getName();
     this.ingredients = orderMenuItem.getMenuItem().getIngredients();
+    this.instructions = orderMenuItem.getInstructions();
     this.description = orderMenuItem.getMenuItem().getDescription();
     this.calories = orderMenuItem.getMenuItem().getCalories();
-    this.price = orderMenuItem.getMenuItem().getPrice();
+    DecimalFormat priceFormat = new DecimalFormat("#.00");
+    this.price = priceFormat.format(orderMenuItem.getMenuItem().getPrice());
     this.is_vegan = orderMenuItem.getMenuItem().getVegan();
     this.is_vegetarian = orderMenuItem.getMenuItem().getVegetarian();
     this.is_gluten_free = orderMenuItem.getMenuItem().getGlutenFree();
@@ -56,7 +61,7 @@ public class OrderItemsData {
     return description;
   }
 
-  public Double getPrice() {
+  public String getPrice() {
     return price;
   }
 
@@ -86,5 +91,9 @@ public class OrderItemsData {
 
   public Double getCalories() {
     return calories;
+  }
+
+  public String getInstructions() {
+    return instructions;
   }
 }
