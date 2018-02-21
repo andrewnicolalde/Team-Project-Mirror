@@ -9,13 +9,15 @@
   <link rel="stylesheet" href="../css/homepage.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../js/ajax-wrapper.js"></script>
+  <script type="text/javascript" src="../js/customer-home.js"></script>
 </head>
 <body>
 
 <div class="jumbotron jumbotron-fluid bg-info text-white text-center">
   <div class="container-fluid">
     <h1 class="display-2">Oaxaca</h1>
-    <p class="lead"> A stylish Mexican Resturant.</p>
+    <p class="lead"> A Stylish Mexican Restaurant.</p>
   </div>
 </div>
 
@@ -23,7 +25,7 @@
   <div class="row">
     <div id="menubutton" class="col-md-6 col-lg-6">
       <!-- FIXME: Use sensible paths. This does nothing right now -->
-        <a href="menu.html" class="btn btn-large btn-block btn-info text-center" role="button"><h1 id="menubutton1" class="display-2 text-center">Start Order</h1></a>
+        <a onclick="getTransactionId()" href="menu.html" class="btn btn-large btn-block btn-info text-center" role="button"><h1 id="menubutton1" class="display-2 text-center">Start Order</h1></a>
     </div>
     <div class="col-lg-5 col-md-5" style="padding-top: 60;">
       <div id="arrows" class="carousel slide" data-ride="carousel">
