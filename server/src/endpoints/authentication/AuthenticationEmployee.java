@@ -119,6 +119,7 @@ public class AuthenticationEmployee {
       // I'm afraid I can't do that.
       halt(401, "error_401");
     }
+    em.close();
   }
 
   /**
