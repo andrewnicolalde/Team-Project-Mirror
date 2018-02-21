@@ -15,7 +15,7 @@
 <div id="qunit-fixture"></div>
 <script>
   QUnit.test("Check the browser supports push notifications.", function ( assert ) {
-    if(verifyBrowserSupport()) {
+    if(browserSupportsPush()) {
       assert.ok(true);
     } else {
       assert.ok(false);

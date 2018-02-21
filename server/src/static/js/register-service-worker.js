@@ -2,11 +2,23 @@
  * Credit for this code to Matt Gaunt from Google
  */
 
+$(document).ready(function () {
+  if (browserSupportsPush()) {
+    // add a button users can click to get push notifications.
+    if (!havePermissions()) {
+      var button = "<button onclick='doSomething()'>Notifications</button>";
+      $('div').append(button);
+    } else {
+      // register service worker and check subscriptions. send to backend.
+    }
+  }
+});
+
 /**
  * Verify if the browser supports service workers and Push.
  * @return {boolean} true if the browser supports it, false otherwise.
  */
-function verifyBrowserSupport() {
+function browserSupportsPush() {
   if (!('serviceWorker' in navigator)) {
     // not supported, we can't do anything so..
     return Boolean(false);
@@ -15,16 +27,48 @@ function verifyBrowserSupport() {
     // again not supported, we can't do anything so..
     return Boolean(false);
   }
+  // TODO check if we need to show notifications or can we just change the page?
   if (!('Notification' in window)) {
-    // can't show notifications
+    // check if there is another notification API.
+    if (('showNotification' in ServiceWorkerRegistration.prototype)) {
+      return Boolean(true);
+    } else {
+      // We definitely can't show Notifications.
+      return Boolean(false);
+    }
   }
   return Boolean(true);
 }
 
 /**
+ * Checks if the page has permission to show notifications to the user. If false we cannot use push notifications.
+ * @return {boolean} True if we can show notifications. False if not.
+ */
+function havePermissions() {
+  return Boolean(Notification.permission === "granted");
+}
+
+/**
+ * Gets the PushSubscription if it already exists. If not it returns null.
+ * @param registration
+ * @return {Promise<PushSubscription>} or null if there is no subscription.
+ */
+function getCurrentSubscription(registration) {
+  registration.pushManager.getSubscription()
+  .then(function (subscription) {
+    if (!subscription) {
+      return; // there isn't a subscription return to create a new one.
+    }
+    return subscription;
+  }).catch(function (err) {
+    console.error(err);
+  });
+}
+
+/**
  * Takes a url of a js file that contains the worker code and registers it as a ServiceWorker.
  * Console logs the result.
- * @param worker
+ * @param worker The path of the js file which contains the worker.
  * @return {Promise<ServiceWorkerRegistration>} the registration with which the service worker is accessed.
  */
 function registerServiceWorker(worker) {
@@ -60,7 +104,7 @@ function askPermission() {
 }
 
 /**
- * Check permissions and show a test notification.
+ * TODO refactor to become permission asking wrapper leading to registering a service worker etc.
  */
 function doSomething() {
   if (!(Notification.permission === "granted")) {
@@ -74,7 +118,9 @@ function doSomething() {
   } else {
     // Do nothing we want to register a worker either way.
   }
-    var registration = registerServiceWorker("../js/notification-worker.js")
+  var subscription = subscribeUserToPush();
+  console.log(subscription);
+  // sendSubscriptionToBackEnd(registration);
 }
 
 /**
@@ -85,17 +131,14 @@ function doSomething() {
 function subscribeUserToPush() {
   return navigator.serviceWorker.register('/js/notification-worker.js')
   .then(function(registration) {
-    var enc = new TextEncoder("utf-8");
+    var serverKey = urlBase64ToUint8Array('BIz9luhpKgx76RcIhqU4fmdIC1ve7fT5gm2Y632w_lsd_od2B87XschASGbi7EfgTIWpBAPKh2IWTOMt1Gux7tA');
     const subscribeOptions = {
       userVisibleOnly: true,
-      applicationServerKey: enc.encode(
-          'BE4fhya6e_JedY-5R7cRMXj973kghfY3YTk0Bzi8AWXGc8f1JHD3GBmWsg1J8DvMW3uLG5nf6ycDjbFO0n5u7n4'
-      )
+      applicationServerKey: serverKey
     };
 
     return registration.pushManager.subscribe(subscribeOptions);
-  })
-  .then(function(pushSubscription) {
+  }).then(function(pushSubscription) {
     console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
     return pushSubscription;
   });
@@ -104,27 +147,44 @@ function subscribeUserToPush() {
 /**
  * Send the subscription object to the server so we can issue push notifications.
  * Credit Matt Gaunt, Google.
- * @param subscription
- * @return {Promise<Response>}
+ * @param subscription The PushSubscription object.
+ * @return {Promise<Response>} The response from the server.
  */
 function sendSubscriptionToBackEnd(subscription) {
-  return fetch('/api/save-subscription/', {
+  return fetch('/api/authStaff/save-subscription/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(subscription)
-  })
-  .then(function(response) {
+  }).then(function(response) {
     if (!response.ok) {
-      throw new Error('Bad status code from server.');
+      return Response.error();
     }
 
     return response.json();
-  })
-  .then(function(responseData) {
+  }).then(function(responseData) {
     if (!(responseData.data && responseData.data.success)) {
-      throw new Error('Bad response from server.');
+      return Response.error();
     }
   });
+}
+
+/**
+ * Utility function to send the VAPID key.
+ * Credit Malko https://gist.github.com/malko/ff77f0af005f684c44639e4061fa8019
+ * @param base64String
+ * @return {Uint8Array}
+ */
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding)
+      .replace(/\-/g, '+')
+      .replace(/_/g, '/')
+  ;
+  const rawData = window.atob(base64);
+  return Uint8Array.from([...rawData;
+].
+  map((char) = > char.charCodeAt(0);
+))
 }
