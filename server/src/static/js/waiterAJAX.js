@@ -153,6 +153,7 @@ function loadOrderList(tableNumber) {
             + "setActiveOrder(event); "
             + "loadOrder(this.getAttribute('data-ordernum'));"
             + "document.getElementById('confirm_button').style.visibility = 'visible';"
+            + "document.getElementById('delivered_button').style.visibility = 'visible';"
             + "document.getElementById('edit_button').style.visibility = 'visible';"
             + "document.getElementById('cancel_button').style.visibility = 'visible';"
             + "\">"
