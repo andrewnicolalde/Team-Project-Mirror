@@ -18,7 +18,6 @@ function getActiveOrder() {
  * of the currently active table.
  * @param menuItemId the ID of the menu item to be added to the order
  */
-
 function addToOrder(menuItemId) {
   var activeOrder = getActiveOrder();
 
@@ -192,7 +191,7 @@ function changeOrderStatus(orderStatus) {
         orderNumber: activeOrder.getAttribute('data-ordernum'),
         newOrderStatus: orderStatus
       }),
-      loadTables
+      loadTables()
   );
 }
 
@@ -205,8 +204,11 @@ function confirmCancelOrder() {
   if (getActiveOrder() == null) {
     bootbox.alert("There is no order selected");
   } else {
-    bootbox.confirm("Are you sure you want to cancel this order?", function () {
-      changeOrderStatus('CANCELLED');
+    bootbox.confirm("Are you sure you want to cancel this order?", function (result) {
+      if(result){ // If the user hit okay (result == true)
+        changeOrderStatus('CANCELLED');
+      }
+      // Otherwise do nothing
     });
   }
 }
@@ -214,5 +216,5 @@ function confirmCancelOrder() {
 // Loads the menu and tables when the page loads.
 $(document).ready(function () {
   loadMenu();
-  loadTables()
+  loadTables();
 });
