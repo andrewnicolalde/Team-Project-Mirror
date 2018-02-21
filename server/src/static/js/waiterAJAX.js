@@ -70,48 +70,14 @@ function loadOrder(orderNumber) {
       $("#current-order").append("<li class='list-group-item list-group-item-action'"
           + "id= \"order-item-" + i + "\">"
           + "<span class='span-bold'>"
-          + response[i].name + ": </span> "
+          + response[i].name + " </span> "
           + "<span style='float: right'> £" + response[i].price + "</span>"
-          + "<h6> Instructions: " + response[i].instructions + "</h6>"
+          + "<h6>" + response[i].instructions + "</h6>"
           + "</li>");
     }
   });
 }
 
-/**
- * This function is responsible for retrieving and displaying the menu
- * item elements in the Menu column in waiter.html.
- */
-function loadMenu() {
-  // Send get request to server for menu JSON
-  get("/api/authStaff/getMenu", function (data) {
-    // Parse JSON
-    var response = JSON.parse(data);
-
-    // Add items to menu list
-    for (var i = 0; i < response.length; i++) {
-      $("#menu-list").append("<li class='list-group-item list-group-item-action'"
-          + "id= \"menu-item-" + i + "\""
-          + "data-menuItemNum='" + response[i].id + "'"
-          + "onclick='addToOrder(this.getAttribute(\"data-menuItemNum\"))'>"
-          + "<span class='span-bold'>"
-          + response[i].name + ": </span> " + response[i].price + "</li>");
-      // Show dietary information
-      if (response[i].is_gluten_free) { // Gluten Free
-        $("#menu-item-" + i).append(
-            " <img src='../images/gluten-free.svg' alt='Gluten Free'>");
-      }
-      if (response[i].is_vegetarian) { // Vegetarian
-        $("#menu-item-" + i).append(
-            " <img src='../images/vegetarian-mark.svg' alt='Vegetarian'>");
-      }
-      if (response[i].is_vegan) {
-        $("#menu-item-" + i).append(
-            " <img src='../images/vegan-mark.svg' alt='Vegan'>");
-      }
-    }
-  });
-}
 
 /**
  * This function is responsible for retrieving and displaying the tables
@@ -218,6 +184,5 @@ function confirmCancelOrder() {
 
 // Loads the menu and tables when the page loads.
 $(document).ready(function () {
-  loadMenu();
   loadTables();
 });
