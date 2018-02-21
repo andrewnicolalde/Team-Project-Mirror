@@ -95,8 +95,12 @@ function displayOrderItems(data, foodOrder) {
   var response = JSON.parse(data);
 
   for (var i = 0; i < response.length; i++) {
-    $("#list-" +foodOrder).append("<li class='list-group-item'><b>" + response[i].name +"</b>"
-        + "<br>"+ response[i].instructions +"</li>");
+    var item = "<li class='list-group-item'><div><b>"+ response[i].name +"</b><input type='checkbox' class='custom-checkbox'></div>";
+    if (!(response[i].instructions === "")) {
+      item += response[i].instructions
+    }
+    item += "</li>";
+    $("#list-" + foodOrder).append(item);
   }
 }
 

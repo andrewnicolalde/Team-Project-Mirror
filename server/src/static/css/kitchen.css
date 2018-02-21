@@ -35,6 +35,9 @@
   box-shadow: 1px 1px 1px 1px grey;
 }
 
+.order-list input {
+  float: right;
+}
 .col-3 {
   max-width: 20%;
 }
@@ -49,6 +52,10 @@
 
 .list-group-item {
   font-size: 1.25rem;
+}
+
+.list-group-item input{
+  float: right;
 }
 
 #row {
