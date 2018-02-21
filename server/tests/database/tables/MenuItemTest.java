@@ -35,7 +35,7 @@ public class MenuItemTest {
     //Create new category
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    Category category = new Category("Food");
+    Category category = new Category("Food", 1L);
     entityManager.persist(category);
     entityManager.getTransaction().commit();
     entityManager.close();
