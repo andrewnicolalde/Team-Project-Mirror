@@ -73,18 +73,6 @@ function orderDone(orderId) {
       });
 }
 
-function removeFromScreen(data,Id) {
-  //var response = JSON.parse(data);
-
-  if (data !== "success") {
-    throw new Error();
-  } else {
-    var parent = document.getElementById("row");
-    var child = document.getElementById(Id);
-    parent.removeChild(child);
-    getCookingOrders();
-  }
-}
 /**
  * Gets the items from the order from the database. Displays them.
  * @param foodOrderId The ID of the Order which we are getting the items of.
@@ -107,7 +95,22 @@ function displayOrderItems(data, foodOrder) {
   var response = JSON.parse(data);
 
   for (var i = 0; i < response.length; i++) {
-    $("#list-" +foodOrder).append("<li class='list-group-item'><b>" + response[i].name +"</b><br>"+ response[i].instructions +"</li>");
+    $("#list-" +foodOrder).append("<li class='list-group-item'><b>" + response[i].name +"</b>"
+        + "<br>"+ response[i].instructions +"</li>");
+  }
+}
+
+
+function removeFromScreen(data,Id) {
+  //var response = JSON.parse(data);
+
+  if (data !== "success") {
+    throw new Error();
+  } else {
+    var parent = document.getElementById("row");
+    var child = document.getElementById(Id);
+    parent.removeChild(child);
+    getCookingOrders();
   }
 }
 
