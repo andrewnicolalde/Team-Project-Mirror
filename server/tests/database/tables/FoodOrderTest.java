@@ -69,7 +69,7 @@ public class FoodOrderTest {
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
     Transaction transaction = new Transaction(false, 1.00, new Timestamp(1516709651),
-        restaurantTableStaff);
+        false, restaurantTableStaff);
     entityManager.persist(transaction);
     entityManager.getTransaction().commit();
     entityManager.close();

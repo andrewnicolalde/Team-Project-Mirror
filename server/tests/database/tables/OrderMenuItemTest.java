@@ -68,7 +68,7 @@ public class OrderMenuItemTest {
     //Create new Transaction
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    Transaction transaction = new Transaction(false, 1.00, new Timestamp(1516709651),
+    Transaction transaction = new Transaction(false, 1.00, new Timestamp(1516709651), false,
         restaurantTableStaff);
     entityManager.persist(transaction);
     entityManager.getTransaction().commit();
@@ -95,7 +95,7 @@ public class OrderMenuItemTest {
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
     MenuItem menuItem = new MenuItem("Burger", "Got meat",
-        "Well it's a burger", 1.00, false, false,
+        "Well it's a burger",500.00, 1.00, false, false,
         false, "picSrc", category);
     entityManager.persist(menuItem);
     entityManager.getTransaction().commit();

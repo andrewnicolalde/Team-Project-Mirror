@@ -26,7 +26,7 @@ $(document).ready(function () {
 
 function loadMenu() {
   // Send get request to server for menu JSON
-  get("/api/authStaff/menu", function (data) {
+  get("/api/authStaff/getMenu", function (data) {
     // Parse JSON
     var response = JSON.parse(data);
 
@@ -66,7 +66,7 @@ function addToOrder(menuItemId) {
   });
 
   // Handle possible responses
-  post("/api/authStaff/addToOrder", nameValuePairs, function (status) {
+  post("/api/authStaff/addItemToOrder", nameValuePairs, function (status) {
     loadOrder(2);
     if (status === "") {
       // Refresh current order table to show new change
@@ -79,7 +79,7 @@ function addToOrder(menuItemId) {
 // TODO make generic.
 function loadOrder(orderNumber) {
   var orderNumberToSend = JSON.stringify({orderNumber: orderNumber});
-  post("/api/authStaff/getOrder", orderNumberToSend, function (data) {
+  post("/api/authStaff/getOrderItems", orderNumberToSend, function (data) {
 
     // Parse JSON
     var response = JSON.parse(data);

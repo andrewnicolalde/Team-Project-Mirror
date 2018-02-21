@@ -1,6 +1,4 @@
-package endpoints.waiter;
-
-import static util.JsonUtil.toJson;
+package endpoints.tables;
 
 import database.DatabaseManager;
 import database.tables.RestaurantTableStaff;
@@ -9,12 +7,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
 import spark.Response;
+import util.JsonUtil;
 
+/**
+ * This class gets the list of tables from the database.
+ */
 public class Tables {
 
-  /**
-   * Returns a string holding a list of tables. No JSON as it is a get request.
-   */
   public static String getTables(Request request, Response response) {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
@@ -23,7 +22,7 @@ public class Tables {
     return getTableData(staffSession.getStaff().getEmployeeNumber());
   }
 
-  public static String getTableData(Long staffId) {
+  private static String getTableData(Long staffId) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from " +
@@ -35,6 +34,6 @@ public class Tables {
       tableData[i] = new TableData(restaurantTableStaffs.get(i));
     }
 
-    return toJson(tableData);
+    return JsonUtil.getInstance().toJson(tableData);
   }
 }

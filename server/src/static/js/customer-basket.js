@@ -3,8 +3,7 @@
  *table so that it can be displayed in the basket page.
  */
 $(document).ready(function () {
-  // TODO: Update path once real endpoint is set up
-  post("/api/authStaff/getOrder", function (data) {
+  post("/api/authStaff/getOrderItems", function (data) {
     //parse JSON
     var response = JSON.parse(data);
     for (i = 0; i < response.length; i++) {
