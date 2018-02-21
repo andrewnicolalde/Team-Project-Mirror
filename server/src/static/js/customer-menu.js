@@ -1,6 +1,6 @@
 $(document).ready(function () {
-  loadMenu();
   getTransactionId();
+  loadMenu();
 });
 
 function loadMenu() {
@@ -53,5 +53,23 @@ function getOrderId(transactionId) {
     var response = JSON.parse(data);
 
     localStorage.setItem("orderId", response.orderId);
+    // Load order now, when the orderId has definitely been set.
+    loadOrder();
+  });
+}
+
+function loadOrder() {
+  var postData = {orderNumber: localStorage.getItem("orderId")};
+  post("/api/authTable/getOrderItems", JSON.stringify(postData), function(data) {
+    var orderMenuItems = JSON.parse(data);
+    for (var i=0; i<orderMenuItems.length; i++) {
+      var item = orderMenuItems[i];
+      $("#order").append("<li id='ordermenuitem-" + item.id + "' class='list-group-item list-group-item-action'>\n"
+                         + "<span class='span-bold'>" + item.name + "</span>"
+                         + "<span class='span-price'>£" + item.price + "</span>\n"
+                         + "<br>\n"
+                         + item.instructions + "\n"
+                       + "</li>");
+    }
   });
 }
