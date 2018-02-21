@@ -62,6 +62,7 @@ function loadOrder() {
   var postData = {orderNumber: localStorage.getItem("orderId")};
   post("/api/authTable/getOrderItems", JSON.stringify(postData), function(data) {
     var orderMenuItems = JSON.parse(data);
+    var total = 0.0;
     for (var i=0; i<orderMenuItems.length; i++) {
       var item = orderMenuItems[i];
       $("#order").append("<li id='ordermenuitem-" + item.id + "' class='list-group-item list-group-item-action'>\n"
@@ -70,6 +71,11 @@ function loadOrder() {
                          + "<br>\n"
                          + item.instructions + "\n"
                        + "</li>");
+      total += parseFloat(item.price);
     }
+    $("#order").append("<li id='total-price' class='list-group-item list-group-item-info'>\n"
+                       + "<span class='span-bold'>Total:</span>"
+                       + "<span class='span-price'>£" + total.toFixed(2) + "</span>\n"
+                     + "</li>");
   });
 }
