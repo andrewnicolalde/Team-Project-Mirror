@@ -1,3 +1,5 @@
+var basket = [];
+
 $(document).ready(function () {
   getTransactionId();
   loadMenu();
@@ -62,28 +64,50 @@ function loadOrder() {
   var postData = {orderNumber: localStorage.getItem("orderId")};
   post("/api/authTable/getOrderItems", JSON.stringify(postData), function(data) {
     var orderMenuItems = JSON.parse(data);
-    var total = 0.0;
     for (var i=0; i<orderMenuItems.length; i++) {
       var item = orderMenuItems[i];
       addItemToBasket(item);
-      total += parseFloat(item.price);
     }
-
-    $("#order").append("<li id='total-price' class='list-group-item list-group-item-info'>\n"
-                       + "<span class='span-bold'>Total:</span>"
-                       + "<span class='span-right'>£" + total.toFixed(2) + "</span>\n"
-                     + "</li>");
+    calculateTotal();
   });
 }
 
 function addItemToBasket(item) {
-  $("#order").append("<li id='ordermenuitem-" + item.id + "' class='list-group-item list-group-item-action'>\n"
+  var parent = $("#order");
+
+  // Add item
+  basket.push(item);
+  parent.append("<li id='ordermenuitem-" + item.id + "' class='list-group-item list-group-item-action'>\n"
                      + "<span class='span-bold'>" + item.name + "</span>"
                      + "<span class='span-right'>£" + item.price + "</span>\n"
                      + "<br>\n"
                      + item.instructions
                      + "<span class='span-right'><i class='fa fa-edit fa-lg edit'></i><i class='fa fa-times fa-lg remove' onclick='removeOrderMenuItem(" + item.id + ");'></i></span>"
                    + "</li>");
+}
+
+function calculateTotal() {
+  // Remove old total order if it exists
+  var parent = document.getElementById("order");
+  var totalPrice = document.getElementById("total-price");
+  console.log(totalPrice);
+  if (totalPrice != null) {
+    parent.removeChild(totalPrice);
+  }
+
+
+  // Calculate total
+  var total = 0.0;
+  for (var i=0; i<basket.length; i++) {
+    var item = basket[i];
+    total += parseFloat(item.price);
+  }
+
+  // Display it.
+  $("#order").append("<li id='total-price' class='list-group-item list-group-item-info'>\n"
+      + "<span class='span-bold'>Total:</span>"
+      + "<span class='span-right'>£" + total.toFixed(2) + "</span>\n"
+      + "</li>");
 }
 
 function removeOrderMenuItem(itemId) {
@@ -93,6 +117,16 @@ function removeOrderMenuItem(itemId) {
       var parent = document.getElementById("order");
       var child = document.getElementById("ordermenuitem-" + itemId);
       parent.removeChild(child);
+
+      // Remove it from the basket array
+      for (var i=0; i<basket.length; i++) {
+        if (basket[i].id === itemId) {
+          basket.splice(i, 1);
+        }
+      }
+
+      // Recalculate the price
+      calculateTotal();
     }
   })
 }
