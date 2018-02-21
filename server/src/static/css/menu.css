@@ -29,11 +29,11 @@
 }
 
 .remove {
-  margin-left: 3px;
+  margin-left: 10px;
   color: red;
 }
 
 .edit {
-  margin-right: 3px;
+  margin-right: 10px;
   color: #b322ff;
 }
