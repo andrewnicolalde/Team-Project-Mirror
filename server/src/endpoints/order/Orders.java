@@ -11,6 +11,8 @@ import database.tables.TableSession;
 import database.tables.TableStatus;
 import database.tables.Transaction;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -65,6 +67,17 @@ public class Orders {
             + "where foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNo",
         FoodOrder.class).setParameter("tableNo", tableOrderParams.getTableNumber())
         .getResultList();
+
+    // Apdated from https://stackoverflow.com/questions/4018090/sorting-listclass-by-one-of-its-variable
+    foodOrders.sort((t0, t1) -> {
+      if (t0.getOrderId() < t1.getOrderId()) {
+        return -1;
+      }
+      if (t0.getOrderId() > t1.getOrderId()) {
+        return 1;
+      }
+      return 0;
+    });
 
     OrderData[] orderData = new OrderData[foodOrders.size()];
     for (int i = 0; i < orderData.length; i++) {

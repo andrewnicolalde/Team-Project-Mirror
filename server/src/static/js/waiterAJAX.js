@@ -14,36 +14,6 @@ function getActiveOrder() {
 }
 
 /**
- * This function is responsible for adding menu items to the current order
- * of the currently active table.
- * @param menuItemId the ID of the menu item to be added to the order
- */
-function addToOrder(menuItemId) {
-  var activeOrder = getActiveOrder();
-
-  // TODO: Remove this and add an actual way to add instructions.
-  var requirements = "These are test instructions";
-
-  // Create name-value pairs for HTTP post request, see
-  // https://en.wikipedia.org/wiki/POST_(HTTP)#Use_for_submitting_web_forms
-  var nameValuePairs = JSON.stringify({
-    orderNumber: activeOrder.getAttribute('data-ordernum'),
-    menuItemId: menuItemId,
-    requirements: requirements
-  });
-
-  // Handle possible responses
-  post("/api/authStaff/addItemToOrder", nameValuePairs, function (status) {
-    loadOrder(activeOrder.getAttribute('data-ordernum'));
-    if (status === "") {
-      // Refresh current order table to show new change
-      console.log("Add item to order failed");
-      console.log(status);
-    }
-  });
-}
-
-/**
  * This script is responsible for retrieving and displaying the contents of each
  * Table's current order. It also clears the Current Order column of any existing
  * entries before adding the selected Table's entries to the Current Order column.

@@ -3,6 +3,7 @@ package endpoints.tables;
 import database.DatabaseManager;
 import database.tables.RestaurantTableStaff;
 import database.tables.StaffSession;
+import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -28,6 +29,16 @@ public class Tables {
     List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from " +
             "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
         RestaurantTableStaff.class).getResultList();
+
+    restaurantTableStaffs.sort((t0, t1) -> {
+      if (t0.getRestaurantTable().getTableNumber() < t1.getRestaurantTable().getTableNumber()) {
+        return -1;
+      }
+      if (t0.getRestaurantTable().getTableNumber() > t1.getRestaurantTable().getTableNumber()) {
+        return 1;
+      }
+      return 0;
+    });
 
     TableData[] tableData = new TableData[restaurantTableStaffs.size()];
     for (int i = 0; i < tableData.length; i++) {
