@@ -6,12 +6,12 @@
 /* Adapted from
   https://stackoverflow.com/questions/24166568/set-bootstrap-modal-body-height-by-percentage
    https://stackoverflow.com/questions/42896820/bootstrap-4-modal-width-increase*/
-.modal-lg {
+.menu-lg {
   max-width: 80% !important;
 }
-.modal-dialog {
+.menu-dialog {
   height: 100%;
 }
-.modal-content {
+.menu-content {
   height: 95%;
 }
