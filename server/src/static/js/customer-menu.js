@@ -41,7 +41,17 @@ function loadMenu() {
                                                                + "<span class='span-bold'>" + menuItem.name + "</span> - £" + menuItem.price + "\n"
                                                                + "<br>\n"
                                                                + menuItem.description + "\n"
+                                                               + "<br>\n"
                                                              + "</li>");
+        if (menuItem.is_gluten_free) {
+          $("#menuitem-" + menuItem.id).append("<img src='../images/gluten-free.svg' alt='Gluten Free'>");
+        }
+        if (menuItem.is_vegetarian) {
+          $("#menuitem-" + menuItem.id).append("<img src='../images/vegetarian-mark.svg' alt='Vegetarian'>");
+        }
+        if (menuItem.is_vegan) {
+          $("#menuitem-" + menuItem.id).append("<img src='../images/vegan-mark.svg' alt='Vegan'>");
+        }
       }
     });
   });
@@ -159,7 +169,6 @@ function showItemModal(itemId) {
     if (menuItems[i].id === itemId) {
       var item = menuItems[i];
       var modal = document.getElementById("addToOrderModal");
-      console.log(item);
       document.getElementById("name").innerText = item.name;
       document.getElementById("category").innerText = item.category;
       document.getElementById("description").innerText = item.description;
