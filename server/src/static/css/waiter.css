@@ -3,13 +3,15 @@
   font-weight: bold;
 }
 
-/* Adapted from https://stackoverflow.com/questions/24166568/set-bootstrap-modal-body-height-by-percentage */
-.modal-dialog,
-.modal-content {
-  height: 90%;
-  width: 100%;
+/* Adapted from
+  https://stackoverflow.com/questions/24166568/set-bootstrap-modal-body-height-by-percentage
+   https://stackoverflow.com/questions/42896820/bootstrap-4-modal-width-increase*/
+.modal-lg {
+  max-width: 80% !important;
 }
-
-.modal-body {
-  max-height: calc(100% - 120px);
+.modal-dialog {
+  height: 100%;
+}
+.modal-content {
+  height: 95%;
 }
