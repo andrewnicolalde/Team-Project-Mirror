@@ -1,14 +1,17 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--scripts-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="../js/ajax-wrapper.js"></script>
     <script src="../js/customer-basket.js"></script>
     <title>Oaxaca | Basket</title>
@@ -23,40 +26,56 @@
 <div class="container">
     <h2>Basket</h2>
     <table class="table table-hover">
-        <!--names of the columns of the table-->
+        <!--names of the columns of the table, to be displayed in table head (thead)-->
         <thead>
         <tr>
             <th scope="col">#</th>
             <th scope="col">Description</th>
             <th scope="col">Price</th>
-            <th scope="col">Quantity</th>
         </tr>
         </thead>
         <tbody id="table-body">
         <!--tr to /tr is one table row-->
-        <tr>
+        <!--th is the row number-->
+        <!--td are the columns in a row-->
+
+        <tr data-toggle="collapse" data-target="#row1" class="clickable">
             <th scope="row">1</th>
             <td>Taco</td>
             <td>£3</td>
-            <td>5</td>
         </tr>
+        <!--The <tr> elements in between rows can be toggled to collapse, revealing more information about the food in the above row-->
         <tr>
+            <td colspan="3">
+                <div id="row1" class="collapse">cornflour tacos with a filling of your choice.</div>
+            </td>
+        </tr>
+        <tr data-toggle="collapse" data-target="#row2" class="clickable">
             <th scope="row">2</th>
             <td>Tortilla Chip</td>
             <td>£1</td>
-            <td>2</td>
         </tr>
         <tr>
+            <td colspan="3">
+                <div id="row2" class="collapse">a classic tortilla chip.</div>
+            </td>
+        </tr>
+        <tr data-toggle="collapse" data-target="#row3" class="clickable">
             <th scope="row">3</th>
             <td>burrito</td>
             <td>£6</td>
-            <td>1</td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <div id="row3" class="collapse">a burrito with a filling of your choice.</div>
+            </td>
         </tr>
         </tbody>
     </table>
+    <!--buttons load on the right hand side of the page-->
     <div class="pull-right">
         <a href="#" class="btn btn-success" style="float: right;">Call waiter</a>
-        <a href="#" class="btn" style="float: right;">Back to menu</a>
+        <a href="menupage.html" class="btn" style="float: right;">Back to menu</a>
     </div>
 </div>
 </body>

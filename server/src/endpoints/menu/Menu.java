@@ -1,6 +1,7 @@
 package endpoints.menu;
 
 import database.DatabaseManager;
+import database.tables.Category;
 import database.tables.MenuItem;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -30,7 +31,7 @@ public class Menu {
     entityManager.close();
 
     if (menuItems == null) {
-      return "";
+      return "[]";
     }
 
     MenuData[] menuData = new MenuData[menuItems.size()];
@@ -40,5 +41,20 @@ public class Menu {
     }
 
     return JsonUtil.getInstance().toJson(menuData);
+  }
+
+  public static String getCategories() {
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
+
+    List<Category> categories = em.createQuery("from Category ORDER BY displayOrder asc",
+        Category.class).getResultList();
+
+    em.close();
+
+    if (categories == null) {
+      return "[]";
+    }
+
+    return JsonUtil.getInstance().toJson(categories);
   }
 }
