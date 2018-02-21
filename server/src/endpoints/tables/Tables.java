@@ -34,6 +34,8 @@ public class Tables {
       tableData[i] = new TableData(restaurantTableStaffs.get(i));
     }
 
+    entityManager.close();
+
     return JsonUtil.getInstance().toJson(tableData);
   }
 }
