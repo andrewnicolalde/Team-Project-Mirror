@@ -22,20 +22,37 @@
 
 <div class="row">
   <div class="col-sm-7">
-    <div id="menu" class="column">
+    <div id="menu-title" class="column">
       <h5 class="text-center">Menu</h5>
+      <p class="text-center">
+        Key:<br>
+        Gluten Free: <img src="../images/gluten-free.svg">
+        Vegetarian: <img src="../images/vegetarian-mark.svg">
+        Vegan: <img src="../images/vegan-mark.svg">
+      </p>
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <div id="basket-title" class="column">
+      <h5 class="text-center">Basket</h5>
+      <div class="text-center">
+        <button id="confirm-button" class="btn btn-success" type="button">Confirm Order</button>
+        <button id="call-waiter-button" class="btn btn-danger" type="button">Call Waiter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-7">
+    <div id="menu" class="column">
       <div id="categories">
       </div>
     </div>
   </div>
   <div class="col-sm-5">
     <div id="basket" class="column">
-      <h5 class="text-center">Basket</h5>
-      <div class="text-center">
-        <button id="confirm-button" class="btn btn-success" type="button">Confirm Order</button>
-        <button id="call-waiter-button" class="btn btn-danger" type="button">Call Waiter</button>
-      </div>
-      <ul id="order" class="list-group menuitems">
+      <ul id="order" class="list-group">
       </ul>
     </div>
   </div>
