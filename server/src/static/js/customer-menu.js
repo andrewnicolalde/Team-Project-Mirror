@@ -1,4 +1,12 @@
 var basket = [];
+var menuItems = [];
+
+window.onclick = function(event) {
+  var modal = document.getElementById("addToOrderModal");
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+};
 
 $(document).ready(function () {
   getTransactionId();
@@ -25,10 +33,10 @@ function loadMenu() {
 
     // Load menu
     get("/api/authTable/getMenu", function(menuData){
-      menu = JSON.parse(menuData);
-      for(var i=0; i<menu.length; i++) {
-        var menuItem = menu[i];
-        $("#category-" + menuItem.categoryId + "-list").append("<li id='menuitem-" + menuItem.id + "' class='menuitem list-group-item list-group-item-action'>\n"
+      menuItems = JSON.parse(menuData);
+      for(var i=0; i<menuItems.length; i++) {
+        var menuItem = menuItems[i];
+        $("#category-" + menuItem.categoryId + "-list").append("<li id='menuitem-" + menuItem.id + "' class='menuitem list-group-item list-group-item-action' onclick='showItemModal(" + menuItem.id + ")'>\n"
                                                                + "<span class='span-bold'>" + menuItem.name + "</span> - £" + menuItem.price + "\n"
                                                                + "<br>\n"
                                                                + menuItem.description + "\n"
@@ -90,7 +98,6 @@ function calculateTotal() {
   // Remove old total order if it exists
   var parent = document.getElementById("order");
   var totalPrice = document.getElementById("total-price");
-  console.log(totalPrice);
   if (totalPrice != null) {
     parent.removeChild(totalPrice);
   }
@@ -144,4 +151,15 @@ function addToOrder(itemId, instructions) {
       addItemToBasket(item);
     }
   })
+}
+
+function showItemModal(itemId) {
+  for (var i=0; i<menuItems.length; i++) {
+    if (menuItems[i].id === itemId) {
+      var item = menuItems[i];
+      var modal = document.getElementById("addToOrderModal");
+      modal.style.display = "block";
+      break;
+    }
+  }
 }
