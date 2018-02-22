@@ -9,6 +9,7 @@ import database.tables.RestaurantTableStaff;
 import database.tables.TableSession;
 import database.tables.Transaction;
 import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -90,16 +91,7 @@ public class Orders {
         FoodOrder.class).setParameter("orderStatus", statusOrderParams.getOrderStatus())
         .getResultList();
 
-    foodOrders.sort((o1, o2) -> {
-      if (o1.getTimeConfirmed().compareTo(o2.getTimeConfirmed()) < 0) {
-        return 1;
-      } else if (o1.getTimeConfirmed().compareTo(o2.getTimeConfirmed()) > 0) {
-        return -1;
-      } else {
-        return 0;
-      }
-    });
-    System.out.println(foodOrders);
+    foodOrders.sort(Comparator.comparing(FoodOrder::getTimeConfirmed));
 
     OrderData[] orderData = new OrderData[foodOrders.size()];
     for (int i = 0; i < orderData.length; i++) {
