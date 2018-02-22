@@ -83,4 +83,15 @@ public class PushSubscription {
   public void setAuth(String auth) {
     this.auth = auth;
   }
+
+  @Override
+  public String toString() {
+    return "PushSubscription{" +
+        "subscriptionId=" + subscriptionId +
+        ", endpoint='" + endpoint + '\'' +
+        ", expirationTime=" + expirationTime +
+        ", publicKey='" + publicKey + '\'' +
+        ", auth='" + auth + '\'' +
+        '}';
+  }
 }

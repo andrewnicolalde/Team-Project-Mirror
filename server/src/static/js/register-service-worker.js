@@ -131,7 +131,7 @@ function doSomething() {
 function subscribeUserToPush() {
   return navigator.serviceWorker.register('/js/notification-worker.js')
   .then(function(registration) {
-    var serverKey = urlBase64ToUint8Array('BIz9luhpKgx76RcIhqU4fmdIC1ve7fT5gm2Y632w_lsd_od2B87XschASGbi7EfgTIWpBAPKh2IWTOMt1Gux7tA');
+    var serverKey = urlB64ToUint8Array('BIz9luhpKgx76RcIhqU4fmdIC1ve7fT5gm2Y632w_lsd_od2B87XschASGbi7EfgTIWpBAPKh2IWTOMt1Gux7tA');
     const subscribeOptions = {
       userVisibleOnly: true,
       applicationServerKey: serverKey
@@ -178,21 +178,33 @@ function sendSubscriptionToBackEnd(subscription) {
   });
 }
 
+/*
+*  Function: urlB64ToUint8Array.
+*  Credit: Matt Gaunt https://github.com/GoogleChromeLabs/web-push-codelab/blob/master/app/scripts/main.js
+*  Push Notifications codelab
+*  Copyright 2015 Google Inc. All rights reserved.
+*
+*  Being used under the Apache License, Version 2.0
+*
+*      https://www.apache.org/licenses/LICENSE-2.0
+*/
 /**
  * Utility function to send the VAPID key.
- * Credit Malko https://gist.github.com/malko/ff77f0af005f684c44639e4061fa8019
+ * Modified to change let to var in for loop due to intellij complaining. Roger Milroy.
  * @param base64String
  * @return {Uint8Array}
  */
-function urlBase64ToUint8Array(base64String) {
+function urlB64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding)
-      .replace(/\-/g, '+')
-      .replace(/_/g, '/')
-  ;
+  .replace(/\-/g, '+')
+  .replace(/_/g, '/');
+
   const rawData = window.atob(base64);
-  return Uint8Array.from([...rawData;
-].
-  map((char) = > char.charCodeAt(0);
-))
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (var i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
 }
