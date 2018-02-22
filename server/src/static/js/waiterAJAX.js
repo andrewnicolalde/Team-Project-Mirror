@@ -78,21 +78,39 @@ function loadOrderList(tableNumber) {
 
     for (var i = 0; i < orders.length; i++) {
       var statusIcon;
+      var btnDisable = ["", "", "", ""];
+
       switch (orders[i].orderStatus) {
         case 'Cancelled':
           statusIcon = '<i class="fa fa-times" style="color: red; float: right; font-size: 25px"></i>';
+          // All buttons disabled
+          for (var j = 0; j < btnDisable.length; j++){
+            btnDisable[j] = "disabled"
+          }
           break;
         case 'Ordering':
           statusIcon = '<i class="fa fa-ellipsis-h" style="float: right;font-size: 25px"></i>';
+          // Delivered button disabled
+          btnDisable[1] = "disabled";
           break;
         case 'Ready To Confirm':
           statusIcon = '<i class="fa fa-bell" style="color: yellow; float: right;font-size: 25px"></i>';
+          // Delivered button disabled
+          btnDisable[1] = "disabled";
           break;
         case 'Cooking':
           statusIcon = '<i class="fa fa-fire" style="color: orange; float: right;font-size: 25px"></i>';
+          // All buttons except cancelled disabled
+          for (var j = 0; j < btnDisable.length - 1; j++){
+            btnDisable[j] = "disabled"
+          }
           break;
         case 'Ready To Deliver':
           statusIcon = '<i class="fa fa-check" style="color: #00bf00; float: right;font-size: 25px"></i>';
+          // All buttons except cancelled disabled
+          for (var j = 0; j < btnDisable.length - 1; j++){
+            btnDisable[j] = "disabled"
+          }
           break;
         case 'Delivered':
           statusIcon = '<i class="fas fa-utensils" style="float: right;font-size: 25px"></i>';
@@ -107,7 +125,7 @@ function loadOrderList(tableNumber) {
           + " onclick=\""
             + "setActiveOrder(event); "
             + "loadOrder(this.getAttribute('data-ordernum'));"
-            + "document.getElementById('confirm_button').style.visibility = 'visible';"
+            + "document.getElementById('confirm_button').classList.add('visible', " + btnDisable[0] + ");"
             + "document.getElementById('delivered_button').style.visibility = 'visible';"
             + "document.getElementById('edit_button').style.visibility = 'visible';"
             + "document.getElementById('cancel_button').style.visibility = 'visible';"
