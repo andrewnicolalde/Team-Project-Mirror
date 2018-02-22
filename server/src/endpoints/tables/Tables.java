@@ -29,6 +29,16 @@ public class Tables {
             "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
         RestaurantTableStaff.class).getResultList();
 
+    restaurantTableStaffs.sort((t0, t1) -> {
+      if (t0.getRestaurantTable().getTableNumber() < t1.getRestaurantTable().getTableNumber()) {
+        return -1;
+      }
+      if (t0.getRestaurantTable().getTableNumber() > t1.getRestaurantTable().getTableNumber()) {
+        return 1;
+      }
+      return 0;
+    });
+
     TableData[] tableData = new TableData[restaurantTableStaffs.size()];
     for (int i = 0; i < tableData.length; i++) {
       tableData[i] = new TableData(restaurantTableStaffs.get(i));
