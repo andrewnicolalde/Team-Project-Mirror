@@ -160,6 +160,7 @@ function addToOrder(itemId, instructions) {
     if (data !== "failure") {
       var item = JSON.parse(data);
       addItemToBasket(item);
+      calculateTotal();
     }
   })
 }
@@ -196,6 +197,12 @@ function showItemModal(itemId) {
 
       // Clear the extra instructions text input
       document.getElementById("instructions").value = "";
+
+      // Set the onclick for the add to order button
+      document.getElementById("addToOrderButton").onclick = function() {
+        addToOrder(document.getElementById("addToOrderModal").getAttribute("data-menuitemid"), document.getElementById("instructions").value);
+        document.getElementById('addToOrderModal').style.display = 'none';
+      };
 
       modal.style.display = "block";
       break;

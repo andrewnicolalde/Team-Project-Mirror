@@ -128,7 +128,7 @@ public class Orders {
     entityManager.persist(orderMenuItem);
     entityManager.getTransaction().commit();
     entityManager.close();
-    return "success";
+    return JsonUtil.getInstance().toJson(new OrderItemsData(orderMenuItem));
   }
 
   /**
