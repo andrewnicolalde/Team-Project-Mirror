@@ -55,6 +55,7 @@ public class Main {
     post("/api/authTable/addItemToOrder", Orders::addOrderMenuItem);
     post("/api/authTable/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authTable/changeOrderStatus", Orders::changeOrderStatus);
+    post("/api/authTable/changeOrderInstructions", Orders::changeOrderInstructions);
 
     System.out.println("Visit: http://localhost:4567");
 
