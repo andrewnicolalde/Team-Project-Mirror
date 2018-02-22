@@ -2,9 +2,9 @@
  * This function returns the selected table.
  * @returns The web element representing the current table
  */
-function getActiveOrder() {
-  var allOrders = document.getElementById("orders-list").children;
-  var activeTable;
+function getActiveTable() {
+  // Construct a list of all orders in the document
+  var allOrders = document.querySelectorAll('[id^="order-title-"]');
   for (var i = 0; i < allOrders.length; i++) {
     if (allOrders[i].classList.contains("active")) {
       activeTable = allOrders[i];
@@ -19,7 +19,7 @@ function getActiveOrder() {
  * @param menuItemId the ID of the menu item to be added to the order
  */
 function addToOrder(menuItemId) {
-  var activeOrder = getActiveOrder();
+  var activeOrder = getActiveTable();
 
   // TODO: Remove this and add an actual way to add instructions.
   var requirements = "These are test instructions";
@@ -120,10 +120,18 @@ function loadMenu() {
 function loadTables() {
   get("/api/authStaff/getTables", function (data) {
     var response = JSON.parse(data);
-    var currentOrderElement = document.getElementById("orders-list");
+    var currentOrderElement = document.getElementById("tables-list");
     while (currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
+    // Add each Table to the list of tables
+    for(var i = 0; i < response.length; i++){
+      $("#tables-list").append(
+          "<li data-tablenum='"+ response[i].number +"' id='table-"+response[i].number+"' class='list-group-item list-group-item-action'><span>Table "+ response[i].number +" - " + response[i].status
+          + "<ul id='table-"+ response[i].number+"-orders-list'></ul>"
+          + "</li>");
+    }
+    // Load all orders for each table
     for (var i = 0; i < response.length; i++) {
       loadOrderList(response[i].number);
     }
@@ -139,16 +147,16 @@ function loadOrderList(tableNumber) {
     tableNumber: tableNumber
   }), function (data) {
     var orders = JSON.parse(data);
-    var currentOrderElement = document.getElementById("orders-list");
+    var currentOrderElement = document.getElementById("table-"+tableNumber+"-orders-list");
     while (currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
     for (var i = 0; i < orders.length; i++) {
-      $("#orders-list").append(
+      $(currentOrderElement).append( // Change back to orders list
           "<li"
-          + " id='table-" + orders[i].foodOrderId + "'"
+          + " id='order-title-" + orders[i].foodOrderId + "'"
           + " data-ordernum='" + orders[i].foodOrderId + "'"
-          + " class='list-group-item list-group-item-action'"
+          + " class='list-group-item list-group-item-action' data-toggle='collapse'"
           + " onclick=\""
             + "setActiveOrder(event); "
             + "loadOrder(this.getAttribute('data-ordernum'));"
@@ -156,9 +164,7 @@ function loadOrderList(tableNumber) {
             + "document.getElementById('edit_button').style.visibility = 'visible';"
             + "document.getElementById('cancel_button').style.visibility = 'visible';"
             + "\">"
-          + "<span class='span-bold'>Table </span>" + tableNumber
-          + "<span> - Order </span>" + orders[i].foodOrderId
-          + ": " + orders[i].orderStatus
+          + "<span class='span-bold'>Order </span>" + orders[i].foodOrderId +" - "+ orders[i].orderStatus
           + "</li>"
       );
     }
@@ -172,10 +178,14 @@ function loadOrderList(tableNumber) {
  * @param event The event which was triggered by the clicked element
  */
 function setActiveOrder(event) {
+
+
+  // Get a list of every order in the entire document
+  var allTables = document.querySelectorAll('[id^="order-title-"]');
+
   // Reset all orders to non-active
-  var allOrders = document.getElementById("orders-list").children;
-  for (var i = 0; i < allOrders.length; i++) {
-    allOrders[i].className = "list-group-item list-group-item-action";
+  for (var i = 0; i < allTables.length; i++) {
+    allTables[i].className = "list-group-item list-group-item-action";
   }
 
   // Set active element
@@ -188,7 +198,7 @@ function setActiveOrder(event) {
  * @param orderStatus The status you are making the order
  */
 function changeOrderStatus(orderStatus) {
-  var activeOrder = getActiveOrder();
+  var activeOrder = getActiveTable();
   post("/api/authStaff/changeOrderStatus",
       JSON.stringify({
         orderNumber: activeOrder.getAttribute('data-ordernum'),
@@ -204,7 +214,7 @@ function changeOrderStatus(orderStatus) {
  * a waiter does not cancel an order by mistake.
  */
 function confirmCancelOrder() {
-  if (getActiveOrder() == null) {
+  if (getActiveTable() == null) {
     bootbox.alert("There is no order selected");
   } else {
     bootbox.confirm("Are you sure you want to cancel this order?", function (result) {
