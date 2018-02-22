@@ -5,6 +5,7 @@ import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
+import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.Timestamp;
 import java.util.Base64;
@@ -20,7 +21,15 @@ import org.bouncycastle.math.ec.ECPoint;
  */
 public class Subscription {
 
+  /**
+   * Constructor for a Subscription object.
+   * @param subscription The PushSubscription object that it will be constructed from.
+   */
   public Subscription(PushSubscription subscription) {
+    // Add BouncyCastle as an algorithm provider
+    if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+      Security.addProvider(new BouncyCastleProvider());
+    }
     this.subscriptionId = subscription.getSubscriptionId();
     this.endpoint = subscription.getEndpoint();
     this.expirationTime = subscription.getExpirationTime();

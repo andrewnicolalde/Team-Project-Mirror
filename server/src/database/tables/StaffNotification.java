@@ -13,7 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author Marcus Messer
  */
 @Entity
-public class Notification {
+public class StaffNotification {
 
   /**
    * An auto generated primary key, for the use of storing the notification
