@@ -77,6 +77,28 @@ function loadOrderList(tableNumber) {
     var orders = JSON.parse(data);
 
     for (var i = 0; i < orders.length; i++) {
+      var statusIcon;
+      switch (orders[i].orderStatus) {
+        case 'Cancelled':
+          statusIcon = '<i class="fa fa-times" style="color: red; float: right; font-size: 25px"></i>';
+          break;
+        case 'Ordering':
+          statusIcon = '<i class="fa fa-ellipsis-h" style="float: right;font-size: 25px"></i>';
+          break;
+        case 'Ready To Confirm':
+          statusIcon = '<i class="fa fa-bell" style="color: yellow; float: right;font-size: 25px"></i>';
+          break;
+        case 'Cooking':
+          statusIcon = '<i class="fa fa-fire" style="color: orange; float: right;font-size: 25px"></i>';
+          break;
+        case 'Ready To Deliver':
+          statusIcon = '<i class="fa fa-check" style="color: #00bf00; float: right;font-size: 25px"></i>';
+          break;
+        case 'Delivered':
+          statusIcon = '<i class="fas fa-utensils" style="float: right;font-size: 25px"></i>';
+          break;
+      }
+
       $("#orders-list").append(
           "<li"
           + " id='table-" + orders[i].foodOrderId + "'"
@@ -93,6 +115,7 @@ function loadOrderList(tableNumber) {
           + "<span class='span-bold'>Table </span>" + tableNumber
           + "<span> - Order </span>" + orders[i].foodOrderId
           + ": " + orders[i].orderStatus
+          + statusIcon
           + "</li>"
       );
     }
