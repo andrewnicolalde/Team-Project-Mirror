@@ -1,6 +1,5 @@
 package endpoints.order;
 
-import com.google.gson.Gson;
 import database.DatabaseManager;
 import database.tables.FoodOrder;
 import database.tables.MenuItem;
@@ -8,7 +7,6 @@ import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
 import database.tables.RestaurantTableStaff;
 import database.tables.TableSession;
-import database.tables.TableStatus;
 import database.tables.Transaction;
 import java.sql.Timestamp;
 import java.util.List;
@@ -91,6 +89,17 @@ public class Orders {
             + "where foodOrder.status = :orderStatus",
         FoodOrder.class).setParameter("orderStatus", statusOrderParams.getOrderStatus())
         .getResultList();
+
+    foodOrders.sort((o1, o2) -> {
+      if (o1.getTimeConfirmed().compareTo(o2.getTimeConfirmed()) < 0) {
+        return 1;
+      } else if (o1.getTimeConfirmed().compareTo(o2.getTimeConfirmed()) > 0) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+    System.out.println(foodOrders);
 
     OrderData[] orderData = new OrderData[foodOrders.size()];
     for (int i = 0; i < orderData.length; i++) {
