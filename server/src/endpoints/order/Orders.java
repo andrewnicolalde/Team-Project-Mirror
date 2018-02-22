@@ -1,6 +1,5 @@
 package endpoints.order;
 
-import com.google.gson.Gson;
 import database.DatabaseManager;
 import database.tables.FoodOrder;
 import database.tables.MenuItem;
@@ -8,7 +7,6 @@ import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
 import database.tables.RestaurantTableStaff;
 import database.tables.TableSession;
-import database.tables.TableStatus;
 import database.tables.Transaction;
 import java.sql.Timestamp;
 import java.util.Collections;
@@ -39,7 +37,7 @@ public class Orders {
     List<OrderMenuItem> orderMenuItems = entityManager
         .createQuery("from OrderMenuItem orderMenuItem where "
             + "orderMenuItem.foodOrder.id = :orderId", OrderMenuItem.class).setParameter("orderId",
-            omiList.getOrderNumber()).getResultList();
+            omiList.getOrderId()).getResultList();
 
     entityManager.close();
 
@@ -104,6 +102,8 @@ public class Orders {
             + "where foodOrder.status = :orderStatus",
         FoodOrder.class).setParameter("orderStatus", statusOrderParams.getOrderStatus())
         .getResultList();
+
+    foodOrders.sort(Comparator.comparing(FoodOrder::getTimeConfirmed));
 
     OrderData[] orderData = new OrderData[foodOrders.size()];
     for (int i = 0; i < orderData.length; i++) {

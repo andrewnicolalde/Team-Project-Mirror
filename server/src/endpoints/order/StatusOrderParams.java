@@ -18,4 +18,8 @@ public class StatusOrderParams {
   public OrderStatus getOrderStatus() {
     return orderStatus;
   }
+
+  public String toString() {
+    return orderStatus.toString();
+  }
 }
