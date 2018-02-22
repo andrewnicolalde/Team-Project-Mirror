@@ -95,4 +95,14 @@ public class OrderMenuItem {
   public void setInstructions(String instructions) {
     this.instructions = instructions;
   }
+
+  @Override
+  public String toString() {
+    return "OrderMenuItem{" +
+        "orderMenuItemId=" + orderMenuItemId +
+        ", menuItem=" + menuItem +
+        ", foodOrder=" + foodOrder +
+        ", instructions='" + instructions + '\'' +
+        '}';
+  }
 }

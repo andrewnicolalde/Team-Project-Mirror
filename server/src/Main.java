@@ -33,7 +33,8 @@ public class Main {
     before("/api/authTable/*", AuthenticationTable::checkTableSession);
 
     // Endpoints which are meant to be connected to directly, not via AJAX requests.
-    get("/logout", AuthenticationEmployee::logOutEmployee);
+    get("/logoutStaff", AuthenticationEmployee::logOutEmployee);
+    get("/logoutTable", AuthenticationTable::logOutTable);
     post("/loginStaff", AuthenticationEmployee::logInEmployee);
     post("/loginTable", AuthenticationTable::logInTable);
 
@@ -53,9 +54,10 @@ public class Main {
     get("/api/authTable/getTransactionId", Orders::getTransactionId);
     post("/api/authTable/getOrderId", Orders::getOrderId);
     post("/api/authTable/getOrderItems", Orders::getOrderItems);
-    post("/api/authTable/getOrderItems", Orders::getOrderItems);
     post("/api/authTable/addItemToOrder", Orders::addOrderMenuItem);
+    post("/api/authTable/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authTable/changeOrderStatus", Orders::changeOrderStatus);
+    post("/api/authTable/changeOrderInstructions", Orders::changeOrderInstructions);
 
     System.out.println("Visit: http://localhost:4567");
 

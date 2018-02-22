@@ -94,4 +94,14 @@ public class Staff {
   public void setFranchise(Franchise franchise) {
     this.franchise = franchise;
   }
+
+  @Override
+  public String toString() {
+    return "Staff{" +
+        "employeeNumber=" + employeeNumber +
+        ", password='" + password + '\'' +
+        ", department=" + department +
+        ", franchise=" + franchise +
+        '}';
+  }
 }

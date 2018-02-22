@@ -1,8 +1,6 @@
 #sidebar {
-  min-width: 200px;
   max-width: 200px;
-  height: 100vh;
-  background-color: #17a2b8;
+  height: 95vh;
   color: white;
 }
 
@@ -26,13 +24,12 @@
 }
 
 .order-list li {
-  width: 100%;
+  /*width: 100%;*/
+  border-radius: 5px;
+  border: 2px lightgrey;
   height: 45px;
   text-align: center;
-  line-height: 45px;
-  text-shadow: 2px 2px 1px black;
   margin-top: 7px;
-  box-shadow: 1px 1px 1px 1px grey;
 }
 
 .order-list input {
@@ -69,20 +66,14 @@
 /*Colour coded list elements according to priority.*/
 
 .red {
-  background: #f85032; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to bottom, #e73827, #f85032); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to bottom, #e73827, #f85032); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #f80b1d;
 }
 
 .yellow {
-  background: #CAC531; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to bottom, #F3F9A7, #CAC531); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to bottom, #F3F9A7, #CAC531); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #dcd700;
 }
 
 .green {
-  background: #56ab2f; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to bottom, #a8e063, #56ab2f); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to bottom, #a8e063, #56ab2f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #40ab1c;
 }
 

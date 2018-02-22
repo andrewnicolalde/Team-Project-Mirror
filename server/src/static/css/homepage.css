@@ -46,3 +46,7 @@ a:active {
   text-decoration: none;
   color: white;
 }
+
+.carousel-inner {
+     margin-bottom: 20px;
+}
