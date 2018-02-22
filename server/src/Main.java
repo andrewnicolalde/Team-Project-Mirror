@@ -33,6 +33,7 @@ public class Main {
 
     // Endpoints which are meant to be connected to directly, not via AJAX requests.
     get("/logoutStaff", AuthenticationEmployee::logOutEmployee);
+    get("/logoutTable", AuthenticationTable::logOutTable);
     post("/loginStaff", AuthenticationEmployee::logInEmployee);
     post("/loginTable", AuthenticationTable::logInTable);
 
