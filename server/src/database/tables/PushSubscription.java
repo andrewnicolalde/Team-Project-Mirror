@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -13,6 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author Marcus Messer
  */
 @Entity
+@Table(name = "PUSH_SUBSCRIPTION")
 public class PushSubscription {
 
   /**
@@ -34,8 +35,52 @@ public class PushSubscription {
   private Timestamp expirationTime;
 
   /**
-   * Stores the keys used in the subscriptions
+   * Stores the Base64 encoded users publicKey
    */
-  @ManyToOne
-  private SubscriptionKey subscriptionKey;
+  private String publicKey;
+
+  /**
+   * Stores the Base64 encoded authKey.
+   */
+  private String auth;
+
+  public Long getSubscriptionId() {
+    return subscriptionId;
+  }
+
+  public void setSubscriptionId(Long subscriptionId) {
+    this.subscriptionId = subscriptionId;
+  }
+
+  public String getEndpoint() {
+    return endpoint;
+  }
+
+  public void setEndpoint(String endpoint) {
+    this.endpoint = endpoint;
+  }
+
+  public Timestamp getExpirationTime() {
+    return expirationTime;
+  }
+
+  public void setExpirationTime(Timestamp expirationTime) {
+    this.expirationTime = expirationTime;
+  }
+
+  public String getPublicKey() {
+    return publicKey;
+  }
+
+  public void setPublicKey(String publicKey) {
+    this.publicKey = publicKey;
+  }
+
+  public String getAuth() {
+    return auth;
+  }
+
+  public void setAuth(String auth) {
+    this.auth = auth;
+  }
 }

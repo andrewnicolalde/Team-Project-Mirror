@@ -26,10 +26,8 @@ function displayOrders(data) {
 
   var response = JSON.parse(data);
 
-  var currentOrderElement = document.getElementById("sidebar-orders");
-  while (currentOrderElement.firstChild) {
-    currentOrderElement.removeChild(currentOrderElement.firstChild);
-  }
+  var currentOrderElement = $("sidebar-orders");
+  currentOrderElement.empty();
 
   // If there are more than 4 orders. Add the last ones to the sidebar.
   if (response.length > 4) {

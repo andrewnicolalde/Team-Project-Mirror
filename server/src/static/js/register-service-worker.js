@@ -1,5 +1,6 @@
 /**
- * Credit for this code to Matt Gaunt from Google
+ * Credit for much code to Matt Gaunt from Google. https://developers.google.com/web/fundamentals/push-notifications/
+ * Individual methods have the attribution.
  */
 
 $(document).ready(function () {
@@ -83,7 +84,7 @@ function registerServiceWorker(worker) {
 
 /**
  * Asks for permission to display notifications to the user.
- * credit Matt Gaunt, Google.
+ * credit Matt Gaunt, Google. https://developers.google.com/web/fundamentals/push-notifications/
  * @return {Promise<any>}
  */
 function askPermission() {
@@ -118,14 +119,13 @@ function doSomething() {
   } else {
     // Do nothing we want to register a worker either way.
   }
-  var subscription = subscribeUserToPush();
-  console.log(subscription);
+  subscribeUserToPush().then(function (subscription) { return sendSubscriptionToBackEnd(subscription)});
   // sendSubscriptionToBackEnd(registration);
 }
 
 /**
  * Subscribes the client to a push service. Uses our VAPID public key.
- * Credit Matt Gaunt, Google.
+ * Credit Matt Gaunt, Google. https://developers.google.com/web/fundamentals/push-notifications/
  * @return {Promise<ServiceWorkerRegistration>}
  */
 function subscribeUserToPush() {
@@ -140,6 +140,7 @@ function subscribeUserToPush() {
     return registration.pushManager.subscribe(subscribeOptions);
   }).then(function(pushSubscription) {
     console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
+    console.log("keys: ", pushSubscription);
     return pushSubscription;
   });
 }
@@ -151,12 +152,19 @@ function subscribeUserToPush() {
  * @return {Promise<Response>} The response from the server.
  */
 function sendSubscriptionToBackEnd(subscription) {
-  return fetch('/api/authStaff/save-subscription/', {
+  var pubKey = subscription.getKey('p256dh');
+  var auth = subscription.getKey('auth');
+  return fetch('/api/saveSubscription', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(subscription)
+    body: JSON.stringify({
+      endpoint: subscription.endpoint,
+      expirationTime: subscription.expirationTime,
+      publicKey: btoa(String.fromCharCode.apply(null, new Uint8Array(pubKey))),
+      auth: btoa(String.fromCharCode.apply(null, new Uint8Array(auth)))
+    })
   }).then(function(response) {
     if (!response.ok) {
       return Response.error();
