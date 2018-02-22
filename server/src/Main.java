@@ -32,7 +32,8 @@ public class Main {
     before("/api/authTable/*", AuthenticationTable::checkTableSession);
 
     // Endpoints which are meant to be connected to directly, not via AJAX requests.
-    get("/logout", AuthenticationEmployee::logOutEmployee);
+    get("/logoutStaff", AuthenticationEmployee::logOutEmployee);
+    get("/logoutTable", AuthenticationTable::logOutTable);
     post("/loginStaff", AuthenticationEmployee::logInEmployee);
     post("/loginTable", AuthenticationTable::logInTable);
 
