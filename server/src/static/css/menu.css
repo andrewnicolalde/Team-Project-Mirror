@@ -75,3 +75,9 @@
 .bootbox-confirm {
   z-index: 1041;
 }
+
+.instructions-box {
+  max-width: 200px;
+  clear: none;
+  border-radius: 4px;
+}

@@ -97,12 +97,12 @@ function addItemToBasket(item) {
   // Add item
   basket.push(item);
   parent.append("<li id='ordermenuitem-" + item.id + "' class='list-group-item list-group-item-action'>\n"
-                     + "<span class='bold'>" + item.name + "</span>"
-                     + "<span class='span-right'>£" + item.price + "</span>\n"
-                     + "<br>\n"
-                     + item.instructions
-                     + "<span class='span-right'><i class='fa fa-edit fa-lg edit'></i><i class='fa fa-times fa-lg remove' onclick='confirmRemoveOrderMenuItem(" + item.id + ");'></i></span>"
-                   + "</li>");
+              + "  <span class='bold'>" + item.name + "</span>"
+              + "  <span class='span-right'>£" + item.price + "</span>\n"
+              + "  <br>\n"
+              + "  <span id='omi-instructions-" + item.id + "'><span id='omi-instructions-" + item.id + "-text'>" + item.instructions + "</span></span>\n"
+              + "  <span class='span-right'><i id='omi-edit-" + item.id + "' class='fa fa-edit fa-lg edit' onclick='showEditOrderItemMenu(" + item.id + ", \"" + item.instructions + "\");'></i><i class='fa fa-times fa-lg remove' onclick='confirmRemoveOrderMenuItem(" + item.id + ");'></i></span>\n"
+              + "</li>");
 }
 
 function calculateTotal() {
@@ -216,4 +216,10 @@ function showItemModal(itemId) {
       break;
     }
   }
+}
+
+function showEditOrderItemMenu(orderItemMenuId, instructions) {
+  var span = $("#omi-instructions-" + orderItemMenuId);
+  span.empty();
+  span.append("<input id='omi-instructions-input-" + orderItemMenuId + "' name='omi-instructions-input-" + orderItemMenuId + "' class='instructions-box' type='text' placeholder='Any extra instructions' value='" + instructions + "'>");
 }
