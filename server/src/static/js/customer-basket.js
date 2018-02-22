@@ -7,7 +7,7 @@ $(document).ready(function () {
     get("/api/authStaff/getMenu", function (data) {
         //parse JSON
         var response = JSON.parse(data);
-        for (i = 3; i < response.length; i++) {
+        for (i = 0; i < response.length; i++) {
             $("#table-body").append("<tr data-toggle=\"collapse\" data-target=\"#row"+(i + 1)+"\" class=\"clickable\">" +
                 "<th scope=\"row\">" + (i + 1) + "</th>" +
                 "<td>" + response[i].name + "</td>" +
