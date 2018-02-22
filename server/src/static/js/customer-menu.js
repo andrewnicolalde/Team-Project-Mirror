@@ -36,6 +36,13 @@ function loadMenu() {
   });
 }
 
+function popupclick(){
+
+$('.menuitem').click(function(){
+      $("#modal1").modal();
+  });
+}
+
 function getTransactionId() {
   get("/api/authTable/getTransactionId", function (data) {
     var response = JSON.parse(data);
