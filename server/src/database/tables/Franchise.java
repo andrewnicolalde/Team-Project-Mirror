@@ -86,4 +86,14 @@ public class Franchise {
   public void setPassword(String password) {
     this.password = password;
   }
+
+  @Override
+  public String toString() {
+    return "Franchise{" +
+        "name='" + name + '\'' +
+        ", password='" + password + '\'' +
+        ", address='" + address + '\'' +
+        ", contactNo='" + contactNo + '\'' +
+        '}';
+  }
 }
