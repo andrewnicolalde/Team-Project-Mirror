@@ -38,7 +38,7 @@ function loadMenu() {
       for(var i=0; i<menuItems.length; i++) {
         var menuItem = menuItems[i];
         $("#category-" + menuItem.categoryId + "-list").append("<li id='menuitem-" + menuItem.id + "' class='menuitem list-group-item list-group-item-action' onclick='showItemModal(" + menuItem.id + ")'>\n"
-                                                               + "<span class='span-bold'>" + menuItem.name + "</span> - £" + menuItem.price + "\n"
+                                                               + "<span class='bold'>" + menuItem.name + "</span> - £" + menuItem.price + "\n"
                                                                + "<br>\n"
                                                                + menuItem.description + "\n"
                                                                + "<br>\n"
@@ -97,7 +97,7 @@ function addItemToBasket(item) {
   // Add item
   basket.push(item);
   parent.append("<li id='ordermenuitem-" + item.id + "' class='list-group-item list-group-item-action'>\n"
-                     + "<span class='span-bold'>" + item.name + "</span>"
+                     + "<span class='bold'>" + item.name + "</span>"
                      + "<span class='span-right'>£" + item.price + "</span>\n"
                      + "<br>\n"
                      + item.instructions
@@ -123,7 +123,7 @@ function calculateTotal() {
 
   // Display it.
   $("#order").append("<li id='total-price' class='list-group-item list-group-item-info'>\n"
-      + "<span class='span-bold'>Total:</span>"
+      + "<span class='bold'>Total:</span>"
       + "<span class='span-right'>£" + total.toFixed(2) + "</span>\n"
       + "</li>");
 }
@@ -169,6 +169,7 @@ function showItemModal(itemId) {
     if (menuItems[i].id === itemId) {
       var item = menuItems[i];
       var modal = document.getElementById("addToOrderModal");
+      modal.setAttribute("data-menuitemid", item.id);
       document.getElementById("name").innerText = item.name;
       document.getElementById("category").innerText = item.category;
       document.getElementById("description").innerText = item.description;
@@ -192,6 +193,9 @@ function showItemModal(itemId) {
       if (item.is_vegan) {
         $("#content-info").append("<img src='../images/vegan-mark.svg' alt='Vegan'>");
       }
+
+      // Clear the extra instructions text input
+      document.getElementById("instructions").value = "";
 
       modal.style.display = "block";
       break;

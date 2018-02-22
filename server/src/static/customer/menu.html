@@ -61,7 +61,7 @@
 <!-- Add to order modal - contents is changed by js -->
 <div id="addToOrderModal" class="modal">
   <div class="modal-content">
-    <h3 class="text-center span-faint"><span id="name" class="span-bold">Name</span> - <span id="category">Category</span></h3>
+    <h3 class="text-center span-faint"><span id="name" class="bold">Name</span> - <span id="category">Category</span></h3>
     <div class="row">
       <div id="information" class="col-sm-4 information">
         <p id="description">Description</p>
@@ -70,6 +70,9 @@
         <p>Ingredients: <span id="ingredients">Ingredients</span></p>
         <div id="content-info" class="text-center">
         </div>
+        <input id="instructions" name="instructions" type="text" class="form-control" placeholder="Any extra instructions">
+        <button id="addToOrderButton" class="btn btn-success" type="button">Add To Order</button>
+        <button id="closeModal" class="btn btn-danger" type="button" onclick="document.getElementById('addToOrderModal').style.display = 'none'">Cancel</button>
       </div>
       <div class="col-sm-6">
         <img id="picture" src="../images/hal.jpg">
@@ -77,6 +80,5 @@
     </div>
   </div>
 </div>
-
 </body>
 </html>

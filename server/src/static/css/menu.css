@@ -20,7 +20,7 @@
   text-align: center;
 }
 
-.span-bold {
+.bold {
   font-weight: bold;
   color: black;
 }
@@ -65,4 +65,9 @@
 
 .information {
   padding-left: 10%;
+}
+
+#instructions {
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
