@@ -264,4 +264,23 @@ public class Orders {
 
     return JsonUtil.getInstance().toJson(orderIdData);
   }
+
+  /**
+   * Updates the instructions for a given OrderMenuItem. JSON input: orderMenuItemId, instructions
+   * @param request The HTTP request object.
+   * @param response The HTTP response object.
+   * @return A string saying 'success' or 'failure'
+   */
+  public static String changeOrderInstructions(Request request, Response response) {
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
+    ChangeInstructionsParams changeInstructionsParams = JsonUtil.getInstance().fromJson(
+        request.body(), ChangeInstructionsParams.class);
+
+    em.getTransaction().begin();
+    OrderMenuItem orderMenuItem = em.find(OrderMenuItem.class, changeInstructionsParams.getOrderMenuItemId());
+    orderMenuItem.setInstructions(changeInstructionsParams.getInstructions());
+    em.getTransaction().commit();
+    em.close();
+    return "success";
+  }
 }

@@ -101,7 +101,7 @@ function addItemToBasket(item) {
               + "  <span class='span-right'>£" + item.price + "</span>\n"
               + "  <br>\n"
               + "  <span id='omi-instructions-" + item.id + "'><span id='omi-instructions-" + item.id + "-text'>" + item.instructions + "</span></span>\n"
-              + "  <span class='span-right'><i id='omi-edit-" + item.id + "' class='fa fa-edit fa-lg edit' onclick='showEditOrderItemMenu(" + item.id + ", \"" + item.instructions + "\");'></i><i class='fa fa-times fa-lg remove' onclick='confirmRemoveOrderMenuItem(" + item.id + ");'></i></span>\n"
+              + "  <span class='span-right'><i id='omi-edit-" + item.id + "' class='fa fa-edit fa-lg edit' onclick='showEditOrderMenuItem(" + item.id + ", \"" + item.instructions + "\");'></i><i class='fa fa-times fa-lg remove' onclick='confirmRemoveOrderMenuItem(" + item.id + ");'></i></span>\n"
               + "</li>");
 }
 
@@ -218,8 +218,25 @@ function showItemModal(itemId) {
   }
 }
 
-function showEditOrderItemMenu(orderItemMenuId, instructions) {
-  var span = $("#omi-instructions-" + orderItemMenuId);
+function showEditOrderMenuItem(orderMenuItemId, instructions) {
+  var span = $("#omi-instructions-" + orderMenuItemId);
   span.empty();
-  span.append("<input id='omi-instructions-input-" + orderItemMenuId + "' name='omi-instructions-input-" + orderItemMenuId + "' class='instructions-box' type='text' placeholder='Any extra instructions' value='" + instructions + "'>");
+  span.append("<input id='omi-instructions-input-" + orderMenuItemId + "' name='omi-instructions-input-" + orderMenuItemId + "' class='instructions-box' type='text' placeholder='Any extra instructions' value='" + instructions + "'>");
+  span.append("<i id='omi-confirm-" + orderMenuItemId + "' class='fa fa-check fa-lg confirm' onclick='confirmEditOrderMenuItem(" + orderMenuItemId + ")'></i>");
+  $("#omi-edit-" + orderMenuItemId).hide();
+}
+
+function confirmEditOrderMenuItem(orderMenuItemId) {
+  var span = $("#omi-instructions-" + orderMenuItemId);
+  var instructions = $("#omi-instructions-input-" + orderMenuItemId).val();
+  var data = JSON.stringify({orderMenuItemId: orderMenuItemId,
+                             instructions: instructions});
+  post("/api/authTable/changeOrderInstructions", data, function(data) {
+    if (data === "success") {
+      $("#omi-confirm-" + orderMenuItemId).remove();
+      $("#omi-instructions-input-" + orderMenuItemId).remove();
+      $("#omi-edit-" + orderMenuItemId).show();
+      $("#omi-instructions-" + orderMenuItemId).append("<span id='omi-instructions-" + orderMenuItemId + "-text'>" + instructions + "</span>")
+    }
+  });
 }
