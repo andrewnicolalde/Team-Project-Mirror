@@ -22,6 +22,7 @@
 
 .span-bold {
   font-weight: bold;
+  color: black;
 }
 
 .span-right {
@@ -48,5 +49,21 @@
 }
 
 .modal-content {
+  padding: 20px;
+}
 
+#picture {
+  float: right;
+  max-height: 80%;
+  max-width: 80%;
+}
+
+.span-faint {
+  color: grey;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.information {
+  padding-left: 10%;
 }
