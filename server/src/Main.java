@@ -51,7 +51,6 @@ public class Main {
     get("/api/authTable/getTransactionId", Orders::getTransactionId);
     post("/api/authTable/getOrderId", Orders::getOrderId);
     post("/api/authTable/getOrderItems", Orders::getOrderItems);
-    post("/api/authTable/getOrderItems", Orders::getOrderItems);
     post("/api/authTable/addItemToOrder", Orders::addOrderMenuItem);
     post("/api/authTable/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authTable/changeOrderStatus", Orders::changeOrderStatus);
