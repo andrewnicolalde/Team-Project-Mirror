@@ -11,6 +11,8 @@ import database.tables.TableSession;
 import database.tables.TableStatus;
 import database.tables.Transaction;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -66,11 +68,23 @@ public class Orders {
         FoodOrder.class).setParameter("tableNo", tableOrderParams.getTableNumber())
         .getResultList();
 
+    // Apdated from https://stackoverflow.com/questions/4018090/sorting-listclass-by-one-of-its-variable
+    foodOrders.sort((t0, t1) -> {
+      if (t0.getOrderId() < t1.getOrderId()) {
+        return -1;
+      }
+      if (t0.getOrderId() > t1.getOrderId()) {
+        return 1;
+      }
+      return 0;
+    });
+
     OrderData[] orderData = new OrderData[foodOrders.size()];
     for (int i = 0; i < orderData.length; i++) {
       orderData[i] = new OrderData(foodOrders.get(i));
     }
 
+    entityManager.close();
     return JsonUtil.getInstance().toJson(orderData);
   }
 
@@ -96,6 +110,7 @@ public class Orders {
       orderData[i] = new OrderData(foodOrders.get(i));
     }
 
+    entityManager.close();
     return JsonUtil.getInstance().toJson(orderData);
   }
 
@@ -105,7 +120,7 @@ public class Orders {
    *
    * @param request A HTTP request object.
    * @param response A HTTP response object.
-   * @return A string saying either "success" or "failed"
+   * @return A JSON string representing the MenuItem, or "failure"
    */
   public static String addOrderMenuItem(Request request, Response response) {
     OrderMenuItemParams omi = JsonUtil.getInstance()
@@ -163,24 +178,22 @@ public class Orders {
   }
 
   /**
-   * Removes an item from an order JSON input: foodOrderId
+   * Removes an item from an order JSON input: orderMenuItemId
    *
    * @param request A HTTP request object.
    * @param response A HTTP response object.
    * @return A string saying either "success" or "failed"
    */
   public static String removeOrderMenuItem(Request request, Response response) {
-    OrderMenuItemParams omi = JsonUtil.getInstance()
-        .fromJson(request.body(), OrderMenuItemParams.class);
+    RemoveOrderMenuItemParams omi = JsonUtil.getInstance()
+        .fromJson(request.body(), RemoveOrderMenuItemParams.class);
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     entityManager.getTransaction().begin();
 
-    OrderMenuItem orderMenuItem = entityManager
-        .createQuery("from FoodOrder foodOrder where foodOrder.id = :orderId",
-            OrderMenuItem.class).setParameter("orderId", omi.getOrderNumber()).getSingleResult();
+    OrderMenuItem item = entityManager.find(OrderMenuItem.class, omi.getOrderMenuItemId());
 
-    entityManager.remove(orderMenuItem);
+    entityManager.remove(item);
 
     entityManager.getTransaction().commit();
     entityManager.close();
