@@ -1,9 +1,10 @@
-/*
+
 $(document).ready(function() {
   $('.myBtn').click(function(){
       $("#myModal").modal();
   });
 
+/*
 function myFunction() {
   document.getElementById("myDropdown").classList.toggle("show");
 
