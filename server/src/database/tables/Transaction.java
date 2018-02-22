@@ -133,4 +133,16 @@ public class Transaction {
   public void setHasLeft(boolean hasLeft) {
     this.hasLeft = hasLeft;
   }
+
+  @Override
+  public String toString() {
+    return "Transaction{" +
+        "transactionId=" + transactionId +
+        ", isPaid=" + isPaid +
+        ", total=" + total +
+        ", datetimePaid=" + datetimePaid +
+        ", hasLeft=" + hasLeft +
+        ", restaurantTableStaff=" + restaurantTableStaff +
+        '}';
+  }
 }
