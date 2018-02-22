@@ -101,7 +101,7 @@ function addItemToBasket(item) {
                      + "<span class='span-right'>£" + item.price + "</span>\n"
                      + "<br>\n"
                      + item.instructions
-                     + "<span class='span-right'><i class='fa fa-edit fa-lg edit'></i><i class='fa fa-times fa-lg remove' onclick='removeOrderMenuItem(" + item.id + ");'></i></span>"
+                     + "<span class='span-right'><i class='fa fa-edit fa-lg edit'></i><i class='fa fa-times fa-lg remove' onclick='confirmRemoveOrderMenuItem(" + item.id + ");'></i></span>"
                    + "</li>");
 }
 
@@ -126,6 +126,14 @@ function calculateTotal() {
       + "<span class='bold'>Total:</span>"
       + "<span class='span-right'>£" + total.toFixed(2) + "</span>\n"
       + "</li>");
+}
+
+function confirmRemoveOrderMenuItem(itemId) {
+  bootbox.confirm("Are you sure you want to remove this item?", function (result) {
+    if(result) {
+      removeOrderMenuItem(itemId);
+    }
+  });
 }
 
 function removeOrderMenuItem(itemId) {
