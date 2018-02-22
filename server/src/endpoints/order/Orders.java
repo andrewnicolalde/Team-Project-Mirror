@@ -107,7 +107,7 @@ public class Orders {
    *
    * @param request A HTTP request object.
    * @param response A HTTP response object.
-   * @return A string saying either "success" or "failed"
+   * @return A JSON string representing the MenuItem, or "failure"
    */
   public static String addOrderMenuItem(Request request, Response response) {
     OrderMenuItemParams omi = JsonUtil.getInstance()
@@ -165,24 +165,22 @@ public class Orders {
   }
 
   /**
-   * Removes an item from an order JSON input: foodOrderId
+   * Removes an item from an order JSON input: orderMenuItemId
    *
    * @param request A HTTP request object.
    * @param response A HTTP response object.
    * @return A string saying either "success" or "failed"
    */
   public static String removeOrderMenuItem(Request request, Response response) {
-    OrderMenuItemParams omi = JsonUtil.getInstance()
-        .fromJson(request.body(), OrderMenuItemParams.class);
+    RemoveOrderMenuItemParams omi = JsonUtil.getInstance()
+        .fromJson(request.body(), RemoveOrderMenuItemParams.class);
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     entityManager.getTransaction().begin();
 
-    OrderMenuItem orderMenuItem = entityManager
-        .createQuery("from FoodOrder foodOrder where foodOrder.id = :orderId",
-            OrderMenuItem.class).setParameter("orderId", omi.getOrderNumber()).getSingleResult();
+    OrderMenuItem item = entityManager.find(OrderMenuItem.class, omi.getOrderMenuItemId());
 
-    entityManager.remove(orderMenuItem);
+    entityManager.remove(item);
 
     entityManager.getTransaction().commit();
     entityManager.close();
