@@ -60,4 +60,12 @@ public class TableSession {
   public void setRestaurantTable(RestaurantTable restaurantTable) {
     this.restaurantTable = restaurantTable;
   }
+
+  @Override
+  public String toString() {
+    return "TableSession{" +
+        "tableSessionId='" + tableSessionId + '\'' +
+        ", restaurantTable=" + restaurantTable +
+        '}';
+  }
 }

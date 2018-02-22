@@ -199,4 +199,21 @@ public class MenuItem {
   public void setCalories(Double calories) {
     this.calories = calories;
   }
+
+  @Override
+  public String toString() {
+    return "MenuItem{" +
+        "menuItemId=" + menuItemId +
+        ", name='" + name + '\'' +
+        ", ingredients='" + ingredients + '\'' +
+        ", description='" + description + '\'' +
+        ", price=" + price +
+        ", calories=" + calories +
+        ", isVegan=" + isVegan +
+        ", isVegetarian=" + isVegetarian +
+        ", isGlutenFree=" + isGlutenFree +
+        ", pictureSrc='" + pictureSrc + '\'' +
+        ", category=" + category +
+        '}';
+  }
 }
