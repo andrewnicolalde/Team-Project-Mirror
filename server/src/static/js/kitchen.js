@@ -35,8 +35,10 @@ function displayOrders(data) {
   if (response.length > 4) {
     for (var i = 4; i < response.length; i++) {
       var sideId = response[i].foodOrderId;
+      var time = response[i].timeconfirmed;
+
       if(!orderPresent(sideId)){
-        $("#sidebar-orders").append("<li id='" + sideId + "'>\n"
+        $("#sidebar-orders").append("<li id='" + sideId + "' data-timeconfirmed='" + time + "'>\n"
         + "<h4>Order No: " + sideId + "</h4>"
         + "</li>");
       }
@@ -127,3 +129,5 @@ function orderPresent(orderNum) {
 
   return Boolean(document.getElementById(orderNum) !== null);
 }
+
+
