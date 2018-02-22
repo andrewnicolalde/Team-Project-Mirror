@@ -6,6 +6,7 @@
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
           integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
@@ -30,7 +31,7 @@
   </ul>
   <ul class="navbar-nav">
     <li class="nav-item">
-      <a class="nav-link" href="/logout">Logout</a>
+      <a class="nav-link" href="/logoutStaff">Logout</a>
     </li>
   </ul>
 </nav>
@@ -66,14 +67,17 @@
       </div>
       <h5 class="text-center">Current Order</h5>
       <div class="text-center">
-        <button style="visibility: hidden" id="confirm_button" type="button" class="btn btn-success"
+        <button hidden id="confirm_button" type="button" class="btn btn-confirm"
                 onclick="changeOrderStatus('COOKING')">Confirm
           Order
         </button>
-        <button style="visibility: hidden" id="edit_button" type="button" class="btn btn-info"
+        <button hidden id="delivered_button" type="button" class="btn btn-deliver"
+                onclick="changeOrderStatus('DELIVERED')">Delivered
+        </button>
+        <button hidden id="edit_button" type="button" class="btn btn-edit"
                 data-toggle="modal" data-target="#menuModel">Edit Order
         </button>
-        <button style="visibility: hidden" id="cancel_button" type="button" class="btn btn-danger"
+        <button hidden id="cancel_button" type="button" class="btn btn-cancel"
                 onclick="confirmCancelOrder('menuFrame')">Cancel Order
         </button>
       </div>

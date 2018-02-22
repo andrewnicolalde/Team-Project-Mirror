@@ -117,4 +117,17 @@ public class AuthenticationTable {
       }
     }
   }
+
+  public static Response logOutTable(Request request, Response response) {
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
+    TableSession session = em.find(TableSession.class,
+        request.session().attribute("TableSessionKey"));
+    em.getTransaction().begin();
+    em.remove(session);
+    em.getTransaction().commit();
+    request.session().removeAttribute("TableSessionKey");
+    response.redirect("/");
+    em.close();
+    return response;
+  }
 }

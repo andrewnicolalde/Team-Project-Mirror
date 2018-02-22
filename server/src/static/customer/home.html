@@ -9,25 +9,19 @@
   <link rel="stylesheet" href="../css/homepage.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="../js/ajax-wrapper.js"></script>
-  <script type="text/javascript" src="../js/customer-home.js"></script>
 </head>
 <body>
 
 <div class="jumbotron jumbotron-fluid bg-info text-white text-center">
   <div class="container-fluid">
     <h1 class="display-2">Oaxaca</h1>
-    <p class="lead"> A Stylish Mexican Restaurant.</p>
+    <p class="lead"> A stylish Mexican Resturant.</p>
   </div>
 </div>
 
 <div class="container">
-  <div class="row">
-    <div id="menubutton" class="col-md-6 col-lg-6">
-      <!-- FIXME: Use sensible paths. This does nothing right now -->
-        <a onclick="getTransactionId()" href="menu.html" class="btn btn-large btn-block btn-info text-center" role="button"><h1 id="menubutton1" class="display-2 text-center">Start Order</h1></a>
-    </div>
-    <div class="col-lg-5 col-md-5" style="padding-top: 60;">
+  <div class="row justify-content-md-center">
+    <div class="col-lg-8 col-md-8" style="padding-top: 60;">
       <div id="arrows" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
           <li data-target="#arrows" data-slide-to="0" class="active"></li>
@@ -36,13 +30,13 @@
         </ol>
         <div class="carousel-inner" role="listbox">
           <div class="carousel-item active">
-            <img class="d-block img-fluid" src="../images/burrito.jpg" alt="First slide">
+            <img class="d-block img-fluid" src="../images/Mexican-Food.jpg" alt="First slide">
           </div>
           <div class="carousel-item">
-            <img class="d-block img-fluid" src="../images/pic3.jpg" alt="Second slide">
+            <img class="d-block img-fluid" src="../images/Mexican-Food1.jpg" alt="Second slide">
           </div>
           <div class="carousel-item">
-            <img class="d-block img-fluid" src="../images/oaxacafoodpic.jpg"
+            <img class="d-block img-fluid" src="../images/Mexican-Food2.jpg"
                  alt="Third slide">
           </div>
         </div>
@@ -55,6 +49,15 @@
           <span class="sr-only">Next</span>
         </a>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div id="menubutton" class="col-md-12 col-lg-12">
+        <a href="menu.html" class="btn btn-large btn-block btn-info text-center" role="button"><h1 id="menubutton1" class="display-2 text-center">Start Order</h1></a>
+    </div>
   </div>
 </div>
 
@@ -88,15 +91,15 @@
       <div class="card">
         <img src="../images/ronaldo.jpg" class="card-img-top img-fluid">
         <div class="card-block">
-          <p class="card-text text-muted">"Simple, authentic some text here and traditional"</p>
+          <p class="card-text text-muted">"Simple, authentic dish where the food is as traditional as back at home"</p>
           <p class="card-text text-muted">
             <small class="text-muted">-Ken Smith<br/>(Customer)</small>
           </p>
         </div>
       </div>
     </div>
-    </div>
   </div>
+</div>
 </div>
 </body>
 </html>

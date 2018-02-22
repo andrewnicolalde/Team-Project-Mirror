@@ -15,3 +15,29 @@
 .menu-content {
   height: 95%;
 }
+
+/* Adpated from
+https://stackoverflow.com/questions/14750078/style-disabled-button-with-css
+ */
+button:disabled,
+button[disabled] {
+  background-color: #535353;
+}
+
+.btn-confirm {
+  color: white;
+  background-color: #00c200;
+}
+.btn-deliver {
+  color: white;
+  background-color: mediumpurple;
+}
+.btn-edit {
+  color: white;
+  background-color: #17a2b8;
+}
+.btn-cancel {
+  color: white;
+  background-color: red;
+}
+
