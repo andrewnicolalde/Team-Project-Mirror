@@ -11,8 +11,30 @@ window.onclick = function(event) {
 
 $(document).ready(function () {
   loadMenu();
-  loadOrder();
+  getTransactionId()
 });
+
+function getTransactionId() {
+  get("/api/authTable/getTransactionId", function (data) {
+    var response = JSON.parse(data);
+
+    var transactionId = response.transactionId;
+
+    getOrderId(transactionId);
+  });
+}
+
+function getOrderId(transactionId) {
+  post("/api/authTable/getOrderId", JSON.stringify({
+    transactionId: transactionId
+  }), function (data) {
+    var response = JSON.parse(data);
+
+    sessionStorage.setItem("orderId", response.orderId);
+    // Load order now, when the orderId has definitely been set.
+    loadOrder();
+  });
+}
 
 function loadMenu() {
   // Load categories
@@ -216,6 +238,17 @@ function confirmEditOrderMenuItem(orderMenuItemId) {
       $("#omi-instructions-input-" + orderMenuItemId).remove();
       $("#omi-edit-" + orderMenuItemId).show();
       $("#omi-instructions-" + orderMenuItemId).append("<span id='omi-instructions-" + orderMenuItemId + "-text'>" + instructions + "</span>")
+    }
+  });
+}
+
+function confirmOrder() {
+  var orderNumber = localStorage.getItem("orderId");
+  var dataToSend = JSON.stringify({orderNumber: orderNumber,
+                                   newOrderStatus: "READY_TO_CONFIRM"});
+  post("/api/authTable/changeOrderStatus", dataToSend, function(data) {
+    if (data === "success") {
+      window.location.replace("/customer/basket.html");
     }
   });
 }
