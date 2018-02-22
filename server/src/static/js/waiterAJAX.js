@@ -77,62 +77,18 @@ function loadOrderList(tableNumber) {
     var orders = JSON.parse(data);
 
     for (var i = 0; i < orders.length; i++) {
-      var statusIcon;
-      var btnDisable = ["true", "true", "true", "true"];
-
-      switch (orders[i].orderStatus) {
-        case 'Cancelled':
-          statusIcon = '<i class="fa fa-times" style="color: red; float: right; font-size: 25px"></i>';
-          // All buttons disabled
-          for (var j = 0; j < btnDisable.length; j++){
-            btnDisable[j] = "false"
-          }
-          break;
-        case 'Ordering':
-          statusIcon = '<i class="fa fa-ellipsis-h" style="float: right;font-size: 25px"></i>';
-          // Delivered button disabled
-          btnDisable[1] = "false";
-          break;
-        case 'Ready To Confirm':
-          statusIcon = '<i class="fa fa-bell" style="color: yellow; float: right;font-size: 25px"></i>';
-          // Delivered button disabled
-          btnDisable[1] = "false";
-          break;
-        case 'Cooking':
-          statusIcon = '<i class="fa fa-fire" style="color: orange; float: right;font-size: 25px"></i>';
-          // All buttons except cancelled disabled
-          for (var j = 0; j < btnDisable.length - 1; j++){
-            btnDisable[j] = "false"
-          }
-          break;
-        case 'Ready To Deliver':
-          statusIcon = '<i class="fa fa-check" style="color: #00bf00; float: right;font-size: 25px"></i>';
-          // Only Delivered and cancelled are enabled
-          btnDisable[0] = "false";
-          btnDisable[2] = "false";
-          break;
-        case 'Delivered':
-          statusIcon = '<i class="fas fa-utensils" style="float: right;font-size: 25px"></i>';
-          // All buttons except cancelled disabled
-          for (var j = 0; j < btnDisable.length - 1; j++){
-            btnDisable[j] = "false"
-          }
-          break;
-      }
+      var statusIcon = getOrderIcon(orders[i].orderStatus);
 
       $("#orders-list").append(
           "<li"
           + " id='table-" + orders[i].foodOrderId + "'"
           + " data-ordernum='" + orders[i].foodOrderId + "'"
+          + " data-orderStatus='"+ orders[i].orderStatus +"'"
           + " class='list-group-item list-group-item-action'"
           + " onclick=\""
             + "setActiveOrder(event); "
             + "loadOrder(this.getAttribute('data-ordernum'));"
-            + "document.getElementById('confirm_button').hidden = false;"
-            + "document.getElementById('delivered_button').hidden = false;"
-            + "document.getElementById('edit_button').hidden = false;"
-            + "disableButtons();"
-            + "document.getElementById('cancel_button').hidden = false;"
+            + "setButtons(this.getAttribute('data-orderStatus'));"
             + "\">"
           + "<span class='span-bold'>Table </span>" + tableNumber
           + "<span> - Order </span>" + orders[i].foodOrderId
@@ -142,6 +98,93 @@ function loadOrderList(tableNumber) {
       );
     }
   });
+}
+
+/**
+ * Sets the buttons per the order
+ */
+function setButtons(orderStatus) {
+  document.getElementById('confirm_button').hidden = false;
+  document.getElementById('delivered_button').hidden = false;
+  document.getElementById('edit_button').hidden = false;
+  document.getElementById('cancel_button').hidden = false;
+
+  getDisabled(orderStatus);
+}
+
+/**
+ * This function sets which buttons should be disabled dependant on the the status
+ */
+function getDisabled(orderStatus) {
+  var buttons = [
+      document.getElementById("confirm_button"),
+      document.getElementById("delivered_button"),
+      document.getElementById("edit_button"),
+      document.getElementById("cancel_button")
+  ];
+
+  for(var i = 0; i < buttons.length; i ++) {
+    if (buttons[i].getAttribute("disabled")) {
+      buttons[i].removeAttribute("disabled");
+    }
+  }
+
+  switch (orderStatus) {
+    case 'Cancelled':
+      for (var i = 0; i < buttons.length; i ++) {
+        buttons[i].setAttribute("disabled", "disabled");
+      }
+      break;
+    case 'Ordering':
+      buttons[1].setAttribute("disabled", "disabled");
+      break;
+    case 'Ready To Confirm':
+      buttons[1].setAttribute("disabled", "disabled");
+      break;
+    case 'Cooking':
+      for (var i = 0; i < buttons.length - 1; i ++) {
+        buttons[i].setAttribute("disabled", "disabled");
+      }
+      break;
+    case 'Ready To Deliver':
+      buttons[0].setAttribute("disabled", "disabled");
+      buttons[2].setAttribute("disabled", "disabled");
+      break;
+    case 'Delivered':
+      for (var i = 0; i < buttons.length; i ++) {
+        buttons[i].setAttribute("disabled", "disabled");
+      }
+      break;
+  }
+}
+
+/**
+ * This method sets the icon for the order
+ */
+function getOrderIcon(orderStatus) {
+  var statusIcon;
+  switch (orderStatus) {
+    case 'Cancelled':
+      statusIcon = '<i class="fa fa-times" style="color: red; float: right; font-size: 25px"></i>';
+      break;
+    case 'Ordering':
+      statusIcon = '<i class="fa fa-ellipsis-h" style="float: right;font-size: 25px"></i>';
+      break;
+    case 'Ready To Confirm':
+      statusIcon = '<i class="fa fa-bell" style="color: yellow; float: right;font-size: 25px"></i>';
+      break;
+    case 'Cooking':
+      statusIcon = '<i class="fa fa-fire" style="color: orange; float: right;font-size: 25px"></i>';
+      break;
+    case 'Ready To Deliver':
+      statusIcon = '<i class="fa fa-check" style="color: #00bf00; float: right;font-size: 25px"></i>';
+      break;
+    case 'Delivered':
+      statusIcon = '<i class="fas fa-utensils" style="float: right;font-size: 25px"></i>';
+      break;
+  }
+  return statusIcon;
+
 }
 
 /**

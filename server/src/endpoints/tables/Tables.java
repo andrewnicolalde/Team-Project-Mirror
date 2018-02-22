@@ -3,7 +3,6 @@ package endpoints.tables;
 import database.DatabaseManager;
 import database.tables.RestaurantTableStaff;
 import database.tables.StaffSession;
-import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
