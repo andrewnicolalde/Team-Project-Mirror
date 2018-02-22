@@ -64,4 +64,13 @@ public class Category {
   public void setDisplayOrder(Long displayOrder) {
     this.displayOrder = displayOrder;
   }
+
+  @Override
+  public String toString() {
+    return "Category{" +
+        "categoryId=" + categoryId +
+        ", name='" + name + '\'' +
+        ", displayOrder=" + displayOrder +
+        '}';
+  }
 }
