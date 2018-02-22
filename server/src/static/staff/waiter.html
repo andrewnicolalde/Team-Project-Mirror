@@ -67,17 +67,17 @@
       </div>
       <h5 class="text-center">Current Order</h5>
       <div class="text-center">
-        <button hidden id="confirm_button" type="button" class="btn btn-success"
+        <button hidden id="confirm_button" type="button" class="btn btn-confirm"
                 onclick="changeOrderStatus('COOKING')">Confirm
           Order
         </button>
-        <button hidden id="delivered_button" type="button" class="btn btn-warning"
+        <button hidden id="delivered_button" type="button" class="btn btn-deliver"
                 onclick="changeOrderStatus('DELIVERED')">Delivered
         </button>
-        <button hidden id="edit_button" type="button" class="btn btn-info"
+        <button hidden id="edit_button" type="button" class="btn btn-edit"
                 data-toggle="modal" data-target="#menuModel">Edit Order
         </button>
-        <button hidden id="cancel_button" type="button" class="btn btn-danger"
+        <button hidden id="cancel_button" type="button" class="btn btn-cancel"
                 onclick="confirmCancelOrder('menuFrame')">Cancel Order
         </button>
       </div>
