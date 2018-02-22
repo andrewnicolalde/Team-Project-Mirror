@@ -162,7 +162,7 @@ function addToOrder(itemId, instructions) {
   var dataToSend = JSON.stringify({
     menuItemId: itemId,
     instructions: instructions,
-    orderNumber: localStorage.getItem("orderId")
+    orderNumber: sessionStorage.getItem("orderId")
   });
 
   post("/api/authTable/addItemToOrder", dataToSend, function(data) {
@@ -243,7 +243,7 @@ function confirmEditOrderMenuItem(orderMenuItemId) {
 }
 
 function confirmOrder() {
-  var orderNumber = localStorage.getItem("orderId");
+  var orderNumber = sessionStorage.getItem("orderId");
   var dataToSend = JSON.stringify({orderNumber: orderNumber,
                                    newOrderStatus: "READY_TO_CONFIRM"});
   post("/api/authTable/changeOrderStatus", dataToSend, function(data) {
