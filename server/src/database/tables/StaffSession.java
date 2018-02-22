@@ -61,4 +61,12 @@ public class StaffSession {
   public void setStaffSessionId(String staffSessionId) {
     this.staffSessionId = staffSessionId;
   }
+
+  @Override
+  public String toString() {
+    return "StaffSession{" +
+        "staffSessionId='" + staffSessionId + '\'' +
+        ", staff=" + staff +
+        '}';
+  }
 }

@@ -91,4 +91,14 @@ public class RestaurantTable {
   public void setFranchise(Franchise franchise) {
     this.franchise = franchise;
   }
+
+  @Override
+  public String toString() {
+    return "RestaurantTable{" +
+        "tableId=" + tableId +
+        ", tableNumber=" + tableNumber +
+        ", status=" + status +
+        ", franchise=" + franchise +
+        '}';
+  }
 }
