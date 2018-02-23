@@ -1,6 +1,5 @@
 package endpoints.order;
 
-import com.google.gson.Gson;
 import database.DatabaseManager;
 import database.tables.FoodOrder;
 import database.tables.MenuItem;
@@ -8,9 +7,10 @@ import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
 import database.tables.RestaurantTableStaff;
 import database.tables.TableSession;
-import database.tables.TableStatus;
 import database.tables.Transaction;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -37,7 +37,7 @@ public class Orders {
     List<OrderMenuItem> orderMenuItems = entityManager
         .createQuery("from OrderMenuItem orderMenuItem where "
             + "orderMenuItem.foodOrder.id = :orderId", OrderMenuItem.class).setParameter("orderId",
-            omiList.getOrderNumber()).getResultList();
+            omiList.getOrderId()).getResultList();
 
     entityManager.close();
 
@@ -66,6 +66,17 @@ public class Orders {
         FoodOrder.class).setParameter("tableNo", tableOrderParams.getTableNumber())
         .getResultList();
 
+    // Apdated from https://stackoverflow.com/questions/4018090/sorting-listclass-by-one-of-its-variable
+    foodOrders.sort((t0, t1) -> {
+      if (t0.getOrderId() < t1.getOrderId()) {
+        return -1;
+      }
+      if (t0.getOrderId() > t1.getOrderId()) {
+        return 1;
+      }
+      return 0;
+    });
+
     OrderData[] orderData = new OrderData[foodOrders.size()];
     for (int i = 0; i < orderData.length; i++) {
       orderData[i] = new OrderData(foodOrders.get(i));
@@ -91,6 +102,8 @@ public class Orders {
             + "where foodOrder.status = :orderStatus",
         FoodOrder.class).setParameter("orderStatus", statusOrderParams.getOrderStatus())
         .getResultList();
+
+    foodOrders.sort(Comparator.comparing(FoodOrder::getTimeConfirmed));
 
     OrderData[] orderData = new OrderData[foodOrders.size()];
     for (int i = 0; i < orderData.length; i++) {
@@ -128,7 +141,7 @@ public class Orders {
     entityManager.persist(orderMenuItem);
     entityManager.getTransaction().commit();
     entityManager.close();
-    return "success";
+    return JsonUtil.getInstance().toJson(new OrderItemsData(orderMenuItem));
   }
 
   /**
@@ -263,5 +276,24 @@ public class Orders {
     OrderIdData orderIdData = new OrderIdData(foodOrder.getOrderId());
 
     return JsonUtil.getInstance().toJson(orderIdData);
+  }
+
+  /**
+   * Updates the instructions for a given OrderMenuItem. JSON input: orderMenuItemId, instructions
+   * @param request The HTTP request object.
+   * @param response The HTTP response object.
+   * @return A string saying 'success' or 'failure'
+   */
+  public static String changeOrderInstructions(Request request, Response response) {
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
+    ChangeInstructionsParams changeInstructionsParams = JsonUtil.getInstance().fromJson(
+        request.body(), ChangeInstructionsParams.class);
+
+    em.getTransaction().begin();
+    OrderMenuItem orderMenuItem = em.find(OrderMenuItem.class, changeInstructionsParams.getOrderMenuItemId());
+    orderMenuItem.setInstructions(changeInstructionsParams.getInstructions());
+    em.getTransaction().commit();
+    em.close();
+    return "success";
   }
 }

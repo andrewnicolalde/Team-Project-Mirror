@@ -9,6 +9,7 @@
   <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
   <script type="text/javascript" src="../js/ajax-wrapper.js"></script>
   <script type="text/javascript" src="../js/customer-menu.js"></script>
   <link rel="stylesheet" href="../css/menu.css">
@@ -22,15 +23,35 @@
 
 <div class="row">
   <div class="col-sm-7">
-    <div id="menu" class="column">
+    <div id="menu-title" class="column">
       <h5 class="text-center">Menu</h5>
+      <p class="text-center">
+        Gluten Free: <img src="../images/gluten-free.svg">
+        Vegetarian: <img src="../images/vegetarian-mark.svg">
+        Vegan: <img src="../images/vegan-mark.svg">
+      </p>
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <div id="basket-title" class="column">
+      <h5 class="text-center">Basket</h5>
+      <div class="text-center">
+        <button id="confirm-button" class="btn btn-success" type="button" onclick="confirmOrder()">Confirm Order</button>
+        <button id="call-waiter-button" class="btn btn-danger" type="button" onclick="callWaiterToTable()">Call Waiter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-7">
+    <div id="menu" class="column">
       <div id="categories">
       </div>
     </div>
   </div>
   <div class="col-sm-5">
     <div id="basket" class="column">
-      <h5 class="text-center">Basket</h5>
       <ul id="order" class="list-group">
       </ul>
     </div>
@@ -40,20 +61,24 @@
 <!-- Add to order modal - contents is changed by js -->
 <div id="addToOrderModal" class="modal">
   <div class="modal-content">
-    <h3 class="span-faint"><span id="name" class="span-bold">Chicken Tortilla Soup</span> - <span id="category">Appetizers</span></h3>
+    <h3 class="text-center span-faint"><span id="name" class="bold">Name</span> - <span id="category">Category</span></h3>
     <div class="row">
-      <div class="col-sm-4 information">
-        <p id="description">A hearty Central American soup with complex flavours and textures. </p>
-        <p>Price: £<span id="price">6.99</span></p>
-        <p>Calories: <span id="calories">100</span>kcal</p>
-        <p>Ingredients: <span id="ingredients">Chicken, Tortilla and Soup</span></p>
+      <div id="information" class="col-sm-4 information">
+        <p id="description">Description</p>
+        <p>Price: £<span id="price">Price</span></p>
+        <p>Calories: <span id="calories">Calories</span>kcal</p>
+        <p>Ingredients: <span id="ingredients">Ingredients</span></p>
+        <div id="content-info" class="text-center">
+        </div>
+        <input id="instructions" name="instructions" type="text" class="form-control" placeholder="Any extra instructions">
+        <button id="addToOrderButton" class="btn btn-success" type="button">Add To Order</button>
+        <button id="closeModal" class="btn btn-danger" type="button" onclick="document.getElementById('addToOrderModal').style.display = 'none';">Cancel</button>
       </div>
       <div class="col-sm-6">
-        <img id="picture" src="../images/ChickenTortillaSoup.jpg">
+        <img id="picture" src="../images/hal.jpg">
       </div>
     </div>
   </div>
 </div>
-
 </body>
 </html>

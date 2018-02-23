@@ -79,11 +79,15 @@ public class OrderItemsData {
     return picture_src;
   }
 
-  public Double getCalories() {
-    return calories;
-  }
-
   public String getInstructions() {
     return instructions;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public Double getCalories() {
+    return calories;
   }
 }
