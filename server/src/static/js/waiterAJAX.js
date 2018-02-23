@@ -18,12 +18,12 @@ function getActiveOrder() {
  * Table's current order. It also clears the Current Order column of any existing
  * entries before adding the selected Table's entries to the Current Order column.
  *
- * @param orderNumber The number of the order to load.
+ * @param orderId The number of the order to load.
  */
-function loadOrder(orderNumber) {
-  sessionStorage.setItem("orderId", orderNumber);
+function loadOrder(orderId) {
+  sessionStorage.setItem("orderId", orderId);
 
-  var orderNumberToSend = JSON.stringify({orderNumber: orderNumber});
+  var orderNumberToSend = JSON.stringify({orderId: orderId});
   post("/api/authStaff/getOrderItems", orderNumberToSend, function (data) {
 
     // Parse JSON
