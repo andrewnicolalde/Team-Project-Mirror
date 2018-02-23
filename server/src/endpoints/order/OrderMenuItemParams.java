@@ -9,12 +9,12 @@ public class OrderMenuItemParams {
 
   private Long menuItemId;
   private String instructions;
-  private Long orderNumber;
+  private Long orderId;
 
-  public OrderMenuItemParams(Long menuItemId, String instructions, Long orderNumber) {
+  public OrderMenuItemParams(Long menuItemId, String instructions, Long orderId) {
     this.menuItemId = menuItemId;
     this.instructions = instructions;
-    this.orderNumber = orderNumber;
+    this.orderId = orderId;
   }
 
   public Long getMenuItemId() {
@@ -25,7 +25,7 @@ public class OrderMenuItemParams {
     return instructions;
   }
 
-  public Long getOrderNumber() {
-    return orderNumber;
+  public Long getorderId() {
+    return orderId;
   }
 }
