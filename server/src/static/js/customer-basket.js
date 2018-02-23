@@ -6,7 +6,7 @@ $(document).ready(function () {
   // TODO: Update path once real endpoint is set up
   post("/api/authTable/getOrderItems",
       JSON.stringify({
-        orderNumber: sessionStorage.getItem("orderId")
+        orderId: sessionStorage.getItem("orderId")
       }), function (data) {
         //parse JSON
         var response = JSON.parse(data);

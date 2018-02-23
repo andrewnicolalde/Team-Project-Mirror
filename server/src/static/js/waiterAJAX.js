@@ -23,8 +23,8 @@ function getActiveOrder() {
 function loadOrder(orderId) {
   sessionStorage.setItem("orderId", orderId);
 
-  var orderNumberToSend = JSON.stringify({orderId: orderId});
-  post("/api/authStaff/getOrderItems", orderNumberToSend, function (data) {
+  var orderIdToSend = JSON.stringify({orderId: orderId});
+  post("/api/authStaff/getOrderItems", orderIdToSend, function (data) {
 
     // Parse JSON
     var response = JSON.parse(data);
@@ -227,7 +227,7 @@ function changeOrderStatus(orderStatus) {
   var activeOrder = getActiveOrder();
   post("/api/authStaff/changeOrderStatus",
       JSON.stringify({
-        orderNumber: activeOrder.getAttribute('data-ordernum'),
+        orderId: activeOrder.getAttribute('data-ordernum'),
         newOrderStatus: orderStatus
       }),
       loadTables()
