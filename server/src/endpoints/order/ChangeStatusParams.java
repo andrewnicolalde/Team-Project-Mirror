@@ -8,11 +8,11 @@ package endpoints.order;
 public class ChangeStatusParams {
 
   private String newOrderStatus;
-  private Long orderNumber;
+  private Long orderId;
 
-  public ChangeStatusParams(Long orderNumber, String newOrderStatus) {
+  public ChangeStatusParams(Long orderId, String newOrderStatus) {
     this.newOrderStatus = newOrderStatus;
-    this.orderNumber = orderNumber;
+    this.orderId = orderId;
   }
 
   public String getNewOrderStatus() {
@@ -20,6 +20,6 @@ public class ChangeStatusParams {
   }
 
   public Long getFoodOrderId() {
-    return orderNumber;
+    return orderId;
   }
 }
