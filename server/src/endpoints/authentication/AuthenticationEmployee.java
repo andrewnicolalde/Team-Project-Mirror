@@ -12,7 +12,11 @@ import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
 
-
+/**
+ * This class authenticates a staff member to use the system.
+ *
+ * @author Toby Such
+ */
 public class AuthenticationEmployee {
 
   /**
@@ -38,13 +42,10 @@ public class AuthenticationEmployee {
   }
 
   /**
-   * Authenticates the log in request, and redirects them if successful. JSON input: employeeNumber:
-   * The employee number of the user trying to log in with. password: The password of the user
-   * trying to log in.
-   *
+   * Authenticates the log in request, and redirects them if successful.
    * @param request The HTTP request
    * @param response The response to give.
-   * @return The a JSON response showing whether is was successful and if so, the session key.
+   * @return A JSON response showing whether is was successful and if so, the session key.
    */
   public static Response logInEmployee(Request request, Response response) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
@@ -80,9 +81,9 @@ public class AuthenticationEmployee {
       request.session().attribute("StaffSessionKey", sessionKey);
 
       if (staffSession.getStaff().getDepartment() == Department.WAITER) {
-        response.redirect("/waiter/waiter-ui.html");
+        response.redirect("/staff/waiter.html");
       } else if (staffSession.getStaff().getDepartment() == Department.KITCHEN) {
-        response.redirect("/kitchen.html");
+        response.redirect("/staff/kitchen.html");
       } else {
         response.redirect("/");
       }
@@ -94,9 +95,9 @@ public class AuthenticationEmployee {
   }
 
   /**
-   * Checks if the request has a valid staff session key. Will halt if not. No JSON input as it is
-   * intended to run before most get/posty requests - it just checks the session details.
-   *
+   * Checks if the request has a valid staff session key. Will halt if not.
+   * No JSON input as it is intended to run before most get/posty requests - it just checks the
+   * session details.
    * @param request The HTTP request.
    * @param response The HTTP response.
    */
@@ -118,6 +119,7 @@ public class AuthenticationEmployee {
       // I'm afraid I can't do that.
       halt(401, "error_401");
     }
+    em.close();
   }
 
   /**

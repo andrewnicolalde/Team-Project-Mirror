@@ -52,7 +52,7 @@ public class OrderMenuItem {
   }
 
   /**
-   * This constrcutor create new entities.
+   * This constructor create new entities.
    *
    * @param menuItem The menu item that the order is related to do.
    * @param foodOrder The order that the menu item is related to.
@@ -94,5 +94,15 @@ public class OrderMenuItem {
 
   public void setInstructions(String instructions) {
     this.instructions = instructions;
+  }
+
+  @Override
+  public String toString() {
+    return "OrderMenuItem{" +
+        "orderMenuItemId=" + orderMenuItemId +
+        ", menuItem=" + menuItem +
+        ", foodOrder=" + foodOrder +
+        ", instructions='" + instructions + '\'' +
+        '}';
   }
 }

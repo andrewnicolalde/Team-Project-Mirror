@@ -98,4 +98,14 @@ public class FoodOrder {
   public void setTransaction(Transaction transaction) {
     this.transaction = transaction;
   }
+
+  @Override
+  public String toString() {
+    return "FoodOrder{" +
+        "orderId=" + orderId +
+        ", status=" + status +
+        ", timeConfirmed=" + timeConfirmed +
+        ", transaction=" + transaction +
+        '}';
+  }
 }

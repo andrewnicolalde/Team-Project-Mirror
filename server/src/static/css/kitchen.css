@@ -1,0 +1,79 @@
+#sidebar {
+  max-width: 200px;
+  height: 95vh;
+  color: white;
+}
+
+/* Remove any padding or margin to remove gap between the sidebar and the side.*/
+.container-fluid {
+  padding: 0;
+  margin: 0;
+}
+
+.sideHeader {
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+}
+
+.order-list {
+  list-style-type: none;
+  padding: 0;
+  text-align: center;
+}
+
+.order-list li {
+  /*width: 100%;*/
+  border-radius: 5px;
+  border: 2px lightgrey;
+  height: 45px;
+  text-align: center;
+  margin-top: 7px;
+}
+
+.order-list input {
+  float: right;
+}
+.col-3 {
+  max-width: 20%;
+}
+
+.list-group h2 {
+  text-align: center;
+}
+
+.list-group button {
+  float: right;
+}
+
+.list-group-item {
+  font-size: 1.25rem;
+}
+
+.list-group-item input{
+  float: right;
+}
+
+#row {
+  max-width: 80%;
+}
+
+.col {
+  margin-top: 2%;
+}
+
+/*Colour coded list elements according to priority.*/
+
+.red {
+  background: #f80b1d;
+}
+
+.yellow {
+  background: #dcd700;
+}
+
+.green {
+  background: #40ab1c;
+}
+

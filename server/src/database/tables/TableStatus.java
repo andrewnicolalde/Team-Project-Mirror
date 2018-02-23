@@ -6,7 +6,19 @@ package database.tables;
  * @author Marcus Messer
  */
 public enum TableStatus {
-  FREE,
-  FILLED,
-  NEEDS_CLEANING
+  FREE ("Free"),
+  FILLED ("Filled"),
+  NEEDS_HELP ("Needs Help"),
+  NEEDS_CLEANING ("Needs Cleaning");
+
+  private final String status;
+
+  TableStatus(String status) {
+    this.status = status;
+  }
+
+  @Override
+  public String toString() {
+    return this.status;
+  }
 }

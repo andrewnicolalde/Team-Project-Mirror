@@ -5,19 +5,6 @@
   margin-bottom: 1%;
 }
 
-.btn-group {
-  background-color: white;
-  border: 2px solid black;
-  color: grey;
-  padding: 6px 10px;
-  text-align: center;
-  text-decoration: blink;
-  display: inline-block;
-  font-size: 10px;
-  position: absolute;
-  top: 0;
-  right: 0;
-}
 .btn-block {
   margin-bottom: 20px;
 }
@@ -27,6 +14,10 @@
   width: 50%;
   padding: 10px;
   text-align: center;
+}
+
+#menubutton1 {
+    color: white;
 }
 
 .login-form {
@@ -54,4 +45,8 @@ a:hover {
 a:active {
   text-decoration: none;
   color: white;
+}
+
+.carousel-inner {
+     margin-bottom: 20px;
 }

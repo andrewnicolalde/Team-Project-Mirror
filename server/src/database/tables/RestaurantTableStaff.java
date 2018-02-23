@@ -82,4 +82,13 @@ public class RestaurantTableStaff {
   public void setRestaurantTable(RestaurantTable restaurantTable) {
     this.restaurantTable = restaurantTable;
   }
+
+  @Override
+  public String toString() {
+    return "RestaurantTableStaff{" +
+        "restaurntTableStaffId=" + restaurntTableStaffId +
+        ", staff=" + staff +
+        ", restaurantTable=" + restaurantTable +
+        '}';
+  }
 }
