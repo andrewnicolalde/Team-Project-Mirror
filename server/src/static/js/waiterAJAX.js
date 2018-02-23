@@ -63,8 +63,8 @@ function loadTables() {
     // Add each Table to the list of tables
     for(var i = 0; i < response.length; i++){
       $("#tables-list").append(
-          "<li data-tablenum='"+ response[i].number +"' id='table-"+response[i].number+"' class='list-group-item list-group-item-action'><span>Table "+ response[i].number +" - " + response[i].status
-          + "<ul id='table-"+ response[i].number+"-orders-list'></ul>"
+          "<li data-tablenum='"+ response[i].number +"' id='table-"+response[i].number+"' class='list-group-item list-group-item-action' data-toggle='collapse' href='#table-" + response[i].number +"-orders-list'><span>Table "+ response[i].number +" - " + response[i].status
+          + "<ul id='table-"+ response[i].number+"-orders-list' ></ul>"
           + "</li>");
     }
     // Load all orders for each table
@@ -96,6 +96,7 @@ function loadOrderList(tableNumber) {
           + " data-orderStatus='"+ orders[i].orderStatus +"'"
           + " class='list-group-item list-group-item-action'"
           + " onclick=\""
+            + "event.stopPropagation();" // This prevents clicking on the orders resulting in collapsing the table
             + "setActiveOrder(event); "
             + "loadOrder(this.getAttribute('data-ordernum'));"
             + "setButtons(this.getAttribute('data-orderStatus'));"
