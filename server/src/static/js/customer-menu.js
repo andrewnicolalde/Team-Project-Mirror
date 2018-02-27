@@ -11,30 +11,7 @@ window.onclick = function(event) {
 
 $(document).ready(function () {
   loadMenu();
-  getTransactionId()
 });
-
-function getTransactionId() {
-  get("/api/authTable/getTransactionId", function (data) {
-    var response = JSON.parse(data);
-
-    var transactionId = response.transactionId;
-
-    getOrderId(transactionId);
-  });
-}
-
-function getOrderId(transactionId) {
-  post("/api/authTable/getOrderId", JSON.stringify({
-    transactionId: transactionId
-  }), function (data) {
-    var response = JSON.parse(data);
-
-    sessionStorage.setItem("orderId", response.orderId);
-    // Load order now, when the orderId has definitely been set.
-    loadOrder();
-  });
-}
 
 function loadMenu() {
   // Load categories
@@ -81,7 +58,7 @@ function loadMenu() {
 
 
 function loadOrder() {
-  var postData = {orderNumber: sessionStorage.getItem("orderId")};
+  var postData = {orderId: sessionStorage.getItem("orderId")};
   post("/api/authTable/getOrderItems", JSON.stringify(postData), function(data) {
     var orderMenuItems = JSON.parse(data);
     for (var i=0; i<orderMenuItems.length; i++) {
@@ -162,7 +139,7 @@ function addToOrder(itemId, instructions) {
   var dataToSend = JSON.stringify({
     menuItemId: itemId,
     instructions: instructions,
-    orderNumber: sessionStorage.getItem("orderId")
+    orderId: sessionStorage.getItem("orderId")
   });
 
   post("/api/authTable/addItemToOrder", dataToSend, function(data) {
@@ -243,8 +220,8 @@ function confirmEditOrderMenuItem(orderMenuItemId) {
 }
 
 function confirmOrder() {
-  var orderNumber = sessionStorage.getItem("orderId");
-  var dataToSend = JSON.stringify({orderNumber: orderNumber,
+  var orderId = sessionStorage.getItem("orderId");
+  var dataToSend = JSON.stringify({orderId: orderId,
                                    newOrderStatus: "READY_TO_CONFIRM"});
   post("/api/authTable/changeOrderStatus", dataToSend, function(data) {
     if (data === "success") {

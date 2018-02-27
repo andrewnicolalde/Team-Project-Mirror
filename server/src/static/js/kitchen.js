@@ -70,7 +70,7 @@ function orderDone(orderId) {
   var statusReady = "READY_TO_DELIVER";
   post("/api/authStaff/changeOrderStatus",
       JSON.stringify({
-        orderNumber:orderId,
+        orderId:orderId,
         newOrderStatus:statusReady
       }), function (data) {
         removeFromScreen(data, orderId);

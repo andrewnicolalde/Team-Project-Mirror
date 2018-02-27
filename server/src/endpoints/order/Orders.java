@@ -132,7 +132,7 @@ public class Orders {
 
     FoodOrder foodOrder = entityManager.createQuery("from FoodOrder foodOrder where "
             + " foodOrder.id = :orderId",
-        FoodOrder.class).setParameter("orderId", omi.getOrderNumber()).getSingleResult();
+        FoodOrder.class).setParameter("orderId", omi.getorderId()).getSingleResult();
 
     entityManager.getTransaction().begin();
     OrderMenuItem orderMenuItem = new OrderMenuItem(entityManager.find(
