@@ -215,19 +215,32 @@ public class Orders {
     TableSession tableSession = entityManager.find(TableSession.class,
         request.session().attribute("TableSessionKey"));
 
-    Transaction transaction = entityManager.createQuery("from Transaction transaction where "
+    Transaction transaction;
+
+    List<Transaction> transactions = entityManager.createQuery("from Transaction transaction where "
         + "transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNo AND "
         + "transaction.isPaid = false ", Transaction.class).setParameter("tableNo",
-        tableSession.getRestaurantTable().getTableNumber()).getSingleResult();
+        tableSession.getRestaurantTable().getTableNumber()).getResultList();
 
-    if (transaction == null) {
+    // If there isn't an unpaid transaction for the current table, create a new one.
+    if (transactions.size() == 0) {
       entityManager.getTransaction().begin();
-      RestaurantTableStaff temp = entityManager.createQuery("from RestaurantTableStaff tableStaff "
-          + "where tableStaff.restaurantTable = :table", RestaurantTableStaff.class).setParameter(
-          "table", 1).getSingleResult();
+      List<RestaurantTableStaff> servers = entityManager.createQuery("from RestaurantTableStaff tableStaff "
+          + "where tableStaff.restaurantTable.tableNumber = :table", RestaurantTableStaff.class).setParameter(
+          "table", tableSession.getRestaurantTable().getTableNumber()).getResultList();
+
+      RestaurantTableStaff temp;
+      if (servers.size() == 0) {
+        // If there are no waiters assigned to serve this table, then we have an issue...
+        return "failure";
+      } else {
+        temp = servers.get(0);
+      }
       transaction = new Transaction(false, null, null, false, temp);
       entityManager.persist(transaction);
       entityManager.getTransaction().commit();
+    } else {
+      transaction = transactions.get(0);
     }
 
     entityManager.close();
