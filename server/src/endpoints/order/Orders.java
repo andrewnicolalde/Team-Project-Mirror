@@ -211,7 +211,6 @@ public class Orders {
    */
   public static String getTransactionId(Request request, Response response) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
-  // TODO implement after table session has properly been implemented.
     TableSession tableSession = entityManager.find(TableSession.class,
         request.session().attribute("TableSessionKey"));
 
@@ -226,8 +225,8 @@ public class Orders {
     if (transactions.size() == 0) {
       entityManager.getTransaction().begin();
       List<RestaurantTableStaff> servers = entityManager.createQuery("from RestaurantTableStaff tableStaff "
-          + "where tableStaff.restaurantTable.tableNumber = :table", RestaurantTableStaff.class).setParameter(
-          "table", tableSession.getRestaurantTable().getTableNumber()).getResultList();
+          + "where tableStaff.restaurantTable = :table", RestaurantTableStaff.class).setParameter(
+          "table", tableSession.getRestaurantTable()).getResultList();
 
       RestaurantTableStaff temp;
       if (servers.size() == 0) {
