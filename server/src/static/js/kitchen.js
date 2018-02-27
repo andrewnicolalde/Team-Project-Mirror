@@ -53,7 +53,7 @@ function displayOrders(data) {
           + "<ul class='list-group' id='list-"+ Id +"'>"
           + "<li class='list-group-item'> "
           + "<h2>Order " + Id + "</h2> "
-          + "<div>20:12.12"
+          + "<div>" + shortTime(response[j].timeConfirmed)
           + "<button type='button' class='btn btn-success' data-orderId='"+ Id +"' onclick='orderDone(this.getAttribute(\"data-orderId\"))'>Done</button></div>"
           + "</li>"
           + "</ul>"
@@ -61,6 +61,22 @@ function displayOrders(data) {
       getOrderItems(Id);
     }
   }
+}
+
+function shortTime(time) {
+  var orderTime = new Date(time);
+  var shortTime = paddedTime(orderTime.getHours()) + ":" + paddedTime(orderTime.getMinutes()) + "." + paddedTime(orderTime.getSeconds());
+  return shortTime;
+}
+
+function paddedTime(time) {
+  var padded;
+  if (time < 10) {
+    padded = "0" + time;
+  } else {
+    padded = time;
+  }
+  return padded;
 }
 
 /**
