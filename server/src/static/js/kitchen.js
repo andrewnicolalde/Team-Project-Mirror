@@ -63,12 +63,22 @@ function displayOrders(data) {
   }
 }
 
+/**
+ * Reduces the full time stamp to just the hours minutes and seconds.
+ * @param time The full timestamp.
+ * @return {string} The condensed time.
+ */
 function shortTime(time) {
   var orderTime = new Date(time);
   var shortTime = paddedTime(orderTime.getHours()) + ":" + paddedTime(orderTime.getMinutes()) + "." + paddedTime(orderTime.getSeconds());
   return shortTime;
 }
 
+/**
+ * Helper function to ensure time is formatted correctly.
+ * @param time The original time.
+ * @return {string} A formatted string of the time.
+ */
 function paddedTime(time) {
   var padded;
   if (time < 10) {
