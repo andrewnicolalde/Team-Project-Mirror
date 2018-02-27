@@ -11,6 +11,7 @@ window.onclick = function(event) {
 
 $(document).ready(function () {
   loadMenu();
+  loadOrder();
 });
 
 function loadMenu() {

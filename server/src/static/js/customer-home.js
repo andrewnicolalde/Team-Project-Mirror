@@ -15,7 +15,6 @@ function getOrderId(transactionId) {
     var response = JSON.parse(data);
 
     sessionStorage.setItem("orderId", response.orderId);
-    // Load order now, when the orderId has definitely been set.
-    loadOrder();
+    window.location.replace("/customer/menu.html");
   });
 }
