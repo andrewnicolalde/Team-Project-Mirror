@@ -1,10 +1,15 @@
 package endpoints.menu;
 
 import database.DatabaseManager;
+import database.tables.FranchiseMenuItem;
 import database.tables.Category;
-import database.tables.MenuItem;
+import database.tables.Franchise;
+import database.tables.StaffSession;
+import database.tables.TableSession;
 import java.util.List;
 import javax.persistence.EntityManager;
+import spark.Request;
+import spark.Response;
 import util.JsonUtil;
 
 /**
@@ -19,25 +24,40 @@ public class Menu {
    * Gets the full menu from the database and returns it in JSON. No JSON input as it is a get
    * request.
    *
-   * @return The menu in JSON as a string.
+   * @param request A HTML request
+   * @param response A HTML response
+   * @return The menu in JSON as a string
    */
-  public static String getMenu() {
+  public static String getMenu(Request request, Response response) {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
-    List<MenuItem> menuItems = entityManager.createQuery("from MenuItem ", MenuItem.class)
-        .getResultList();
+    Franchise franchise = null;
+
+    if (request.session().attribute("TableSessionKey") != "") {
+      franchise = entityManager.find(TableSession.class, request.session().attribute(
+          "TableSessionKey")).getRestaurantTable().getFranchise();
+    } else if (request.session().attribute("StaffSessionKey") != "") {
+      franchise = entityManager.find(StaffSession.class, request.session().attribute(
+          "StaffSessionKey")).getStaff().getFranchise();
+    } else {
+      return "";
+    }
+
+    List<FranchiseMenuItem> menuItems = entityManager.createQuery("from FranchiseMenuItem "
+        + "menuItem where menuItem.franchise = :franchise", FranchiseMenuItem.class)
+        .setParameter("franchise", franchise).getResultList();
 
     entityManager.close();
 
-    if (menuItems == null) {
+    if (menuItems.size() == 0) {
       return "[]";
     }
 
     MenuData[] menuData = new MenuData[menuItems.size()];
 
     for (int i = 0; i < menuData.length; i++) {
-      menuData[i] = new MenuData(menuItems.get(i));
+      menuData[i] = new MenuData(menuItems.get(i).getMenuItem());
     }
 
     return JsonUtil.getInstance().toJson(menuData);

@@ -1,4 +1,4 @@
-package database;
+package database.tables;
 
 import database.tables.Franchise;
 import database.tables.MenuItem;
@@ -6,12 +6,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
  * This class enables franchise to have separate menus. By linking menu items to the franchises.
  */
 @Entity
+@Table(name = "Franchise_Menu_Item")
 public class FranchiseMenuItem {
 
   /**
