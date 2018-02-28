@@ -34,10 +34,10 @@ public class Menu {
 
     Franchise franchise = null;
 
-    if (request.session().attribute("TableSessionKey") != "") {
+    if (request.session().attribute("TableSessionKey") != null) {
       franchise = entityManager.find(TableSession.class, request.session().attribute(
           "TableSessionKey")).getRestaurantTable().getFranchise();
-    } else if (request.session().attribute("StaffSessionKey") != "") {
+    } else if (request.session().attribute("StaffSessionKey") != null) {
       franchise = entityManager.find(StaffSession.class, request.session().attribute(
           "StaffSessionKey")).getStaff().getFranchise();
     } else {
