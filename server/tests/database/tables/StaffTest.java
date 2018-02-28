@@ -43,7 +43,7 @@ public class StaffTest {
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
     //Add a new staff member to the database
-    entityManager.persist(new Staff("Password", Department.WAITER, franchise));
+    entityManager.persist(new Staff("John", "Doe", "Password", Department.WAITER, franchise));
     entityManager.getTransaction().commit();
     //Close the connection to the database
     entityManager.close();
