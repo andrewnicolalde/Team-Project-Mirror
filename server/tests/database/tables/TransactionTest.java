@@ -43,7 +43,7 @@ public class TransactionTest {
     //Create new Staff member
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    Staff staff = new Staff("Password", Department.KITCHEN, franchise);
+    Staff staff = new Staff("John", "Doe", "Password", Department.KITCHEN, franchise);
     entityManager.persist(staff);
     entityManager.getTransaction().commit();
     entityManager.close();

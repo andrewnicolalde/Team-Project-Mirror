@@ -261,18 +261,14 @@ public class Orders {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
-    FoodOrder foodOrder;
-    try {
-      foodOrder = entityManager.createQuery("from FoodOrder foodOrder where "
+    List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder where "
               + "foodOrder.transaction.id = :transactionId and foodOrder.status = :ordering",
           FoodOrder.class).setParameter("transactionId", orderIdParams.getTransactionId())
-          .setParameter("ordering", OrderStatus.ORDERING).getSingleResult();
-    } catch (Exception e) {
-      e.printStackTrace();
-      foodOrder = null;
-    }
+          .setParameter("ordering", OrderStatus.ORDERING).getResultList();
 
-    if (foodOrder == null) {
+
+    FoodOrder foodOrder;
+    if (foodOrders.size() == 0) {
       entityManager.getTransaction().begin();
 
       foodOrder = new FoodOrder(OrderStatus.ORDERING, null, entityManager.find(Transaction.class,
@@ -281,6 +277,8 @@ public class Orders {
       entityManager.persist(foodOrder);
 
       entityManager.getTransaction().commit();
+    } else {
+      foodOrder = foodOrders.get(0);
     }
 
     entityManager.close();
