@@ -86,3 +86,8 @@
   clear: none;
   border-radius: 4px;
 }
+
+/* Macs seem to override the bootstrap color so this is here to override that.*/
+.category-button {
+  background-color: #f0f0f0;
+}
