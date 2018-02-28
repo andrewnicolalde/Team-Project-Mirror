@@ -26,21 +26,47 @@
 </nav>
 <div class="container">
     <h2>Basket</h2>
-    <table class="table table-hover">
-        <!--names of the columns of the table, to be displayed in table head (thead)-->
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Description</th>
-            <th scope="col">Price</th>
-        </tr>
-        </thead>
-        <tbody id="table-body">
-        <!--tr to /tr is one table row-->
-        <!--th is the row number-->
-        <!--td are the columns in a row-->
-        </tbody>
-    </table>
+    <div id="accordion">
+        <div class="card">
+            <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                <h5 class="mb-0">
+                    Order 1
+                </h5>
+            </div>
+
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    orderinfo1
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="headingTwo" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <h5 class="mb-0">
+                    Order 2
+                </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div class="card-body">
+                    orderinfos2
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="headingThree" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                <h5 class="mb-0">
+                    Order 3
+                </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                <div class="card-body">
+                    somemoreorderinfos
+                </div>
+            </div>
+        </div>
+    </div>
     <!--buttons load on the right hand side of the page-->
     <div class="pull-right">
         <!-- Button trigger modal -->
