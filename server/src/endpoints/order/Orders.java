@@ -32,6 +32,10 @@ public class Orders {
     ListOrderMenuItemParams omiList = JsonUtil.getInstance().fromJson(request.body(),
         ListOrderMenuItemParams.class);
 
+    if (isNotValidOrder(request, omiList.getOrderId())) {
+      return "";
+    }
+
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     List<OrderMenuItem> orderMenuItems = entityManager
         .createQuery("from OrderMenuItem orderMenuItem where "
@@ -125,7 +129,9 @@ public class Orders {
     OrderMenuItemParams omi = JsonUtil.getInstance()
         .fromJson(request.body(), OrderMenuItemParams.class);
 
-    //TODO check which franchise to add the order to.
+    if (isNotValidOrder(request, omi.getorderId())) {
+      return "";
+    }
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
@@ -155,6 +161,10 @@ public class Orders {
   public static String changeOrderStatus(Request request, Response response) {
     ChangeStatusParams cos = JsonUtil.getInstance()
         .fromJson(request.body(), ChangeStatusParams.class);
+
+    if (isNotValidOrder(request, cos.getFoodOrderId())) {
+      return "";
+    }
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
@@ -186,6 +196,10 @@ public class Orders {
   public static String removeOrderMenuItem(Request request, Response response) {
     RemoveOrderMenuItemParams omi = JsonUtil.getInstance()
         .fromJson(request.body(), RemoveOrderMenuItemParams.class);
+
+    if (isNotValidOrder(request, omi.getOrderMenuItemId())) {
+      return "";
+    }
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     entityManager.getTransaction().begin();
@@ -260,8 +274,6 @@ public class Orders {
     OrderIdParams orderIdParams = JsonUtil.getInstance()
         .fromJson(request.body(), OrderIdParams.class);
 
-    System.out.println(orderIdParams.getTransactionId());
-
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder where "
@@ -298,9 +310,10 @@ public class Orders {
    * @return A string saying 'success' or 'failure'
    */
   public static String changeOrderInstructions(Request request, Response response) {
-    EntityManager em = DatabaseManager.getInstance().getEntityManager();
     ChangeInstructionsParams changeInstructionsParams = JsonUtil.getInstance().fromJson(
         request.body(), ChangeInstructionsParams.class);
+
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
 
     em.getTransaction().begin();
     OrderMenuItem orderMenuItem = em
@@ -315,9 +328,12 @@ public class Orders {
    * Checks if the order belongs to the table.
    * @param request The HTML request.
    * @param orderId The orderId being checked.
-   * @return True if the orderId is valid.
+   * @return True if the orderId is not valid.
    */
-  private boolean isValidOrder(Request request, Long orderId) {
+  private static boolean isNotValidOrder(Request request, Long orderId) {
+    if (request.session().attribute("StaffSessionKey") != null) {
+      return false;
+    }
     if (request.session().attribute("TableSessionKey") != null) {
       EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
       FoodOrder foodOrder = entityManager.find(FoodOrder.class, orderId);
@@ -325,13 +341,10 @@ public class Orders {
       TableSession tableSession = entityManager.find(TableSession.class,
           request.session().attribute("TableSessionKey"));
 
-      if (foodOrder.getTransaction().getRestaurantTableStaff().getRestaurantTable() == tableSession
-          .getRestaurantTable()) {
-        return true;
-      }
-    } else if (request.session().attribute("StaffSessionKey") != null) {
-      return true;
+      return foodOrder.getTransaction().getRestaurantTableStaff().getRestaurantTable()
+          != tableSession
+          .getRestaurantTable();
     }
-    return false;
+    return true;
   }
 }
