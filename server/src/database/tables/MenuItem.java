@@ -1,9 +1,15 @@
 package database.tables;
 
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
@@ -33,7 +39,14 @@ public class MenuItem {
   /**
    * This field holds the information about the ingredients information.
    */
-  private String ingredients;
+  @ManyToMany(fetch = FetchType.EAGER, cascade = {
+      CascadeType.PERSIST,
+      CascadeType.MERGE,
+  })
+  @JoinTable(name = "INGREDIENT_MENU_ITEM",
+      joinColumns = @JoinColumn(name = "menuItemId"),
+      inverseJoinColumns = @JoinColumn(name = "ingredientId"))
+  private Set<Ingredient> ingredients = new HashSet<>();
 
   /**
    * This field holds the description of the menu item.
@@ -86,7 +99,8 @@ public class MenuItem {
 
   /**
    * This constructor is used to create new menu items.
-   *  @param name The name of menu item.
+   *
+   * @param name The name of menu item.
    * @param ingredients The ingredients info for the item.
    * @param description The description for the item.
    * @param calories The amount of calories for the item.
@@ -96,7 +110,7 @@ public class MenuItem {
    * @param isGlutenFree If the item is gluten free.
    * @param category The category the item belongs in.
    */
-  public MenuItem(String name, String ingredients, String description, Double calories,
+  public MenuItem(String name, Set<Ingredient> ingredients, String description, Double calories,
       Double price,
       Boolean isVegan, Boolean isVegetarian, Boolean isGlutenFree, String pictureSrc,
       Category category) {
@@ -112,6 +126,42 @@ public class MenuItem {
     this.category = category;
   }
 
+  /**
+   * Adds an ingredient to the list of ingredients.
+   *
+   * @param ingredient The new ingredient
+   */
+  public void addIngredient(Ingredient ingredient) {
+    ingredients.add(ingredient);
+    ingredient.getMenuItems().add(this);
+  }
+
+  /**
+   * Removes an ingredient from the set of ingredients.
+   *
+   * @param ingredient The ingredient to remove
+   */
+  public void removeIngredient(Ingredient ingredient) {
+    ingredients.remove(ingredient);
+    ingredient.getMenuItems().remove(this);
+  }
+
+  public String getIngredients() {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    //Taken from https://stackoverflow.com/questions/3395286/remove-last-character-of-a-stringbuilder
+    for (Ingredient ingredient : ingredients) {
+      stringBuilder.append(ingredient.getIngredientName()).append(", ");
+    }
+
+    if (stringBuilder.length() > 0) {
+      stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+      stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+    }
+
+    return stringBuilder.toString();
+  }
+
   public String getName() {
     return name;
   }
@@ -120,11 +170,11 @@ public class MenuItem {
     this.name = name;
   }
 
-  public String getIngredients() {
+  public Set<Ingredient> getIngredientsSet() {
     return ingredients;
   }
 
-  public void setIngredients(String ingredients) {
+  public void setIngredientsSet(Set<Ingredient> ingredients) {
     this.ingredients = ingredients;
   }
 
@@ -199,6 +249,7 @@ public class MenuItem {
   public void setCalories(Double calories) {
     this.calories = calories;
   }
+
 
   @Override
   public String toString() {
