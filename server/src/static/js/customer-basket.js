@@ -15,13 +15,8 @@ $(document).ready(function () {
               + (i + 1) + "\" class=\"clickable\">" +
               "<th scope=\"row\">" + (i + 1) + "</th>" +
               "<td>" + response[i].name + "</td>" +
+              "<td>" + response[i].instructions + "</td>" +
               "<td>£" + response[i].price + "</td>" +
-              "</tr>" +
-              "<tr>" +
-              "<td colspan=\"3\">" +
-              "<div id=\"row" + (i + 1) + "\" class=\"collapse\">"
-              + response[i].instructions + "</div>" +
-              "</td>" +
               "</tr>"
           );
         }

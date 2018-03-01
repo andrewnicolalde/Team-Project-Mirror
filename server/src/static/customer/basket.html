@@ -28,26 +28,40 @@
     <h2>Basket</h2>
     <div id="accordion">
         <div class="card">
-            <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            <div class="card-header" id="heading1" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
                 <h5 class="mb-0">
                     Order 1
                 </h5>
             </div>
-
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div id="collapse1" class="collapse show" aria-labelledby="heading1" data-parent="#accordion">
                 <div class="card-body">
-                    orderinfo1
+                    <table class="table table-hover">
+                        <!--names of the columns of the table, to be displayed in table head (thead)-->
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Instructions</th>
+                            <th scope="col">Price</th>
+                        </tr>
+                        </thead>
+                        <tbody id="table-body">
+                        <!--tr to /tr is one table row-->
+                        <!--th is the row number-->
+                        <!--td are the columns in a row-->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
         <div class="card">
-            <div class="card-header" id="headingTwo" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            <div class="card-header" id="heading2" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
                 <h5 class="mb-0">
                     Order 2
                 </h5>
             </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div id="collapse2" class="collapse" aria-labelledby="heading2" data-parent="#accordion">
                 <div class="card-body">
                     orderinfos2
                 </div>
@@ -55,18 +69,20 @@
         </div>
 
         <div class="card">
-            <div class="card-header" id="headingThree" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            <div class="card-header" id="heading3" data-toggle="collapse" data-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
                 <h5 class="mb-0">
                     Order 3
                 </h5>
             </div>
-            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div id="collapse3" class="collapse" aria-labelledby="heading3" data-parent="#accordion">
                 <div class="card-body">
                     somemoreorderinfos
                 </div>
             </div>
         </div>
     </div>
+
+    <div style="padding-bottom: 10px"><!--Some padding between the accordion and buttons--></div>
     <!--buttons load on the right hand side of the page-->
     <div class="pull-right">
         <!-- Button trigger modal -->
