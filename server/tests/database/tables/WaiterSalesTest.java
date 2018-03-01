@@ -12,7 +12,8 @@ import org.junit.Test;
 
 public class WaiterSalesTest {
 
-  private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("server.database.test");
+  private EntityManagerFactory entityManagerFactory = Persistence
+      .createEntityManagerFactory("server.database.test");
   private EntityManager entityManager;
 
   @Before
@@ -75,7 +76,7 @@ public class WaiterSalesTest {
     //Create new menu item
     entityManager.getTransaction().begin();
     MenuItem menuItem = new MenuItem("Burger", "Got meat",
-        "Well it's a burger",500.00, 1.00, false, false,
+        "Well it's a burger", 500.00, 1.00, false, false,
         false, "picSrc", category);
     entityManager.persist(menuItem);
     entityManager.getTransaction().commit();
@@ -93,7 +94,8 @@ public class WaiterSalesTest {
     entityManager.persist(waiterSale);
     entityManager.getTransaction().commit();
 
-    WaiterSale sale = entityManager.createQuery("from WaiterSale ", WaiterSale.class).getSingleResult();
+    WaiterSale sale = entityManager.createQuery("from WaiterSale ", WaiterSale.class)
+        .getSingleResult();
 
     assertEquals("Check staff", waiterSale.getStaff(), sale.getStaff());
     assertEquals("Check item", waiterSale.getMenuItem(), sale.getMenuItem());
