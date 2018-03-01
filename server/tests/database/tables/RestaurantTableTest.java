@@ -12,6 +12,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public class RestaurantTableTest {
+  //TODO Figure out why this test never completes.
 
   private EntityManagerFactory entityManagerFactory;
 
