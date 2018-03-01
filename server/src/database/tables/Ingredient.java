@@ -1,15 +1,19 @@
 package database.tables;
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
  * This class stores the ingredients of the menu items.
  */
 @Entity
-public class Ingredients {
+public class Ingredient {
 
   /**
    * Ths primary key so it can be stored in the database.
@@ -26,10 +30,13 @@ public class Ingredients {
    */
   private String ingredientName;
 
+  @ManyToMany(fetch = FetchType.EAGER, mappedBy = "ingredients")
+  private Set<MenuItem> menuItems = new HashSet<>();
+
   /**
    * This empty constructor is used by Hibernate.
    */
-  public Ingredients() {
+  public Ingredient() {
     //Empty Body
   }
 
@@ -38,7 +45,7 @@ public class Ingredients {
    *
    * @param ingredientName The name of the the new ingredient.
    */
-  public Ingredients(String ingredientName) {
+  public Ingredient(String ingredientName) {
     this.ingredientName = ingredientName;
   }
 
@@ -56,5 +63,13 @@ public class Ingredients {
 
   public void setIngredientName(String ingredientName) {
     this.ingredientName = ingredientName;
+  }
+
+  public Set<MenuItem> getMenuItems() {
+    return menuItems;
+  }
+
+  public void setMenuItems(Set<MenuItem> menuItems) {
+    this.menuItems = menuItems;
   }
 }

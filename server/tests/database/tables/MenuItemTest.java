@@ -2,6 +2,8 @@ package database.tables;
 
 import database.tables.Category;
 import database.tables.MenuItem;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +45,9 @@ public class MenuItemTest {
     //Create new menu item
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    MenuItem menuItem = new MenuItem("Burger", "Got meat",
+    Set<Ingredient> ingredients = new HashSet<>();
+    ingredients.add(new Ingredient("Beef"));
+    MenuItem menuItem = new MenuItem("Burger", ingredients,
         "Well it's a burger",500.00, 1.00, false, false,
         false, "picture_src", category);
     entityManager.persist(menuItem);
