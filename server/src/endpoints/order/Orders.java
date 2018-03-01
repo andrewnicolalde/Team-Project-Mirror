@@ -326,6 +326,7 @@ public class Orders {
 
   /**
    * Checks if the order belongs to the table.
+   *
    * @param request The HTML request.
    * @param orderId The orderId being checked.
    * @return True if the orderId is not valid.
@@ -341,9 +342,12 @@ public class Orders {
       TableSession tableSession = entityManager.find(TableSession.class,
           request.session().attribute("TableSessionKey"));
 
-      return foodOrder.getTransaction().getRestaurantTableStaff().getRestaurantTable()
-          != tableSession
-          .getRestaurantTable();
+      if (foodOrder.getTransaction().getRestaurantTableStaff().getRestaurantTable()
+          == tableSession
+          .getRestaurantTable()) {
+        return foodOrder.getStatus() != OrderStatus.ORDERING
+            && foodOrder.getStatus() != OrderStatus.READY_TO_CONFIRM;
+      }
     }
     return true;
   }
