@@ -3,6 +3,8 @@ package database.tables;
 import static org.junit.Assert.assertEquals;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -75,7 +77,9 @@ public class WaiterSalesTest {
 
     //Create new menu item
     entityManager.getTransaction().begin();
-    MenuItem menuItem = new MenuItem("Burger", "Got meat",
+    Set<Ingredient> ingredients = new HashSet<>();
+    ingredients.add(new Ingredient("Beef"));
+    MenuItem menuItem = new MenuItem("Burger", ingredients,
         "Well it's a burger", 500.00, 1.00, false, false,
         false, "picSrc", category);
     entityManager.persist(menuItem);
