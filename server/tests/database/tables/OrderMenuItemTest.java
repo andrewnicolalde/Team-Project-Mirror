@@ -1,20 +1,20 @@
 package database.tables;
 
+import static org.junit.Assert.assertEquals;
+
+import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.sql.Timestamp;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-
 public class OrderMenuItemTest {
+
   private EntityManagerFactory entityManagerFactory;
 
   @Before
@@ -99,7 +99,7 @@ public class OrderMenuItemTest {
     Set<Ingredient> ingredients = new HashSet<>();
     ingredients.add(new Ingredient("Beef"));
     MenuItem menuItem = new MenuItem("Burger", ingredients,
-        "Well it's a burger",500.00, 1.00, false, false,
+        "Well it's a burger", 500.00, 1.00, false, false,
         false, "picSrc", category);
     entityManager.persist(menuItem);
     entityManager.getTransaction().commit();
@@ -113,7 +113,6 @@ public class OrderMenuItemTest {
     entityManager.persist(orderMenuItem);
     entityManager.getTransaction().commit();
     entityManager.close();
-
 
     //Get menu order item from database.
     entityManager = entityManagerFactory.createEntityManager();
