@@ -6,8 +6,10 @@ import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
 import database.tables.RestaurantTableStaff;
+import database.tables.StaffSession;
 import database.tables.TableSession;
 import database.tables.Transaction;
+import database.tables.WaiterSale;
 import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.List;
@@ -127,6 +129,7 @@ public class Orders {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
+
     //Gets the food order that the item is going to be added to.
     FoodOrder foodOrder = entityManager.createQuery("from FoodOrder foodOrder where "
             + " foodOrder.id = :orderId",
@@ -138,6 +141,13 @@ public class Orders {
         MenuItem.class, omi.getMenuItemId()), foodOrder, omi.getInstructions());
 
     entityManager.persist(orderMenuItem);
+
+    // Updates the waiter sale if they added the menu item.
+    if (request.session().attribute("StaffSessionKey") != null) {
+      StaffSession staffSession = entityManager.find(StaffSession.class, request.session().attribute("StaffSessionKey"));
+      WaiterSale waiterSale = new WaiterSale(staffSession.getStaff(), entityManager.find(MenuItem.class, omi.getMenuItemId()), foodOrder);
+      entityManager.persist(waiterSale);
+    }
 
     //Updates the transaction total
     foodOrder.getTransaction()
@@ -241,7 +251,7 @@ public class Orders {
       } else {
         temp = servers.get(0);
       }
-      transaction = new Transaction(false, null, null, false, temp);
+      transaction = new Transaction(false, 0.0, null, false, temp);
       entityManager.persist(transaction);
       entityManager.getTransaction().commit();
     } else {
