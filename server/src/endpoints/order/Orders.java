@@ -211,23 +211,35 @@ public class Orders {
    */
   public static String getTransactionId(Request request, Response response) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
-  // TODO implement after table session has properly been implemented.
     TableSession tableSession = entityManager.find(TableSession.class,
         request.session().attribute("TableSessionKey"));
 
-    Transaction transaction = entityManager.createQuery("from Transaction transaction where "
+    Transaction transaction;
+
+    List<Transaction> transactions = entityManager.createQuery("from Transaction transaction where "
         + "transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNo AND "
         + "transaction.isPaid = false ", Transaction.class).setParameter("tableNo",
-        tableSession.getRestaurantTable().getTableNumber()).getSingleResult();
+        tableSession.getRestaurantTable().getTableNumber()).getResultList();
 
-    if (transaction == null) {
+    // If there isn't an unpaid transaction for the current table, create a new one.
+    if (transactions.size() == 0) {
       entityManager.getTransaction().begin();
-      RestaurantTableStaff temp = entityManager.createQuery("from RestaurantTableStaff tableStaff "
+      List<RestaurantTableStaff> servers = entityManager.createQuery("from RestaurantTableStaff tableStaff "
           + "where tableStaff.restaurantTable = :table", RestaurantTableStaff.class).setParameter(
-          "table", 1).getSingleResult();
+          "table", tableSession.getRestaurantTable()).getResultList();
+
+      RestaurantTableStaff temp;
+      if (servers.size() == 0) {
+        // If there are no waiters assigned to serve this table, then we have an issue...
+        return "failure";
+      } else {
+        temp = servers.get(0);
+      }
       transaction = new Transaction(false, null, null, false, temp);
       entityManager.persist(transaction);
       entityManager.getTransaction().commit();
+    } else {
+      transaction = transactions.get(0);
     }
 
     entityManager.close();
@@ -249,18 +261,14 @@ public class Orders {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
-    FoodOrder foodOrder;
-    try {
-      foodOrder = entityManager.createQuery("from FoodOrder foodOrder where "
+    List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder where "
               + "foodOrder.transaction.id = :transactionId and foodOrder.status = :ordering",
           FoodOrder.class).setParameter("transactionId", orderIdParams.getTransactionId())
-          .setParameter("ordering", OrderStatus.ORDERING).getSingleResult();
-    } catch (Exception e) {
-      e.printStackTrace();
-      foodOrder = null;
-    }
+          .setParameter("ordering", OrderStatus.ORDERING).getResultList();
 
-    if (foodOrder == null) {
+
+    FoodOrder foodOrder;
+    if (foodOrders.size() == 0) {
       entityManager.getTransaction().begin();
 
       foodOrder = new FoodOrder(OrderStatus.ORDERING, null, entityManager.find(Transaction.class,
@@ -269,6 +277,8 @@ public class Orders {
       entityManager.persist(foodOrder);
 
       entityManager.getTransaction().commit();
+    } else {
+      foodOrder = foodOrders.get(0);
     }
 
     entityManager.close();
