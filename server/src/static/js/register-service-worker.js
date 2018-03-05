@@ -58,7 +58,7 @@ function getCurrentSubscription(registration) {
   registration.pushManager.getSubscription()
   .then(function (subscription) {
     if (!subscription) {
-      return; // there isn't a subscription return to create a new one.
+      throw new Error("There isn't a subscription");// there isn't a subscription return to create a new one.
     }
     return subscription;
   }).catch(function (err) {
@@ -76,7 +76,8 @@ function registerServiceWorker(worker) {
   return navigator.serviceWorker.register(worker)
   .then(function (registration) {
     console.log("Registration successful");
-    return registration;})
+    return registration;
+  })
   .catch(function (reason) {
     console.error("Unable to register: ", reason);
   });
@@ -88,8 +89,8 @@ function registerServiceWorker(worker) {
  * @return {Promise<any>} A Promise that resolves to indicate the users response to asking permission.
  */
 function askPermission() {
-  return new Promise(function(resolve, reject) {
-    const permissionResult = Notification.requestPermission(function(result) {
+  return new Promise(function (resolve, reject) {
+    const permissionResult = Notification.requestPermission(function (result) {
       resolve(result);
     });
 
@@ -97,7 +98,7 @@ function askPermission() {
       permissionResult.then(resolve, reject);
     }
   })
-  .then(function(permissionResult) {
+  .then(function (permissionResult) {
     if (permissionResult !== 'granted') {
       throw new Error('We weren\'t granted permission.');
     }
@@ -114,11 +115,22 @@ function getPermissionAndSubscribe() {
     askPermission().then(function (result) {
       // if it is a success then we subscribe the user to push.
       $('#notify').remove();
-      subscribeUserToPush().then(function (subscription) { return sendSubscriptionToBackEnd(subscription)});
+      subscribeUserToPush().then(function (subscription) {
+        return sendSubscriptionToBackEnd(subscription)
+      });
     }, function (err) {
       // if it fails we log the error.
       console.error(err);
     });
+  } else {
+    navigator.serviceWorker.getRegistration()
+    .then(function (registration) {
+      getCurrentSubscription(registration).then(function (subscription) {
+        sendSubscriptionToBackEnd(subscription);
+      })
+    }).catch(function (reason) {
+      console.error(reason);
+    })
   }
 }
 
@@ -129,16 +141,16 @@ function getPermissionAndSubscribe() {
  */
 function subscribeUserToPush() {
   return navigator.serviceWorker.register('/js/notification-worker.js')
-  .then(function(registration) {
-    var serverKey = urlB64ToUint8Array('BIz9luhpKgx76RcIhqU4fmdIC1ve7fT5gm2Y632w_lsd_od2B87XschASGbi7EfgTIWpBAPKh2IWTOMt1Gux7tA');
+  .then(function (registration) {
+    var serverKey = urlB64ToUint8Array(
+        'BIz9luhpKgx76RcIhqU4fmdIC1ve7fT5gm2Y632w_lsd_od2B87XschASGbi7EfgTIWpBAPKh2IWTOMt1Gux7tA');
     const subscribeOptions = {
       userVisibleOnly: true,
       applicationServerKey: serverKey
     };
 
     return registration.pushManager.subscribe(subscribeOptions);
-  }).then(function(pushSubscription) {
-    console.log('success');
+  }).then(function (pushSubscription) {
     return pushSubscription;
   });
 }
@@ -152,12 +164,12 @@ function sendSubscriptionToBackEnd(subscription) {
   var pubKey = subscription.getKey('p256dh');
   var auth = subscription.getKey('auth');
   post('/api/saveSubscription', JSON.stringify({
-      endpoint: subscription.endpoint,
-      expirationTime: subscription.expirationTime,
-      publicKey: btoa(String.fromCharCode.apply(null, new Uint8Array(pubKey))),
-      auth: btoa(String.fromCharCode.apply(null, new Uint8Array(auth)))
-    }), function (data) {
-      console.log(data);
+    endpoint: subscription.endpoint,
+    expirationTime: subscription.expirationTime,
+    publicKey: btoa(String.fromCharCode.apply(null, new Uint8Array(pubKey))),
+    auth: btoa(String.fromCharCode.apply(null, new Uint8Array(auth)))
+  }), function (data) {
+    console.log(data);
   });
 }
 
