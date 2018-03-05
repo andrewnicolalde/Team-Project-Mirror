@@ -3,7 +3,7 @@
  * Sets up all the pages jQuery functions.
  */
 $(document).ready(function () {
-  var tid = setInterval(getCookingOrders, 5000);
+  var tid = setInterval(getCookingOrders, 15000);
 
   getCookingOrders();
 });

@@ -6,10 +6,10 @@ import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
 import database.tables.RestaurantTableStaff;
+import database.tables.StaffSession;
 import database.tables.TableSession;
 import database.tables.Transaction;
 import java.sql.Timestamp;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -157,7 +157,11 @@ public class Orders {
     ChangeStatusParams cos = JsonUtil.getInstance()
         .fromJson(request.body(), ChangeStatusParams.class);
 
+
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    StaffSession staffSession = entityManager.find(StaffSession.class,
+        request.session().attribute("StaffSessionKey"));
+
 
     entityManager.getTransaction().begin();
 

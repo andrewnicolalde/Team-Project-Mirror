@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -13,7 +14,13 @@ import org.hibernate.annotations.GenericGenerator;
  * @author Marcus Messer
  */
 @Entity
+@Table(name = "STAFF_NOTIFICATION")
 public class StaffNotification {
+
+  public StaffNotification(Staff staff, PushSubscription pushSubscription){
+    this.staff = staff;
+    this.pushSubscription = pushSubscription;
+  }
 
   /**
    * An auto generated primary key, for the use of storing the notification

@@ -2,6 +2,9 @@ package endpoints.notification;
 
 import database.DatabaseManager;
 import database.tables.PushSubscription;
+import database.tables.Staff;
+import database.tables.StaffNotification;
+import database.tables.StaffSession;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.concurrent.ExecutionException;
@@ -32,9 +35,26 @@ public class Notifications {
     entityManager.getTransaction().begin();
     entityManager.persist(subscription);
     entityManager.getTransaction().commit();
+
+    request.session().attribute("StaffSessionKey");
+    if (request.session().attribute("StaffSessionKey") == null) {
+      if (request.session().attribute("TableSessionKey") == null) {
+        return "failed"; // TODO replace with proper error message.
+      } else {
+        return "failed"; // for now, maybe replace. TODO think about customer notifications.
+      }
+    } else {
+      Staff staff = entityManager.find(StaffSession.class, request.session().attribute("StaffSessionKey")).getStaff();
+      StaffNotification staffNotification = new StaffNotification(staff, subscription);
+      entityManager.getTransaction().begin();
+      entityManager.persist(staffNotification);
+      entityManager.getTransaction().commit();
+    }
+
+
     entityManager.close();
 
-    return "success";
+    return "success"; //TODO replace with JSON or request.ok or something like that.
   }
 
   /**

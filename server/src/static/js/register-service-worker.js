@@ -1,6 +1,6 @@
 /**
  * Credit for much code to Matt Gaunt from Google. https://developers.google.com/web/fundamentals/push-notifications/
- * Individual methods have the attribution.
+ * Individual methods have the attribution. Some are modified.
  */
 
 $(document).ready(function () {
@@ -112,14 +112,14 @@ function getPermissionAndSubscribe() {
   if (!(Notification.permission === "granted")) {
     // Async checking of permission. wait for result.
     askPermission().then(function (result) {
-      // if it is a success then this will be executed
+      // if it is a success then we subscribe the user to push.
       $('#notify').remove();
       subscribeUserToPush().then(function (subscription) { return sendSubscriptionToBackEnd(subscription)});
     }, function (err) {
       // if it fails we log the error.
       console.error(err);
     });
-    }
+  }
 }
 
 /**
@@ -138,42 +138,26 @@ function subscribeUserToPush() {
 
     return registration.pushManager.subscribe(subscribeOptions);
   }).then(function(pushSubscription) {
-    console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
-    console.log("keys: ", pushSubscription);
+    console.log('success');
     return pushSubscription;
   });
 }
 
 /**
  * Send the subscription object to the server so we can issue push notifications.
- * Credit Matt Gaunt, Google.
+ * Credit Matt Gaunt, Google. https://developers.google.com/web/fundamentals/push-notifications/
  * @param subscription The PushSubscription object.
- * @return {Promise<Response>} The response from the server.
  */
 function sendSubscriptionToBackEnd(subscription) {
   var pubKey = subscription.getKey('p256dh');
   var auth = subscription.getKey('auth');
-  return fetch('/api/saveSubscription', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
+  post('/api/saveSubscription', JSON.stringify({
       endpoint: subscription.endpoint,
       expirationTime: subscription.expirationTime,
       publicKey: btoa(String.fromCharCode.apply(null, new Uint8Array(pubKey))),
       auth: btoa(String.fromCharCode.apply(null, new Uint8Array(auth)))
-    })
-  }).then(function(response) {
-    if (!(response.body.toString() === "success")) {
-      return Response.error();
-    }
-
-    return response.json();
-  }).then(function(responseData) {
-    if (!(responseData.data && responseData.data.success)) {
-      return Response.error();
-    }
+    }), function (data) {
+      console.log(data);
   });
 }
 
