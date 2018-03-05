@@ -7,8 +7,8 @@ $(document).ready(function () {
   if (browserSupportsPush()) {
     // add a button users can click to get push notifications.
     if (!havePermissions()) {
-      var button = "<button onclick='doSomething()'>Notifications</button>";
-      $('div').append(button);
+      var button = "<button id='notify' class='btn' onclick='getPermissionAndSubscribe()'>Notifications</button>";
+      $('.nav').append(button);
     } else {
       // register service worker and check subscriptions. send to backend.
     }
@@ -85,7 +85,7 @@ function registerServiceWorker(worker) {
 /**
  * Asks for permission to display notifications to the user.
  * credit Matt Gaunt, Google. https://developers.google.com/web/fundamentals/push-notifications/
- * @return {Promise<any>}
+ * @return {Promise<any>} A Promise that resolves to indicate the users response to asking permission.
  */
 function askPermission() {
   return new Promise(function(resolve, reject) {
@@ -105,22 +105,21 @@ function askPermission() {
 }
 
 /**
- * TODO refactor to become permission asking wrapper leading to registering a service worker etc.
+ * Wrapper method that checks for existing permissions. If there are none it asks for permission
+ * and then subscribes the user to push and sends the subscription to the backend.
  */
-function doSomething() {
+function getPermissionAndSubscribe() {
   if (!(Notification.permission === "granted")) {
-    var result = askPermission();
-    if (result === "granted") {
-      // nothing right now.
-    } else {
-      // return an error.
-      return new Error();
+    // Async checking of permission. wait for result.
+    askPermission().then(function (result) {
+      // if it is a success then this will be executed
+      $('#notify').remove();
+      subscribeUserToPush().then(function (subscription) { return sendSubscriptionToBackEnd(subscription)});
+    }, function (err) {
+      // if it fails we log the error.
+      console.error(err);
+    });
     }
-  } else {
-    // Do nothing we want to register a worker either way.
-  }
-  subscribeUserToPush().then(function (subscription) { return sendSubscriptionToBackEnd(subscription)});
-  // sendSubscriptionToBackEnd(registration);
 }
 
 /**
@@ -166,7 +165,7 @@ function sendSubscriptionToBackEnd(subscription) {
       auth: btoa(String.fromCharCode.apply(null, new Uint8Array(auth)))
     })
   }).then(function(response) {
-    if (!response.ok) {
+    if (!(response.body.toString() === "success")) {
       return Response.error();
     }
 

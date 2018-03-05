@@ -4,9 +4,6 @@ import database.DatabaseManager;
 import database.tables.PushSubscription;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.concurrent.ExecutionException;
 import javax.persistence.EntityManager;
 import nl.martijndwars.webpush.Notification;
@@ -59,21 +56,7 @@ public class Notifications {
       pushService.setPrivateKey("qiaDwfworQzdvrTXW0-mXLYH2Cs4qmkAWABmUHfw32k");
       pushService.setPublicKey("BIz9luhpKgx76RcIhqU4fmdIC1ve7fT5gm2Y632w_lsd_od2B87XschASGbi7EfgTIWpBAPKh2IWTOMt1Gux7tA");
       pushService.send(notification);
-    } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
-    } catch (InvalidKeySpecException e) {
-      e.printStackTrace();
-    } catch (NoSuchProviderException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (ExecutionException e) {
-      e.printStackTrace();
-    } catch (GeneralSecurityException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    } catch (JoseException e) {
+    } catch (IOException | GeneralSecurityException | ExecutionException | JoseException | InterruptedException e) {
       e.printStackTrace();
     }
   }
