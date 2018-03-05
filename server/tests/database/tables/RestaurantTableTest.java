@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class RestaurantTableTest {
+  //TODO Figure out why this test never completes.
 
   private EntityManagerFactory entityManagerFactory;
 
