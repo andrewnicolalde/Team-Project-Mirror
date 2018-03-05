@@ -27,11 +27,19 @@ public class Tables {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from "
-        + "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
+            + "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
         RestaurantTableStaff.class).getResultList();
 
     // This sorts by the table status.
-    restaurantTableStaffs.sort(Comparator.comparing(t0 -> t0.getRestaurantTable().getStatus()));
+    restaurantTableStaffs.sort((t0, t1) -> {
+      if (t0.getRestaurantTable().getStatus().compareTo(t1.getRestaurantTable().getStatus())
+          == 0) {
+        return t0.getRestaurantTable().getNeedsHelpTime()
+            .compareTo(t1.getRestaurantTable().getNeedsHelpTime());
+      } else {
+        return t0.getRestaurantTable().getStatus().compareTo(t1.getRestaurantTable().getStatus());
+      }
+    });
 
     TableData[] tableData = new TableData[restaurantTableStaffs.size()];
     for (int i = 0; i < tableData.length; i++) {

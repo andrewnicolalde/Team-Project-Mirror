@@ -35,7 +35,8 @@ public class RestaurantTable {
    */
   private TableStatus status;
   /**
-   * This field stores the time when the customer asks for help, it can be null
+   * This field stores the time when the customer asks for help, it can be null but shouldn't be
+   * null, if the table status is set to NEEDS_HELP.
    */
   private Timestamp needsHelpTime;
   /**
