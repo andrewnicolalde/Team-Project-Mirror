@@ -17,6 +17,10 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "STAFF_NOTIFICATION")
 public class StaffNotification {
 
+  public StaffNotification() {
+    // Do nothing, I need this for Hibernate to work.
+  }
+
   public StaffNotification(Staff staff, PushSubscription pushSubscription){
     this.staff = staff;
     this.pushSubscription = pushSubscription;
