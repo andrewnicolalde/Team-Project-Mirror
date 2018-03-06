@@ -7,6 +7,7 @@ import static spark.Spark.staticFileLocation;
 import database.DatabaseManager;
 import endpoints.authentication.AuthenticationEmployee;
 import endpoints.authentication.AuthenticationTable;
+import endpoints.manager.Employee;
 import endpoints.menu.Menu;
 import endpoints.order.Orders;
 import endpoints.tables.Tables;
@@ -40,6 +41,7 @@ public class Main {
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/getMenu", Menu::getMenu);
     get("/api/authStaff/getTables", Tables::getTables);
+    get("/api/authStaff/getEmployees", Employee::getEmployees);
     post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
     post("/api/authStaff/getOrdersByStatus", Orders::getOrdersByStatus);
     post("/api/authStaff/getOrderItems", Orders::getOrderItems);
