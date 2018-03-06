@@ -46,6 +46,7 @@ public class Main {
     post("/api/authStaff/addItemToOrder", Orders::addOrderMenuItem);
     post("/api/authStaff/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
+    post("/api/authStaff/changeTableStatus", Tables::changeTableStatus);
 
     get("/api/authTable/getMenu", Menu::getMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());
@@ -56,6 +57,7 @@ public class Main {
     post("/api/authTable/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authTable/changeOrderStatus", Orders::changeOrderStatus);
     post("/api/authTable/changeOrderInstructions", Orders::changeOrderInstructions);
+    post("/api/authTable/changeTableStatus", Tables::changeTableStatus);
 
     System.out.println("Visit: http://localhost:4567");
 
