@@ -4,6 +4,7 @@ import database.DatabaseManager;
 import database.tables.RestaurantTable;
 import database.tables.RestaurantTableStaff;
 import database.tables.StaffSession;
+import database.tables.TableSession;
 import database.tables.TableStatus;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -60,13 +61,17 @@ public class Tables {
   public static String changeTableStatus(Request request, Response response) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
+    TableSession tableSession = entityManager.find(TableSession.class, request.session().attribute("TableSessionKey"));
+
+    ChangeTableStatus cts = JsonUtil.getInstance().fromJson(request.body(), ChangeTableStatus.class);
+
     entityManager.getTransaction().begin();
 
     RestaurantTable restaurantTable = entityManager
         .createQuery("from RestaurantTable table where table.tableId = :id", RestaurantTable.class)
-        .setParameter("id", cos.getId()).getSingleResult();
+        .setParameter("id", tableSession.getRestaurantTable().getTableId()).getSingleResult();
 
-    restaurantTable.setStatus(TableStatus.valueOf(cos.getNewOrderStatus()));
+    restaurantTable.setStatus(TableStatus.valueOf(cts.getNewStatus()));
 
     entityManager.getTransaction().commit();
     entityManager.close();

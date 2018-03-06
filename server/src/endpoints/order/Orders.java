@@ -8,7 +8,6 @@ import database.tables.OrderStatus;
 import database.tables.RestaurantTableStaff;
 import database.tables.TableSession;
 import database.tables.Transaction;
-import endpoints.ChangeStatusParams;
 import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.List;
