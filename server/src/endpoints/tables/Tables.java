@@ -1,8 +1,11 @@
 package endpoints.tables;
 
 import database.DatabaseManager;
+import database.tables.RestaurantTable;
 import database.tables.RestaurantTableStaff;
 import database.tables.StaffSession;
+import database.tables.TableStatus;
+import endpoints.ChangeStatusParams;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -26,7 +29,7 @@ public class Tables {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from "
-        + "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
+            + "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
         RestaurantTableStaff.class).getResultList();
 
     restaurantTableStaffs.sort((t0, t1) -> {
@@ -49,7 +52,29 @@ public class Tables {
     return JsonUtil.getInstance().toJson(tableData);
   }
 
+  /**
+   * This method changes the table status.
+   * @param request A html request
+   * @param response A html response
+   * @return Success after it change the status.
+   */
   public static String changeTableStatus(Request request, Response response) {
-    return "";
+    ChangeStatusParams cos = JsonUtil.getInstance()
+        .fromJson(request.body(), ChangeStatusParams.class);
+
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
+    entityManager.getTransaction().begin();
+
+    RestaurantTable restaurantTable = entityManager
+        .createQuery("from RestaurantTable table where table.tableId = :id", RestaurantTable.class)
+        .setParameter("id", cos.getId()).getSingleResult();
+
+    restaurantTable.setStatus(TableStatus.valueOf(cos.getNewOrderStatus()));
+
+    entityManager.getTransaction().commit();
+    entityManager.close();
+
+    return "success";
   }
 }
