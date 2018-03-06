@@ -6,8 +6,10 @@ import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
 import database.tables.RestaurantTableStaff;
+import database.tables.StaffSession;
 import database.tables.TableSession;
 import database.tables.Transaction;
+import database.tables.WaiterSale;
 import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.List;
@@ -135,16 +137,35 @@ public class Orders {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
+    //Gets the food order that the item is going to be added to.
     FoodOrder foodOrder = entityManager.createQuery("from FoodOrder foodOrder where "
             + " foodOrder.id = :orderId",
         FoodOrder.class).setParameter("orderId", omi.getorderId()).getSingleResult();
 
+    //Creates a new menu item and adds it to the order.
     entityManager.getTransaction().begin();
     OrderMenuItem orderMenuItem = new OrderMenuItem(entityManager.find(
         MenuItem.class, omi.getMenuItemId()), foodOrder, omi.getInstructions());
 
     entityManager.persist(orderMenuItem);
+
+    // Updates the waiter sale if they added the menu item.
+    if (request.session().attribute("StaffSessionKey") != null) {
+      StaffSession staffSession = entityManager
+          .find(StaffSession.class, request.session().attribute("StaffSessionKey"));
+      WaiterSale waiterSale = new WaiterSale(staffSession.getStaff(),
+          entityManager.find(MenuItem.class, omi.getMenuItemId()), foodOrder);
+      entityManager.persist(waiterSale);
+    }
+
+    //Updates the transaction total
+    foodOrder.getTransaction()
+        .setTotal(foodOrder.getTransaction().getTotal() + orderMenuItem.getMenuItem().getPrice());
+
+    //Updates the order total
+    foodOrder.setTotal(foodOrder.getTotal() + orderMenuItem.getMenuItem().getPrice());
     entityManager.getTransaction().commit();
+
     entityManager.close();
     return JsonUtil.getInstance().toJson(new OrderItemsData(orderMenuItem));
   }
@@ -178,6 +199,11 @@ public class Orders {
 
     if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.COOKING) {
       foodOrder.setTimeConfirmed(new Timestamp(System.currentTimeMillis()));
+    }
+
+    if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.CANCELLED) {
+      foodOrder.getTransaction()
+          .setTotal(foodOrder.getTransaction().getTotal() - foodOrder.getTotal());
     }
 
     entityManager.getTransaction().commit();
@@ -250,7 +276,7 @@ public class Orders {
       } else {
         temp = servers.get(0);
       }
-      transaction = new Transaction(false, null, null, false, temp);
+      transaction = new Transaction(false, 0.0, null, false, temp);
       entityManager.persist(transaction);
       entityManager.getTransaction().commit();
     } else {
@@ -310,10 +336,9 @@ public class Orders {
    * @return A string saying 'success' or 'failure'
    */
   public static String changeOrderInstructions(Request request, Response response) {
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
     ChangeInstructionsParams changeInstructionsParams = JsonUtil.getInstance().fromJson(
         request.body(), ChangeInstructionsParams.class);
-
-    EntityManager em = DatabaseManager.getInstance().getEntityManager();
 
     em.getTransaction().begin();
     OrderMenuItem orderMenuItem = em
