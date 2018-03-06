@@ -57,6 +57,29 @@ function loadMenu() {
   });
 }
 
+function filtername() {
+
+    get("/api/authTable/getMenu", function(menuData){
+          menuItems = JSON.parse(menuData);
+
+     var input, filter, ul, li, a, i;
+        input = document.getElementById('myInput');
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("menuitem");
+        li = ul.getElementsByTagName('span');
+
+          for(var i=0; i<li.length; i++) {
+            //var menuItem = menuItems[i];
+
+            a = li[i].getElementsByTagName("a")[0];
+                if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+           }
+    }
+}
 
 function loadOrder() {
   var postData = {orderId: sessionStorage.getItem("orderId")};
