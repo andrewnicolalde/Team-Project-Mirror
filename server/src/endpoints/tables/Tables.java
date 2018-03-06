@@ -1,11 +1,8 @@
 package endpoints.tables;
 
 import database.DatabaseManager;
-import database.tables.RestaurantTable;
 import database.tables.RestaurantTableStaff;
 import database.tables.StaffSession;
-import database.tables.TableStatus;
-import endpoints.ChangeStatusParams;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
