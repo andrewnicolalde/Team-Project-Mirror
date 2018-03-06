@@ -175,7 +175,19 @@ public class Orders {
       List<StaffNotification> staffNotifications = entityManager.createQuery("from StaffNotification staffNotification "
           + "where staffNotification.staff.department = :department", StaffNotification.class)
           .setParameter("department", Department.KITCHEN).getResultList();
-      String message = "New Order";
+
+      List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
+              + "where foodOrder.status = :orderStatus",
+          FoodOrder.class).setParameter("orderStatus", OrderStatus.COOKING)
+          .getResultList();
+
+      foodOrders.sort(Comparator.comparing(FoodOrder::getTimeConfirmed));
+
+      OrderData[] orderData = new OrderData[foodOrders.size()];
+      for (int i = 0; i < orderData.length; i++) {
+        orderData[i] = new OrderData(foodOrders.get(i));
+      }
+      String message = JsonUtil.getInstance().toJson(orderData);
       for (StaffNotification n : staffNotifications) {
         Notifications.sendPushMessage(n.getPushSubscription(), message.getBytes());
       }

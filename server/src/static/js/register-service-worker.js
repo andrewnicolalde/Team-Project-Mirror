@@ -140,7 +140,7 @@ function getPermissionAndSubscribe() {
  * @return {Promise<ServiceWorkerRegistration>}
  */
 function subscribeUserToPush() {
-  return navigator.serviceWorker.register('/js/notification-worker.js')
+  return navigator.serviceWorker.register('/js/kitchen-notification-worker.js')
   .then(function (registration) {
     var serverKey = urlB64ToUint8Array(
         'BIz9luhpKgx76RcIhqU4fmdIC1ve7fT5gm2Y632w_lsd_od2B87XschASGbi7EfgTIWpBAPKh2IWTOMt1Gux7tA');

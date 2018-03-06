@@ -3,8 +3,8 @@
  */
 self.addEventListener('push', function (event) {
   if (event.data) {
-    console.log(event.data.text());
+    console.log(event.data.json());
   }
-  const notify = self.registration.showNotification(event.data.text());
+  const notify = self.registration.showNotification(event);
   event.waitUntil(notify);
 });
