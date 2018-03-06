@@ -54,6 +54,7 @@ public class Tables {
 
   /**
    * This method changes the table status.
+   *
    * @param request A html request
    * @param response A html response
    * @return Success after it change the status.
@@ -61,15 +62,18 @@ public class Tables {
   public static String changeTableStatus(Request request, Response response) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
-    TableSession tableSession = entityManager.find(TableSession.class, request.session().attribute("TableSessionKey"));
+    Long tableId = entityManager
+        .find(TableSession.class, request.session().attribute("TableSessionKey"))
+        .getRestaurantTable().getTableId();
 
-    ChangeTableStatus cts = JsonUtil.getInstance().fromJson(request.body(), ChangeTableStatus.class);
+    ChangeTableStatus cts = JsonUtil.getInstance()
+        .fromJson(request.body(), ChangeTableStatus.class);
 
     entityManager.getTransaction().begin();
 
     RestaurantTable restaurantTable = entityManager
         .createQuery("from RestaurantTable table where table.tableId = :id", RestaurantTable.class)
-        .setParameter("id", tableSession.getRestaurantTable().getTableId()).getSingleResult();
+        .setParameter("id", tableId).getSingleResult();
 
     restaurantTable.setStatus(TableStatus.valueOf(cts.getNewStatus()));
 
