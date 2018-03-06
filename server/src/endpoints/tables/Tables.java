@@ -25,8 +25,8 @@ public class Tables {
   private static String getTableData(Long staffId) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
-    List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from " +
-            "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
+    List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from "
+        + "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
         RestaurantTableStaff.class).getResultList();
 
     restaurantTableStaffs.sort((t0, t1) -> {
@@ -47,5 +47,9 @@ public class Tables {
     entityManager.close();
 
     return JsonUtil.getInstance().toJson(tableData);
+  }
+
+  public static String changeTableStatus(Request request, Response response) {
+    return "";
   }
 }

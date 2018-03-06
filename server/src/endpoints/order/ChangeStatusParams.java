@@ -19,7 +19,7 @@ public class ChangeStatusParams {
     return newOrderStatus;
   }
 
-  public Long getFoodOrderId() {
+  public Long getId() {
     return orderId;
   }
 }
