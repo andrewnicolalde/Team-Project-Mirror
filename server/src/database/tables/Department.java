@@ -6,7 +6,18 @@ package database.tables;
  * @author Marcus Messer
  */
 public enum Department {
-  WAITER,
-  KITCHEN,
-  MANAGER
+  WAITER("Waiter"),
+  KITCHEN("Kitchen"),
+  MANAGER("Manager");
+
+  private final String name;
+
+  Department(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public String toString() {
+    return this.name;
+  }
 }

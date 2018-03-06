@@ -7,13 +7,13 @@ public class EmployeeData {
   private Long employeeNumber;
   private String firstName;
   private String lastName;
-  private Department department;
+  private String department;
 
   public EmployeeData(Staff staff) {
     this.employeeNumber = staff.getEmployeeNumber();
     this.firstName = staff.getFirstName();
     this.lastName = staff.getSurname();
-    this.department = staff.getDepartment();
+    this.department = staff.getDepartment().toString();
   }
 
   public Long getEmployeeNumber() {
@@ -40,11 +40,11 @@ public class EmployeeData {
     this.lastName = lastName;
   }
 
-  public Department getDepartment() {
+  public String getDepartment() {
     return department;
   }
 
   public void setDepartment(Department department) {
-    this.department = department;
+    this.department = department.toString();
   }
 }
