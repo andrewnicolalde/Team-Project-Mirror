@@ -232,6 +232,13 @@ function confirmOrder() {
 }
 
 function callWaiterToTable() {
-  bootbox.alert("Your waiter has been called, and will be with you shortly.");
+
+  var dataToSend = JSON.stringify({newStatus: "NEEDS_HELP"});
+
+  post("/api/authTable/changeTableStatus", dataToSend, function (data) {
+    if (data === "success") {
+      bootbox.alert("Your waiter has been called, and will be with you shortly.");
+    }
+  })
 
 }
