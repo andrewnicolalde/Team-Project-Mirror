@@ -7,5 +7,6 @@ package database.tables;
  */
 public enum Department {
   WAITER,
-  KITCHEN
+  KITCHEN,
+  MANAGER
 }
