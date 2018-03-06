@@ -66,6 +66,20 @@
             </div>
         </div>
         <a href="menu.html" class="btn" style="float: right;">Back to menu</a>
+        <!-- Stripe docs https://stripe.com/docs/quickstart -->
+        <form action="your-server-side-code" method="POST">
+            <script
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_kYhdU5MRbncuBXn23zkDXhb0"
+                data-amount="999"
+                data-name="Oaxaca"
+                data-description="Example charge"
+                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                data-locale="auto"
+                data-currency="gbp"
+                data-allow-remember-me="false">
+            </script>
+        </form>
     </div>
 </div>
 </body>
