@@ -10,25 +10,20 @@ $(document).ready(function () {
         }), function (data) {
             //parse JSON
             var response = JSON.parse(data);
+            var order = "<tr data-toggle=\"collapse\" data-target=\"#row\"";
             for (i = 0; i < response.length; i++) {
-                var order = "<tr data-toggle=\"collapse\" data-target=\"#row"
-                    + (i + 1) + "\" class=\"clickable\">" +
+                    order += (i + 1) + "\" class=\"clickable\">" +
                     "<th scope=\"row\">" + (i + 1) + "</th>" +
                     "<td>" + response[i].name + "</td>" +
+                    "<td>" + response[i].instructions + "</td>" +
                     "<td>£" + response[i].price + "</td>" +
-                    "</tr>" +
-                    "<tr>" +
-                    "<td colspan=\"3\">" +
-                    "<div id=\"row" + (i + 1) + "\" class=\"collapse\">"
-                    + response[i].instructions + "</div>" +
-                    "</td>" +
                     "</tr>"
             }
             for (i = 0; i < response.length; i++) {
-                $("#panels").append("<div class=\"card\">" +
+                $("#accordion").append("<div class=\"card\">" +
                     "<div class=\"card-header\" id=\"heading\"" + i + " data-toggle=\"collapse\" data-target=\"#collapse\"" + i + " aria-expanded=\"false\" aria-controls=\"collapse\"" + i + " >" +
                     "<h5 class=\"mb-0\">" +
-                    "Order 2" +
+                    "Order 1" +
                     "</h5>" +
                     "</div>" +
                     "<div id=\"collapse\"" + i + "  class=\"collapse\" aria-labelledby=\"heading\"" + i + " data-parent=\"#accordion\">" +
@@ -49,7 +44,6 @@ $(document).ready(function () {
                     <!--td are the columns in a row-->
                     "</tbody>" +
                     "</table>" +
-                    "orderinfos2" +
                     "</div>" +
                     "</div>" +
                     "</div>"
