@@ -1,8 +1,10 @@
 package endpoints.tables;
 
 import database.DatabaseManager;
+import database.tables.RestaurantTable;
 import database.tables.RestaurantTableStaff;
 import database.tables.StaffSession;
+import database.tables.TableStatus;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -56,9 +58,6 @@ public class Tables {
    * @return Success after it change the status.
    */
   public static String changeTableStatus(Request request, Response response) {
-    ChangeStatusParams cos = JsonUtil.getInstance()
-        .fromJson(request.body(), ChangeStatusParams.class);
-
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     entityManager.getTransaction().begin();
