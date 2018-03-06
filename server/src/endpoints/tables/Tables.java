@@ -3,7 +3,6 @@ package endpoints.tables;
 import database.DatabaseManager;
 import database.tables.RestaurantTableStaff;
 import database.tables.StaffSession;
-import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -33,7 +32,8 @@ public class Tables {
     // This sorts by the table status.
     restaurantTableStaffs.sort((t0, t1) -> {
       if (t0.getRestaurantTable().getStatus().compareTo(t1.getRestaurantTable().getStatus())
-          == 0) {
+          == 0 && t0.getRestaurantTable().getNeedsHelpTime() != null
+          && t1.getRestaurantTable().getNeedsHelpTime() != null) {
         return t0.getRestaurantTable().getNeedsHelpTime()
             .compareTo(t1.getRestaurantTable().getNeedsHelpTime());
       } else {
