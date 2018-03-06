@@ -332,19 +332,24 @@ public class Orders {
    * @return True if the orderId is not valid.
    */
   private static boolean isNotValidOrder(Request request, Long orderId) {
+    // Checks if the staff member is accessing the order.
     if (request.session().attribute("StaffSessionKey") != null) {
       return false;
     }
     if (request.session().attribute("TableSessionKey") != null) {
+      // Gets the order.
       EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
       FoodOrder foodOrder = entityManager.find(FoodOrder.class, orderId);
 
+      // Gets the table session.
       TableSession tableSession = entityManager.find(TableSession.class,
           request.session().attribute("TableSessionKey"));
 
+      //Checks the transaction id.
       if (foodOrder.getTransaction().getRestaurantTableStaff().getRestaurantTable()
           == tableSession
           .getRestaurantTable()) {
+        //Checks if the table is in the correct status.
         return foodOrder.getStatus() != OrderStatus.ORDERING
             && foodOrder.getStatus() != OrderStatus.READY_TO_CONFIRM;
       }
