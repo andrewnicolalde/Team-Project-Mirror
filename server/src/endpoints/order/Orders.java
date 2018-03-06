@@ -137,7 +137,6 @@ public class Orders {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
-
     //Gets the food order that the item is going to be added to.
     FoodOrder foodOrder = entityManager.createQuery("from FoodOrder foodOrder where "
             + " foodOrder.id = :orderId",
@@ -152,14 +151,19 @@ public class Orders {
 
     // Updates the waiter sale if they added the menu item.
     if (request.session().attribute("StaffSessionKey") != null) {
-      StaffSession staffSession = entityManager.find(StaffSession.class, request.session().attribute("StaffSessionKey"));
-      WaiterSale waiterSale = new WaiterSale(staffSession.getStaff(), entityManager.find(MenuItem.class, omi.getMenuItemId()), foodOrder);
+      StaffSession staffSession = entityManager
+          .find(StaffSession.class, request.session().attribute("StaffSessionKey"));
+      WaiterSale waiterSale = new WaiterSale(staffSession.getStaff(),
+          entityManager.find(MenuItem.class, omi.getMenuItemId()), foodOrder);
       entityManager.persist(waiterSale);
     }
 
     //Updates the transaction total
     foodOrder.getTransaction()
         .setTotal(foodOrder.getTransaction().getTotal() + orderMenuItem.getMenuItem().getPrice());
+
+    //Updates the order total
+    foodOrder.setTotal(foodOrder.getTotal() + orderMenuItem.getMenuItem().getPrice());
     entityManager.getTransaction().commit();
 
     entityManager.close();
@@ -195,6 +199,11 @@ public class Orders {
 
     if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.COOKING) {
       foodOrder.setTimeConfirmed(new Timestamp(System.currentTimeMillis()));
+    }
+
+    if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.CANCELLED) {
+      foodOrder.getTransaction()
+          .setTotal(foodOrder.getTransaction().getTotal() - foodOrder.getTotal());
     }
 
     entityManager.getTransaction().commit();
