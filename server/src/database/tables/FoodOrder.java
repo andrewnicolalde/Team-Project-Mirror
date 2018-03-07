@@ -42,6 +42,7 @@ public class FoodOrder {
   /**
    * This field stores the total for the order.
    */
+  @Column(name = "total")
   private double total;
 
   /**
