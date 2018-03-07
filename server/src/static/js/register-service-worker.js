@@ -13,7 +13,7 @@ $(document).ready(function () {
       setUpPush();
     }
   }
-  navigator.serviceWorker.addEventListener('message', function (event) {
+  navigator.serviceWorker.addEventListener('message', (event) => {
     displayOrders(JSON.stringify(event.data));
   });
 });
@@ -69,12 +69,12 @@ function getCurrentSubscription(registration) {
  */
 function registerServiceWorker(worker) {
   return navigator.serviceWorker.register(worker)
-  .then(function (registration) {
+  .then((registration) => {
     console.log("Registration successful");
     console.log(registration.scope);
     return registration;
   })
-  .catch(function (reason) {
+  .catch((reason) => {
     console.error("Unable to register: ", reason);
   });
 }
@@ -92,7 +92,7 @@ function getPermissionAndSubscribe() {
       // the main part of registering, subscribing and pushing. All async meaning thens are needed.
       registerServiceWorker('/js/kitchen-notification-worker.js').then(
           (registration) => {
-            console.log("service worker registered.");
+            console.log("Service worker registered.");
             subscribeUserToPush(registration)
           });
     } else {
@@ -110,7 +110,7 @@ function setUpPush() {
   navigator.serviceWorker.getRegistration('/js/')
   .then((registration) => {
     if (registration !== undefined) {
-      console.log("we have a service worker");
+      console.log("Have a service worker");
       // we have a service worker already.
       getCurrentSubscription(registration)
       .then((subscription) => {
@@ -124,7 +124,7 @@ function setUpPush() {
       });
 
     } else {
-      console.log("have permissions but no service worker.");
+      console.log("No service worker.");
       registerServiceWorker('/js/kitchen-notification-worker.js')
       .then((registration) => {
         subscribeUserToPush(registration);
@@ -166,7 +166,7 @@ function sendSubscriptionToBackEnd(subscription) {
     expirationTime: subscription.expirationTime,
     publicKey: btoa(String.fromCharCode.apply(null, new Uint8Array(pubKey))),
     auth: btoa(String.fromCharCode.apply(null, new Uint8Array(auth)))
-  }), function (data) {
+  }), (data) => {
     console.log(data);
   });
 }
