@@ -61,13 +61,14 @@ function loadTables() {
     }
     // Add each Table to the list of tables
     for (var i = 0; i < response.length; i++) {
+      console.log(response[i].tableId);
       $("#tables-list").append(
           "<li data-tablenum='" + response[i].number + "' id='table-"
           + response[i].number
           + "' class='list-group-item list-group-item-action' data-toggle='collapse' href='#table-"
           + response[i].number + "-orders-list'><span>Table "
           + response[i].number + " - " + response[i].status
-          + helpBtn(response[i].status)
+          + helpBtn(response[i].status, response[i].tableId)
           + "<ul id='table-" + response[i].number + "-orders-list' ></ul>"
           + "</li>");
     }
@@ -78,9 +79,9 @@ function loadTables() {
   });
 }
 
-function helpBtn(status) {
+function helpBtn(status, tableId) {
   if (status === "Needs Help") {
-    return "<ul><button id = 'helpedButton' type='button' class='btn btn-helped' onclick=\"event.stopPropagation(); changeTableStatus()\">Helped</button></ul>"
+    return "<ul><button id ='helpedButton-"+tableId+"' data-tableId=" + tableId + " type='button' class='btn btn-helped' onclick=\"changeTableStatus(event)\">Helped</button></ul>"
   } else {
     return "";
   }
@@ -283,9 +284,15 @@ function confirmCancelOrder() {
 /**
  * This method changes the table status, after the waiter has helped the customer.
  */
-function changeTableStatus() {
+function changeTableStatus(event) {
+  event.stopPropagation();
+  var btn = document.getElementById(event.currentTarget.id);
+  console.log(event.currentTarget.id);
+  console.log(btn.id);
+  console.log(btn.dataset.tableid);
   post("/api/authStaff/changeTableStatus",
-      JSON.stringify({newStatus: "FILLED"}));
+      JSON.stringify({newStatus: "FILLED", tableId: btn.dataset.tableId}),
+      function (data) {});
 }
 
 // Loads the menu and tables when the page loads.

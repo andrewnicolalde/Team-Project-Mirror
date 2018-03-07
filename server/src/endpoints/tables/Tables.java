@@ -62,12 +62,22 @@ public class Tables {
   public static String changeTableStatus(Request request, Response response) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
-    Long tableId = entityManager
-        .find(TableSession.class, request.session().attribute("TableSessionKey"))
-        .getRestaurantTable().getTableId();
+    System.out.println(request.body());
 
     ChangeTableStatus cts = JsonUtil.getInstance()
         .fromJson(request.body(), ChangeTableStatus.class);
+
+
+    Long tableId;
+    if (request.session().attribute("TableSessionKey") != null) {
+      tableId = entityManager
+          .find(TableSession.class, request.session().attribute("TableSessionKey"))
+          .getRestaurantTable().getTableId();
+    } else if (request.session().attribute("StaffSessionKey") != null) {
+      tableId = cts.getTableId();
+    } else {
+      return "";
+    }
 
     entityManager.getTransaction().begin();
 
