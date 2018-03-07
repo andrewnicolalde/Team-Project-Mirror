@@ -3,7 +3,7 @@
  * Individual methods have the attribution. Some are modified.
  */
 
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', function (event) {
   if (browserSupportsPush()) {
     // add a button users can click to get push notifications.
     if (!havePermissions()) {
