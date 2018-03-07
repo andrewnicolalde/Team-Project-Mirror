@@ -40,6 +40,11 @@ public class FoodOrder {
   private Timestamp timeConfirmed;
 
   /**
+   * This field stores the total for the order.
+   */
+  private double total;
+
+  /**
    * This field is a type Long foreign key referencing the transactionId of Transaction.
    */
   @ManyToOne
@@ -107,5 +112,13 @@ public class FoodOrder {
         ", timeConfirmed=" + timeConfirmed +
         ", transaction=" + transaction +
         '}';
+  }
+
+  public double getTotal() {
+    return total;
+  }
+
+  public void setTotal(double total) {
+    this.total = total;
   }
 }
