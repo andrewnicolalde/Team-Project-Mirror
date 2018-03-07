@@ -19,6 +19,10 @@ self.addEventListener('push', function (event) {
   event.waitUntil(promiseChain);
 });
 
+self.addEventListener('activate', event => {
+  clients.claim();
+});
+
 /**
  * Function to check if the page is in focus so we can just update it.
  * Credit: Matt Gaunt, Google https://developers.google.com/web/fundamentals/push-notifications/common-notification-patterns

@@ -10,7 +10,7 @@ $(document).ready(function () {
       var button = "<button id='notify' class='btn' onclick='getPermissionAndSubscribe()'>Notifications</button>";
       $('.nav').append(button);
     } else {
-      getPermissionAndSubscribe();
+      setUpPush();
     }
   }
   navigator.serviceWorker.addEventListener('message', function (event) {
@@ -58,15 +58,7 @@ function havePermissions() {
  * @return {Promise<PushSubscription>} or null if there is no subscription.
  */
 function getCurrentSubscription(registration) {
-  registration.pushManager.getSubscription()
-  .then(function (subscription) {
-    if (!subscription) {
-      throw new Error("There isn't a subscription");// there isn't a subscription return to create a new one.
-    }
-    return subscription;
-  }).catch(function (err) {
-    console.error(err);
-  });
+  return registration.pushManager.getSubscription();
 }
 
 /**
@@ -79,6 +71,7 @@ function registerServiceWorker(worker) {
   return navigator.serviceWorker.register(worker)
   .then(function (registration) {
     console.log("Registration successful");
+    console.log(registration.scope);
     return registration;
   })
   .catch(function (reason) {
@@ -87,84 +80,76 @@ function registerServiceWorker(worker) {
 }
 
 /**
- * Asks for permission to display notifications to the user.
- * credit Matt Gaunt, Google. https://developers.google.com/web/fundamentals/push-notifications/
- * @return {Promise<any>} A Promise that resolves to indicate the users response to asking permission.
+ * Wrapper method that asks for permission, subscribes the user to push,
+ * then sends the subscription to the backend.
  */
-function askPermission() {
-  return new Promise(function (resolve, reject) {
-    const permissionResult = Notification.requestPermission(function (result) {
-      resolve(result);
-    });
-
-    if (permissionResult) {
-      permissionResult.then(resolve, reject);
+function getPermissionAndSubscribe() {
+  // Async checking of permission. wait for result.
+  Notification.requestPermission().then((result) => {
+    // if it is a success then we subscribe the user to push.
+    if (result === 'granted') {
+      $('#notify').remove();
+      // the main part of registering, subscribing and pushing. All async meaning thens are needed.
+      registerServiceWorker('/js/kitchen-notification-worker.js').then(
+          (registration) => {
+            console.log("service worker registered.");
+            subscribeUserToPush(registration)
+          });
+    } else {
+      console.log("We were rejected.. :(");
     }
-  })
-  .then(function (permissionResult) {
-    if (permissionResult !== 'granted') {
-      throw new Error('We weren\'t granted permission.');
-    }
+  }).catch((reason) => {
+    console.error(reason);
   });
 }
 
 /**
- * Wrapper method that checks for existing permissions. If there are none it asks for permission
- * and then subscribes the user to push and sends the subscription to the backend.
- * TODO this is ugly refactor!!!!!
+ * Wrapper method to initialise the push notifications.
  */
-function getPermissionAndSubscribe() {
-  if (!(Notification.permission === "granted")) {
-    // Async checking of permission. wait for result.
-    askPermission().then(function (result) {
-      // if it is a success then we subscribe the user to push.
-      $('#notify').remove();
-      registerServiceWorker('/js/kitchen-notification-worker.js').then(function (registration) {
-        subscribeUserToPush(registration).then(function (subscription) {
-          return sendSubscriptionToBackEnd(subscription);
-        });
+function setUpPush() {
+  navigator.serviceWorker.getRegistration('/js/')
+  .then((registration) => {
+    if (registration !== undefined) {
+      console.log("we have a service worker");
+      // we have a service worker already.
+      getCurrentSubscription(registration)
+      .then((subscription) => {
+        console.log('Already subscribed');
+        // do nothing, we have already registered and sent to the back end.
+      }).catch((reason) => {
+        // log the reason for debugging
+        console.error(reason);
+        // should be because we don't have a subscription so we subscribe and send it to the server.
+        subscribeUserToPush(registration);
+      });
+
+    } else {
+      console.log("have permissions but no service worker.");
+      registerServiceWorker('/js/kitchen-notification-worker.js')
+      .then((registration) => {
+        subscribeUserToPush(registration);
       })
-    }, function (err) {
-      // if it fails we log the error.
-      console.error(err);
-    });
-  } else {
-    navigator.serviceWorker.getRegistration()
-    .then(function (registration) {
-      getCurrentSubscription(registration).then(function (subscription) {
-        sendSubscriptionToBackEnd(subscription);
-      })
-      // TODO refactor so we don't have to catch exceptions. Also it doesn't quite work.
-    }).catch(function (reason) {
-        registerServiceWorker('/js/kitchen-notification-worker.js').then(function (registration) {
-          subscribeUserToPush(registration).then(function (subscription) {
-            return sendSubscriptionToBackEnd(subscription);
-          });
-        }).catch(function (reason2) {
-          console.error(reason2);
-        })
-      })
-  }
+    }
+  });
 }
 
 /**
  * Subscribes the client to a push service. Uses our VAPID public key.
  * Credit Matt Gaunt, Google. https://developers.google.com/web/fundamentals/push-notifications/
- * @return {Promise<ServiceWorkerRegistration>}
+ * Modified.
  */
 function subscribeUserToPush(registration) {
 
-    var serverKey = urlB64ToUint8Array(
-        'BIz9luhpKgx76RcIhqU4fmdIC1ve7fT5gm2Y632w_lsd_od2B87XschASGbi7EfgTIWpBAPKh2IWTOMt1Gux7tA');
-    const subscribeOptions = {
-      userVisibleOnly: true,
-      applicationServerKey: serverKey
-    };
-
-    return registration.pushManager.subscribe(subscribeOptions)
-  .then(function (pushSubscription) {
-    return pushSubscription;
-  });
+  var serverKey = urlB64ToUint8Array(
+      'BIz9luhpKgx76RcIhqU4fmdIC1ve7fT5gm2Y632w_lsd_od2B87XschASGbi7EfgTIWpBAPKh2IWTOMt1Gux7tA');
+  const subscribeOptions = {
+    userVisibleOnly: true,
+    applicationServerKey: serverKey
+  };
+    registration.pushManager.subscribe(subscribeOptions)
+    .then((pushSubscription) => {
+      sendSubscriptionToBackEnd(pushSubscription);
+    });
 }
 
 /**
@@ -175,6 +160,7 @@ function subscribeUserToPush(registration) {
 function sendSubscriptionToBackEnd(subscription) {
   var pubKey = subscription.getKey('p256dh');
   var auth = subscription.getKey('auth');
+  console.log('sending to backend');
   post('/api/saveSubscription', JSON.stringify({
     endpoint: subscription.endpoint,
     expirationTime: subscription.expirationTime,
