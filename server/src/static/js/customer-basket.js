@@ -2,28 +2,20 @@
  *This script retrieves the current order for a given
  *table so that it can be displayed in the basket page.
  */
+
+/**
+ * Creates an accordion card which includes the table-body for the loadOrder() function to work.
+ */
 $(document).ready(function () {
-    // TODO: Update path once real endpoint is set up
     post("/api/authTable/getOrderItems",
-        JSON.stringify({
-            orderId: sessionStorage.getItem("orderId")
+        JSON.stringify({orderId: sessionStorage.getItem("orderId")
         }), function (data) {
-            //parse JSON
             var response = JSON.parse(data);
-            var order = "<tr data-toggle=\"collapse\" data-target=\"#row\"";
-            for (i = 0; i < response.length; i++) {
-                    order += (i + 1) + "\" class=\"clickable\">" +
-                    "<th scope=\"row\">" + (i + 1) + "</th>" +
-                    "<td>" + response[i].name + "</td>" +
-                    "<td>" + response[i].instructions + "</td>" +
-                    "<td>£" + response[i].price + "</td>" +
-                    "</tr>"
-            }
-            for (i = 0; i < response.length; i++) {
+            for (i = 1; i < response.length; i++) {
                 $("#accordion").append("<div class=\"card\">" +
                     "<div class=\"card-header\" id=\"heading\"" + i + " data-toggle=\"collapse\" data-target=\"#collapse\"" + i + " aria-expanded=\"false\" aria-controls=\"collapse\"" + i + " >" +
                     "<h5 class=\"mb-0\">" +
-                    "Order 1" +
+                    "Order " + response[i].foodOrderId +
                     "</h5>" +
                     "</div>" +
                     "<div id=\"collapse\"" + i + "  class=\"collapse\" aria-labelledby=\"heading\"" + i + " data-parent=\"#accordion\">" +
@@ -42,6 +34,7 @@ $(document).ready(function () {
                     <!--tr to /tr is one table row-->
                     <!--th is the row number-->
                     <!--td are the columns in a row-->
+                    "<script>loadOrder();</script>" +
                     "</tbody>" +
                     "</table>" +
                     "</div>" +
@@ -49,6 +42,28 @@ $(document).ready(function () {
                     "</div>"
                 );
             }
-            $('#table-body').append(order);
         });
 });
+
+/**
+ * Loads all the items for one order.
+ */
+function loadOrder(){
+    post("/api/authTable/getOrderItems",
+        JSON.stringify({
+            orderId: sessionStorage.getItem("orderId")
+        }), function (data) {
+            //parse JSON
+            var response = JSON.parse(data);
+            var order = "<tr data-toggle=\"collapse\" data-target=\"#row\"";
+            for (i = 0; i < response.length; i++) {
+                order += (i + 1) + "\" class=\"clickable\">" +
+                    "<th scope=\"row\">" + (i + 1) + "</th>" +
+                    "<td>" + response[i].name + "</td>" +
+                    "<td>" + response[i].instructions + "</td>" +
+                    "<td>£" + response[i].price + "</td>" +
+                    "</tr>"
+            }
+            $("#table-body").append(order);
+        });
+}
