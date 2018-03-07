@@ -10,9 +10,12 @@ $(document).ready(function () {
       var button = "<button id='notify' class='btn' onclick='getPermissionAndSubscribe()'>Notifications</button>";
       $('.nav').append(button);
     } else {
-      // register service worker and check subscriptions. send to backend.
+      getPermissionAndSubscribe();
     }
   }
+  navigator.serviceWorker.addEventListener('message', function (event) {
+    displayOrders(JSON.stringify(event.data));
+  });
 });
 
 /**
@@ -108,6 +111,7 @@ function askPermission() {
 /**
  * Wrapper method that checks for existing permissions. If there are none it asks for permission
  * and then subscribes the user to push and sends the subscription to the backend.
+ * TODO this is ugly refactor!!!!!
  */
 function getPermissionAndSubscribe() {
   if (!(Notification.permission === "granted")) {
@@ -115,9 +119,11 @@ function getPermissionAndSubscribe() {
     askPermission().then(function (result) {
       // if it is a success then we subscribe the user to push.
       $('#notify').remove();
-      subscribeUserToPush().then(function (subscription) {
-        return sendSubscriptionToBackEnd(subscription)
-      });
+      registerServiceWorker('/js/kitchen-notification-worker.js').then(function (registration) {
+        subscribeUserToPush(registration).then(function (subscription) {
+          return sendSubscriptionToBackEnd(subscription);
+        });
+      })
     }, function (err) {
       // if it fails we log the error.
       console.error(err);
@@ -128,9 +134,16 @@ function getPermissionAndSubscribe() {
       getCurrentSubscription(registration).then(function (subscription) {
         sendSubscriptionToBackEnd(subscription);
       })
+      // TODO refactor so we don't have to catch exceptions. Also it doesn't quite work.
     }).catch(function (reason) {
-      console.error(reason);
-    })
+        registerServiceWorker('/js/kitchen-notification-worker.js').then(function (registration) {
+          subscribeUserToPush(registration).then(function (subscription) {
+            return sendSubscriptionToBackEnd(subscription);
+          });
+        }).catch(function (reason2) {
+          console.error(reason2);
+        })
+      })
   }
 }
 
@@ -139,9 +152,8 @@ function getPermissionAndSubscribe() {
  * Credit Matt Gaunt, Google. https://developers.google.com/web/fundamentals/push-notifications/
  * @return {Promise<ServiceWorkerRegistration>}
  */
-function subscribeUserToPush() {
-  return navigator.serviceWorker.register('/js/kitchen-notification-worker.js')
-  .then(function (registration) {
+function subscribeUserToPush(registration) {
+
     var serverKey = urlB64ToUint8Array(
         'BIz9luhpKgx76RcIhqU4fmdIC1ve7fT5gm2Y632w_lsd_od2B87XschASGbi7EfgTIWpBAPKh2IWTOMt1Gux7tA');
     const subscribeOptions = {
@@ -149,8 +161,8 @@ function subscribeUserToPush() {
       applicationServerKey: serverKey
     };
 
-    return registration.pushManager.subscribe(subscribeOptions);
-  }).then(function (pushSubscription) {
+    return registration.pushManager.subscribe(subscribeOptions)
+  .then(function (pushSubscription) {
     return pushSubscription;
   });
 }

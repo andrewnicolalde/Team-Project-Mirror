@@ -11,6 +11,7 @@ import database.tables.StaffNotification;
 import database.tables.TableSession;
 import database.tables.Transaction;
 import endpoints.notification.Notifications;
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.List;
@@ -161,7 +162,6 @@ public class Orders {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
-
     entityManager.getTransaction().begin();
 
     FoodOrder foodOrder = entityManager.createQuery("from FoodOrder foodOrder where "
@@ -172,8 +172,9 @@ public class Orders {
 
     if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.COOKING) {
       foodOrder.setTimeConfirmed(new Timestamp(System.currentTimeMillis()));
-      List<StaffNotification> staffNotifications = entityManager.createQuery("from StaffNotification staffNotification "
-          + "where staffNotification.staff.department = :department", StaffNotification.class)
+      List<StaffNotification> staffNotifications = entityManager
+          .createQuery("from StaffNotification staffNotification "
+              + "where staffNotification.staff.department = :department", StaffNotification.class)
           .setParameter("department", Department.KITCHEN).getResultList();
 
       List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
@@ -189,7 +190,11 @@ public class Orders {
       }
       String message = JsonUtil.getInstance().toJson(orderData);
       for (StaffNotification n : staffNotifications) {
-        Notifications.sendPushMessage(n.getPushSubscription(), message.getBytes());
+        try {
+          Notifications.sendPushMessage(n.getPushSubscription(), message.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+          e.printStackTrace();
+        }
       }
 
     }
