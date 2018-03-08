@@ -6,8 +6,8 @@ package database.tables;
  * @author Marcus Messer
  */
 public enum OrderStatus {
-  READY_TO_CONFIRM ("Ready To Confirm"),
   READY_TO_DELIVER ("Ready To Deliver"),
+  READY_TO_CONFIRM ("Ready To Confirm"),
   ORDERING ("Ordering"),
   COOKING ("Cooking"),
   DELIVERED ("Delivered"),
