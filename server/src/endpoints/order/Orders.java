@@ -14,9 +14,11 @@ import database.tables.TableSession;
 import database.tables.Transaction;
 import endpoints.notification.Notifications;
 import endpoints.transaction.TransactionIdParams;
+import endpoints.transaction.Transactions;
 import java.io.UnsupportedEncodingException;
 import database.tables.WaiterSale;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -364,9 +366,27 @@ public class Orders {
     return 10;
   }
 
+  /**
+   *
+   * @param request
+   * @param response
+   * @return
+   */
   public static String getAllOrdersForTable(Request request, Response response) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
+    TableSession tableSession = em.find(TableSession.class,
+        request.session().attribute("TableSessionKey"));
+    Transaction transaction = Transactions.getCurrentTransaction(tableSession.getRestaurantTable());
+
+    List<FoodOrder> orders = em.createQuery("FROM FoodOrder foodorder WHERE foodorder.transaction = :transaction", FoodOrder.class).setParameter("transaction", transaction).getResultList();
+    List<OrderWithContents> orderDetailsToSend = new ArrayList<>();
+
+    for (FoodOrder order : orders) {
+      List<OrderMenuItem> orderContents = em.createQuery("FROM OrderMenuItem ordermenuitem WHERE ordermenuitem.foodOrder = :order", OrderMenuItem.class).setParameter("order", order).getResultList();
+      orderDetailsToSend.add(new OrderWithContents(order.getOrderId(), orderContents));
+    }
+
     em.close();
-    return "";
+    return JsonUtil.getInstance().toJson(orderDetailsToSend);
   }
 }
