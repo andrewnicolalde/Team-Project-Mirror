@@ -12,6 +12,7 @@ import database.tables.StaffSession;
 import database.tables.TableSession;
 import database.tables.Transaction;
 import endpoints.notification.Notifications;
+import endpoints.transaction.TransactionIdParams;
 import java.io.UnsupportedEncodingException;
 import database.tables.WaiterSale;
 import java.sql.Timestamp;
@@ -326,14 +327,14 @@ public class Orders {
    * @return A foodOrderId in the form of a string.
    */
   public static String getOrderId(Request request, Response response) {
-    OrderIdParams orderIdParams = JsonUtil.getInstance()
-        .fromJson(request.body(), OrderIdParams.class);
+    TransactionIdParams transactionIdParams = JsonUtil.getInstance()
+        .fromJson(request.body(), TransactionIdParams.class);
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder where "
             + "foodOrder.transaction.id = :transactionId and foodOrder.status = :ordering",
-        FoodOrder.class).setParameter("transactionId", orderIdParams.getTransactionId())
+        FoodOrder.class).setParameter("transactionId", transactionIdParams.getTransactionId())
         .setParameter("ordering", OrderStatus.ORDERING).getResultList();
 
     FoodOrder foodOrder;
@@ -341,7 +342,7 @@ public class Orders {
       entityManager.getTransaction().begin();
 
       foodOrder = new FoodOrder(OrderStatus.ORDERING, null, entityManager.find(Transaction.class,
-          orderIdParams.getTransactionId()));
+          transactionIdParams.getTransactionId()));
 
       entityManager.persist(foodOrder);
 
@@ -409,5 +410,14 @@ public class Orders {
       }
     }
     return true;
+  }
+
+  /**
+   * Returns the total price of an order.
+   * @return
+   */
+  public static int getOrderTotal(Request request){
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
+    return 10;
   }
 }
