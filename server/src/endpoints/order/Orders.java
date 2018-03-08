@@ -1,14 +1,18 @@
 package endpoints.order;
 
 import database.DatabaseManager;
+import database.tables.Department;
 import database.tables.FoodOrder;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
 import database.tables.RestaurantTableStaff;
+import database.tables.StaffNotification;
 import database.tables.StaffSession;
 import database.tables.TableSession;
 import database.tables.Transaction;
+import endpoints.notification.Notifications;
+import java.io.UnsupportedEncodingException;
 import database.tables.WaiterSale;
 import java.sql.Timestamp;
 import java.util.Comparator;
@@ -199,6 +203,31 @@ public class Orders {
 
     if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.COOKING) {
       foodOrder.setTimeConfirmed(new Timestamp(System.currentTimeMillis()));
+      List<StaffNotification> staffNotifications = entityManager
+          .createQuery("from StaffNotification staffNotification "
+              + "where staffNotification.staff.department = :department", StaffNotification.class)
+          .setParameter("department", Department.KITCHEN).getResultList();
+
+      List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
+              + "where foodOrder.status = :orderStatus",
+          FoodOrder.class).setParameter("orderStatus", OrderStatus.COOKING)
+          .getResultList();
+
+      foodOrders.sort(Comparator.comparing(FoodOrder::getTimeConfirmed));
+
+      OrderData[] orderData = new OrderData[foodOrders.size()];
+      for (int i = 0; i < orderData.length; i++) {
+        orderData[i] = new OrderData(foodOrders.get(i));
+      }
+      String message = JsonUtil.getInstance().toJson(orderData);
+      for (StaffNotification n : staffNotifications) {
+        try {
+          Notifications.sendPushMessage(n.getPushSubscription(), message.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+          e.printStackTrace();
+        }
+      }
+
     }
 
     if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.CANCELLED) {
