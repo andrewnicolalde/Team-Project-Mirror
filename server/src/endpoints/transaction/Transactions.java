@@ -64,6 +64,9 @@ public class Transactions {
 
   /**
    * Returns the total price of a transaction.
+   *
+   * JSON Input:
+   * transactionId: the ID of the transaction you want the total for
    */
   public static String getTransactionTotal(Request request, Response response) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
