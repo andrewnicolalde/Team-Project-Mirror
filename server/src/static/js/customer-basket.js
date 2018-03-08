@@ -58,3 +58,24 @@ function getTransactionTotal(transactionId) {
     });
   });
 }
+
+/**
+ * This function hides the payment options modal
+ */
+function hidePaymentModal(){
+  $('#paymentModal').modal('hide');
+}
+
+/**
+ * This function hides the cash payment modal
+ */
+function hideCashPaymentModal(){
+  $('#cashPaymentModal').modal('hide');
+}
+
+/**
+ * This function calls a waiter to the table
+ */
+function callWaiterToTable() {
+  bootbox.alert("Your waiter has been called, and will be with you shortly.");
+}

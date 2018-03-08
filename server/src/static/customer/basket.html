@@ -12,6 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
     <script src="https://checkout.stripe.com/checkout.js"></script>
     <script src="../js/ajax-wrapper.js"></script>
     <script src="../js/customer-basket.js"></script>
@@ -48,8 +49,8 @@
             Call waiter
         </button>
 
-        <!-- Modal -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <!-- Staff notification modal -->
+        <div class="modal fade" id="staffNotificationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -67,12 +68,12 @@
         </div>
         <a href="menu.html" class="btn" style="float: right;">Back to menu</a>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#paymentModal">Pay</button>
-        <!-- Payment modal -->
-        <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- Payment options modal -->
+        <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentOptionsModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Payment methods</h5>
+                        <h5 class="modal-title" id="paymentOptionsModalLabel">Payment methods</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -81,8 +82,8 @@
                         Thank you for coming to Oaxaca! Please select a payment method.
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-success" style="width: 300px">Cash</button>
-                        <button type="button" id="payWithCardButton" class="btn btn-primary" style="width: 300px">Card</button>
+                        <button type="button" id="payWithCashButton" class="btn btn-success" data-toggle="modal" data-target="#cashPaymentModal" onclick="hidePaymentModal()" style="width: 300px">Cash</button>
+                        <button type="button" id="payWithCardButton" class="btn btn-primary" onclick="hidePaymentModal()" style="width: 300px">Card</button>
                         <script>
                           var handler = StripeCheckout.configure({
                             key: 'pk_test_kYhdU5MRbncuBXn23zkDXhb0',
@@ -114,6 +115,28 @@
                             handler.close();
                           });
                         </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Cash payment modal -->
+        <div class="modal fade" id="cashPaymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentOptionsModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cashModalLabel">Cash Payment</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div id="cashPaymentModalBody" class="modal-body">Your total is</div>
+                    <script>
+                      getTransactionId().then(getTransactionTotal).then(function (total){
+                        document.getElementById("cashPaymentModalBody").innerText += " £"+total;
+                      })
+                    </script>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success btn-block" onclick="hideCashPaymentModal(); callWaiterToTable()">Call Waiter</button>
                     </div>
                 </div>
             </div>
