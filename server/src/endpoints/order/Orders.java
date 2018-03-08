@@ -75,16 +75,7 @@ public class Orders {
         FoodOrder.class).setParameter("tableNo", tableOrderParams.getTableNumber())
         .getResultList();
 
-    // Apdated from https://stackoverflow.com/questions/4018090/sorting-listclass-by-one-of-its-variable
-    foodOrders.sort((t0, t1) -> {
-      if (t0.getOrderId() < t1.getOrderId()) {
-        return -1;
-      }
-      if (t0.getOrderId() > t1.getOrderId()) {
-        return 1;
-      }
-      return 0;
-    });
+    foodOrders.sort(Comparator.comparing(FoodOrder::getStatus));
 
     OrderData[] orderData = new OrderData[foodOrders.size()];
     for (int i = 0; i < orderData.length; i++) {

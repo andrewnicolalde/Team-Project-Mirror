@@ -25,18 +25,20 @@ public class Tables {
   private static String getTableData(Long staffId) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
-    List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from " +
-            "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
+    List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from "
+            + "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
         RestaurantTableStaff.class).getResultList();
 
+    // This sorts by the table status.
     restaurantTableStaffs.sort((t0, t1) -> {
-      if (t0.getRestaurantTable().getTableNumber() < t1.getRestaurantTable().getTableNumber()) {
-        return -1;
+      if (t0.getRestaurantTable().getStatus().compareTo(t1.getRestaurantTable().getStatus())
+          == 0 && t0.getRestaurantTable().getNeedsHelpTime() != null
+          && t1.getRestaurantTable().getNeedsHelpTime() != null) {
+        return t0.getRestaurantTable().getNeedsHelpTime()
+            .compareTo(t1.getRestaurantTable().getNeedsHelpTime());
+      } else {
+        return t0.getRestaurantTable().getStatus().compareTo(t1.getRestaurantTable().getStatus());
       }
-      if (t0.getRestaurantTable().getTableNumber() > t1.getRestaurantTable().getTableNumber()) {
-        return 1;
-      }
-      return 0;
     });
 
     TableData[] tableData = new TableData[restaurantTableStaffs.size()];
