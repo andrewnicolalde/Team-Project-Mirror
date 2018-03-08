@@ -60,14 +60,39 @@ function loadMenu() {
 
 function filtername() {
 
+  var input, filter, displayMenuItems;
+
+  input = document.getElementById("mysearchbox");
+  filter = input.value.toUpperCase();
+  displayMenuItems = document.getElementsByClassName("menuitem");
+  for (var i = 0; i < displayMenuItems.length; i++) {
+    var mi = displayMenuItems[i];
+    for (var j = 0; j < mi.childNodes.length; j++) {
+    var node = mi.childNodes[j];
+      if (node.className === "bold") {
+        if (node.innerHTML.toUpperCase().indexOf(filter) > -1) {
+          mi.style.display = "";
+        } else {
+          mi.style.display = "none";
+        }
+      }
+    }
+    console.log(mi.innerHTML);
+  }
+
+
+
+  /*
+
     get("/api/authTable/getMenu", function(menuData){
           menuItems = JSON.parse(menuData);
 
-     var input, filter, ul, li, a;
+     var input, filter, ul, li, a, cat;
         input = document.getElementById("mysearchbox");
         filter = input.value.toUpperCase();
+        cat = document.getElementById("category-");
         ul = document.getElementById("menuitem-");
-        li = ul.getElementsByTagName("span");
+        li = cat.ul.getElementsByTagName("span");
 
           for(var i=0; i<li.length; i++) {
 
@@ -79,6 +104,7 @@ function filtername() {
                 }
            }
     });
+  */
 }
 
 
