@@ -8,6 +8,7 @@ import database.DatabaseManager;
 import endpoints.authentication.AuthenticationEmployee;
 import endpoints.authentication.AuthenticationTable;
 import endpoints.menu.Menu;
+import endpoints.notification.Notifications;
 import endpoints.order.Orders;
 import endpoints.tables.Tables;
 
@@ -38,7 +39,7 @@ public class Main {
     post("/loginTable", AuthenticationTable::logInTable);
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
-    get("/api/authStaff/getMenu", (req, res) -> Menu.getMenu());
+    get("/api/authStaff/getMenu", Menu::getMenu);
     get("/api/authStaff/getTables", Tables::getTables);
     post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
     post("/api/authStaff/getOrdersByStatus", Orders::getOrdersByStatus);
@@ -46,8 +47,9 @@ public class Main {
     post("/api/authStaff/addItemToOrder", Orders::addOrderMenuItem);
     post("/api/authStaff/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
+    post("/api/saveSubscription", Notifications::saveSubscription);
 
-    get("/api/authTable/getMenu", (req, res) -> Menu.getMenu());
+    get("/api/authTable/getMenu", Menu::getMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());
     get("/api/authTable/getTransactionId", Orders::getTransactionId);
     post("/api/authTable/getOrderId", Orders::getOrderId);
