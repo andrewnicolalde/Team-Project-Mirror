@@ -38,7 +38,7 @@ public class Transaction {
    * This field stores the combined price of every Menu_Item in every order belonging to this
    * transaction.
    */
-  @Column(name = "total")
+  @Column(name = "total", nullable = false)
   private Double total;
 
   /**

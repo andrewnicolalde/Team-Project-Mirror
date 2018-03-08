@@ -1,15 +1,21 @@
 package endpoints.order;
 
 import database.DatabaseManager;
+import database.tables.Department;
 import database.tables.FoodOrder;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
 import database.tables.RestaurantTableStaff;
+import database.tables.StaffNotification;
+import database.tables.StaffSession;
 import database.tables.TableSession;
 import database.tables.Transaction;
+import endpoints.notification.Notifications;
+import endpoints.transaction.TransactionIdParams;
+import java.io.UnsupportedEncodingException;
+import database.tables.WaiterSale;
 import java.sql.Timestamp;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -32,6 +38,10 @@ public class Orders {
   public static String getOrderItems(Request request, Response response) {
     ListOrderMenuItemParams omiList = JsonUtil.getInstance().fromJson(request.body(),
         ListOrderMenuItemParams.class);
+
+    if (isNotValidOrder(request, omiList.getOrderId())) {
+      return "";
+    }
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     List<OrderMenuItem> orderMenuItems = entityManager
@@ -66,16 +76,7 @@ public class Orders {
         FoodOrder.class).setParameter("tableNo", tableOrderParams.getTableNumber())
         .getResultList();
 
-    // Apdated from https://stackoverflow.com/questions/4018090/sorting-listclass-by-one-of-its-variable
-    foodOrders.sort((t0, t1) -> {
-      if (t0.getOrderId() < t1.getOrderId()) {
-        return -1;
-      }
-      if (t0.getOrderId() > t1.getOrderId()) {
-        return 1;
-      }
-      return 0;
-    });
+    foodOrders.sort(Comparator.comparing(FoodOrder::getStatus));
 
     OrderData[] orderData = new OrderData[foodOrders.size()];
     for (int i = 0; i < orderData.length; i++) {
@@ -115,8 +116,8 @@ public class Orders {
   }
 
   /**
-   * Adds an orderMenuItem to an order. JSON input: foodOrderId, menuItemId
-   * requirements: A string representing a description/extra details for the order.
+   * Adds an orderMenuItem to an order. JSON input: foodOrderId, menuItemId requirements: A string
+   * representing a description/extra details for the order.
    *
    * @param request A HTTP request object.
    * @param response A HTTP response object.
@@ -126,28 +127,49 @@ public class Orders {
     OrderMenuItemParams omi = JsonUtil.getInstance()
         .fromJson(request.body(), OrderMenuItemParams.class);
 
-    //TODO check which franchise to add the order to.
+    if (isNotValidOrder(request, omi.getorderId())) {
+      return "";
+    }
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
+    //Gets the food order that the item is going to be added to.
     FoodOrder foodOrder = entityManager.createQuery("from FoodOrder foodOrder where "
             + " foodOrder.id = :orderId",
         FoodOrder.class).setParameter("orderId", omi.getorderId()).getSingleResult();
 
+    //Creates a new menu item and adds it to the order.
     entityManager.getTransaction().begin();
     OrderMenuItem orderMenuItem = new OrderMenuItem(entityManager.find(
         MenuItem.class, omi.getMenuItemId()), foodOrder, omi.getInstructions());
 
     entityManager.persist(orderMenuItem);
+
+    // Updates the waiter sale if they added the menu item.
+    if (request.session().attribute("StaffSessionKey") != null) {
+      StaffSession staffSession = entityManager
+          .find(StaffSession.class, request.session().attribute("StaffSessionKey"));
+      WaiterSale waiterSale = new WaiterSale(staffSession.getStaff(),
+          entityManager.find(MenuItem.class, omi.getMenuItemId()), foodOrder);
+      entityManager.persist(waiterSale);
+    }
+
+    //Updates the transaction total
+    foodOrder.getTransaction()
+        .setTotal(foodOrder.getTransaction().getTotal() + orderMenuItem.getMenuItem().getPrice());
+
+    //Updates the order total
+    foodOrder.setTotal(foodOrder.getTotal() + orderMenuItem.getMenuItem().getPrice());
     entityManager.getTransaction().commit();
+
     entityManager.close();
     return JsonUtil.getInstance().toJson(new OrderItemsData(orderMenuItem));
   }
 
   /**
-   * Changes the order status JSON input: foodOrderId,
-   * newOrderStatus: A string representing the new order status. This can be CANCELLED, ORDERING,
-   * READY_TO_CONFIRM, COOKING, READY_TO_DELIVER or DELIVERED.
+   * Changes the order status JSON input: foodOrderId, newOrderStatus: A string representing the new
+   * order status. This can be CANCELLED, ORDERING, READY_TO_CONFIRM, COOKING, READY_TO_DELIVER or
+   * DELIVERED.
    *
    * @param request A HTTP request object.
    * @param response A HTTP response object.
@@ -156,6 +178,10 @@ public class Orders {
   public static String changeOrderStatus(Request request, Response response) {
     ChangeStatusParams cos = JsonUtil.getInstance()
         .fromJson(request.body(), ChangeStatusParams.class);
+
+    if (isNotValidOrder(request, cos.getFoodOrderId())) {
+      return "";
+    }
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
@@ -169,6 +195,36 @@ public class Orders {
 
     if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.COOKING) {
       foodOrder.setTimeConfirmed(new Timestamp(System.currentTimeMillis()));
+      List<StaffNotification> staffNotifications = entityManager
+          .createQuery("from StaffNotification staffNotification "
+              + "where staffNotification.staff.department = :department", StaffNotification.class)
+          .setParameter("department", Department.KITCHEN).getResultList();
+
+      List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
+              + "where foodOrder.status = :orderStatus",
+          FoodOrder.class).setParameter("orderStatus", OrderStatus.COOKING)
+          .getResultList();
+
+      foodOrders.sort(Comparator.comparing(FoodOrder::getTimeConfirmed));
+
+      OrderData[] orderData = new OrderData[foodOrders.size()];
+      for (int i = 0; i < orderData.length; i++) {
+        orderData[i] = new OrderData(foodOrders.get(i));
+      }
+      String message = JsonUtil.getInstance().toJson(orderData);
+      for (StaffNotification n : staffNotifications) {
+        try {
+          Notifications.sendPushMessage(n.getPushSubscription(), message.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+          e.printStackTrace();
+        }
+      }
+
+    }
+
+    if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.CANCELLED) {
+      foodOrder.getTransaction()
+          .setTotal(foodOrder.getTransaction().getTotal() - foodOrder.getTotal());
     }
 
     entityManager.getTransaction().commit();
@@ -187,6 +243,10 @@ public class Orders {
   public static String removeOrderMenuItem(Request request, Response response) {
     RemoveOrderMenuItemParams omi = JsonUtil.getInstance()
         .fromJson(request.body(), RemoveOrderMenuItemParams.class);
+
+    if (isNotValidOrder(request, omi.getOrderMenuItemId())) {
+      return "";
+    }
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     entityManager.getTransaction().begin();
@@ -224,9 +284,11 @@ public class Orders {
     // If there isn't an unpaid transaction for the current table, create a new one.
     if (transactions.size() == 0) {
       entityManager.getTransaction().begin();
-      List<RestaurantTableStaff> servers = entityManager.createQuery("from RestaurantTableStaff tableStaff "
-          + "where tableStaff.restaurantTable = :table", RestaurantTableStaff.class).setParameter(
-          "table", tableSession.getRestaurantTable()).getResultList();
+      List<RestaurantTableStaff> servers = entityManager
+          .createQuery("from RestaurantTableStaff tableStaff "
+              + "where tableStaff.restaurantTable = :table", RestaurantTableStaff.class)
+          .setParameter(
+              "table", tableSession.getRestaurantTable()).getResultList();
 
       RestaurantTableStaff temp;
       if (servers.size() == 0) {
@@ -235,7 +297,7 @@ public class Orders {
       } else {
         temp = servers.get(0);
       }
-      transaction = new Transaction(false, null, null, false, temp);
+      transaction = new Transaction(false, 0.0, null, false, temp);
       entityManager.persist(transaction);
       entityManager.getTransaction().commit();
     } else {
@@ -250,29 +312,28 @@ public class Orders {
 
   /**
    * This method gets the current foodOrderId for the table. If one doesn't exist it creates it.
+   *
    * @param request A HTML request.
    * @param response A HTML response.
    * @return A foodOrderId in the form of a string.
    */
   public static String getOrderId(Request request, Response response) {
-    OrderIdParams orderIdParams = JsonUtil.getInstance().fromJson(request.body(), OrderIdParams.class);
-
-    System.out.println(orderIdParams.getTransactionId());
+    TransactionIdParams transactionIdParams = JsonUtil.getInstance()
+        .fromJson(request.body(), TransactionIdParams.class);
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder where "
-              + "foodOrder.transaction.id = :transactionId and foodOrder.status = :ordering",
-          FoodOrder.class).setParameter("transactionId", orderIdParams.getTransactionId())
-          .setParameter("ordering", OrderStatus.ORDERING).getResultList();
-
+            + "foodOrder.transaction.id = :transactionId and foodOrder.status = :ordering",
+        FoodOrder.class).setParameter("transactionId", transactionIdParams.getTransactionId())
+        .setParameter("ordering", OrderStatus.ORDERING).getResultList();
 
     FoodOrder foodOrder;
     if (foodOrders.size() == 0) {
       entityManager.getTransaction().begin();
 
       foodOrder = new FoodOrder(OrderStatus.ORDERING, null, entityManager.find(Transaction.class,
-          orderIdParams.getTransactionId()));
+          transactionIdParams.getTransactionId()));
 
       entityManager.persist(foodOrder);
 
@@ -290,6 +351,7 @@ public class Orders {
 
   /**
    * Updates the instructions for a given OrderMenuItem. JSON input: orderMenuItemId, instructions
+   *
    * @param request The HTTP request object.
    * @param response The HTTP response object.
    * @return A string saying 'success' or 'failure'
@@ -300,10 +362,53 @@ public class Orders {
         request.body(), ChangeInstructionsParams.class);
 
     em.getTransaction().begin();
-    OrderMenuItem orderMenuItem = em.find(OrderMenuItem.class, changeInstructionsParams.getOrderMenuItemId());
+    OrderMenuItem orderMenuItem = em
+        .find(OrderMenuItem.class, changeInstructionsParams.getOrderMenuItemId());
     orderMenuItem.setInstructions(changeInstructionsParams.getInstructions());
     em.getTransaction().commit();
     em.close();
     return "success";
+  }
+
+  /**
+   * Checks if the order belongs to the table.
+   *
+   * @param request The HTML request.
+   * @param orderId The orderId being checked.
+   * @return True if the orderId is not valid.
+   */
+  private static boolean isNotValidOrder(Request request, Long orderId) {
+    // Checks if the staff member is accessing the order.
+    if (request.session().attribute("StaffSessionKey") != null) {
+      return false;
+    }
+    if (request.session().attribute("TableSessionKey") != null) {
+      // Gets the order.
+      EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+      FoodOrder foodOrder = entityManager.find(FoodOrder.class, orderId);
+
+      // Gets the table session.
+      TableSession tableSession = entityManager.find(TableSession.class,
+          request.session().attribute("TableSessionKey"));
+
+      //Checks the transaction id.
+      if (foodOrder.getTransaction().getRestaurantTableStaff().getRestaurantTable()
+          == tableSession
+          .getRestaurantTable()) {
+        //Checks if the table is in the correct status.
+        return foodOrder.getStatus() != OrderStatus.ORDERING
+            && foodOrder.getStatus() != OrderStatus.READY_TO_CONFIRM;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Returns the total price of an order.
+   * @return
+   */
+  public static int getOrderTotal(Request request){
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
+    return 10;
   }
 }

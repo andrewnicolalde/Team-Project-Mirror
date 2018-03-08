@@ -1,15 +1,15 @@
-package endpoints.order;
+package endpoints.transaction;
 
 /**
  * This class converts JSON into a useful Java Object
  *
  * @author Marcus Messer
  */
-public class OrderIdParams {
+public class TransactionIdParams {
 
   private Long transactionId;
 
-  public OrderIdParams (Long transactionId) {
+  public TransactionIdParams(Long transactionId) {
     this.transactionId = transactionId;
   }
 

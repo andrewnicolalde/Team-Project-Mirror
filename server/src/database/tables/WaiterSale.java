@@ -46,12 +46,13 @@ public class WaiterSale {
   /**
    * Empty constructor used by Hibernate.
    */
-  public WaiterSale(){
+  public WaiterSale() {
     //Empty Body
   }
 
   /**
    * This constructor is how new sales are added for a member of staff.
+   *
    * @param staff The staff member who added the extra item.
    * @param menuItem The item added to the order.
    * @param foodOrder The order the item has been added to.
