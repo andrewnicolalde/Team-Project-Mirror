@@ -25,6 +25,17 @@ public class Staff {
   @GeneratedValue(generator = "increment")
   @GenericGenerator(name = "increment", strategy = "increment")
   private Long employeeNumber;
+
+  /**
+   * This field stores the first name of the employee.
+   */
+  private String firstName;
+
+  /**
+   * This field stores the surname of the employee.
+   */
+  private String surname;
+
   /**
    * This field stores the password for the employee.
    */
@@ -53,14 +64,19 @@ public class Staff {
   /**
    * This constructor allows us to create new employees.
    *
+   * @param firstName The first name of the new employee
+   * @param surname The surname of the new employee
    * @param password The new employees password.
    * @param department The new employees department.
    * @param franchise The store the employee belongs too.
    */
-  public Staff(String password, Department department, Franchise franchise) {
+  public Staff(String firstName, String surname, String password, Department department,
+      Franchise franchise) {
     this.password = password;
     this.department = department;
     this.franchise = franchise;
+    this.firstName = firstName;
+    this.surname = surname;
   }
 
   public Long getEmployeeNumber() {
@@ -103,5 +119,21 @@ public class Staff {
         ", department=" + department +
         ", franchise=" + franchise +
         '}';
+  }
+
+  public String getSurname() {
+    return surname;
+  }
+
+  public void setSurname(String surname) {
+    this.surname = surname;
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
   }
 }

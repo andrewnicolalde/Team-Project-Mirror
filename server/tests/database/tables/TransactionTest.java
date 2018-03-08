@@ -1,18 +1,18 @@
 package database.tables;
 
+import static junit.framework.TestCase.assertEquals;
+
+import java.sql.Timestamp;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.sql.Timestamp;
-import java.util.List;
-
-import static junit.framework.TestCase.assertEquals;
-
 public class TransactionTest {
+
   private EntityManagerFactory entityManagerFactory;
 
   @Before
@@ -43,7 +43,7 @@ public class TransactionTest {
     //Create new Staff member
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    Staff staff = new Staff("Password", Department.KITCHEN, franchise);
+    Staff staff = new Staff("John", "Doe", "Password", Department.KITCHEN, franchise);
     entityManager.persist(staff);
     entityManager.getTransaction().commit();
     entityManager.close();

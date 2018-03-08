@@ -1,24 +1,23 @@
 package database.tables;
 
-import database.tables.Category;
+import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-
 public class CategoryTest {
+
   private EntityManagerFactory entityManagerFactory;
 
   @Before
   public void setUp() {
     //Create link to the database
-    entityManagerFactory = Persistence.createEntityManagerFactory("server.database");
+    entityManagerFactory = Persistence.createEntityManagerFactory("server.database.test");
   }
 
   @After
