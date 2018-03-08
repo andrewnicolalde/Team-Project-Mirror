@@ -8,6 +8,7 @@ import database.DatabaseManager;
 import endpoints.authentication.AuthenticationEmployee;
 import endpoints.authentication.AuthenticationTable;
 import endpoints.menu.Menu;
+import endpoints.notification.Notifications;
 import endpoints.order.Orders;
 import endpoints.tables.Tables;
 
@@ -47,6 +48,7 @@ public class Main {
     post("/api/authStaff/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
     post("/api/authStaff/changeTableStatus", Tables::changeTableStatus);
+    post("/api/saveSubscription", Notifications::saveSubscription);
 
     get("/api/authTable/getMenu", Menu::getMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());

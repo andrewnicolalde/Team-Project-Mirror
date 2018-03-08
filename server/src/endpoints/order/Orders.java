@@ -1,14 +1,19 @@
 package endpoints.order;
 
 import database.DatabaseManager;
+import database.tables.Department;
 import database.tables.FoodOrder;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
 import database.tables.RestaurantTableStaff;
+import database.tables.StaffNotification;
 import database.tables.StaffSession;
 import database.tables.TableSession;
 import database.tables.Transaction;
+import endpoints.notification.Notifications;
+import endpoints.transaction.TransactionIdParams;
+import java.io.UnsupportedEncodingException;
 import database.tables.WaiterSale;
 import java.sql.Timestamp;
 import java.util.Comparator;
@@ -71,16 +76,7 @@ public class Orders {
         FoodOrder.class).setParameter("tableNo", tableOrderParams.getTableNumber())
         .getResultList();
 
-    // Apdated from https://stackoverflow.com/questions/4018090/sorting-listclass-by-one-of-its-variable
-    foodOrders.sort((t0, t1) -> {
-      if (t0.getOrderId() < t1.getOrderId()) {
-        return -1;
-      }
-      if (t0.getOrderId() > t1.getOrderId()) {
-        return 1;
-      }
-      return 0;
-    });
+    foodOrders.sort(Comparator.comparing(FoodOrder::getStatus));
 
     OrderData[] orderData = new OrderData[foodOrders.size()];
     for (int i = 0; i < orderData.length; i++) {
@@ -199,6 +195,31 @@ public class Orders {
 
     if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.COOKING) {
       foodOrder.setTimeConfirmed(new Timestamp(System.currentTimeMillis()));
+      List<StaffNotification> staffNotifications = entityManager
+          .createQuery("from StaffNotification staffNotification "
+              + "where staffNotification.staff.department = :department", StaffNotification.class)
+          .setParameter("department", Department.KITCHEN).getResultList();
+
+      List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
+              + "where foodOrder.status = :orderStatus",
+          FoodOrder.class).setParameter("orderStatus", OrderStatus.COOKING)
+          .getResultList();
+
+      foodOrders.sort(Comparator.comparing(FoodOrder::getTimeConfirmed));
+
+      OrderData[] orderData = new OrderData[foodOrders.size()];
+      for (int i = 0; i < orderData.length; i++) {
+        orderData[i] = new OrderData(foodOrders.get(i));
+      }
+      String message = JsonUtil.getInstance().toJson(orderData);
+      for (StaffNotification n : staffNotifications) {
+        try {
+          Notifications.sendPushMessage(n.getPushSubscription(), message.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+          e.printStackTrace();
+        }
+      }
+
     }
 
     if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.CANCELLED) {
@@ -297,14 +318,14 @@ public class Orders {
    * @return A foodOrderId in the form of a string.
    */
   public static String getOrderId(Request request, Response response) {
-    OrderIdParams orderIdParams = JsonUtil.getInstance()
-        .fromJson(request.body(), OrderIdParams.class);
+    TransactionIdParams transactionIdParams = JsonUtil.getInstance()
+        .fromJson(request.body(), TransactionIdParams.class);
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder where "
             + "foodOrder.transaction.id = :transactionId and foodOrder.status = :ordering",
-        FoodOrder.class).setParameter("transactionId", orderIdParams.getTransactionId())
+        FoodOrder.class).setParameter("transactionId", transactionIdParams.getTransactionId())
         .setParameter("ordering", OrderStatus.ORDERING).getResultList();
 
     FoodOrder foodOrder;
@@ -312,7 +333,7 @@ public class Orders {
       entityManager.getTransaction().begin();
 
       foodOrder = new FoodOrder(OrderStatus.ORDERING, null, entityManager.find(Transaction.class,
-          orderIdParams.getTransactionId()));
+          transactionIdParams.getTransactionId()));
 
       entityManager.persist(foodOrder);
 
@@ -380,5 +401,14 @@ public class Orders {
       }
     }
     return true;
+  }
+
+  /**
+   * Returns the total price of an order.
+   * @return
+   */
+  public static int getOrderTotal(Request request){
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
+    return 10;
   }
 }

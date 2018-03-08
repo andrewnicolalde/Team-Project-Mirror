@@ -6,12 +6,12 @@ package database.tables;
  * @author Marcus Messer
  */
 public enum OrderStatus {
-  CANCELLED ("Cancelled"),
-  ORDERING ("Ordering"),
-  READY_TO_CONFIRM ("Ready To Confirm"),
-  COOKING ("Cooking"),
   READY_TO_DELIVER ("Ready To Deliver"),
-  DELIVERED ("Delivered");
+  READY_TO_CONFIRM ("Ready To Confirm"),
+  ORDERING ("Ordering"),
+  COOKING ("Cooking"),
+  DELIVERED ("Delivered"),
+  CANCELLED ("Cancelled");
 
   /**
    * Stores the readable name for the status.
