@@ -6,6 +6,7 @@ import database.tables.FoodOrder;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
+import database.tables.RestaurantTable;
 import database.tables.RestaurantTableStaff;
 import database.tables.StaffNotification;
 import database.tables.StaffSession;
@@ -410,5 +411,11 @@ public class Orders {
   public static int getOrderTotal(Request request){
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
     return 10;
+  }
+
+  public static String getAllOrdersForTable(Request request, Response response) {
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
+    em.close();
+    return "";
   }
 }
