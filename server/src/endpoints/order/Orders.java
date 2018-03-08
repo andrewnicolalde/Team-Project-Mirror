@@ -354,12 +354,4 @@ public class Orders {
     return true;
   }
 
-  /**
-   * Returns the total price of an order.
-   * @return
-   */
-  public static int getOrderTotal(Request request){
-    EntityManager em = DatabaseManager.getInstance().getEntityManager();
-    return 10;
-  }
 }

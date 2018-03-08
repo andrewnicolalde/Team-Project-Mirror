@@ -59,6 +59,7 @@ public class Main {
     post("/api/authTable/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authTable/changeOrderStatus", Orders::changeOrderStatus);
     post("/api/authTable/changeOrderInstructions", Orders::changeOrderInstructions);
+    post("/api/authTable/getTransactionTotal", Transactions::getTransactionTotal);
 
     System.out.println("Visit: http://localhost:4567");
 

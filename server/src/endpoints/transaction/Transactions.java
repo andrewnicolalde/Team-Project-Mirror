@@ -12,6 +12,7 @@ import spark.Response;
 import util.JsonUtil;
 
 public class Transactions {
+
   /**
    * This method gets the current transaction for a table. If one doesn't exist it creates a new
    * one.
@@ -61,4 +62,14 @@ public class Transactions {
     return JsonUtil.getInstance().toJson(transactionIdData);
   }
 
+  /**
+   * Returns the total price of a transaction.
+   */
+  public static String getTransactionTotal(Request request, Response response) {
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
+    TransactionIdParams orderIdParams = JsonUtil.getInstance()
+        .fromJson(request.body(), TransactionIdParams.class);
+    Transaction transaction = em.find(Transaction.class, orderIdParams.getTransactionId());
+    return JsonUtil.getInstance().toJson(transaction.getTotal());
+  }
 }
