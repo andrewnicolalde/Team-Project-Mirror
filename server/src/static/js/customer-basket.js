@@ -11,11 +11,11 @@ $(document).ready(function () {
         JSON.stringify({orderId: sessionStorage.getItem("orderId")
         }), function (data) {
             var response = JSON.parse(data);
-            for (i = 1; i < response.length; i++) {
+            i = 1;
                 $("#accordion").append("<div class=\"card\">" +
                     "<div class=\"card-header\" id=\"heading\"" + i + " data-toggle=\"collapse\" data-target=\"#collapse\"" + i + " aria-expanded=\"false\" aria-controls=\"collapse\"" + i + " >" +
                     "<h5 class=\"mb-0\">" +
-                    "Order " + response[i].foodOrderId +
+                    "Order 1" +
                     "</h5>" +
                     "</div>" +
                     "<div id=\"collapse\"" + i + "  class=\"collapse\" aria-labelledby=\"heading\"" + i + " data-parent=\"#accordion\">" +
@@ -41,7 +41,7 @@ $(document).ready(function () {
                     "</div>" +
                     "</div>"
                 );
-            }
+
         });
 });
 
@@ -55,9 +55,9 @@ function loadOrder(){
         }), function (data) {
             //parse JSON
             var response = JSON.parse(data);
-            var order = "<tr data-toggle=\"collapse\" data-target=\"#row\"";
+            var order = "<tr";
             for (i = 0; i < response.length; i++) {
-                order += (i + 1) + "\" class=\"clickable\">" +
+                order += ">" +
                     "<th scope=\"row\">" + (i + 1) + "</th>" +
                     "<td>" + response[i].name + "</td>" +
                     "<td>" + response[i].instructions + "</td>" +
