@@ -97,11 +97,14 @@
 
                           document.getElementById('payWithCardButton').addEventListener('click', function(e) {
                             // Open Checkout with further options:
-                            handler.open({
-                              name: 'Oaxaca',
-                              description: '2 widgets',
-                              currency: 'gbp',
-                              amount: 2000
+                            // Get order total from endpoint
+                            getTransactionId().then(getTransactionTotal).then(function (total) {
+                              handler.open({
+                                name: 'Oaxaca',
+                                description: 'Your meal',
+                                currency: 'gbp',
+                                amount: Math.floor(total * 100)
+                              });
                             });
                             e.preventDefault();
                           });
