@@ -33,6 +33,8 @@ $(document).ready(function () {
                     "</div>" +
                     "</div>"
                 );
+                //Page currently doesnt load when this function is called
+                //Page can take a few seconds to load and sometimes freezes when right clicking
                 //loadOrder(current.orderContents);
             }
         });
