@@ -367,10 +367,10 @@ public class Orders {
   }
 
   /**
-   *
-   * @param request
-   * @param response
-   * @return
+   * Returns a string representing a JSON array of all the orders, their status and their contents
+   * @param request The HTTP request
+   * @param response The HTTP response
+   * @return A strign formatted to represent JSON.
    */
   public static String getAllOrdersForTable(Request request, Response response) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
@@ -383,7 +383,11 @@ public class Orders {
 
     for (FoodOrder order : orders) {
       List<OrderMenuItem> orderContents = em.createQuery("FROM OrderMenuItem ordermenuitem WHERE ordermenuitem.foodOrder = :order", OrderMenuItem.class).setParameter("order", order).getResultList();
-      orderDetailsToSend.add(new OrderWithContents(order.getOrderId(), orderContents));
+      List<OrderItemsData> orderItemDetails = new ArrayList<>();
+      for (OrderMenuItem item : orderContents) {
+        orderItemDetails.add(new OrderItemsData(item));
+      }
+      orderDetailsToSend.add(new OrderWithContents(order.getOrderId(), order.getStatus().toString(), orderItemDetails));
     }
 
     em.close();

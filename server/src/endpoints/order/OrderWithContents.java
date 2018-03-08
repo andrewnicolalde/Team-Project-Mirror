@@ -5,11 +5,13 @@ import java.util.List;
 
 public class OrderWithContents {
   private Long orderId;
-  private List<OrderMenuItem> orderContents;
+  private List<OrderItemsData> orderContents;
+  private String status;
 
-  public OrderWithContents(Long orderId, List<OrderMenuItem> orderContents) {
+  public OrderWithContents(Long orderId, String status, List<OrderItemsData> orderContents) {
     this.orderId = orderId;
     this.orderContents = orderContents;
+    this.status = status;
   }
 
   public Long getOrderId() {
@@ -20,11 +22,19 @@ public class OrderWithContents {
     this.orderId = orderId;
   }
 
-  public List<OrderMenuItem> getOrderContents() {
+  public List<OrderItemsData> getOrderContents() {
     return orderContents;
   }
 
-  public void setOrderContents(List<OrderMenuItem> orderContents) {
+  public void setOrderContents(List<OrderItemsData> orderContents) {
     this.orderContents = orderContents;
+  }
+
+  public String getStatus() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
   }
 }
