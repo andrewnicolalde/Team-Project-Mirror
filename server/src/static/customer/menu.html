@@ -22,6 +22,40 @@
   </div>
 </div>
 
+<nav class="navbar navbar-light justify-content-center bg-light">
+  <form class="form-inline form-center">
+    <input class="form-control" id="mysearchbox" onkeyup="filtername()" type="search" placeholder="Search Menu.." aria-label="Search">
+    <div class="input-group-btn">
+      <div class="btn-group" role="group">
+        <div class="dropdown dropdown-lg">
+          <button type="button" class="btn bg-info text-white dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+          <div class="dropdown-menu dropdown-menu-right" role="menu">
+            <p class="text-center">Filter by:</p>
+            <div class="form-check">
+              <input class="form-check-input position-static" type="checkbox" value="" id="glutencheckbox" checked>
+              <label class="form-check-label" for="glutencheckbox">
+                <p class="text-center">Gluten Free: <img src="../images/gluten-free.svg"></p>
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input position-static" type="checkbox" value="" id="vegetariancheckbox">
+              <label class="form-check-label" for="vegetariancheckbox">
+                <p class="text-center">Vegetarian: <img src="../images/vegetarian-mark.svg"></p>
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input position-static" type="checkbox" value="" id="vegancheckbox">
+              <label class="form-check-label" for="vegancheckbox">
+                <p class="text-center">Vegan: <img src="../images/vegan-mark.svg"></p>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</nav>
+
 <div class="row">
   <div class="col-sm-7">
     <div id="menu-title" class="column">

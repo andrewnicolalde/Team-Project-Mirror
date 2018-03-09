@@ -1,18 +1,18 @@
 package database.tables;
 
+import static junit.framework.TestCase.assertEquals;
+
+import java.sql.Timestamp;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.sql.Timestamp;
-import java.util.List;
-
-import static junit.framework.TestCase.assertEquals;
-
 public class FoodOrderTest {
+
   private EntityManagerFactory entityManagerFactory;
 
   @Before

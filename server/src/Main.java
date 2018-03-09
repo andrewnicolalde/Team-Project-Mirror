@@ -9,8 +9,10 @@ import endpoints.authentication.AuthenticationEmployee;
 import endpoints.authentication.AuthenticationTable;
 import endpoints.manager.Employee;
 import endpoints.menu.Menu;
+import endpoints.notification.Notifications;
 import endpoints.order.Orders;
 import endpoints.tables.Tables;
+import endpoints.transaction.Transactions;
 
 public class Main {
 
@@ -52,16 +54,21 @@ public class Main {
     post("/api/authStaff/editStaff", Employee::editEmployee);
     post("/api/authStaff/addStaff", Employee::addEmployee);
     post("/api/authStaff/removeStaff", Employee::removeEmployee);
+    post("/api/authStaff/changeTableStatus", Tables::changeTableStatus);
+    post("/api/saveSubscription", Notifications::saveSubscription);
 
     get("/api/authTable/getMenu", Menu::getMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());
-    get("/api/authTable/getTransactionId", Orders::getTransactionId);
+    get("/api/authTable/getTransactionId", Transactions::getTransactionId);
+    get("/api/authTable/getAllOrdersForTable", Orders::getAllOrdersForTable);
     post("/api/authTable/getOrderId", Orders::getOrderId);
     post("/api/authTable/getOrderItems", Orders::getOrderItems);
     post("/api/authTable/addItemToOrder", Orders::addOrderMenuItem);
     post("/api/authTable/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authTable/changeOrderStatus", Orders::changeOrderStatus);
     post("/api/authTable/changeOrderInstructions", Orders::changeOrderInstructions);
+    post("/api/authTable/changeTableStatus", Tables::changeTableStatus);
+    post("/api/authTable/getTransactionTotal", Transactions::getTransactionTotal);
 
     System.out.println("Visit: http://localhost:4567");
 

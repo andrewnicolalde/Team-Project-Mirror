@@ -1,5 +1,6 @@
 package database.tables;
 
+import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -33,6 +34,11 @@ public class RestaurantTable {
    * <code>TableStatus.java</code> enum.
    */
   private TableStatus status;
+  /**
+   * This field stores the time when the customer asks for help, it can be null but shouldn't be
+   * null, if the table status is set to NEEDS_HELP.
+   */
+  private Timestamp needsHelpTime;
   /**
    * This field is the foreign key for the franchise it references the franchise table.
    */
@@ -100,5 +106,13 @@ public class RestaurantTable {
         ", status=" + status +
         ", franchise=" + franchise +
         '}';
+  }
+
+  public Timestamp getNeedsHelpTime() {
+    return needsHelpTime;
+  }
+
+  public void setNeedsHelpTime(Timestamp needsHelpTime) {
+    this.needsHelpTime = needsHelpTime;
   }
 }
