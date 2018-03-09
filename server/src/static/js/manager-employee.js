@@ -65,6 +65,59 @@ function confirmEdit(id) {
       });
 }
 
+function startAdd() {
+  $("#employees").append("<tr id='new-employee-form'>\n"
+        + "<td id='emp-id-new'></td>\n"
+        + "<td id='emp-first-new'><input id='emp-first-new-input'></td>\n"
+        + "<td id='emp-last-new'><input id='emp-last-new-input'></td>\n"
+        + "<td id='emp-department-new'><select id='emp-department-new-input'>" + createDepartmentOptions("") + "</select></td>\n"
+        + "<td id='actions-new'><i id='confirm-new' class='fas fa-check fa-lg confirm' data-toggle='modal' data-target='#password-modal'></i></td>\n"
+      + "</tr>");
+  $("#add-staff-btn").hide();
+}
+
+function showPasswordModal() {
+
+}
+
+function confirmAdd() {
+  var dataToSend = JSON.stringify({
+    firstName: $("#emp-first-new-input").val(),
+    lastName: $("#emp-last-new-input").val(),
+    department: $("#emp-department-new-input").val()
+  });
+
+  post("/api/authStaff/addStaff",
+      dataToSend,
+      function(data) {
+        employee = JSON.parse(data);
+        // Remove new employee form
+        $("#new-employee-form").remove();
+
+        // Add new employee
+        $("#employees").append("<tr>\n"
+            + "<td id='emp-id-" + employee.employeeNumber + "'>" + employee.employeeNumber + "</td>\n"
+            + "<td id='emp-first-" + employee.employeeNumber + "'>" + employee.firstName + "</td>\n"
+            + "<td id='emp-last-" + employee.employeeNumber + "'>" + employee.lastName + "</td>\n"
+            + "<td id='emp-department-" + employee.employeeNumber + "'>" + employee.department + "</td>\n"
+            + "<td id='actions-" + employee.employeeNumber + "'><i id='edit-" + employee.employeeNumber + "' class=\"fas fa-edit fa-lg edit\" onclick='startEdit(" + employee.employeeNumber + ");'></i><i class=\"fa fa-times fa-lg remove\" onclick='remove(" + employee.employeeNumber + ");'></i></td>\n"
+            + "</tr>");
+      });
+}
+
+function checkPasswordsMatch() {
+  var pwd1 = $("#pwd1");
+  var pwd2 = $("#pwd2");
+  var btn = $("#confirm-pwd");
+  if (pwd1.val() === pwd2.val() && pwd1.val().length > 0) {
+    btn.removeClass("disabled");
+    btn.addClass("active");
+  } else {
+    btn.removeClass("active");
+    btn.addClass("disabled");
+  }
+}
+
 function remove(id) {
   bootbox.confirm("Are you sure you want to remove this item?", function (result) {
   });

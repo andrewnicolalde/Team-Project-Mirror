@@ -44,6 +44,27 @@
     <tbody id="employees">
     </tbody>
   </table>
+  <button id="add-staff-btn" class="btn btn-info" onclick="startAdd()">Add Staff</button>
+</div>
+<div id="password-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Password</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body form-group">
+        <label for="pwd1">Enter Password:</label>
+        <input id="pwd1" type="password" onkeyup="checkPasswordsMatch()">
+        <label for="pwd2">Reenter Password:</label>
+        <input id="pwd2" type="password" onkeyup="checkPasswordsMatch()">
+      </div>
+      <div class="modal-footer">
+        <button id="confirm-pwd" type="button" class="btn btn-info disabled" data-dismiss="modal" onclick="confirmAdd()">Add Staff</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 </body>
 </html>

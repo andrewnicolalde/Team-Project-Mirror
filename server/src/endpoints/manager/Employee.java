@@ -8,6 +8,7 @@ import database.tables.StaffSession;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
+import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
 import util.JsonUtil;
@@ -40,5 +41,17 @@ public class Employee {
 
   public static String getDepartments(Request request, Response response) {
     return Department.getJsonList();
+  }
+
+  public static String addEmployee(Request request, Response response) {
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
+    NewEmployeeData ed = JsonUtil.getInstance().fromJson(request.body(), NewEmployeeData.class);
+    em.getTransaction().begin();
+    StaffSession session = em.find(StaffSession.class, request.session().attribute("StaffSessionKey"));
+    Staff staff = new Staff(ed.getFirstName(), ed.getLastName(), BCrypt.hashpw(ed.getPassword(), BCrypt.gensalt()), Department.fromString(ed.getDepartment()), session.getStaff().getFranchise());
+    em.persist(staff);
+    em.getTransaction().commit();
+    em.close();
+    return JsonUtil.getInstance().toJson(new EmployeeData(staff));
   }
 }
