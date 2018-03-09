@@ -11,6 +11,7 @@ import endpoints.menu.Menu;
 import endpoints.notification.Notifications;
 import endpoints.order.Orders;
 import endpoints.tables.Tables;
+import endpoints.transaction.Transactions;
 
 public class Main {
 
@@ -52,7 +53,7 @@ public class Main {
 
     get("/api/authTable/getMenu", Menu::getMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());
-    get("/api/authTable/getTransactionId", Orders::getTransactionId);
+    get("/api/authTable/getTransactionId", Transactions::getTransactionId);
     post("/api/authTable/getOrderId", Orders::getOrderId);
     post("/api/authTable/getOrderItems", Orders::getOrderItems);
     post("/api/authTable/addItemToOrder", Orders::addOrderMenuItem);
@@ -60,6 +61,7 @@ public class Main {
     post("/api/authTable/changeOrderStatus", Orders::changeOrderStatus);
     post("/api/authTable/changeOrderInstructions", Orders::changeOrderInstructions);
     post("/api/authTable/changeTableStatus", Tables::changeTableStatus);
+    post("/api/authTable/getTransactionTotal", Transactions::getTransactionTotal);
 
     System.out.println("Visit: http://localhost:4567");
 
