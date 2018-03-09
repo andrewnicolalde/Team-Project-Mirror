@@ -20,4 +20,17 @@ public enum Department {
   public String toString() {
     return this.name;
   }
+
+  public static Department fromString(String val) {
+    switch (val.toLowerCase()) {
+      case "waiter":
+        return WAITER;
+      case "kitchen":
+        return KITCHEN;
+      case "manager":
+        return MANAGER;
+      default:
+        return null;
+    }
+  }
 }

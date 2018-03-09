@@ -28,11 +28,24 @@ function startEdit(id) {
 }
 
 function confirmEdit(id) {
-  $("#emp-first-" + id).html($("#emp-first-" + id + "-input").val());
-  $("#emp-last-" + id).html($("#emp-last-" + id + "-input").val());
-  $("#emp-department-" + id).html($("#emp-department-" + id + "-input").val());
-  $("#actions-" + id).prepend("<i id='edit-" + id + "' class=\"fas fa-edit fa-lg edit\" onclick='startEdit(" + id + ");'></i>")
-  $("#confirm-" + id).remove();
+  var dataToSend = JSON.stringify({
+    employeeNumber: id,
+    firstName: $("#emp-first-" + id + "-input").val(),
+    lastName: $("#emp-last-" + id + "-input").val(),
+    department: $("#emp-department-" + id + "-input").val()
+  });
+
+  post("/api/authStaff/editStaff",
+      dataToSend,
+      function(data) {
+        if (data === "success") {
+          $("#emp-first-" + id).html($("#emp-first-" + id + "-input").val());
+          $("#emp-last-" + id).html($("#emp-last-" + id + "-input").val());
+          $("#emp-department-" + id).html($("#emp-department-" + id + "-input").val());
+          $("#actions-" + id).prepend("<i id='edit-" + id + "' class=\"fas fa-edit fa-lg edit\" onclick='startEdit(" + id + ");'></i>")
+          $("#confirm-" + id).remove();
+        }
+      });
 }
 
 function remove(id) {
