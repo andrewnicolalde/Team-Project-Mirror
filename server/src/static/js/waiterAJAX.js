@@ -48,7 +48,6 @@ function loadOrder(orderId) {
   });
 }
 
-
 /**
  * This function is responsible for retrieving and displaying the tables
  * (i.e. Table 1) in the Tables column in waiter-ui.html
@@ -61,10 +60,14 @@ function loadTables() {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
     // Add each Table to the list of tables
-    for(var i = 0; i < response.length; i++){
+    for (var i = 0; i < response.length; i++) {
       $("#tables-list").append(
-          "<li data-tablenum='"+ response[i].number +"' id='table-"+response[i].number+"' class='list-group-item list-group-item-action' data-toggle='collapse' href='#table-" + response[i].number +"-orders-list'><span>Table "+ response[i].number +" - " + response[i].status
-          + "<ul id='table-"+ response[i].number+"-orders-list' ></ul>"
+          "<li data-tablenum='" + response[i].number + "' id='table-"
+          + response[i].number
+          + "' class='list-group-item list-group-item-action' data-toggle='collapse' data-target='#table-"
+          + response[i].number + "-orders-list'><span>Table "
+          + response[i].number + " - " + response[i].status
+          + "<ul id='table-" + response[i].number + "-orders-list' class='collapse'></ul>"
           + "</li>");
     }
     // Load all orders for each table
@@ -83,7 +86,8 @@ function loadOrderList(tableNumber) {
     tableNumber: tableNumber
   }), function (data) {
     var orders = JSON.parse(data);
-    var currentOrderElement = document.getElementById("table-"+tableNumber+"-orders-list");
+    var currentOrderElement = document.getElementById("table-" + tableNumber
+        + "-orders-list");
     while (currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
@@ -93,15 +97,16 @@ function loadOrderList(tableNumber) {
           "<li"
           + " id='order-title-" + orders[i].foodOrderId + "'"
           + " data-ordernum='" + orders[i].foodOrderId + "'"
-          + " data-orderStatus='"+ orders[i].orderStatus +"'"
+          + " data-orderStatus='" + orders[i].orderStatus + "'"
           + " class='list-group-item list-group-item-action'"
           + " onclick=\""
-            + "event.stopPropagation();" // This prevents clicking on the orders resulting in collapsing the table
-            + "setActiveOrder(event); "
-            + "loadOrder(this.getAttribute('data-ordernum'));"
-            + "setButtons(this.getAttribute('data-orderStatus'));"
-            + "\">"
-          + "<span class='span-bold'>Order </span>" + orders[i].foodOrderId +" - "+ orders[i].orderStatus
+          + "event.stopPropagation();" // This prevents clicking on the orders resulting in collapsing the table
+          + "setActiveOrder(event); "
+          + "loadOrder(this.getAttribute('data-ordernum'));"
+          + "setButtons(this.getAttribute('data-orderStatus'));"
+          + "\">"
+          + "<span class='span-bold'>Order </span>" + orders[i].foodOrderId
+          + " - " + orders[i].orderStatus
           + statusIcon
           + "</li>"
       );
@@ -126,13 +131,13 @@ function setButtons(orderStatus) {
  */
 function getDisabled(orderStatus) {
   var buttons = [
-      document.getElementById("confirm_button"),
-      document.getElementById("delivered_button"),
-      document.getElementById("edit_button"),
-      document.getElementById("cancel_button")
+    document.getElementById("confirm_button"),
+    document.getElementById("delivered_button"),
+    document.getElementById("edit_button"),
+    document.getElementById("cancel_button")
   ];
 
-  for(var i = 0; i < buttons.length; i ++) {
+  for (var i = 0; i < buttons.length; i++) {
     if (buttons[i].getAttribute("disabled")) {
       buttons[i].removeAttribute("disabled");
     }
@@ -140,7 +145,7 @@ function getDisabled(orderStatus) {
 
   switch (orderStatus) {
     case 'Cancelled':
-      for (var i = 0; i < buttons.length; i ++) {
+      for (var i = 0; i < buttons.length; i++) {
         buttons[i].setAttribute("disabled", "disabled");
       }
       break;
@@ -151,7 +156,7 @@ function getDisabled(orderStatus) {
       buttons[1].setAttribute("disabled", "disabled");
       break;
     case 'Cooking':
-      for (var i = 0; i < buttons.length - 1; i ++) {
+      for (var i = 0; i < buttons.length - 1; i++) {
         buttons[i].setAttribute("disabled", "disabled");
       }
       break;
@@ -160,7 +165,7 @@ function getDisabled(orderStatus) {
       buttons[2].setAttribute("disabled", "disabled");
       break;
     case 'Delivered':
-      for (var i = 0; i < buttons.length; i ++) {
+      for (var i = 0; i < buttons.length; i++) {
         buttons[i].setAttribute("disabled", "disabled");
       }
       break;
@@ -214,7 +219,7 @@ function setActiveOrder(event) {
   }
 
   //Checks to see if the order has been deselected or cancelled.
-  if (event == null){
+  if (event == null) {
     //Hides buttons
     document.getElementById('confirm_button').hidden = true;
     document.getElementById('delivered_button').hidden = true;
@@ -256,13 +261,14 @@ function confirmCancelOrder() {
   if (getActiveTable() == null) {
     bootbox.alert("There is no order selected");
   } else {
-    bootbox.confirm("Are you sure you want to cancel this order?", function (result) {
-      if(result){ // If the user hit okay (result == true)
-        changeOrderStatus('CANCELLED');
-        setActiveOrder(null);
-      }
-      // Otherwise do nothing
-    });
+    bootbox.confirm("Are you sure you want to cancel this order?",
+        function (result) {
+          if (result) { // If the user hit okay (result == true)
+            changeOrderStatus('CANCELLED');
+            setActiveOrder(null);
+          }
+          // Otherwise do nothing
+        });
   }
 }
 
