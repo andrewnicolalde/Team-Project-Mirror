@@ -67,7 +67,7 @@ function loadTables() {
           + "' class='list-group-item list-group-item-action' data-toggle='collapse' href='#table-"
           + response[i].number + "-orders-list'><span><div class='lst-table'>Table"
           + response[i].number + " - " + response[i].status
-          + helpBtn(response[i].status, response[i].tableId) +"</div>"
+          + tableBtns(response[i].status, response[i].tableId) +"</div>"
           + "<ul id='table-" + response[i].number + "-orders-list' ></ul>"
           + "</li>");
     }
@@ -78,9 +78,11 @@ function loadTables() {
   });
 }
 
-function helpBtn(status, tableId) {
+function tableBtns(status, tableId) {
   if (status === "Needs Help") {
-    return "<button id ='helpedButton-"+tableId+"' data-tableId=" + tableId + " type='button' class='btn btn-helped' onclick=\"changeTableStatus(event)\">Helped</button>"
+    return "<button id ='helpedButton-"+tableId+"' data-tableId=" + tableId + " type='button' class='btn btn-helped' onclick=\"changeTableStatus(event, 'FILLED')\">Helped</button>"
+  } else if (status === "Needs Cleaning") {
+    return "<button id = 'cleanButton-" + tableId + "'data-tableId=" + tableId+ " type='button' class='btn btn-cleaned' onclick=\"changeTableStatus(event, 'FREE')\">Cleaned</button>"
   } else {
     return "";
   }
@@ -283,14 +285,14 @@ function confirmCancelOrder() {
 /**
  * This method changes the table status, after the waiter has helped the customer.
  */
-function changeTableStatus(event) {
+function changeTableStatus(event, status) {
   event.stopPropagation();
   var btn = document.getElementById(event.currentTarget.id);
   console.log(event.currentTarget.id);
   console.log(btn.id);
   console.log(btn.dataset.tableid);
   post("/api/authStaff/changeTableStatus",
-      JSON.stringify({newStatus: "FILLED", tableId: btn.dataset.tableid.toString()}),
+      JSON.stringify({newStatus: status, tableId: btn.dataset.tableid.toString()}),
       function (data) {});
 }
 
