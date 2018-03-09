@@ -47,6 +47,12 @@ button[disabled] {
   float: right;
 }
 
+.btn-cleaned {
+  color: white;
+  background-color: mediumorchid;
+  float: right;
+}
+
 .lst-table {
   margin-bottom: 5%;
 }
