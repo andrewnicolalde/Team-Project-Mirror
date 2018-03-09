@@ -6,9 +6,9 @@ package database.tables;
  * @author Marcus Messer
  */
 public enum TableStatus {
-  FREE ("Free"),
-  FILLED ("Filled"),
   NEEDS_HELP ("Needs Help"),
+  FILLED ("Filled"),
+  FREE ("Free"),
   NEEDS_CLEANING ("Needs Cleaning");
 
   private final String status;

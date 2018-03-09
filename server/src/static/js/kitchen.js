@@ -3,8 +3,6 @@
  * Sets up all the pages jQuery functions.
  */
 $(document).ready(function () {
-  var tid = setInterval(getCookingOrders, 5000);
-
   getCookingOrders();
 });
 
@@ -27,10 +25,8 @@ function displayOrders(data) {
 
   var response = JSON.parse(data);
 
-  var currentOrderElement = document.getElementById("sidebar-orders");
-  while (currentOrderElement.firstChild) {
-    currentOrderElement.removeChild(currentOrderElement.firstChild);
-  }
+  var currentOrderElement = $("sidebar-orders");
+  currentOrderElement.empty();
 
   // If there are more than 4 orders. Add the last ones to the sidebar.
   if (response.length > 4) {
@@ -53,7 +49,7 @@ function displayOrders(data) {
           + "<ul class='list-group' id='list-"+ Id +"'>"
           + "<li class='list-group-item'> "
           + "<h2>Order " + Id + "</h2> "
-          + "<div>20:12.12"
+          + "<div>" + shortTime(response[j].timeConfirmed)
           + "<button type='button' class='btn btn-success' data-orderId='"+ Id +"' onclick='orderDone(this.getAttribute(\"data-orderId\"))'>Done</button></div>"
           + "</li>"
           + "</ul>"
@@ -61,6 +57,32 @@ function displayOrders(data) {
       getOrderItems(Id);
     }
   }
+}
+
+/**
+ * Reduces the full time stamp to just the hours minutes and seconds.
+ * @param time The full timestamp.
+ * @return {string} The condensed time.
+ */
+function shortTime(time) {
+  var orderTime = new Date(time);
+  var shortTime = paddedTime(orderTime.getHours()) + ":" + paddedTime(orderTime.getMinutes()) + "." + paddedTime(orderTime.getSeconds());
+  return shortTime;
+}
+
+/**
+ * Helper function to ensure time is formatted correctly.
+ * @param time The original time.
+ * @return {string} A formatted string of the time.
+ */
+function paddedTime(time) {
+  var padded;
+  if (time < 10) {
+    padded = "0" + time;
+  } else {
+    padded = time;
+  }
+  return padded;
 }
 
 /**
