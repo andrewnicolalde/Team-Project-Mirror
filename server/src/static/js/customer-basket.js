@@ -55,3 +55,54 @@ function loadOrder(current) {
   }
   return order;
 }
+
+ * This function is a helper function which gives getTransactionTotal a
+ * transactionId.
+ * @returns {Promise} transaction ID
+ */
+function getTransactionId(){
+  return new Promise(function (resolve, reject) {
+    get("/api/authTable/getTransactionId", function(data) {
+      var response = JSON.parse(data);
+      //console.log(response.transactionId);
+      resolve(response.transactionId);
+    });
+  });
+}
+
+/**
+ * This function is responsible for
+ * @param transactionId
+ * @returns the total price of the transaction
+ */
+function getTransactionTotal(transactionId) {
+  var dataToSend = JSON.stringify({
+    transactionId: transactionId
+  });
+  return new Promise(function (resolve, reject){
+    post("/api/authTable/getTransactionTotal", dataToSend, function(data){
+      resolve(data);
+    });
+  });
+}
+
+/**
+ * This function hides the payment options modal
+ */
+function hidePaymentModal(){
+  $('#paymentModal').modal('hide');
+}
+
+/**
+ * This function hides the cash payment modal
+ */
+function hideCashPaymentModal(){
+  $('#cashPaymentModal').modal('hide');
+}
+
+/**
+ * This function calls a waiter to the table
+ */
+function callWaiterToTable() {
+  bootbox.alert("Your waiter has been called, and will be with you shortly.");
+}
