@@ -55,7 +55,7 @@ function loadOrder(current) {
   }
   return order;
 }
-
+/**
  * This function is a helper function which gives getTransactionTotal a
  * transactionId.
  * @returns {Promise} transaction ID
