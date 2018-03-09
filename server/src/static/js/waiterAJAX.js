@@ -61,12 +61,14 @@ function loadTables() {
     }
     // Add each Table to the list of tables
     for (var i = 0; i < response.length; i++) {
+      var statusIcon = getTableIcon(response[i].status);
       $("#tables-list").append(
           "<li data-tablenum='" + response[i].number + "' id='table-"
           + response[i].number
           + "' class='list-group-item list-group-item-action' data-toggle='collapse' data-target='#table-"
           + response[i].number + "-orders-list'><span><div class='lst-table'>Table "
           + response[i].number + " - " + response[i].status
+          + statusIcon
           + tableBtns(response[i].status, response[i].tableId) +"</div>"
           + "<ul id='table-" + response[i].number + "-orders-list' class='collapse'></ul>"
           + "</li>");
@@ -80,12 +82,14 @@ function loadTables() {
 
 function tableBtns(status, tableId) {
   if (status === "Needs Help") {
-    return "<button id ='helpedButton-"+tableId+"' data-tableId=" + tableId + " type='button' class='btn btn-helped' onclick=\"changeTableStatus(event, 'FILLED')\">Helped</button>"
+    return "<button id ='helpedButton-" + tableId + "' data-tableId=" + tableId
+        + " type='button' class='btn btn-helped' onclick=\"changeTableStatus(event, 'FILLED')\">Helped</button>"
   } else if (status === "Needs Cleaning") {
     return "<button id = 'cleanButton-" + tableId + "'data-tableId=" + tableId
         + " type='button' class='btn btn-cleaned' onclick=\"changeTableStatus(event, 'FREE')\">Cleaned</button>"
   } else if (status === "Free") {
-    return "<button id ='filledButton-"+tableId+"' data-tableId=" + tableId + " type='button' class='btn btn-filled' onclick=\"changeTableStatus(event, 'FILLED')\">Filled</button>"
+    return "<button id ='filledButton-" + tableId + "' data-tableId=" + tableId
+        + " type='button' class='btn btn-filled' onclick=\"changeTableStatus(event, 'FILLED')\">Filled</button>"
   } else {
     return "";
   }
@@ -183,6 +187,24 @@ function getDisabled(orderStatus) {
       }
       break;
   }
+}
+
+function getTableIcon(tableStatus) {
+  var statusIcon;
+  switch (tableStatus) {
+    case 'Free':
+      statusIcon = '<i class="far fa-circle table-icon" style="color: black; float: right; font-size: 25px"></i>';
+      break;
+    case 'Filled':
+      statusIcon = '<i class="fas fa-circle table-icon" style="color: black; float: right;font-size: 25px"></i>';
+      break;
+    case 'Needs Cleaning':
+      statusIcon = '<i class="fa fa-trash table-icon" style="color: red; float: right;font-size: 25px"></i>';
+      break;
+    case 'Needs Help':
+      statusIcon = '<i class="fa fa-exclamation table-icon" style="color: red; float: right;font-size: 25px"></i>';
+  }
+  return statusIcon;
 }
 
 /**
