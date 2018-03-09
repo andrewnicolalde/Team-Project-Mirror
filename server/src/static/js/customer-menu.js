@@ -65,6 +65,22 @@ function filtername() {
   input = document.getElementById("mysearchbox");
   filter = input.value.toUpperCase();
   displayMenuItems = document.getElementsByClassName("menuitem");
+
+  // If the filter has any text in it, then expand all the categories.
+  // Otherwise, close them all
+
+  if (filter.length === 0) {
+    var elementsToHide = document.getElementsByClassName("collapse show");
+    for (var i = 0; i < elementsToHide.length; i++) {
+      elementsToHide[i].classList.remove("show");
+    }
+  } else {
+    var elementsToShow = document.getElementsByClassName("collapse");
+    for (var i = 0; i < elementsToShow.length; i++) {
+      elementsToShow[i].classList.add("show");
+    }
+  }
+
   for (var i = 0; i < displayMenuItems.length; i++) {
     var mi = displayMenuItems[i];
     for (var j = 0; j < mi.childNodes.length; j++) {
