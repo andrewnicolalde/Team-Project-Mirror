@@ -1,5 +1,6 @@
 package endpoints.authentication;
 
+import static database.tables.Department.*;
 import static spark.Spark.halt;
 
 import database.DatabaseManager;
@@ -80,12 +81,19 @@ public class AuthenticationEmployee {
       request.session(true);
       request.session().attribute("StaffSessionKey", sessionKey);
 
-      if (staffSession.getStaff().getDepartment() == Department.WAITER) {
-        response.redirect("/staff/waiter.html");
-      } else if (staffSession.getStaff().getDepartment() == Department.KITCHEN) {
-        response.redirect("/staff/kitchen.html");
-      } else {
-        response.redirect("/");
+      switch (staffSession.getStaff().getDepartment()) {
+        case WAITER:
+          response.redirect("/staff/waiter.html");
+          break;
+        case KITCHEN:
+          response.redirect("/staff/kitchen.html");
+          break;
+        case MANAGER:
+          response.redirect("/manager/home.html");
+          break;
+        default:
+          response.redirect("/");
+          break;
       }
     } else {
       response.redirect("/");

@@ -7,6 +7,7 @@ import static spark.Spark.staticFileLocation;
 import database.DatabaseManager;
 import endpoints.authentication.AuthenticationEmployee;
 import endpoints.authentication.AuthenticationTable;
+import endpoints.manager.Employee;
 import endpoints.menu.Menu;
 import endpoints.notification.Notifications;
 import endpoints.order.Orders;
@@ -42,12 +43,17 @@ public class Main {
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/getMenu", Menu::getMenu);
     get("/api/authStaff/getTables", Tables::getTables);
+    get("/api/authStaff/getEmployees", Employee::getEmployees);
+    get("/api/authStaff/getDepartments", Employee::getDepartments);
     post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
     post("/api/authStaff/getOrdersByStatus", Orders::getOrdersByStatus);
     post("/api/authStaff/getOrderItems", Orders::getOrderItems);
     post("/api/authStaff/addItemToOrder", Orders::addOrderMenuItem);
     post("/api/authStaff/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
+    post("/api/authStaff/editStaff", Employee::editEmployee);
+    post("/api/authStaff/addStaff", Employee::addEmployee);
+    post("/api/authStaff/removeStaff", Employee::removeEmployee);
     post("/api/authStaff/changeTableStatus", Tables::changeTableStatus);
     post("/api/saveSubscription", Notifications::saveSubscription);
 
