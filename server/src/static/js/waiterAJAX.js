@@ -65,8 +65,9 @@ function loadTables() {
           "<li data-tablenum='" + response[i].number + "' id='table-"
           + response[i].number
           + "' class='list-group-item list-group-item-action' data-toggle='collapse' data-target='#table-"
-          + response[i].number + "-orders-list'><span>Table "
+          + response[i].number + "-orders-list'><span><div class='lst-table'>Table "
           + response[i].number + " - " + response[i].status
+          + tableBtns(response[i].status, response[i].tableId) +"</div>"
           + "<ul id='table-" + response[i].number + "-orders-list' class='collapse'></ul>"
           + "</li>");
     }
@@ -75,6 +76,19 @@ function loadTables() {
       loadOrderList(response[i].number);
     }
   });
+}
+
+function tableBtns(status, tableId) {
+  if (status === "Needs Help") {
+    return "<button id ='helpedButton-"+tableId+"' data-tableId=" + tableId + " type='button' class='btn btn-helped' onclick=\"changeTableStatus(event, 'FILLED')\">Helped</button>"
+  } else if (status === "Needs Cleaning") {
+    return "<button id = 'cleanButton-" + tableId + "'data-tableId=" + tableId
+        + " type='button' class='btn btn-cleaned' onclick=\"changeTableStatus(event, 'FREE')\">Cleaned</button>"
+  } else if (status === "Free") {
+    return "<button id ='filledButton-"+tableId+"' data-tableId=" + tableId + " type='button' class='btn btn-filled' onclick=\"changeTableStatus(event, 'FILLED')\">Filled</button>"
+  } else {
+    return "";
+  }
 }
 
 /**
@@ -122,7 +136,6 @@ function setButtons(orderStatus) {
   document.getElementById('delivered_button').hidden = false;
   document.getElementById('edit_button').hidden = false;
   document.getElementById('cancel_button').hidden = false;
-
   getDisabled(orderStatus);
 }
 
@@ -270,6 +283,20 @@ function confirmCancelOrder() {
           // Otherwise do nothing
         });
   }
+}
+
+/**
+ * This method changes the table status, after the waiter has helped the customer.
+ */
+function changeTableStatus(event, status) {
+  event.stopPropagation();
+  var btn = document.getElementById(event.currentTarget.id);
+  console.log(event.currentTarget.id);
+  console.log(btn.id);
+  console.log(btn.dataset.tableid);
+  post("/api/authStaff/changeTableStatus",
+      JSON.stringify({newStatus: status, tableId: btn.dataset.tableid.toString()}),
+      function (data) {});
 }
 
 // Loads the menu and tables when the page loads.
