@@ -45,15 +45,28 @@ $(document).ready(function () {
  */
 function loadOrder(current) {
   //parse JSON
-  for (var j = 0; j < current.length; j++) {
-    var order = "<tr data-toggle=\"collapse\" data-target=\"#row\"";
-    order += (j + 1) + "\" class=\"clickable\">" +
-        "<td>" + current[j].name + "</td>" +
-        "<td>" + current[j].description + "</td>" +
-        "<td>" + current[j].instructions + "</td>" +
-        "<td>£" + current[j].price + "</td>" +
-        "</tr>";
-    console.log(order);
-    $("#table-body" + j).append(order);
+  // for (var j = 0; j < current.length; j++) {
+  //   var order = "<tr data-toggle=\"collapse\" data-target=\"#row\"";
+  //   order += (j + 1) + "\" class=\"clickable\">" +
+  //       "<td>" + current[j].name + "</td>" +
+  //       "<td>" + current[j].description + "</td>" +
+  //       "<td>" + current[j].instructions + "</td>" +
+  //       "<td>£" + current[j].price + "</td>" +
+  //       "</tr>";
+  //
+  //   console.log(current.id);
+  //
+  //   $("#table-body" + j).append(order);
+  // }
+
+  var order = "";
+  for (var i = 0; i < current.length; i++) {
+    order += "<tr>"
+        + "<td>" + current[i].name + "</td>"
+        + "<td>" + current[i].description + "</td>"
+        + "<td>" + current[i].instructions + "</td>"
+        + "<td>£" + current[i].price + "</td>"
+        + "</tr>"
   }
+  return order;
 }
