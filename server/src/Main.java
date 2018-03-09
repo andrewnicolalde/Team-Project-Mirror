@@ -8,7 +8,6 @@ import database.DatabaseManager;
 import endpoints.authentication.AuthenticationEmployee;
 import endpoints.authentication.AuthenticationTable;
 import endpoints.manager.Employee;
-import endpoints.manager.Manager;
 import endpoints.menu.Menu;
 import endpoints.order.Orders;
 import endpoints.tables.Tables;
@@ -49,7 +48,7 @@ public class Main {
     post("/api/authStaff/addItemToOrder", Orders::addOrderMenuItem);
     post("/api/authStaff/removeItemFromOrder", Orders::removeOrderMenuItem);
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
-    post("/api/authStaff/editStaff", Manager::editStaff);
+    post("/api/authStaff/editStaff", Employee::editEmployee);
 
     get("/api/authTable/getMenu", Menu::getMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());
