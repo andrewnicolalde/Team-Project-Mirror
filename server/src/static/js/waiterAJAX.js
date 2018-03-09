@@ -62,8 +62,9 @@ function loadTables() {
     }
     // Add each Table to the list of tables
     for(var i = 0; i < response.length; i++){
+      var statusIcon = getTableIcon(response[i].status);
       $("#tables-list").append(
-          "<li data-tablenum='"+ response[i].number +"' id='table-"+response[i].number+"' class='list-group-item list-group-item-action' data-toggle='collapse' href='#table-" + response[i].number +"-orders-list'><span>Table "+ response[i].number +" - " + response[i].status
+          "<li data-tablenum='"+ response[i].number +"' id='table-"+response[i].number+"' class='list-group-item list-group-item-action' data-toggle='collapse' href='#table-" + response[i].number +"-orders-list'><span>"+ statusIcon +"Table "+ response[i].number +" - " + response[i].status
           + "<ul id='table-"+ response[i].number+"-orders-list' ></ul>"
           + "</li>");
     }
@@ -165,6 +166,22 @@ function getDisabled(orderStatus) {
       }
       break;
   }
+}
+
+function getTableIcon(tableStatus) {
+  var statusIcon;
+  switch (tableStatus) {
+    case 'Free':
+      statusIcon = '<i class="far fa-circle" style="color: black; float: right; font-size: 25px"></i>';
+      break;
+    case 'Filled':
+      statusIcon = '<i class="fas fa-circle" style="color: black; float: right;font-size: 25px"></i>';
+      break;
+    case 'Needs Cleaning':
+      statusIcon = '<i class="fa fa-trash" style="color: red; float: right;font-size: 25px"></i>';
+      break;
+  }
+  return statusIcon;
 }
 
 /**
