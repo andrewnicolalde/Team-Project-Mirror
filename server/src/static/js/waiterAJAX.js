@@ -64,11 +64,10 @@ function loadTables() {
       $("#tables-list").append(
           "<li data-tablenum='" + response[i].number + "' id='table-"
           + response[i].number
-          + "' class='list-group-item list-group-item-action' data-toggle='collapse' href='#table-"
-          + response[i].number + "-orders-list'><span><div class='lst-table'>Table"
+          + "' class='list-group-item list-group-item-action' data-toggle='collapse' data-target='#table-"
+          + response[i].number + "-orders-list'><span>Table "
           + response[i].number + " - " + response[i].status
-          + tableBtns(response[i].status, response[i].tableId) +"</div>"
-          + "<ul id='table-" + response[i].number + "-orders-list' ></ul>"
+          + "<ul id='table-" + response[i].number + "-orders-list' class='collapse'></ul>"
           + "</li>");
     }
     // Load all orders for each table

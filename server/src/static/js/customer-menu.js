@@ -67,6 +67,44 @@ function loadMenu() {
   });
 }
 
+function filtername() {
+
+  var input, filter, displayMenuItems;
+
+  input = document.getElementById("mysearchbox");
+  filter = input.value.toUpperCase();
+  displayMenuItems = document.getElementsByClassName("menuitem");
+
+  // If the filter has any text in it, then expand all the categories.
+  // Otherwise, close them all
+
+  if (filter.length === 0) {
+    var elementsToHide = document.getElementsByClassName("collapse show");
+    for (var i = 0; i < elementsToHide.length; i++) {
+      elementsToHide[i].classList.remove("show");
+    }
+  } else {
+    var elementsToShow = document.getElementsByClassName("collapse");
+    for (var i = 0; i < elementsToShow.length; i++) {
+      elementsToShow[i].classList.add("show");
+    }
+  }
+
+  for (var i = 0; i < displayMenuItems.length; i++) {
+    var mi = displayMenuItems[i];
+    for (var j = 0; j < mi.childNodes.length; j++) {
+    var node = mi.childNodes[j];
+      if (node.className === "bold") {
+        if (node.innerHTML.toUpperCase().indexOf(filter) > -1) {
+          mi.style.display = "";
+        } else {
+          mi.style.display = "none";
+        }
+      }
+    }
+  }
+}
+
 function loadOrder() {
   var postData = {orderId: sessionStorage.getItem("orderId")};
   post("/api/authTable/getOrderItems", JSON.stringify(postData),
