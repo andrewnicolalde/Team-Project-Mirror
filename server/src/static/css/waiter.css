@@ -41,3 +41,25 @@ button[disabled] {
   background-color: red;
 }
 
+.btn-helped {
+  color: white;
+  background-color: red;
+  float: right;
+}
+
+.btn-cleaned {
+  color: white;
+  background-color: mediumorchid;
+  float: right;
+}
+
+.btn-filled {
+  color: white;
+  background-color: darkorange;
+  float: right;
+}
+
+.lst-table {
+  margin-bottom: 5%;
+}
+
