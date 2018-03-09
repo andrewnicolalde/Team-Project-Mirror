@@ -82,7 +82,10 @@ function tableBtns(status, tableId) {
   if (status === "Needs Help") {
     return "<button id ='helpedButton-"+tableId+"' data-tableId=" + tableId + " type='button' class='btn btn-helped' onclick=\"changeTableStatus(event, 'FILLED')\">Helped</button>"
   } else if (status === "Needs Cleaning") {
-    return "<button id = 'cleanButton-" + tableId + "'data-tableId=" + tableId+ " type='button' class='btn btn-cleaned' onclick=\"changeTableStatus(event, 'FREE')\">Cleaned</button>"
+    return "<button id = 'cleanButton-" + tableId + "'data-tableId=" + tableId
+        + " type='button' class='btn btn-cleaned' onclick=\"changeTableStatus(event, 'FREE')\">Cleaned</button>"
+  } else if (status === "Free") {
+    return "<button id ='filledButton-"+tableId+"' data-tableId=" + tableId + " type='button' class='btn btn-filled' onclick=\"changeTableStatus(event, 'FILLED')\">Filled</button>"
   } else {
     return "";
   }

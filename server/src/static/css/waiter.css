@@ -53,6 +53,12 @@ button[disabled] {
   float: right;
 }
 
+.btn-filled {
+  color: white;
+  background-color: darkorange;
+  float: right;
+}
+
 .lst-table {
   margin-bottom: 5%;
 }
