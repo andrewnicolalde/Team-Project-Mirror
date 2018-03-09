@@ -26,7 +26,7 @@ function loadMenu() {
       $("#categories").append("<div class='category'>\n"
                               + "<button id='category-" + c.categoryId + "-button' type='button' class='btn btn-block category-button' data-toggle='collapse' data-target='#category-" + c.categoryId + "'>" + c.name + "</button>\n"
                               + "<div id='category-" + c.categoryId + "' class='collapse'>\n"
-                                + "<ul id='category-" + c.categoryId + "-list' class='menuitems list-group collapse'>\n"
+                                + "<ul id='category-" + c.categoryId + "-list' class='menuitems list-group'>\n"
                                 + "</ul>\n"
                               + "</div>\n"
                             + "</div>");
@@ -55,6 +55,45 @@ function loadMenu() {
       }
     });
   });
+}
+
+
+function filtername() {
+
+  var input, filter, displayMenuItems;
+
+  input = document.getElementById("mysearchbox");
+  filter = input.value.toUpperCase();
+  displayMenuItems = document.getElementsByClassName("menuitem");
+
+  // If the filter has any text in it, then expand all the categories.
+  // Otherwise, close them all
+
+  if (filter.length === 0) {
+    var elementsToHide = document.getElementsByClassName("collapse show");
+    for (var i = 0; i < elementsToHide.length; i++) {
+      elementsToHide[i].classList.remove("show");
+    }
+  } else {
+    var elementsToShow = document.getElementsByClassName("collapse");
+    for (var i = 0; i < elementsToShow.length; i++) {
+      elementsToShow[i].classList.add("show");
+    }
+  }
+
+  for (var i = 0; i < displayMenuItems.length; i++) {
+    var mi = displayMenuItems[i];
+    for (var j = 0; j < mi.childNodes.length; j++) {
+    var node = mi.childNodes[j];
+      if (node.className === "bold") {
+        if (node.innerHTML.toUpperCase().indexOf(filter) > -1) {
+          mi.style.display = "";
+        } else {
+          mi.style.display = "none";
+        }
+      }
+    }
+  }
 }
 
 
