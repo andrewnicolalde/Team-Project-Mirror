@@ -51,6 +51,7 @@ public class Main {
     post("/api/authStaff/changeOrderStatus", Orders::changeOrderStatus);
     post("/api/authStaff/editStaff", Employee::editEmployee);
     post("/api/authStaff/addStaff", Employee::addEmployee);
+    post("/api/authStaff/removeStaff", Employee::removeEmployee);
 
     get("/api/authTable/getMenu", Menu::getMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());

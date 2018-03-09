@@ -54,4 +54,15 @@ public class Employee {
     em.close();
     return JsonUtil.getInstance().toJson(new EmployeeData(staff));
   }
+
+  public static String removeEmployee(Request request, Response response) {
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
+    EmployeeIdParams id = JsonUtil.getInstance().fromJson(request.body(), EmployeeIdParams.class);
+    em.getTransaction().begin();
+    Staff staff = em.find(Staff.class, id.getEmployeeNumber());
+    em.remove(staff);
+    em.getTransaction().commit();
+    em.close();
+    return "success";
+  }
 }

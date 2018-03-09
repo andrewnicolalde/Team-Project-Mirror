@@ -13,7 +13,7 @@ function loadEmployees() {
     var employees = JSON.parse(data);
     for (var i = 0; i < employees.length; i++) {
       var employee = employees[i];
-      $("#employees").append("<tr>\n"
+      $("#employees").append("<tr id='emp-" + employee.employeeNumber + "'>\n"
                              + "<td id='emp-id-" + employee.employeeNumber + "'>" + employee.employeeNumber + "</td>\n"
                              + "<td id='emp-first-" + employee.employeeNumber + "'>" + employee.firstName + "</td>\n"
                              + "<td id='emp-last-" + employee.employeeNumber + "'>" + employee.lastName + "</td>\n"
@@ -95,7 +95,7 @@ function confirmAdd() {
         $("#new-employee-form").remove();
 
         // Add new employee
-        $("#employees").append("<tr>\n"
+        $("#employees").append("<tr id='emp-" + employee.employeeNumber + "'>\n"
             + "<td id='emp-id-" + employee.employeeNumber + "'>" + employee.employeeNumber + "</td>\n"
             + "<td id='emp-first-" + employee.employeeNumber + "'>" + employee.firstName + "</td>\n"
             + "<td id='emp-last-" + employee.employeeNumber + "'>" + employee.lastName + "</td>\n"
@@ -119,6 +119,16 @@ function checkPasswordsMatch() {
 }
 
 function remove(id) {
-  bootbox.confirm("Are you sure you want to remove this item?", function (result) {
+  bootbox.confirm("Are you sure you want to remove this employee account?", function (result) {
+    if(result) {
+      var dataToSend = JSON.stringify({employeeNumber: id});
+      post("/api/authStaff/removeStaff",
+          dataToSend,
+          function (data) {
+            if (data === "success") {
+              $("#emp-" + id).remove();
+            }
+          })
+    }
   });
 }
