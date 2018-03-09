@@ -1,5 +1,11 @@
+var departments
+
 $(document).ready(function () {
   loadEmployees();
+  get("/api/authStaff/getDepartments",
+      function(data) {
+        departments = JSON.parse(data);
+      });
 });
 
 function loadEmployees() {
@@ -18,10 +24,22 @@ function loadEmployees() {
   });
 }
 
+function createDepartmentOptions(department) {
+  var departmentsOptions = "";
+  for (var i = 0; i < departments.length; i++) {
+    if (departments[i] === department) {
+      departmentsOptions += "<option selected>" + departments[i] + "</option>\n";
+    } else {
+      departmentsOptions += "<option>" + departments[i] + "</option>\n";
+    }
+  }
+  return departmentsOptions;
+}
+
 function startEdit(id) {
   $("#emp-first-" + id).html("<input id='emp-first-" + id + "-input' value='" + $("#emp-first-" + id).text() + "'>");
   $("#emp-last-" + id).html("<input id='emp-last-" + id + "-input' value='" + $("#emp-last-" + id).text() + "'>");
-  $("#emp-department-" + id).html("<input id='emp-department-" + id + "-input' value='" + $("#emp-department-" + id).text() + "'>");
+  $("#emp-department-" + id).html("<select id='emp-department-" + id + "-input'>" + createDepartmentOptions($("#emp-department-" + id).text()) + "</select>");
   $("#edit-" + id).remove();
   $("#actions-" + id).prepend("<i id='confirm-" + id + "' class='fa fa-check fa-lg confirm' onclick='confirmEdit(" + id + ")'></i>");
 }

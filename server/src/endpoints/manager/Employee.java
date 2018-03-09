@@ -37,4 +37,8 @@ public class Employee {
     em.close();
     return "success";
   }
+
+  public static String getDepartments(Request request, Response response) {
+    return Department.getJsonList();
+  }
 }

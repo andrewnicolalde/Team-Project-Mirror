@@ -33,4 +33,8 @@ public enum Department {
         return null;
     }
   }
+
+  public static String getJsonList() {
+    return "[\"Waiter\",\"Kitchen\",\"Manager\"]";
+  }
 }
