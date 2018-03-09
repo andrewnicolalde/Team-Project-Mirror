@@ -25,8 +25,8 @@ function loadMenu() {
       var c = categories[i];
       $("#categories").append("<div class='category'>\n"
                               + "<button id='category-" + c.categoryId + "-button' type='button' class='btn btn-block category-button' data-toggle='collapse' data-target='#category-" + c.categoryId + "'>" + c.name + "</button>\n"
-                              + "<div id='category-" + c.categoryId + "'>\n"
-                                + "<ul id='category-" + c.categoryId + "-list' class='menuitems list-group collapse'>\n"
+                              + "<div id='category-" + c.categoryId + "' class='collapse'>\n"
+                                + "<ul id='category-" + c.categoryId + "-list' class='menuitems list-group'>\n"
                                 + "</ul>\n"
                               + "</div>\n"
                             + "</div>");
