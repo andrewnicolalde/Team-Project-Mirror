@@ -77,34 +77,7 @@ function filtername() {
         }
       }
     }
-    console.log(mi.innerHTML);
   }
-
-
-
-  /*
-
-    get("/api/authTable/getMenu", function(menuData){
-          menuItems = JSON.parse(menuData);
-
-     var input, filter, ul, li, a, cat;
-        input = document.getElementById("mysearchbox");
-        filter = input.value.toUpperCase();
-        cat = document.getElementById("category-");
-        ul = document.getElementById("menuitem-");
-        li = cat.ul.getElementsByTagName("span");
-
-          for(var i=0; i<li.length; i++) {
-
-            a = li[i].getElementsByTagName("a")[0];
-                if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    li[i].style.display = "";
-                } else {
-                    li[i].style.display = "none";
-                }
-           }
-    });
-  */
 }
 
 
