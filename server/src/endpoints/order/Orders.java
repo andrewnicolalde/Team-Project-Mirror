@@ -6,17 +6,15 @@ import database.tables.FoodOrder;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
-import database.tables.RestaurantTable;
-import database.tables.RestaurantTableStaff;
 import database.tables.StaffNotification;
 import database.tables.StaffSession;
 import database.tables.TableSession;
 import database.tables.Transaction;
+import database.tables.WaiterSale;
 import endpoints.notification.Notifications;
 import endpoints.transaction.TransactionIdParams;
 import endpoints.transaction.Transactions;
 import java.io.UnsupportedEncodingException;
-import database.tables.WaiterSale;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -359,15 +357,15 @@ public class Orders {
 
   /**
    * Returns the total price of an order.
-   * @return
    */
-  public static int getOrderTotal(Request request){
+  public static int getOrderTotal(Request request) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
     return 10;
   }
 
   /**
    * Returns a string representing a JSON array of all the orders, their status and their contents
+   *
    * @param request The HTTP request
    * @param response The HTTP response
    * @return A strign formatted to represent JSON.
@@ -378,19 +376,26 @@ public class Orders {
         request.session().attribute("TableSessionKey"));
     Transaction transaction = Transactions.getCurrentTransaction(tableSession.getRestaurantTable());
 
-    List<FoodOrder> orders = em.createQuery("FROM FoodOrder foodorder WHERE foodorder.transaction = :transaction", FoodOrder.class).setParameter("transaction", transaction).getResultList();
+    List<FoodOrder> orders = em
+        .createQuery("FROM FoodOrder foodorder WHERE foodorder.transaction = :transaction",
+            FoodOrder.class).setParameter("transaction", transaction).getResultList();
     List<OrderWithContents> orderDetailsToSend = new ArrayList<>();
 
     for (FoodOrder order : orders) {
-      List<OrderMenuItem> orderContents = em.createQuery("FROM OrderMenuItem ordermenuitem WHERE ordermenuitem.foodOrder = :order", OrderMenuItem.class).setParameter("order", order).getResultList();
+      List<OrderMenuItem> orderContents = em
+          .createQuery("FROM OrderMenuItem ordermenuitem WHERE ordermenuitem.foodOrder = :order",
+              OrderMenuItem.class).setParameter("order", order).getResultList();
       List<OrderItemsData> orderItemDetails = new ArrayList<>();
       for (OrderMenuItem item : orderContents) {
         orderItemDetails.add(new OrderItemsData(item));
       }
-      orderDetailsToSend.add(new OrderWithContents(order.getOrderId(), order.getStatus().toString(), orderItemDetails));
+      orderDetailsToSend.add(new OrderWithContents(order.getOrderId(), order.getStatus().toString(),
+          orderItemDetails));
     }
 
     em.close();
+
+    orderDetailsToSend.sort(Comparator.comparing(OrderWithContents::getOrderId));
     return JsonUtil.getInstance().toJson(orderDetailsToSend);
   }
 }

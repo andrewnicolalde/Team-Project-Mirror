@@ -44,21 +44,6 @@ $(document).ready(function () {
  * Loads all the items for one order.
  */
 function loadOrder(current) {
-  //parse JSON
-  // for (var j = 0; j < current.length; j++) {
-  //   var order = "<tr data-toggle=\"collapse\" data-target=\"#row\"";
-  //   order += (j + 1) + "\" class=\"clickable\">" +
-  //       "<td>" + current[j].name + "</td>" +
-  //       "<td>" + current[j].description + "</td>" +
-  //       "<td>" + current[j].instructions + "</td>" +
-  //       "<td>£" + current[j].price + "</td>" +
-  //       "</tr>";
-  //
-  //   console.log(current.id);
-  //
-  //   $("#table-body" + j).append(order);
-  // }
-
   var order = "";
   for (var i = 0; i < current.length; i++) {
     order += "<tr>"
