@@ -41,3 +41,13 @@ button[disabled] {
   background-color: red;
 }
 
+.btn-helped {
+  color: white;
+  background-color: red;
+  float: right;
+}
+
+.lst-table {
+  margin-bottom: 5%;
+}
+

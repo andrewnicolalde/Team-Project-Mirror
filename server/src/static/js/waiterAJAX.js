@@ -61,14 +61,13 @@ function loadTables() {
     }
     // Add each Table to the list of tables
     for (var i = 0; i < response.length; i++) {
-      console.log(response[i].tableId);
       $("#tables-list").append(
           "<li data-tablenum='" + response[i].number + "' id='table-"
           + response[i].number
           + "' class='list-group-item list-group-item-action' data-toggle='collapse' href='#table-"
-          + response[i].number + "-orders-list'><span>Table "
+          + response[i].number + "-orders-list'><span><div class='lst-table'>Table"
           + response[i].number + " - " + response[i].status
-          + helpBtn(response[i].status, response[i].tableId)
+          + helpBtn(response[i].status, response[i].tableId) +"</div>"
           + "<ul id='table-" + response[i].number + "-orders-list' ></ul>"
           + "</li>");
     }
@@ -81,7 +80,7 @@ function loadTables() {
 
 function helpBtn(status, tableId) {
   if (status === "Needs Help") {
-    return "<ul><button id ='helpedButton-"+tableId+"' data-tableId=" + tableId + " type='button' class='btn btn-helped' onclick=\"changeTableStatus(event)\">Helped</button></ul>"
+    return "<button id ='helpedButton-"+tableId+"' data-tableId=" + tableId + " type='button' class='btn btn-helped' onclick=\"changeTableStatus(event)\">Helped</button>"
   } else {
     return "";
   }
@@ -291,7 +290,7 @@ function changeTableStatus(event) {
   console.log(btn.id);
   console.log(btn.dataset.tableid);
   post("/api/authStaff/changeTableStatus",
-      JSON.stringify({newStatus: "FILLED", tableId: btn.dataset.tableId}),
+      JSON.stringify({newStatus: "FILLED", tableId: btn.dataset.tableid.toString()}),
       function (data) {});
 }
 
