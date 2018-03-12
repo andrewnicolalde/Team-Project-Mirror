@@ -7,7 +7,6 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="">
 
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -39,7 +38,7 @@
 
     <meta charset="UTF-8">
 
-
+   <link rel="stylesheet" href="../css/restaurantdata.css">
 
 </head>
 <body>
@@ -64,9 +63,9 @@
         <h1 class="header">Restaurant Data</h1>
     </div>
 
-    <div class="row">
-        <h2 class="header">Status of Tables</h2>
-        <div class="col-sm-4">
+    <div class="row tables">
+        <h2 class="headerTable">Status of Tables</h2>
+        <div class="col-sm-4 tableInfo">
             <h5 class="text-center">Tables</h5>
             <ul class="list-group" id="tables-list" aria-multiselectable="true">
                 <!-- Loaded dynamically via jQuery script -->
@@ -79,7 +78,7 @@
         </div>
 
     </div>
-    <div class="row">
+    <div class="row stock">
         <h2 class="header">Stock Data</h2>
         <div id="curve_chart" style="width: 900px; height: 500px"></div>
     </div>
