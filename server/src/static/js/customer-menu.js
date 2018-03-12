@@ -52,15 +52,15 @@ function loadMenu() {
             + "</li>");
         if (menuItem.is_gluten_free) {
           $("#menuitem-" + menuItem.id).append(
-              "<img src='../images/gluten-free.svg' alt='Gluten Free'>");
+              "<img class="img1" src='../images/gluten-free.svg' alt='Gluten Free'>");
         }
         if (menuItem.is_vegetarian) {
           $("#menuitem-" + menuItem.id).append(
-              "<img src='../images/vegetarian-mark.svg' alt='Vegetarian'>");
+              "<img class="img2" src='../images/vegetarian-mark.svg' alt='Vegetarian'>");
         }
         if (menuItem.is_vegan) {
           $("#menuitem-" + menuItem.id).append(
-              "<img src='../images/vegan-mark.svg' alt='Vegan'>");
+              "<img class="img3" src='../images/vegan-mark.svg' alt='Vegan'>");
         }
       }
     });
@@ -69,11 +69,12 @@ function loadMenu() {
 
 function filtername() {
 
-  var input, filter, displayMenuItems;
+  var input, filter, displayMenuItems, gluteninput;
 
   input = document.getElementById("mysearchbox");
   filter = input.value.toUpperCase();
   displayMenuItems = document.getElementsByClassName("menuitem");
+  gluteninput = document.getElementById("glutencheckbox");
 
   // If the filter has any text in it, then expand all the categories.
   // Otherwise, close them all
@@ -92,13 +93,17 @@ function filtername() {
 
   for (var i = 0; i < displayMenuItems.length; i++) {
     var mi = displayMenuItems[i];
-    for (var j = 0; j < mi.childNodes.length; j++) {
+    for (var j = 0; j < mi.childNodes.length; j++s) {
     var node = mi.childNodes[j];
       if (node.className === "bold") {
-        if (node.innerHTML.toUpperCase().indexOf(filter) > -1) {
-          mi.style.display = "";
-        } else {
-          mi.style.display = "none";
+        if(gluteninput.checked) {
+          if(node.className === "img1") {
+            if (node.innerHTML.toUpperCase().indexOf(filter) > -1) {
+              mi.style.display = "";
+            } else {
+              mi.style.display = "none";
+            }
+          }
         }
       }
     }
