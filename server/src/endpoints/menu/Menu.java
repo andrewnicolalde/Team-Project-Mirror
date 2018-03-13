@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.xml.crypto.Data;
+import org.hibernate.boot.model.relational.Database;
 import spark.Request;
 import spark.Response;
 import util.JsonUtil;
@@ -172,6 +173,24 @@ public class Menu {
     entityManager.getTransaction().commit();
 
     entityManager.close();
+    return "success";
+  }
+
+  /**
+   * This method removes a menu item from the database. See <code>RemoveMenuItemParams</code>
+   * for JSON details.
+   * @param request A HTML request.
+   * @param response A HTML response.
+   * @return Success after an item is removed.
+   */
+  public static String removeMenuItem(Request request, Response response) {
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
+    RemoveMenuItemParams removeMenuItemParams = JsonUtil.getInstance().fromJson(request.body(),
+        RemoveMenuItemParams.class);
+
+    entityManager.remove(entityManager.find(MenuItem.class, removeMenuItemParams.getId()));
+
     return "success";
   }
 }
