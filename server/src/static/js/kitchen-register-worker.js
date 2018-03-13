@@ -146,10 +146,10 @@ function subscribeUserToPush(registration) {
     userVisibleOnly: true,
     applicationServerKey: serverKey
   };
-    registration.pushManager.subscribe(subscribeOptions)
-    .then((pushSubscription) => {
-      sendSubscriptionToBackEnd(pushSubscription);
-    });
+  registration.pushManager.subscribe(subscribeOptions)
+  .then((pushSubscription) => {
+    sendSubscriptionToBackEnd(pushSubscription);
+  });
 }
 
 /**
