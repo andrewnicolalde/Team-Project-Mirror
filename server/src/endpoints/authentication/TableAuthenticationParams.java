@@ -3,13 +3,13 @@ package endpoints.authentication;
 /**
  * This class converts JSON from the table authentication into usable Java Objects
  */
-class TableAuthenticationParameters {
+class TableAuthenticationParams {
 
-  private String name;
-  private String password;
-  private int tableNumber;
+  private final String name;
+  private final String password;
+  private final int tableNumber;
 
-  TableAuthenticationParameters(String name, String password, int tableNumber) {
+  TableAuthenticationParams(String name, String password, int tableNumber) {
     this.name = name;
     this.password = password;
     this.tableNumber = tableNumber;

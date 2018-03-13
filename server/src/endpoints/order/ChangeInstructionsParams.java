@@ -1,8 +1,9 @@
 package endpoints.order;
 
-public class ChangeInstructionsParams {
-  private Long orderMenuItemId;
-  private String instructions;
+class ChangeInstructionsParams {
+
+  private final Long orderMenuItemId;
+  private final String instructions;
 
   public ChangeInstructionsParams(Long orderMenuItemId, String instructions) {
     this.orderMenuItemId = orderMenuItemId;

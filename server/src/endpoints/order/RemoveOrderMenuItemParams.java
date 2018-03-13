@@ -1,6 +1,6 @@
 package endpoints.order;
 
-public class RemoveOrderMenuItemParams {
+class RemoveOrderMenuItemParams {
   private Long orderMenuItemId;
 
   public RemoveOrderMenuItemParams(Long orderMenuItemId) {

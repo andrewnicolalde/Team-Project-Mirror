@@ -20,6 +20,7 @@ import util.JsonUtil;
  * Class containing most server side logic for sending push notifications.
  * @author Roger Milroy
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class Notifications {
 
   /**
