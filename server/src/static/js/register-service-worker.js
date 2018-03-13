@@ -13,9 +13,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
       setUpPush();
     }
   }
-  navigator.serviceWorker.addEventListener('message', (event) => {
-    displayOrders(JSON.stringify(event.data));
-  });
 });
 
 /**

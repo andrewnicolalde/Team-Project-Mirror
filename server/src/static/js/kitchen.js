@@ -4,6 +4,9 @@
  */
 $(document).ready(function () {
   getCookingOrders();
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    displayOrders(JSON.stringify(event.data));
+  });
 });
 
 function getCookingOrders() {
@@ -67,7 +70,7 @@ function displayOrders(data) {
 function shortTime(time) {
   const orderTime = new Date(time);
   const shortTime = paddedTime(orderTime.getHours()) + ":" + paddedTime(
-      orderTime.getMinutes()) + "." + paddedTime(orderTime.getSeconds());
+      orderTime.getMinutes());
   return shortTime;
 }
 
