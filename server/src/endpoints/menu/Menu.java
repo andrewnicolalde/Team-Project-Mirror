@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.xml.crypto.Data;
 import spark.Request;
 import spark.Response;
 import util.JsonUtil;
@@ -84,7 +85,7 @@ public class Menu {
   }
 
   /**
-   * This method take JSON to create a new menu item. For details on what JSON is needed view
+   * This method takes JSON to create a new menu item. For details on what JSON is needed view
    * <code>MenuItemParams</code>.
    * @param request A HTML request.
    * @param response A HTML response.
@@ -120,9 +121,57 @@ public class Menu {
     return "success";
   }
 
+  /**
+   * This method takes JSON and make menu items editable. For detials on what JSON is needed view
+   * <code>MenuItemParams</code>.
+   * @param request A HTML request.
+   * @param response A HTML response.
+   * @return Success after it adds the item.
+   */
   public static String editMenuItem(Request request, Response response) {
-    
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
+    MenuItemParams menuItemParams = JsonUtil.getInstance().fromJson(request.body(),
+        MenuItemParams.class);
+
+    MenuItem menuItem = entityManager.find(MenuItem.class, menuItemParams.getId());
+
+    entityManager.getTransaction().begin();
+
+    if (menuItemParams.getName() != null) {
+      menuItem.setName(menuItemParams.getName());
+    }
+    if (menuItemParams.getIngredients() != null) {
+      menuItem.setIngredientsSet(new HashSet<>(Arrays.asList(menuItemParams.getIngredients())));
+    }
+    if (menuItemParams.getDescription() != null) {
+      menuItem.setDescription(menuItemParams.getDescription());
+    }
+    if (menuItemParams.getPrice() != null) {
+      menuItem.setPrice(menuItemParams.getPrice());
+    }
+    if (menuItemParams.getCalories() != null) {
+      menuItem.setCalories(menuItemParams.getCalories());
+    }
+    if (menuItemParams.getVegan() != null) {
+      menuItem.setVegan(menuItemParams.getVegan());
+    }
+    if (menuItemParams.getVegertarian() != null) {
+      menuItem.setVegetarian(menuItemParams.getVegertarian());
+    }
+    if (menuItemParams.getGlutenFree() != null) {
+      menuItem.setGlutenFree(menuItemParams.getGlutenFree());
+    }
+    if (menuItemParams.getPictureSrc() != null) {
+      menuItem.setPictureSrc(menuItemParams.getPictureSrc());
+    }
+    if (menuItemParams.getCategory() != null) {
+      menuItem.setCategory(menuItemParams.getCategory());
+    }
+
+    entityManager.getTransaction().commit();
+
+    entityManager.close();
     return "success";
   }
 }

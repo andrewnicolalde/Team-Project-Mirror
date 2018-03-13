@@ -15,58 +15,58 @@ public class MenuItemParams {
    */
   private Long id;
   /**
-   * This stores the name of the menu item.
+   * This stores the name of the menu item. NULL if not edited.
    */
   private String name;
 
   /**
-   * This stores the list of ingredients of the menu item.
+   * This stores the list of ingredients of the menu item. NULL if not edited.
    */
   private Ingredient[] ingredients;
 
   /**
-   * This stores the description of the item.
+   * This stores the description of the item. NULL if not edited.
    */
   private String description;
 
   /**
-   * This stores the price of the menu item.
+   * This stores the price of the menu item. NULL if not edited.
    */
   private Double price;
 
   /**
-   * This stores the calories of the menu item.
+   * This stores the calories of the menu item. NULL if not edited.
    */
   private Double calories;
 
   /**
-   * This stores if the menu item is Vegan.
+   * This stores if the menu item is Vegan. NULL if not edited.
    */
   private Boolean isVegan;
 
   /**
-   * This stores if the menu item is Vegetarian.
+   * This stores if the menu item is Vegetarian. NULL if not edited.
    */
   private Boolean isVegetarian;
 
   /**
-   * This stores if the menu item is gluten free.
+   * This stores if the menu item is gluten free. NULL if not edited.
    */
   private Boolean isGlutenFree;
 
   /**
-   * This stores where the picture for the item is stored.
+   * This stores where the picture for the item is stored. NULL if not edited.
    */
   private String pictureSrc;
 
   /**
-   * This stores the category of item that is being added.
+   * This stores the category of item that is being added. NULL if not edited.
    */
   private Category category;
 
   /**
    * This stores if the menu item is being added to the franchise menu immediately or if its just
-   * going to be added the global menu.
+   * going to be added the global menu. NULL when edited menu item.
    */
   private Boolean addNow;
 
