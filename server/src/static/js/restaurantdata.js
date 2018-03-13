@@ -12,6 +12,7 @@ function drawChart() {
         ['24:00',  200,       50,  63]
     ]);
 
+
     var options = {
         title: 'Stock',
         curveType: 'function',
@@ -22,3 +23,4 @@ function drawChart() {
 
     chart.draw(data, options);
 }
+

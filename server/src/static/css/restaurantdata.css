@@ -1,5 +1,5 @@
-body {
-
+.mainbody {
+    padding: 0px 50px;
 }
 
 .tables {
@@ -8,4 +8,17 @@ body {
 
 .headerTable {
     height: 100px;
+}
+
+.header {
+    padding: 10px 0px;
+}
+.rowHeader {
+    padding: 20px 0px;
+    text-align: center;
+}
+
+h1.header {
+    text-align: center;
+    width: 300px;
 }
