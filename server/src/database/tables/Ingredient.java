@@ -16,9 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
 public class Ingredient {
 
   /**
-   * Ths primary key so it can be stored in the database.
-   *
-   * @author Marcus Messer
+   * This is the primary key so it can be stored in the database.
    */
   @Id
   @GeneratedValue(generator = "increment")
@@ -26,7 +24,7 @@ public class Ingredient {
   private Long ingredientId;
 
   /**
-   * Ths name of the ingredient.
+   * This is the name of the ingredient.
    */
   private String ingredientName;
 
@@ -53,8 +51,8 @@ public class Ingredient {
     return ingredientId;
   }
 
-  public void setIngredientId(Long ingrerdientId) {
-    this.ingredientId = ingrerdientId;
+  public void setIngredientId(Long ingredientId) {
+    this.ingredientId = ingredientId;
   }
 
   public String getIngredientName() {

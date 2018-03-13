@@ -76,12 +76,12 @@
                         <button type="button" id="payWithCashButton" class="btn btn-success" data-toggle="modal" data-target="#cashPaymentModal" onclick="hidePaymentModal()" style="width: 300px">Cash</button>
                         <button type="button" id="payWithCardButton" class="btn btn-primary" onclick="hidePaymentModal()" style="width: 300px">Card</button>
                         <script>
-                          var handler = StripeCheckout.configure({
+                          const handler = StripeCheckout.configure({
                             key: 'pk_test_kYhdU5MRbncuBXn23zkDXhb0',
                             image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
                             locale: 'auto',
                             allowRememberMe: false,
-                            token: function(token) {
+                            token: function (token) {
                               // You can access the token ID with `token.id`.
                               // Get the token ID to your server-side code for use.
                             }

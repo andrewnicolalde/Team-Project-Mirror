@@ -5,9 +5,9 @@ package endpoints.order;
  *
  * @author Marcus Messer
  */
-public class TableOrderParams {
+class TableOrderParams {
 
-  private int tableNumber;
+  private final int tableNumber;
 
   public TableOrderParams(int tableNumber) {
     this.tableNumber = tableNumber;

@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   if (browserSupportsPush()) {
     // add a button users can click to get push notifications.
     if (!havePermissions()) {
-      var button = "<button id='notify' class='btn' onclick='getPermissionAndSubscribe()'>Notifications</button>";
+      const button = "<button id='notify' class='btn' onclick='getPermissionAndSubscribe()'>Notifications</button>";
       $('.nav').append(button);
     } else {
       setUpPush();
@@ -140,7 +140,7 @@ function setUpPush() {
  */
 function subscribeUserToPush(registration) {
 
-  var serverKey = urlB64ToUint8Array(
+  const serverKey = urlB64ToUint8Array(
       'BIz9luhpKgx76RcIhqU4fmdIC1ve7fT5gm2Y632w_lsd_od2B87XschASGbi7EfgTIWpBAPKh2IWTOMt1Gux7tA');
   const subscribeOptions = {
     userVisibleOnly: true,
@@ -158,8 +158,8 @@ function subscribeUserToPush(registration) {
  * @param subscription The PushSubscription object.
  */
 function sendSubscriptionToBackEnd(subscription) {
-  var pubKey = subscription.getKey('p256dh');
-  var auth = subscription.getKey('auth');
+  const pubKey = subscription.getKey('p256dh');
+  const auth = subscription.getKey('auth');
   console.log('sending to backend');
   post('/api/saveSubscription', JSON.stringify({
     endpoint: subscription.endpoint,
@@ -196,7 +196,7 @@ function urlB64ToUint8Array(base64String) {
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
 
-  for (var i = 0; i < rawData.length; ++i) {
+  for (let i = 0; i < rawData.length; ++i) {
     outputArray[i] = rawData.charCodeAt(i);
   }
   return outputArray;
