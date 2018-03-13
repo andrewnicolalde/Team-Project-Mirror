@@ -19,7 +19,8 @@ import org.bouncycastle.math.ec.ECPoint;
  * This class is PushSubscription repackaged due to persistence restrictions.
  * @author Roger Milroy
  */
-public class Subscription {
+@SuppressWarnings("SpellCheckingInspection")
+class Subscription {
 
   /**
    * Constructor for a Subscription object.
@@ -40,7 +41,7 @@ public class Subscription {
   /**
    * Unique ID for the subscription.
    */
-  private Long subscriptionId;
+  private final Long subscriptionId;
 
   /**
    * The end point that the push notifications use.
@@ -78,7 +79,7 @@ public class Subscription {
     this.expirationTime = expirationTime;
   }
 
-  public String getPublicKey() {
+  private String getPublicKey() {
     return publicKey;
   }
 
@@ -86,7 +87,7 @@ public class Subscription {
     this.publicKey = publicKey;
   }
 
-  public String getAuth() {
+  private String getAuth() {
     return auth;
   }
 
@@ -106,7 +107,7 @@ public class Subscription {
    * Returns the base64 encoded public key string as a byte[]
    * Credit: esphen https://github.com/web-push-libs/webpush-java/blob/master/doc/UsageExample.md
    */
-  public byte[] getKeyAsBytes() {
+  private byte[] getKeyAsBytes() {
     return Base64.getDecoder().decode(getPublicKey());
   }
 

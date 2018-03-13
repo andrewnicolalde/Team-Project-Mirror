@@ -7,12 +7,12 @@ import database.tables.RestaurantTableStaff;
  *
  * @author Marcus Messer
  */
-public class TableData {
+class TableData {
 
   private Long tableId;
   private int number;
-  private String status;
-  private String franchise;
+  private final String status;
+  private final String franchise;
 
   public TableData(RestaurantTableStaff restaurantTableStaff) {
     this.number = restaurantTableStaff.getRestaurantTable().getTableNumber();

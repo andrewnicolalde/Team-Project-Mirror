@@ -5,11 +5,11 @@ package endpoints.order;
  *
  * @author Marcus Messer
  */
-public class OrderMenuItemParams {
+class OrderMenuItemParams {
 
-  private Long menuItemId;
-  private String instructions;
-  private Long orderId;
+  private final Long menuItemId;
+  private final String instructions;
+  private final Long orderId;
 
   public OrderMenuItemParams(Long menuItemId, String instructions, Long orderId) {
     this.menuItemId = menuItemId;

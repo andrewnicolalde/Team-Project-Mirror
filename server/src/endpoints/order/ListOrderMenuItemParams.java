@@ -5,9 +5,9 @@ package endpoints.order;
  *
  * @author Marcus Messer
  */
-public class ListOrderMenuItemParams {
+class ListOrderMenuItemParams {
 
-  private Long orderId;
+  private final Long orderId;
 
   public ListOrderMenuItemParams(Long orderId) {
     this.orderId = orderId;

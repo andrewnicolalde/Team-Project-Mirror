@@ -1,3 +1,4 @@
+/*noinspection SpellCheckingInspection*/
 .jumbotron{
 	background-color: grey;
   color:white;
@@ -9,6 +10,7 @@
   margin-bottom: 20px;
 }
 
+/*noinspection SpellCheckingInspection*/
 #loginbuttons {
   margin: auto;
   width: 50%;
@@ -16,6 +18,7 @@
   text-align: center;
 }
 
+/*noinspection SpellCheckingInspection*/
 #menubutton1 {
     color: white;
 }

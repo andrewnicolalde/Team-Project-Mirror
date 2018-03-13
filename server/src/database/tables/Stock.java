@@ -12,7 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author Marcus Messer
  */
 @Entity
-public class Stock {
+class Stock {
 
   /**
    * Required primary key.

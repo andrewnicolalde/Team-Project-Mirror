@@ -5,7 +5,6 @@ import database.tables.RestaurantTable;
 import database.tables.RestaurantTableStaff;
 import database.tables.TableSession;
 import database.tables.Transaction;
-import endpoints.order.TransactionIdData;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -13,11 +12,13 @@ import spark.Response;
 import util.JsonUtil;
 
 public class Transactions {
-  
+
   public static Transaction getCurrentTransaction(RestaurantTable table) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
     Transaction transaction;
-    List<Transaction> transactions = em.createQuery("from Transaction transaction WHERE transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNumber AND transaction.isPaid = FALSE", Transaction.class).setParameter("tableNumber", table.getTableNumber()).getResultList();
+    List<Transaction> transactions = em.createQuery(
+        "from Transaction transaction WHERE transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNumber AND transaction.isPaid = FALSE",
+        Transaction.class).setParameter("tableNumber", table.getTableNumber()).getResultList();
     // If there isn't an unpaid transaction for the current table, create a new one.
     if (transactions.size() == 0) {
       em.getTransaction().begin();
@@ -42,7 +43,7 @@ public class Transactions {
     em.close();
     return transaction;
   }
-  
+
   /**
    * This method gets the current transaction for a table. If one doesn't exist it creates a new
    * one.
@@ -67,8 +68,7 @@ public class Transactions {
   /**
    * Returns the total price of a transaction.
    *
-   * JSON Input:
-   * transactionId: the ID of the transaction you want the total for
+   * JSON Input: transactionId: the ID of the transaction you want the total for
    */
   public static String getTransactionTotal(Request request, Response response) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();

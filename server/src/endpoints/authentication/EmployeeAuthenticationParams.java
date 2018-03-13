@@ -5,12 +5,12 @@ package endpoints.authentication;
  *
  * @author Toby Such
  */
-class EmployeeAuthenticationParameters {
+class EmployeeAuthenticationParams {
 
-  private Long employeeNumber;
-  private String password;
+  private final Long employeeNumber;
+  private final String password;
 
-  EmployeeAuthenticationParameters(Long employeeNumber, String password) {
+  EmployeeAuthenticationParams(Long employeeNumber, String password) {
     this.employeeNumber = employeeNumber;
     this.password = password;
   }
