@@ -191,6 +191,34 @@ public class Menu {
 
     entityManager.remove(entityManager.find(MenuItem.class, removeMenuItemParams.getId()));
 
+    entityManager.close();
+    return "success";
+  }
+
+  /**
+   * This method sets the franchise menu. See <code>FranchiseMenuParams</code> for JSON details.
+   * @param request A HTML request.
+   * @param response A HTML response.
+   * @return Success after the menu items have been added to the franchise menu.
+   */
+  public static String setFranchiseMenu(Request request, Response response) {
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
+    FranchiseMenuParams franchiseMenuParams = JsonUtil.getInstance().fromJson(request.body(),
+        FranchiseMenuParams.class);
+
+    StaffSession staffSession = entityManager.find(StaffSession.class,
+        request.session().attribute("StaffSessionKey"));
+
+    entityManager.getTransaction().begin();
+
+    for (MenuItem item : franchiseMenuParams.getMenuItems()) {
+      entityManager.persist(new FranchiseMenuItem(staffSession.getStaff().getFranchise(), item));
+    }
+
+    entityManager.getTransaction().commit();
+
+    entityManager.close();
     return "success";
   }
 }
