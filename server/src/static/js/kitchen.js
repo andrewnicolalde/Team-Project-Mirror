@@ -7,7 +7,7 @@ $(document).ready(function () {
 });
 
 function getCookingOrders() {
-  var statusCooking = "COOKING";
+  const statusCooking = "COOKING";
   post("/api/authStaff/getOrdersByStatus",
       JSON.stringify({ orderStatus:statusCooking }),
       function (data) {
@@ -23,15 +23,15 @@ function getCookingOrders() {
  */
 function displayOrders(data) {
 
-  var response = JSON.parse(data);
+  const response = JSON.parse(data);
 
-  var currentOrderElement = $("sidebar-orders");
+  const currentOrderElement = $("sidebar-orders");
   currentOrderElement.empty();
 
   // If there are more than 4 orders. Add the last ones to the sidebar.
   if (response.length > 4) {
-    for (var i = 4; i < response.length; i++) {
-      var sideId = response[i].foodOrderId;
+    for (let i = 4; i < response.length; i++) {
+      const sideId = response[i].foodOrderId;
 
       if(!orderPresent(sideId)){
         $("#sidebar-orders").append("<li id='" + sideId + "' data-timeConfirmed='" + response[i].timeConfirmed + "'>\n"
@@ -41,8 +41,8 @@ function displayOrders(data) {
     }
   }
   // Add the first 4 to the page in lists of items.
-  for (var j = 0; j < response.length && j < 4; j++) {
-    var Id = response[j].foodOrderId;
+  for (let j = 0; j < response.length && j < 4; j++) {
+    const Id = response[j].foodOrderId;
     if(!orderPresent(Id)){
 
       $("#row").append("<div class='col' id='"+ Id +"' data-timeConfirmed = '"+ response[j].timeConfirmed +"'>"
@@ -65,8 +65,9 @@ function displayOrders(data) {
  * @return {string} The condensed time.
  */
 function shortTime(time) {
-  var orderTime = new Date(time);
-  var shortTime = paddedTime(orderTime.getHours()) + ":" + paddedTime(orderTime.getMinutes()) + "." + paddedTime(orderTime.getSeconds());
+  const orderTime = new Date(time);
+  const shortTime = paddedTime(orderTime.getHours()) + ":" + paddedTime(
+      orderTime.getMinutes()) + "." + paddedTime(orderTime.getSeconds());
   return shortTime;
 }
 
@@ -76,7 +77,7 @@ function shortTime(time) {
  * @return {string} A formatted string of the time.
  */
 function paddedTime(time) {
-  var padded;
+  let padded;
   if (time < 10) {
     padded = "0" + time;
   } else {
@@ -91,7 +92,7 @@ function paddedTime(time) {
  */
 function orderDone(orderId) {
   // post to api/authStaff/changeOrderStatus
-  var statusReady = "READY_TO_DELIVER";
+  const statusReady = "READY_TO_DELIVER";
   post("/api/authStaff/changeOrderStatus",
       JSON.stringify({
         orderId:orderId,
@@ -121,10 +122,11 @@ function getOrderItems(foodOrderId) {
  * @param foodOrder The ID of the order. To add the elements to the right column.
  */
 function displayOrderItems(data, foodOrder) {
-  var response = JSON.parse(data);
+  const response = JSON.parse(data);
 
-  for (var i = 0; i < response.length; i++) {
-    var item = "<li class='list-group-item'><div><b>"+ response[i].name +"</b><input type='checkbox' class='custom-checkbox'></div>";
+  for (let i = 0; i < response.length; i++) {
+    let item = "<li class='list-group-item'><div><b>" + response[i].name
+        + "</b><input type='checkbox' class='custom-checkbox'></div>";
     if (!(response[i].instructions === "")) {
       item += response[i].instructions
     }
@@ -143,8 +145,8 @@ function removeFromScreen(data, Id) {
   if (data !== "success") {
     throw new Error();
   } else {
-    var parent = document.getElementById("row");
-    var child = document.getElementById(Id);
+    const parent = document.getElementById("row");
+    const child = document.getElementById(Id);
     parent.removeChild(child);
     getCookingOrders();
   }
@@ -160,21 +162,22 @@ function orderPresent(orderNum) {
 }
 
 /**
- * Helper function to calculate the difference between the current time and the given time in millliseconds.
+ * Helper function to calculate the difference between the current time and the given time in milliseconds.
  * @param id Id of the order to get the time from.
  * @return {number} The difference in milliseconds.
  */
 function getTimeDifference(id) {
-  var currentTime = Date.now();
-  var orderDate = new Date(document.getElementById(id).getAttribute("data-timeConfirmed"));
-  var orderTime = orderDate.getTime();
+  const currentTime = Date.now();
+  const orderDate = new Date(
+      document.getElementById(id).getAttribute("data-timeConfirmed"));
+  const orderTime = orderDate.getTime();
   return (currentTime - orderTime);
 }
 
 function checkSidebarTimes() {
-  var orders = $("#sidebar-orders").find("> li");
-  for (var i = 0; i< orders.length; i++) {
-    var difference = getTimeDifference(orders[i].id);
+  const orders = $("#sidebar-orders").find("> li");
+  for (let i = 0; i < orders.length; i++) {
+    const difference = getTimeDifference(orders[i].id);
     if (difference > 1200000) {
       if ($(orders[i].id).hasClass("yellow")) {
         $(orders[i].id).removeClass("yellow");
@@ -192,10 +195,10 @@ function checkSidebarTimes() {
 }
 
 function checkMainPageTimes() {
-  var orders = $("#row").find("> .col");
-  for (var i = 0; i < orders.length; i++) {
-    var difference = getTimeDifference(orders[i].id);
-    var items = $("#list-" + orders[i].id).find("> li");
+  const orders = $("#row").find("> .col");
+  for (let i = 0; i < orders.length; i++) {
+    const difference = getTimeDifference(orders[i].id);
+    const items = $("#list-" + orders[i].id).find("> li");
     if (difference > 1200000) {
       for(var j = 0; j < items.length; j++) {
         if ($(items[j].id).hasClass("yellow")) {

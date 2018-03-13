@@ -4,8 +4,8 @@
  */
 function getActiveTable() {
   // Construct a list of all orders in the document
-  var allOrders = document.querySelectorAll('[id^="order-title-"]');
-  for (var i = 0; i < allOrders.length; i++) {
+  const allOrders = document.querySelectorAll('[id^="order-title-"]');
+  for (let i = 0; i < allOrders.length; i++) {
     if (allOrders[i].classList.contains("active")) {
       activeTable = allOrders[i];
     }
@@ -23,20 +23,20 @@ function getActiveTable() {
 function loadOrder(orderId) {
   sessionStorage.setItem("orderId", orderId);
 
-  var orderIdToSend = JSON.stringify({orderId: orderId});
+  const orderIdToSend = JSON.stringify({orderId: orderId});
   post("/api/authStaff/getOrderItems", orderIdToSend, function (data) {
 
     // Parse JSON
-    var response = JSON.parse(data);
+    const response = JSON.parse(data);
 
     // Remove any existing elements in the current order list
-    var currentOrderElement = document.getElementById("current-order");
+    const currentOrderElement = document.getElementById("current-order");
     while (currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
 
     // Add each list item
-    for (var i = 0; i < response.length; i++) {
+    for (let i = 0; i < response.length; i++) {
       $("#current-order").append("<li class='list-group-item list-group-item-action'"
           + "id= \"order-item-" + i + "\">"
           + "<span class='span-bold'>"
@@ -54,14 +54,14 @@ function loadOrder(orderId) {
  */
 function loadTables() {
   get("/api/authStaff/getTables", function (data) {
-    var response = JSON.parse(data);
-    var currentOrderElement = document.getElementById("tables-list");
+    const response = JSON.parse(data);
+    const currentOrderElement = document.getElementById("tables-list");
     while (currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
     // Add each Table to the list of tables
     for (var i = 0; i < response.length; i++) {
-      var statusIcon = getTableIcon(response[i].status);
+      const statusIcon = getTableIcon(response[i].status);
       $("#tables-list").append(
           "<li data-tablenum='" + response[i].number + "' id='table-"
           + response[i].number
@@ -103,14 +103,14 @@ function loadOrderList(tableNumber) {
   post("/api/authStaff/getOrdersByTable", JSON.stringify({
     tableNumber: tableNumber
   }), function (data) {
-    var orders = JSON.parse(data);
-    var currentOrderElement = document.getElementById("table-" + tableNumber
+    const orders = JSON.parse(data);
+    const currentOrderElement = document.getElementById("table-" + tableNumber
         + "-orders-list");
     while (currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
-    for (var i = 0; i < orders.length; i++) {
-      var statusIcon = getOrderIcon(orders[i].orderStatus);
+    for (let i = 0; i < orders.length; i++) {
+      const statusIcon = getOrderIcon(orders[i].orderStatus);
       $(currentOrderElement).append( // Change back to orders list
           "<li"
           + " id='order-title-" + orders[i].foodOrderId + "'"
@@ -147,7 +147,7 @@ function setButtons(orderStatus) {
  * This function sets which buttons should be disabled dependant on the the status
  */
 function getDisabled(orderStatus) {
-  var buttons = [
+  const buttons = [
     document.getElementById("confirm_button"),
     document.getElementById("delivered_button"),
     document.getElementById("edit_button"),
@@ -190,7 +190,7 @@ function getDisabled(orderStatus) {
 }
 
 function getTableIcon(tableStatus) {
-  var statusIcon;
+  let statusIcon;
   switch (tableStatus) {
     case 'Free':
       statusIcon = '<i class="far fa-circle table-icon" style="color: black; float: right; font-size: 25px"></i>';
@@ -211,7 +211,7 @@ function getTableIcon(tableStatus) {
  * This method sets the icon for the order
  */
 function getOrderIcon(orderStatus) {
-  var statusIcon;
+  let statusIcon;
   switch (orderStatus) {
     case 'Cancelled':
       statusIcon = '<i class="fa fa-times" style="color: red; float: right; font-size: 25px"></i>';
@@ -246,10 +246,10 @@ function setActiveOrder(event) {
 
 
   // Get a list of every order in the entire document
-  var allTables = document.querySelectorAll('[id^="order-title-"]');
+  const allTables = document.querySelectorAll('[id^="order-title-"]');
 
   // Reset all orders to non-active
-  for (var i = 0; i < allTables.length; i++) {
+  for (let i = 0; i < allTables.length; i++) {
     allTables[i].className = "list-group-item list-group-item-action";
   }
 
@@ -261,14 +261,14 @@ function setActiveOrder(event) {
     document.getElementById('edit_button').hidden = true;
     document.getElementById('cancel_button').hidden = true;
     //Remove current order
-    var currentOrderElement = document.getElementById("current-order");
+    const currentOrderElement = document.getElementById("current-order");
     while (currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
     return;
   }
   // Set active element
-  var activeOrder = document.getElementById(event.currentTarget.id);
+  const activeOrder = document.getElementById(event.currentTarget.id);
   activeOrder.className += " active";
 }
 
@@ -277,7 +277,7 @@ function setActiveOrder(event) {
  * @param orderStatus The status you are making the order
  */
 function changeOrderStatus(orderStatus) {
-  var activeOrder = getActiveTable();
+  const activeOrder = getActiveTable();
   post("/api/authStaff/changeOrderStatus",
       JSON.stringify({
         orderId: activeOrder.getAttribute('data-ordernum'),
@@ -312,7 +312,7 @@ function confirmCancelOrder() {
  */
 function changeTableStatus(event, status) {
   event.stopPropagation();
-  var btn = document.getElementById(event.currentTarget.id);
+  const btn = document.getElementById(event.currentTarget.id);
   console.log(event.currentTarget.id);
   console.log(btn.id);
   console.log(btn.dataset.tableid);

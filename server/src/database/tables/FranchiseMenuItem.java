@@ -22,7 +22,7 @@ public class FranchiseMenuItem {
   @Id
   @GeneratedValue(generator = "increment")
   @GenericGenerator(name = "increment", strategy = "increment")
-  private Long frachiseMenuItemId;
+  private Long franchiseMenuItemId;
 
   /**
    * The franchise the menu item links to.
