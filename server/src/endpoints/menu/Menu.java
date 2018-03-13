@@ -119,4 +119,10 @@ public class Menu {
     entityManager.close();
     return "success";
   }
+
+  public static String editMenuItem(Request request, Response response) {
+    
+
+    return "success";
+  }
 }

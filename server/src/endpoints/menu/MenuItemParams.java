@@ -11,6 +11,10 @@ import database.tables.Ingredient;
 public class MenuItemParams {
 
   /**
+   * This stores the id of the menu item, NULL if its a new object.
+   */
+  private Long id;
+  /**
    * This stores the name of the menu item.
    */
   private String name;
@@ -81,10 +85,11 @@ public class MenuItemParams {
    * @param category The category of the item.
    * @param addNow If the item is being added to the franchise table.
    */
-  public MenuItemParams(String name, Ingredient[] ingredients, String description, Double price,
+  public MenuItemParams(Long id, String name, Ingredient[] ingredients, String description, Double price,
       Double calories, Boolean isVegan, Boolean isVegetarian, Boolean isGlutenFree,
       String pictureSrc, Category category, Boolean addNow) {
 
+    this.id = id;
     this.name = name;
     this.ingredients = ingredients;
     this.description = description;
@@ -141,5 +146,9 @@ public class MenuItemParams {
 
   public Boolean getAddNow() {
     return addNow;
+  }
+
+  public Long getId() {
+    return id;
   }
 }
