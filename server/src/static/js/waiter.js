@@ -2,15 +2,15 @@
  * This function returns the selected table.
  * @returns The web element representing the current table
  */
-function getActiveTable() {
+function getActiveOrder() {
   // Construct a list of all orders in the document
   const allOrders = document.querySelectorAll('[id^="order-title-"]');
   for (let i = 0; i < allOrders.length; i++) {
     if (allOrders[i].classList.contains("active")) {
-      activeTable = allOrders[i];
+      activeOrder = allOrders[i];
     }
   }
-  return activeTable;
+  return activeOrder;
 }
 
 /**
@@ -246,11 +246,11 @@ function setActiveOrder(event) {
 
 
   // Get a list of every order in the entire document
-  const allTables = document.querySelectorAll('[id^="order-title-"]');
+  const allOrders = document.querySelectorAll('[id^="order-title-"]');
 
   // Reset all orders to non-active
-  for (let i = 0; i < allTables.length; i++) {
-    allTables[i].className = "list-group-item list-group-item-action";
+  for (let i = 0; i < allOrders.length; i++) {
+    allOrders[i].className = "list-group-item list-group-item-action";
   }
 
   //Checks to see if the order has been deselected or cancelled.
@@ -277,7 +277,7 @@ function setActiveOrder(event) {
  * @param orderStatus The status you are making the order
  */
 function changeOrderStatus(orderStatus) {
-  const activeOrder = getActiveTable();
+  const activeOrder = getActiveOrder();
   post("/api/authStaff/changeOrderStatus",
       JSON.stringify({
         orderId: activeOrder.getAttribute('data-ordernum'),
@@ -293,7 +293,7 @@ function changeOrderStatus(orderStatus) {
  * a waiter does not cancel an order by mistake.
  */
 function confirmCancelOrder() {
-  if (getActiveTable() == null) {
+  if (getActiveOrder() == null) {
     bootbox.alert("There is no order selected");
   } else {
     bootbox.confirm("Are you sure you want to cancel this order?",
