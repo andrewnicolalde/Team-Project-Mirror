@@ -324,4 +324,18 @@ function changeTableStatus(event, status) {
 // Loads the menu and tables when the page loads.
 $(document).ready(function () {
   loadTables();
+
+  if (browserSupportsPush()) {
+    // add a button users can click to get push notifications.
+    if (!havePermissions()) {
+      const button = "<button id='notify' class='btn' onclick='getPermissionAndSubscribe(\"waiter-notification-worker.js\")'>Notifications</button>";
+      $('.nav').append(button);
+    } else {
+      setUpPush('waiter-notification-worker.js');
+    }
+  }
+
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    console.log(event.data);
+  });
 });

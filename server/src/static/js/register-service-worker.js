@@ -3,6 +3,7 @@
  * Individual methods have the attribution. Some are modified.
  */
 
+domainURL = "http://localhost:4567/js/";
 /**
  * Verify if the browser supports service workers and Push.
  * @return {boolean} true if the browser supports it, false otherwise.
@@ -94,7 +95,9 @@ function getPermissionAndSubscribe(worker) {
 function setUpPush(worker) {
   navigator.serviceWorker.getRegistration('/js/')
   .then((registration) => {
-    if (registration !== undefined) {
+    if (registration !== undefined && registration.scriptURL === (domainURL
+            + worker)) {
+      console.log(registration);
       console.log("Have a service worker");
       // we have a service worker already.
       getCurrentSubscription(registration)

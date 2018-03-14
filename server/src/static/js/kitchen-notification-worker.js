@@ -3,7 +3,7 @@ kitchenPageUrl = "http://localhost:4567/staff/kitchen.html"; // TODO change to a
 /**
  * Adds an EventListener waiting for push notifications.
  */
-self.addEventListener('push', function (event) {
+self.addEventListener('push', (event) => {
   const data = event.data.json();
   const pages = clients.matchAll(
       {type: 'window', includeUncontrolled: true}).then((windowClients) => {
