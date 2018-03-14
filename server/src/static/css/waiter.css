@@ -70,3 +70,10 @@ button[disabled] {
   margin-top: 7px
 }
 
+i {
+  padding-left: 1%;
+}
+
+h5 {
+  margin-top: .5rem;
+}
