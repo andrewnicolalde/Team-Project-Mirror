@@ -16,6 +16,10 @@
   height: 95%;
 }
 
+ul {
+  padding: 0;
+}
+
 /* Adapted from
 https://stackoverflow.com/questions/14750078/style-disabled-button-with-css
  */
