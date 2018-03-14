@@ -30,21 +30,19 @@ public class ChargeMaker {
     Stripe.apiKey = "sk_test_nKon8YMF1HyqAvNgvFpFHGbi";
     ChargeMakerParams cm = JsonUtil.getInstance().fromJson(request.body(), ChargeMakerParams.class);
 
-    // Get meta information
+    // Get charge meta information
     String token = cm.getId();
-
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
-    //Transaction transaction = em.f
     TableSession session = em.find(TableSession.class, request.session().attribute("TableSessionKey"));
     Transaction transaction = getCurrentTransaction(session.getRestaurantTable());
     int total = (int)(transaction.getTotal() * 100);
     em.close();
 
     // Create params
-    Map<String, Object> params = new HashMap<String, Object>();
+    Map<String, Object> params = new HashMap<>();
     params.put("amount", total);
     params.put("currency", "gbp");
-    params.put("description", "Example charge");
+    params.put("description", "Your meal at Oaxaca");
     params.put("source", token);
 
     try {
