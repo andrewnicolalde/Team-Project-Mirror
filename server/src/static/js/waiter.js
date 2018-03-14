@@ -66,7 +66,7 @@ function loadTables() {
           "<li data-tablenum='" + response[i].number + "' id='table-"
           + response[i].number
           + "' class='list-group-item list-group-item-action' data-toggle='collapse' data-target='#table-"
-          + response[i].number + "-orders-list'><span><div class='lst-table'>Table "
+          + response[i].number + "-orders-list'><div class='lst-table'>Table "
           + response[i].number + " - " + response[i].status
           + statusIcon
           + tableBtns(response[i].status, response[i].tableId) +"</div>"
@@ -129,7 +129,14 @@ function loadOrderList(tableNumber) {
           + "</li>"
       );
     }
+    addOrderStatusToTable(tableNumber);
+
   });
+}
+
+function addOrderStatusToTable(tablenumber) {
+  const table = $("#table-" + tablenumber).find("> div");
+  table.append(getOrderIcon('Ready To Confirm'));
 }
 
 /**
