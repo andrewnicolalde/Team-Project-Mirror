@@ -1,7 +1,9 @@
 package endpoints.menu;
 
+import database.DatabaseManager;
 import database.tables.Category;
 import database.tables.Ingredient;
+import javax.persistence.EntityManager;
 
 /**
  * This class converts JSON to a usable Java object.
@@ -22,7 +24,7 @@ public class MenuItemParams {
   /**
    * This stores the list of ingredients of the menu item. NULL if not edited.
    */
-  private Ingredient[] ingredients;
+  private Long[] ingredients;
 
   /**
    * This stores the description of the item. NULL if not edited.
@@ -85,7 +87,7 @@ public class MenuItemParams {
    * @param category The category of the item.
    * @param addNow If the item is being added to the franchise table.
    */
-  public MenuItemParams(Long id, String name, Ingredient[] ingredients, String description, Double price,
+  public MenuItemParams(Long id, String name, Long[] ingredients, String description, Double price,
       Double calories, Boolean isVegan, Boolean isVegetarian, Boolean isGlutenFree,
       String pictureSrc, Category category, Boolean addNow) {
 
@@ -109,7 +111,15 @@ public class MenuItemParams {
   }
 
   public Ingredient[] getIngredients() {
-    return ingredients;
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    Ingredient[] ingredientsArr = new Ingredient[ingredients.length];
+
+    for (int i = 0; i < ingredients.length; i++) {
+      ingredientsArr[i] = entityManager.find(Ingredient.class, ingredients[i]);
+    }
+
+    entityManager.close();
+    return ingredientsArr;
   }
 
   public String getDescription() {
