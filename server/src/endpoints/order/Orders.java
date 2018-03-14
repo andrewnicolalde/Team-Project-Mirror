@@ -194,9 +194,30 @@ public class Orders {
 
     foodOrder.setStatus(OrderStatus.valueOf(cos.getNewOrderStatus()));
 
+    if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.READY_TO_DELIVER) {
+      // get a list of waiters on a table.
+      List<StaffNotification> waiterNotifications = entityManager
+          .createQuery("from StaffNotification staffNotification"
+                  + " where staffNotification.staff.department = :department and staffNotification.staff.employeeNumber = :serverNumber",
+              StaffNotification.class).setParameter("department", Department.WAITER)
+          .setParameter("serverNumber",
+              foodOrder.getTransaction().getRestaurantTableStaff().getStaff().getEmployeeNumber())
+          .getResultList();
+      // test message to verify it works.
+      String message = JsonUtil.getInstance().toJson("{\"hello\":\"world\"}");
+      // send the notifications.
+      for (StaffNotification n : waiterNotifications) {
+        try {
+          Notifications.sendPushMessage(n.getPushSubscription(), message.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+
     if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.COOKING) {
       foodOrder.setTimeConfirmed(new Timestamp(System.currentTimeMillis()));
-      List<StaffNotification> staffNotifications = entityManager
+      List<StaffNotification> kitchenNotifications = entityManager
           .createQuery("from StaffNotification staffNotification "
               + "where staffNotification.staff.department = :department", StaffNotification.class)
           .setParameter("department", Department.KITCHEN).getResultList();
@@ -213,7 +234,7 @@ public class Orders {
         orderData[i] = new OrderData(foodOrders.get(i));
       }
       String message = JsonUtil.getInstance().toJson(orderData);
-      for (StaffNotification n : staffNotifications) {
+      for (StaffNotification n : kitchenNotifications) {
         try {
           Notifications.sendPushMessage(n.getPushSubscription(), message.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
