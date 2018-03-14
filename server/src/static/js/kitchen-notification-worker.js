@@ -1,3 +1,5 @@
+kitchenPageUrl = "http://localhost:4567/staff/kitchen.html"; // TODO change to arms for deployment!!!
+
 /**
  * Adds an EventListener waiting for push notifications.
  */
@@ -7,7 +9,9 @@ self.addEventListener('push', function (event) {
       {type: 'window', includeUncontrolled: true}).then((windowClients) => {
 
     windowClients.forEach((windowClient) => {
-      windowClient.postMessage(data);
+      if (windowClient.url === kitchenPageUrl) {
+        windowClient.postMessage(data);
+      }
 
     });
     return self.registration.showNotification("There's a new order to cook!");

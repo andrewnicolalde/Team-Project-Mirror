@@ -4,8 +4,10 @@
  */
 $(document).ready(function () {
   getCookingOrders();
+
   navigator.serviceWorker.addEventListener('message', (event) => {
     displayOrders(JSON.stringify(event.data));
+    console.log(event.data); // TODO remove!
   });
 });
 
