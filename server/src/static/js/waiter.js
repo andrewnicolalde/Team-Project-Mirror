@@ -130,13 +130,39 @@ function loadOrderList(tableNumber) {
       );
     }
     addOrderStatusToTable(tableNumber);
-
   });
 }
 
-function addOrderStatusToTable(tablenumber) {
-  const table = $("#table-" + tablenumber).find("> div");
-  table.append(getOrderIcon('Ready To Confirm'));
+/**
+ * Add the most relevant order status icons to the table for easy identification.
+ * @param tableNumber The table to which we need to add the icon.
+ */
+function addOrderStatusToTable(tableNumber) {
+  // find the div containing the status icons
+  const table = $("#table-" + tableNumber).find("> div");
+  // find all the orders.
+  const orderList = $("#table-" + tableNumber
+      + "-orders-list").find("> li");
+  // define some booleans for flow control.
+  let deliver = Boolean(false);
+  let confirm = Boolean(false);
+  // check for the most impotant statuses and add them
+  for (let i = 0; i < orderList.length; i++) {
+    if (orderList[i].getAttribute('data-orderstatus') === 'Ready To Confirm'
+        && !confirm) {
+      table.append(getOrderIcon('Ready To Confirm'));
+      confirm = Boolean(true);
+    }
+    if (orderList[i].getAttribute('data-orderstatus') === 'Ready To Deliver'
+        && !deliver) {
+      table.append(getOrderIcon('Ready To Deliver'));
+      deliver = Boolean(true);
+    }
+  }
+  // if we don't have any of the most relevant add the top status.
+  if (!deliver && !confirm) {
+    table.append(getOrderIcon(orderList[0].getAttribute('data-orderstatus')));
+  }
 }
 
 /**
