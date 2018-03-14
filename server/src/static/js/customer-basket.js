@@ -1,16 +1,19 @@
+var cost = [];
+
 $(document).ready(function () {
   get("/api/authTable/getAllOrdersForTable",
       function (data) {
         const response = JSON.parse(data);
         for (let i = 0; i < response.length; i++) {
-          // noinspection SpellCheckingInspection
+            // noinspection SpellCheckingInspection
           $("#accordion").append("<div class=\"card\">" +
               "<div class=\"card-header\" id=\"heading\"" + i
               + " data-toggle=\"collapse\" data-target=\"#collapse" + i
               + "\" aria-expanded=\"false\" aria-controls=\"collapse\"" + i
               + " >" +
               "<h5 class=\"mb-0\">" +
-              "Order " + (i + 1) +
+              "Order " + (i + 1) + " - " + response[i].status +
+              "<div class='total' style='float: right'>" + "£" + calculateOneTotal(response[i].orderContents, cost[i]) + "</div>" +
               "</h5>" +
               "</div>" +
               "<div id=\"collapse" + i
@@ -56,6 +59,24 @@ function loadOrder(current) {
   }
   return order;
 }
+
+/**
+ * This function returns the cost of all the items in one order.
+ * @param current the current order
+ * @param cost The table for which we want to calculate the cost for.
+ */
+function calculateOneTotal(current, cost){
+  let currentcost = 0.0;
+  if(current.length == 0){
+    return "0";
+  }
+  for(let i = 0; i < current.length; i++) {
+      const item = current[i].price;
+      currentcost += parseFloat(item);
+  }
+  return currentcost.toFixed(2);
+}
+
 /**
  * This function is a helper function which gives getTransactionTotal a
  * transactionId.
