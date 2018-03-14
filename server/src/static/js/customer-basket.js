@@ -13,7 +13,7 @@ $(document).ready(function () {
               + " >" +
               "<h5 class=\"mb-0\">" +
               "Order " + (i + 1) + " - " + response[i].status +
-              "<div class='total' style='float: right'>" + "£" + calculateOneTotal(response[i].orderContents, cost[i]) + "</div>" +
+              "<div class='total' style='float: right'>" + "£" + (cost[i] = calculateOneTotal(response[i].orderContents, cost[i])) + "</div>" +
               "</h5>" +
               "</div>" +
               "<div id=\"collapse" + i
@@ -41,6 +41,7 @@ $(document).ready(function () {
           //Page currently doesn't load when this function is called
           //Page can take a few seconds to load and sometimes freezes when right clicking
         }
+        $("#total").append("<button type=\"button\" class=\"btn btn-info\">" + "Total: £"+calculateAllTotals(cost) + "</button>");
       });
 });
 
@@ -75,6 +76,15 @@ function calculateOneTotal(current, cost){
       currentcost += parseFloat(item);
   }
   return currentcost.toFixed(2);
+}
+
+function calculateAllTotals(cost){
+    let total = 0.0;
+    for(let i = 0; i < cost.length; i++){
+        const order = cost[i];
+        total += parseFloat(order);
+    }
+    return total.toFixed(2);
 }
 
 /**
