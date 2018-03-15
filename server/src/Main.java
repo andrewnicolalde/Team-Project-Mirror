@@ -5,7 +5,7 @@ import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
 import database.DatabaseManager;
-import endpoints.Ingredient.IngredientEndPoint;
+import endpoints.ingredient.IngredientEndPoint;
 import endpoints.authentication.AuthenticationEmployee;
 import endpoints.authentication.AuthenticationTable;
 import endpoints.manager.Employee;
@@ -65,6 +65,7 @@ public class Main {
     post("/api/authStaff/setFranchiseMenu", Menu::setFranchiseMenu);
     post("/api/authStaff/newIngredient", IngredientEndPoint::newIngredient);
     post("/api/authStaff/removeIngredient", IngredientEndPoint::removeIngredient);
+    post("/api/authStaff/renameIngredient", IngredientEndPoint::renameIngredient);
 
     get("/api/authTable/getMenu", Menu::getMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());

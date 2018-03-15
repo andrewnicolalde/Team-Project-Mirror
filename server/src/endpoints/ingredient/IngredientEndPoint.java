@@ -1,4 +1,4 @@
-package endpoints.Ingredient;
+package endpoints.ingredient;
 
 import database.DatabaseManager;
 import database.tables.Ingredient;
