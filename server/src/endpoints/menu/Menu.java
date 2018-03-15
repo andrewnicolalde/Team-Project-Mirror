@@ -238,6 +238,15 @@ public class Menu {
   }
 
   public static String newIngredients(Request request, Response response) {
+    IngredientParams ingredientParams = JsonUtil.getInstance().fromJson(request.body(),
+        IngredientParams.class);
+
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    entityManager.getTransaction().begin();
+    entityManager.persist(new Ingredient(ingredientParams.getIngredientName()));
+    entityManager.getTransaction().commit();
+
+    entityManager.close();
     return "success";
   }
 }
