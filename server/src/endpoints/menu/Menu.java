@@ -222,6 +222,12 @@ public class Menu {
     return "success";
   }
 
+  /**
+   * This get method returns a list of ingredients in JSON.
+   * @param request A HTML request.
+   * @param response A HTML response.
+   * @return The list of ingredients in JSON.
+   */
   public static String getIngredients(Request request, Response response) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
