@@ -22,14 +22,47 @@ public class Tables {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     StaffSession staffSession = entityManager.find(StaffSession.class, request.session().attribute(
         "StaffSessionKey"));
-    return getTableData(staffSession.getStaff().getEmployeeNumber());
+    return getWaiterTableData(staffSession.getStaff().getEmployeeNumber());
   }
 
-  private static String getTableData(Long staffId) {
+  public static String getAllTables(Request request, Response response) {
+    return getAllTableData();
+  }
+
+  private static String getWaiterTableData(Long staffId) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from "
-            + "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
+            + "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = :staffId",
+        RestaurantTableStaff.class).setParameter("staffId", staffId).getResultList();
+
+    // This sorts by the table status.
+    restaurantTableStaffs.sort((t0, t1) -> {
+      if (t0.getRestaurantTable().getStatus().compareTo(t1.getRestaurantTable().getStatus())
+          == 0 && t0.getRestaurantTable().getNeedsHelpTime() != null
+          && t1.getRestaurantTable().getNeedsHelpTime() != null) {
+        return t0.getRestaurantTable().getNeedsHelpTime()
+            .compareTo(t1.getRestaurantTable().getNeedsHelpTime());
+      } else {
+        return t0.getRestaurantTable().getStatus().compareTo(t1.getRestaurantTable().getStatus());
+      }
+    });
+
+    TableData[] tableData = new TableData[restaurantTableStaffs.size()];
+    for (int i = 0; i < tableData.length; i++) {
+      tableData[i] = new TableData(restaurantTableStaffs.get(i));
+    }
+
+    entityManager.close();
+
+    return JsonUtil.getInstance().toJson(tableData);
+  }
+
+  private static String getAllTableData() {
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
+    List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from "
+            + "RestaurantTableStaff tableStaff",
         RestaurantTableStaff.class).getResultList();
 
     // This sorts by the table status.

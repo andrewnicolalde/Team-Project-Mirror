@@ -22,11 +22,11 @@ import spark.Response;
 import util.JsonUtil;
 
 /**
- * This class is responsible for creating Stripe charges.
+ * This class is responsible for creating Stripe charges & charging the customer's card.
  *
  * @author Andrew Nicolalde
  */
-public class ChargeMaker {
+public class CardChargeMaker {
 
   /**
    * This method is called when a request is sent to /api/authTable/createCardCharge. It invokes
@@ -38,7 +38,7 @@ public class ChargeMaker {
    */
   public static String createCharge(Request request, Response response) {
     Stripe.apiKey = "sk_test_nKon8YMF1HyqAvNgvFpFHGbi";
-    ChargeMakerParams cm = JsonUtil.getInstance().fromJson(request.body(), ChargeMakerParams.class);
+    CardChargeMakerParams cm = JsonUtil.getInstance().fromJson(request.body(), CardChargeMakerParams.class);
 
     // Get charge meta information
     String token = cm.getId();
@@ -60,9 +60,9 @@ public class ChargeMaker {
       Charge charge = Charge.create(params);
       // Change status in database
       em.getTransaction().begin();
-      transaction.setIsPaid(true);
       transaction.setDatetimePaid(new Timestamp(System.currentTimeMillis()));
       session.getRestaurantTable().setStatus(TableStatus.NEEDS_CLEANING);
+      transaction.setIsPaid(true);
       em.getTransaction().commit();
       return "success";
     } catch (AuthenticationException | InvalidRequestException | CardException | APIConnectionException | APIException e) {

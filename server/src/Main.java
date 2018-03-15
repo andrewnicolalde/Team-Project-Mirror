@@ -11,7 +11,7 @@ import endpoints.manager.Employee;
 import endpoints.menu.Menu;
 import endpoints.notification.Notifications;
 import endpoints.order.Orders;
-import endpoints.payment.ChargeMaker;
+import endpoints.payment.CardChargeMaker;
 import endpoints.tables.Tables;
 import endpoints.transaction.Transactions;
 
@@ -44,6 +44,7 @@ public class Main {
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/getMenu", Menu::getMenu);
     get("/api/authStaff/getTables", Tables::getTables);
+    get("/api/authStaff/getAllTables", Tables::getAllTables);
     get("/api/authStaff/getEmployees", Employee::getEmployees);
     get("/api/authStaff/getDepartments", Employee::getDepartments);
     post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
@@ -70,7 +71,7 @@ public class Main {
     post("/api/authTable/changeOrderInstructions", Orders::changeOrderInstructions);
     post("/api/authTable/changeTableStatus", Tables::changeTableStatus);
     post("/api/authTable/getTransactionTotal", Transactions::getTransactionTotal);
-    post("/api/authTable/createCardCharge", ChargeMaker::createCharge);
+    post("/api/authTable/createCardCharge", CardChargeMaker::createCharge);
 
     System.out.println("Visit: http://localhost:4567");
 
