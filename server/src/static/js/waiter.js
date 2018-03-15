@@ -49,35 +49,64 @@ function loadOrder(orderId) {
 }
 
 /**
- * This function is responsible for retrieving and displaying the tables
+ * Wrapper function that checks for whether all tables or my tables wanted.
+ */
+function getTables() {
+  const allTables = document.getElementById("all-tables-toggle").checked;
+  if (allTables) {
+    getAllTables();
+  } else {
+    getMyTables();
+  }
+}
+
+/**
+ * Function responsible for getting table data for all tables.
+ */
+function getAllTables() {
+  get("/api/authStaff/getAllTables", (data) => {
+    loadTables(data);
+  });
+}
+
+/**
+ * Function responsible for getting table data for just the waiters tables.
+ */
+function getMyTables() {
+  get("/api/authStaff/getTables", (data) => {
+    loadTables(data);
+  });
+}
+
+/**
+ * This function is responsible for displaying the tables
  * (i.e. Table 1) in the Tables column in waiter-ui.html
  */
-function loadTables() {
-  get("/api/authStaff/getTables", function (data) {
-    const response = JSON.parse(data);
-    const currentOrderElement = document.getElementById("tables-list");
-    while (currentOrderElement.firstChild) {
-      currentOrderElement.removeChild(currentOrderElement.firstChild);
-    }
-    // Add each Table to the list of tables
-    for (var i = 0; i < response.length; i++) {
-      const statusIcon = getTableIcon(response[i].status);
-      $("#tables-list").append(
-          "<li data-tablenum='" + response[i].number + "' id='table-"
-          + response[i].number
-          + "' class='list-group-item list-group-item-action' data-toggle='collapse' data-target='#table-"
-          + response[i].number + "-orders-list'><div class='lst-table'>Table "
-          + response[i].number + " - " + response[i].status
-          + statusIcon
-          + tableBtns(response[i].status, response[i].tableId) +"</div>"
-          + "<ul id='table-" + response[i].number + "-orders-list' class='collapse'></ul>"
-          + "</li>");
-    }
-    // Load all orders for each table
-    for (var i = 0; i < response.length; i++) {
-      loadOrderList(response[i].number);
-    }
-  });
+function loadTables(data) {
+  const response = JSON.parse(data);
+  const currentOrderElement = document.getElementById("tables-list");
+  while (currentOrderElement.firstChild) {
+    currentOrderElement.removeChild(currentOrderElement.firstChild);
+  }
+  // Add each Table to the list of tables
+  for (var i = 0; i < response.length; i++) {
+    const statusIcon = getTableIcon(response[i].status);
+    $("#tables-list").append(
+        "<li data-tablenum='" + response[i].number + "' id='table-"
+        + response[i].number
+        + "' class='list-group-item list-group-item-action' data-toggle='collapse' data-target='#table-"
+        + response[i].number + "-orders-list'><div class='lst-table'>Table "
+        + response[i].number + " - " + response[i].status
+        + statusIcon
+        + tableBtns(response[i].status, response[i].tableId) + "</div>"
+        + "<ul id='table-" + response[i].number
+        + "-orders-list' class='collapse'></ul>"
+        + "</li>");
+  }
+  // Load all orders for each table
+  for (var i = 0; i < response.length; i++) {
+    loadOrderList(response[i].number);
+  }
 }
 
 function tableBtns(status, tableId) {
@@ -106,7 +135,7 @@ function loadOrderList(tableNumber) {
     const orders = JSON.parse(data);
     const currentOrderElement = document.getElementById("table-" + tableNumber
         + "-orders-list");
-    while (currentOrderElement.firstChild) {
+    while (currentOrderElement !== null && currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
     for (let i = 0; i < orders.length; i++) {
@@ -146,22 +175,24 @@ function addOrderStatusToTable(tableNumber) {
   // define some booleans for flow control.
   let deliver = Boolean(false);
   let confirm = Boolean(false);
-  // check for the most impotant statuses and add them
-  for (let i = 0; i < orderList.length; i++) {
-    if (orderList[i].getAttribute('data-orderstatus') === 'Ready To Confirm'
-        && !confirm) {
-      table.append(getOrderIcon('Ready To Confirm'));
-      confirm = Boolean(true);
+  // check for the most important statuses and add them
+  if (orderList.length > 0) {
+    for (let i = 0; i < orderList.length; i++) {
+      if (orderList[i].getAttribute('data-orderstatus') === 'Ready To Confirm'
+          && !confirm) {
+        table.append(getOrderIcon('Ready To Confirm'));
+        confirm = Boolean(true);
+      }
+      if (orderList[i].getAttribute('data-orderstatus') === 'Ready To Deliver'
+          && !deliver) {
+        table.append(getOrderIcon('Ready To Deliver'));
+        deliver = Boolean(true);
+      }
     }
-    if (orderList[i].getAttribute('data-orderstatus') === 'Ready To Deliver'
-        && !deliver) {
-      table.append(getOrderIcon('Ready To Deliver'));
-      deliver = Boolean(true);
+    // if we don't have any of the most relevant add the top status.
+    if (!deliver && !confirm) {
+      table.append(getOrderIcon(orderList[0].getAttribute('data-orderstatus')));
     }
-  }
-  // if we don't have any of the most relevant add the top status.
-  if (!deliver && !confirm) {
-    table.append(getOrderIcon(orderList[0].getAttribute('data-orderstatus')));
   }
 }
 
@@ -316,7 +347,7 @@ function changeOrderStatus(orderStatus) {
         orderId: activeOrder.getAttribute('data-ordernum'),
         newOrderStatus: orderStatus
       }),
-      loadTables()
+      getTables()
   );
 }
 
@@ -354,9 +385,13 @@ function changeTableStatus(event, status) {
       function (data) {});
 }
 
+function changeTables() {
+  getTables()
+}
+
 // Loads the menu and tables when the page loads.
 $(document).ready(function () {
-  loadTables();
+  getMyTables();
 
   $("div.toggle").css("float", "right");
   $("#table-header").css("margin", "3% 0");
