@@ -52,15 +52,15 @@ function loadMenu() {
             + "</li>");
         if (menuItem.is_gluten_free) {
           $("#menuitem-" + menuItem.id).append(
-              "<img class="img1" src='../images/gluten-free.svg' alt='Gluten Free'>");
+              "<img class='img1' src='../images/gluten-free.svg' alt='Gluten Free'>");
         }
         if (menuItem.is_vegetarian) {
           $("#menuitem-" + menuItem.id).append(
-              "<img class="img2" src='../images/vegetarian-mark.svg' alt='Vegetarian'>");
+              "<img class='img2' src='../images/vegetarian-mark.svg' alt='Vegetarian'>");
         }
         if (menuItem.is_vegan) {
           $("#menuitem-" + menuItem.id).append(
-              "<img class="img3" src='../images/vegan-mark.svg' alt='Vegan'>");
+              "<img class='img3' src='../images/vegan-mark.svg' alt='Vegan'>");
         }
       }
     });
@@ -93,23 +93,41 @@ function filtername() {
 
   for (var i = 0; i < displayMenuItems.length; i++) {
     var mi = displayMenuItems[i];
-    for (var j = 0; j < mi.childNodes.length; j++s) {
+    for (var j = 0; j < mi.childNodes.length; j++) {
     var node = mi.childNodes[j];
       if (node.className === "bold") {
-        if(gluteninput.checked) {
-          if(node.className === "img1") {
-            if (node.innerHTML.toUpperCase().indexOf(filter) > -1) {
-              mi.style.display = "";
-            } else {
-              mi.style.display = "none";
-            }
-          }
+        if(node.innerHTML.toUpperCase().indexOf(filter) > -1) {
+           if(gluteninput.checked == true && node.className === "img1") {
+               mi.style.display = "";
+             } else {
+               mi.style.display = "none";
+             }
+           }
         }
       }
     }
-  }
+
 }
 
+/*
+function checked() {
+
+    var displayMenuItems = document.getElementsByClassName("menuitem");
+    var gluteninput = document.getElementById("glutencheckbox");
+
+    for (var i = 0; i < displayMenuItems.length; i++) {
+      var mi = displayMenuItems[i];
+        for (var j = 0; j < mi.childNodes.length; j++) {
+        var node = mi.childNodes[j];
+          if(gluteninput.checked = true) {
+            if(node.className === "img1") {
+              mi.style.display = "";
+            }
+          }
+        }
+    }
+}
+*/
 function loadOrder() {
   var postData = {orderId: sessionStorage.getItem("orderId")};
   post("/api/authTable/getOrderItems", JSON.stringify(postData),
