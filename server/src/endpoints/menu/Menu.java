@@ -275,4 +275,25 @@ public class Menu {
 
     return "success";
   }
+
+  /**
+   * This method takes JSON to change the name of an ingredient.
+   * See <code>IngredientParams</code> for JSON details.
+   * @param request A HTML request.
+   * @param response A HTML response.
+   * @return success after the rename has happened.
+   */
+  public static String renameIngredient(Request request, Response response) {
+    IngredientParams ingredientParams = JsonUtil.getInstance().fromJson(request.body(),
+        IngredientParams.class);
+
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    Ingredient ingredient = entityManager.find(Ingredient.class, ingredientParams.getId());
+    entityManager.getTransaction().begin();
+    ingredient.setIngredientName(ingredientParams.getIngredientName());
+    entityManager.getTransaction().commit();
+
+    entityManager.close();
+    return "success";
+  }
 }
