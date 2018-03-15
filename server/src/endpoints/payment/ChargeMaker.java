@@ -31,6 +31,7 @@ public class ChargeMaker {
   /**
    * This method is called when a request is sent to /api/authTable/createCardCharge. It invokes
    * Stripe to charge the customer's card the total (in GBP) for
+   *
    * @param request a Spark request
    * @param response a Spark response
    * @return "success" in the case of success, and "failure" in the case of failure
@@ -42,9 +43,10 @@ public class ChargeMaker {
     // Get charge meta information
     String token = cm.getId();
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
-    TableSession session = em.find(TableSession.class, request.session().attribute("TableSessionKey"));
+    TableSession session = em
+        .find(TableSession.class, request.session().attribute("TableSessionKey"));
     Transaction transaction = getCurrentTransaction(session.getRestaurantTable());
-    int total = (int)(transaction.getTotal() * 100);
+    int total = (int) (transaction.getTotal() * 100);
 
     // Create params
     Map<String, Object> params = new HashMap<>();
@@ -63,23 +65,10 @@ public class ChargeMaker {
       session.getRestaurantTable().setStatus(TableStatus.NEEDS_CLEANING);
       em.getTransaction().commit();
       return "success";
-    } catch (AuthenticationException e) {
+    } catch (AuthenticationException | InvalidRequestException | CardException | APIConnectionException | APIException e) {
       e.printStackTrace();
       return "failure";
-    } catch (InvalidRequestException e) {
-      e.printStackTrace();
-      return "failure";
-    } catch (APIConnectionException e) {
-      e.printStackTrace();
-      return "failure";
-    } catch (CardException e) {
-      e.printStackTrace();
-      return "failure";
-    } catch (APIException e) {
-      e.printStackTrace();
-      return "failure";
-    }
-    finally {
+    } finally {
       em.close();
     }
   }
