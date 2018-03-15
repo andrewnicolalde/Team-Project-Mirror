@@ -11,7 +11,9 @@ import com.stripe.exception.InvalidRequestException;
 import com.stripe.model.Charge;
 import database.DatabaseManager;
 import database.tables.TableSession;
+import database.tables.TableStatus;
 import database.tables.Transaction;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManager;
@@ -26,6 +28,13 @@ import util.JsonUtil;
  */
 public class ChargeMaker {
 
+  /**
+   * This method is called when a request is sent to /api/authTable/createCardCharge. It invokes
+   * Stripe to charge the customer's card the total (in GBP) for
+   * @param request a Spark request
+   * @param response a Spark response
+   * @return "success" in the case of success, and "failure" in the case of failure
+   */
   public static String createCharge(Request request, Response response) {
     Stripe.apiKey = "sk_test_nKon8YMF1HyqAvNgvFpFHGbi";
     ChargeMakerParams cm = JsonUtil.getInstance().fromJson(request.body(), ChargeMakerParams.class);
@@ -36,7 +45,6 @@ public class ChargeMaker {
     TableSession session = em.find(TableSession.class, request.session().attribute("TableSessionKey"));
     Transaction transaction = getCurrentTransaction(session.getRestaurantTable());
     int total = (int)(transaction.getTotal() * 100);
-    em.close();
 
     // Create params
     Map<String, Object> params = new HashMap<>();
@@ -46,7 +54,15 @@ public class ChargeMaker {
     params.put("source", token);
 
     try {
+      // Charge customer card
       Charge charge = Charge.create(params);
+      // Change status in database
+      em.getTransaction().begin();
+      transaction.setIsPaid(true);
+      transaction.setDatetimePaid(new Timestamp(System.currentTimeMillis()));
+      session.getRestaurantTable().setStatus(TableStatus.NEEDS_CLEANING);
+      em.getTransaction().commit();
+      return "success";
     } catch (AuthenticationException e) {
       e.printStackTrace();
       return "failure";
@@ -63,7 +79,9 @@ public class ChargeMaker {
       e.printStackTrace();
       return "failure";
     }
-    return "success";
+    finally {
+      em.close();
+    }
   }
 
 }
