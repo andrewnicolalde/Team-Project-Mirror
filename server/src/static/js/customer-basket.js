@@ -1,8 +1,9 @@
 $(document).ready(function () {
   get("/api/authTable/getAllOrdersForTable",
       function (data) {
-        var response = JSON.parse(data);
-        for (var i = 0; i < response.length; i++) {
+        const response = JSON.parse(data);
+        for (let i = 0; i < response.length; i++) {
+          // noinspection SpellCheckingInspection
           $("#accordion").append("<div class=\"card\">" +
               "<div class=\"card-header\" id=\"heading\"" + i
               + " data-toggle=\"collapse\" data-target=\"#collapse" + i
@@ -34,7 +35,7 @@ $(document).ready(function () {
               "</div>" +
               "</div>"
           );
-          //Page currently doesnt load when this function is called
+          //Page currently doesn't load when this function is called
           //Page can take a few seconds to load and sometimes freezes when right clicking
         }
       });
@@ -44,8 +45,8 @@ $(document).ready(function () {
  * Loads all the items for one order.
  */
 function loadOrder(current) {
-  var order = "";
-  for (var i = 0; i < current.length; i++) {
+  let order = "";
+  for (let i = 0; i < current.length; i++) {
     order += "<tr>"
         + "<td>" + current[i].name + "</td>"
         + "<td>" + current[i].description + "</td>"
@@ -63,7 +64,7 @@ function loadOrder(current) {
 function getTransactionId(){
   return new Promise(function (resolve, reject) {
     get("/api/authTable/getTransactionId", function(data) {
-      var response = JSON.parse(data);
+      const response = JSON.parse(data);
       //console.log(response.transactionId);
       resolve(response.transactionId);
     });
@@ -76,7 +77,7 @@ function getTransactionId(){
  * @returns the total price of the transaction
  */
 function getTransactionTotal(transactionId) {
-  var dataToSend = JSON.stringify({
+  const dataToSend = JSON.stringify({
     transactionId: transactionId
   });
   return new Promise(function (resolve, reject){

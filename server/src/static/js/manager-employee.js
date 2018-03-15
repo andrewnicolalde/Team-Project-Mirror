@@ -1,18 +1,18 @@
-var departments
+let departments;
 
-$(document).ready(function () {
+$(document).ready(() => {
   loadEmployees();
   get("/api/authStaff/getDepartments",
-      function(data) {
+      (data) => {
         departments = JSON.parse(data);
       });
 });
 
 function loadEmployees() {
-  get("/api/authStaff/getEmployees", function(data) {
-    var employees = JSON.parse(data);
-    for (var i = 0; i < employees.length; i++) {
-      var employee = employees[i];
+  get("/api/authStaff/getEmployees", (data) => {
+    const employees = JSON.parse(data);
+    for (let i = 0; i < employees.length; i++) {
+      const employee = employees[i];
       $("#employees").append("<tr id='emp-" + employee.employeeNumber + "'>\n"
                              + "<td id='emp-id-" + employee.employeeNumber + "'>" + employee.employeeNumber + "</td>\n"
                              + "<td id='emp-first-" + employee.employeeNumber + "'>" + employee.firstName + "</td>\n"
@@ -25,8 +25,8 @@ function loadEmployees() {
 }
 
 function createDepartmentOptions(department) {
-  var departmentsOptions = "";
-  for (var i = 0; i < departments.length; i++) {
+  let departmentsOptions = "";
+  for (let i = 0; i < departments.length; i++) {
     if (departments[i] === department) {
       departmentsOptions += "<option selected>" + departments[i] + "</option>\n";
     } else {
@@ -45,7 +45,7 @@ function startEdit(id) {
 }
 
 function confirmEdit(id) {
-  var dataToSend = JSON.stringify({
+  const dataToSend = JSON.stringify({
     employeeNumber: id,
     firstName: $("#emp-first-" + id + "-input").val(),
     lastName: $("#emp-last-" + id + "-input").val(),
@@ -54,7 +54,7 @@ function confirmEdit(id) {
 
   post("/api/authStaff/editStaff",
       dataToSend,
-      function(data) {
+      (data) => {
         if (data === "success") {
           $("#emp-first-" + id).html($("#emp-first-" + id + "-input").val());
           $("#emp-last-" + id).html($("#emp-last-" + id + "-input").val());
@@ -81,7 +81,7 @@ function showPasswordModal() {
 }
 
 function confirmAdd() {
-  var dataToSend = JSON.stringify({
+  const dataToSend = JSON.stringify({
     firstName: $("#emp-first-new-input").val(),
     lastName: $("#emp-last-new-input").val(),
     department: $("#emp-department-new-input").val()
@@ -89,7 +89,7 @@ function confirmAdd() {
 
   post("/api/authStaff/addStaff",
       dataToSend,
-      function(data) {
+      (data) => {
         employee = JSON.parse(data);
         // Remove new employee form
         $("#new-employee-form").remove();
@@ -106,9 +106,9 @@ function confirmAdd() {
 }
 
 function checkPasswordsMatch() {
-  var pwd1 = $("#pwd1");
-  var pwd2 = $("#pwd2");
-  var btn = $("#confirm-pwd");
+  const pwd1 = $("#pwd1");
+  const pwd2 = $("#pwd2");
+  const btn = $("#confirm-pwd");
   if (pwd1.val() === pwd2.val() && pwd1.val().length > 0) {
     btn.removeClass("disabled");
     btn.addClass("active");
@@ -119,12 +119,13 @@ function checkPasswordsMatch() {
 }
 
 function remove(id) {
-  bootbox.confirm("Are you sure you want to remove this employee account?", function (result) {
+  bootbox.confirm("Are you sure you want to remove this employee account?",
+      (result) => {
     if(result) {
-      var dataToSend = JSON.stringify({employeeNumber: id});
+      const dataToSend = JSON.stringify({employeeNumber: id});
       post("/api/authStaff/removeStaff",
           dataToSend,
-          function (data) {
+          (data) => {
             if (data === "success") {
               $("#emp-" + id).remove();
             }

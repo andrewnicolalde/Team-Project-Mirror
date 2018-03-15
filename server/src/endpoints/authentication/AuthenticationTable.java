@@ -1,27 +1,27 @@
 package endpoints.authentication;
 
+import static spark.Spark.halt;
+
 import database.DatabaseManager;
 import database.tables.Franchise;
 import database.tables.RestaurantTable;
+import database.tables.TableSession;
 import java.util.List;
 import javax.persistence.EntityManager;
-
-import database.tables.TableSession;
 import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
 
-import static spark.Spark.halt;
-
+@SuppressWarnings("SpellCheckingInspection")
 public class AuthenticationTable {
 
   /**
    * Checks if the given details correctly match a franchise stored in the database, and that the
    * table exists
-   * @param ap A TableAuthenticationParameters object which holds the given login details.
+   * @param ap A TableAuthenticationParams object which holds the given login details.
    * @return The RestaurantTable entity, or null is the parameters are invalid.
    */
-  private static RestaurantTable isValidLoginCombination(TableAuthenticationParameters ap) {
+  private static RestaurantTable isValidLoginCombination(TableAuthenticationParams ap) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
 
     // Check the franchise with the given username exists.
@@ -59,7 +59,7 @@ public class AuthenticationTable {
    */
   public static Response logInTable(Request request, Response response) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
-    TableAuthenticationParameters tap = new TableAuthenticationParameters(request.queryParams(
+    TableAuthenticationParams tap = new TableAuthenticationParams(request.queryParams(
         "franchiseName"), request.queryParams("tablepwd"), Integer.parseInt(request.queryParams(
             "tableNumber")));
 

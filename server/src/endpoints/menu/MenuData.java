@@ -1,7 +1,6 @@
 package endpoints.menu;
 
 import database.tables.MenuItem;
-
 import java.text.DecimalFormat;
 
 /**
@@ -9,20 +8,20 @@ import java.text.DecimalFormat;
  *
  * @author Marcus Messer
  */
-public class MenuData {
+class MenuData {
 
-  private Long id;
-  private String name;
-  private Long categoryId;
-  private String category;
-  private String ingredients;
-  private String description;
-  private Double calories;
-  private String price;
-  private Boolean is_vegan;
-  private Boolean is_vegetarian;
-  private Boolean is_gluten_free;
-  private String picture_src;
+  private final Long id;
+  private final String name;
+  private final Long categoryId;
+  private final String category;
+  private final String ingredients;
+  private final String description;
+  private final Double calories;
+  private final String price;
+  private final Boolean is_vegan;
+  private final Boolean is_vegetarian;
+  private final Boolean is_gluten_free;
+  private final String picture_src;
 
   /**
    * This constructor create new menu data items that can be converted into JSON.
