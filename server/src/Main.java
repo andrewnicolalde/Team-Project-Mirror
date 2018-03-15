@@ -45,6 +45,7 @@ public class Main {
     get("/api/authStaff/getTables", Tables::getTables);
     get("/api/authStaff/getEmployees", Employee::getEmployees);
     get("/api/authStaff/getDepartments", Employee::getDepartments);
+    get("/api/authStaff/getIngredients", Menu::getIngredients);
     post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
     post("/api/authStaff/getOrdersByStatus", Orders::getOrdersByStatus);
     post("/api/authStaff/getOrderItems", Orders::getOrderItems);

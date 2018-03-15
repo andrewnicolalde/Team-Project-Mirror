@@ -227,5 +227,7 @@ public class Menu {
 
     List<Ingredient> ingredients = entityManager.createQuery("from Ingredient ingredient",
         Ingredient.class).getResultList();
+
+    return JsonUtil.getInstance().toJson(ingredients);
   }
 }
