@@ -236,4 +236,8 @@ public class Menu {
 
     return JsonUtil.getInstance().toJson(ingredients);
   }
+
+  public static String newIngredients(Request request, Response response) {
+    return "success";
+  }
 }
