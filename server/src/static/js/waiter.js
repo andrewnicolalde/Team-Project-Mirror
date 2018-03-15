@@ -357,4 +357,8 @@ function changeTableStatus(event, status) {
 // Loads the menu and tables when the page loads.
 $(document).ready(function () {
   loadTables();
+
+  $("div.toggle").css("float", "right");
+  $("#table-header").css("margin", "3% 0");
+  $("#order-header").css("margin", "1.5% 0");
 });
