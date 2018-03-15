@@ -242,9 +242,9 @@ public class Menu {
    * what needs to get sent in the JSON.
    * @param request A HTML request.
    * @param response A HTML response.
-   * @return returns success after the new item is created.
+   * @return success after the new item is created.
    */
-  public static String newIngredients(Request request, Response response) {
+  public static String newIngredient(Request request, Response response) {
     IngredientParams ingredientParams = JsonUtil.getInstance().fromJson(request.body(),
         IngredientParams.class);
 
@@ -254,6 +254,25 @@ public class Menu {
     entityManager.getTransaction().commit();
 
     entityManager.close();
+    return "success";
+  }
+
+  /**
+   * This method takes JSON and removes an ingredient from the database.
+   * See <code>IngredientParams</code> for JSON details.
+   * @param request A HTML request.
+   * @param response A HTML response.
+   * @return success after the item has been removed.
+   */
+  public static String removeIngredient(Request request, Response response) {
+    IngredientParams ingredientParams = JsonUtil.getInstance().fromJson(request.body(),
+        IngredientParams.class);
+
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    entityManager.remove(ingredientParams.getId());
+
+    entityManager.close();
+
     return "success";
   }
 }

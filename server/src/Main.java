@@ -62,7 +62,8 @@ public class Main {
     post("/api/authStaff/editMenuItem", Menu::editMenuItem);
     post("/api/authStaff/removeMenuItem", Menu::removeMenuItem);
     post("/api/authStaff/setFranchiseMenu", Menu::setFranchiseMenu);
-    post("/api/authStaff/newIngredient", Menu::newIngredients);
+    post("/api/authStaff/newIngredient", Menu::newIngredient);
+    post("/api/authStaff/removeIngredient", Menu::removeIngredient);
 
     get("/api/authTable/getMenu", Menu::getMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());
