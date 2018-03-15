@@ -1,4 +1,4 @@
-package endpoints.menu;
+package endpoints.Ingredient;
 
 /**
  * This class takes JSON and creates it into a usable object.

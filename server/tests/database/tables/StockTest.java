@@ -76,7 +76,7 @@ public class StockTest {
     entityManager.persist(category);
     entityManager.getTransaction().commit();
 
-    //Create new Ingredient
+    //Create new IngredientEndPoint
     entityManager.getTransaction().begin();
     Ingredient ingredient = new Ingredient("Lettuce");
     entityManager.persist(ingredient);
@@ -160,7 +160,7 @@ public class StockTest {
     entityManager.persist(category);
     entityManager.getTransaction().commit();
 
-    //Create new Ingredient
+    //Create new IngredientEndPoint
     entityManager.getTransaction().begin();
     Ingredient ingredient = new Ingredient("Lettuce");
     entityManager.persist(ingredient);
