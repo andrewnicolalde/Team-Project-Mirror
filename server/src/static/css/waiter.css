@@ -48,31 +48,22 @@ button[disabled] {
 .btn-helped {
   color: white;
   background-color: red;
-  float: left;
+  float: right;
   margin-right: 5px;
 }
 
 .btn-cleaned {
   color: white;
   background-color: mediumorchid;
-  float: left;
+  float: right;
   margin-right: 5px;
 }
 
 .btn-filled {
   color: white;
   background-color: darkorange;
-  float: left;
+  float: right;
   margin-right: 5px;
-}
-
-.lst-table span p {
-  float: left;
-  display: inline-flex;
-}
-
-.lst-table span button {
-  margin: 0 2%;
 }
 
 .lst-table {
