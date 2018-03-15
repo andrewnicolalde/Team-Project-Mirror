@@ -22,3 +22,11 @@ h1.header {
     text-align: center;
     width: 300px;
 }
+
+iframe {
+    width: 400px;
+    height: 600px;
+    border: none;
+
+}
+
