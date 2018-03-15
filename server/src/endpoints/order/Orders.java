@@ -420,6 +420,8 @@ public class Orders {
         orderData[i] = new OrderData(foodOrders.get(i));
       }
       message = JsonUtil.getInstance().toJson(orderData);
+    } else if (foodOrder.getStatus() == OrderStatus.READY_TO_DELIVER) {
+      message = "An Order is Ready to Deliver!";
     }
     return message;
   }
