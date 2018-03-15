@@ -95,10 +95,12 @@ function loadTables(data) {
         "<li data-tablenum='" + response[i].number + "' id='table-"
         + response[i].number
         + "' class='list-group-item list-group-item-action' data-toggle='collapse' data-target='#table-"
-        + response[i].number + "-orders-list'><div class='lst-table'>Table "
-        + response[i].number + " - " + response[i].status
+        + response[i].number
+        + "-orders-list'><div class='lst-table'><span><p>Table "
+        + response[i].number + " - " + response[i].status + "</p>" + tableBtns(
+        response[i].status, response[i].tableId) + "</span>"
         + statusIcon
-        + tableBtns(response[i].status, response[i].tableId) + "</div>"
+        + "</div>"
         + "<ul id='table-" + response[i].number
         + "-orders-list' class='collapse'></ul>"
         + "</li>");
@@ -396,4 +398,5 @@ $(document).ready(() => {
   $("div.toggle").css("float", "right").addClass("btn-success");
   $("#table-header").css("margin", "3% 0");
   $("#order-header").css("margin", "1.5% 0");
+  $("#tables-list").find("> .list-group-item").css("float", "left");
 });
