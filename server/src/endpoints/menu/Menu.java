@@ -237,6 +237,13 @@ public class Menu {
     return JsonUtil.getInstance().toJson(ingredients);
   }
 
+  /**
+   * This method takes JSON and creates a new ingredient. See <code>IngredientParams</code> for
+   * what needs to get sent in the JSON.
+   * @param request A HTML request.
+   * @param response A HTML response.
+   * @return returns success after the new item is created.
+   */
   public static String newIngredients(Request request, Response response) {
     IngredientParams ingredientParams = JsonUtil.getInstance().fromJson(request.body(),
         IngredientParams.class);
