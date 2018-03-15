@@ -5,14 +5,14 @@ package endpoints.payment;
  *
  * @author Andrew Nicolalde
  */
-public class ChargeMakerParams {
+public class CardChargeMakerParams {
 
   /**
    * The id of the transaction
    */
   String id;
 
-  public ChargeMakerParams(String id){
+  public CardChargeMakerParams(String id){
     this.id = id;
   }
 
