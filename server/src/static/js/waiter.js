@@ -393,7 +393,7 @@ function changeTables() {
 $(document).ready(() => {
   getMyTables();
 
-  $("div.toggle").css("float", "right");
+  $("div.toggle").css("float", "right").addClass("btn-success");
   $("#table-header").css("margin", "3% 0");
   $("#order-header").css("margin", "1.5% 0");
 });
