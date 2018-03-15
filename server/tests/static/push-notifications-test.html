@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!--suppress SpellCheckingInspection -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.5.0.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="../../src/static/js/register-service-worker.js"></script>
+  <script src="https://code.jquery.com/qunit/qunit-2.5.0.js"></script>
+  <script src="../../src/static/js/ajax-wrapper.js"></script>
+
+  <title>Push Tests</title>
+</head>
+<body>
+<!--suppress SpellCheckingInspection -->
+<div id="qunit"></div>
+<!--suppress SpellCheckingInspection -->
+<div id="qunit-fixture"></div>
+<script>
+  QUnit.test("Check the browser supports push notifications.", function ( assert ) {
+    if(browserSupportsPush()) {
+      assert.ok(true);
+    } else {
+      assert.ok(false);
+    }
+  });
+  QUnit.test( "check registering a service worker", function (assert) {
+    registerServiceWorker("/notification-worker.js");
+  });
+</script>
+
+</body>
+</html>

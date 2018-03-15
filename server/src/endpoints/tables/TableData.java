@@ -7,16 +7,18 @@ import database.tables.RestaurantTableStaff;
  *
  * @author Marcus Messer
  */
-public class TableData {
+class TableData {
 
+  private Long tableId;
   private int number;
-  private String status;
-  private String franchise;
+  private final String status;
+  private final String franchise;
 
   public TableData(RestaurantTableStaff restaurantTableStaff) {
     this.number = restaurantTableStaff.getRestaurantTable().getTableNumber();
     this.status = restaurantTableStaff.getRestaurantTable().getStatus().toString();
     this.franchise = restaurantTableStaff.getRestaurantTable().getFranchise().getName();
+    this.tableId = restaurantTableStaff.getRestaurantTable().getTableId();
   }
 
   public int getNumber() {
@@ -29,5 +31,9 @@ public class TableData {
 
   public String getFranchise() {
     return franchise;
+  }
+
+  public Long getTableId() {
+    return tableId;
   }
 }

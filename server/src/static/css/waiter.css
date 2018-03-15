@@ -16,7 +16,7 @@
   height: 95%;
 }
 
-/* Adpated from
+/* Adapted from
 https://stackoverflow.com/questions/14750078/style-disabled-button-with-css
  */
 button:disabled,
@@ -39,5 +39,34 @@ button[disabled] {
 .btn-cancel {
   color: white;
   background-color: red;
+}
+
+.btn-helped {
+  color: white;
+  background-color: red;
+  float: right;
+  margin-right: 5px;
+}
+
+.btn-cleaned {
+  color: white;
+  background-color: mediumorchid;
+  float: right;
+  margin-right: 5px;
+}
+
+.btn-filled {
+  color: white;
+  background-color: darkorange;
+  float: right;
+  margin-right: 5px;
+}
+
+.lst-table {
+  margin-bottom: 5%;
+}
+
+.table-icon {
+  margin-top: 7px
 }
 

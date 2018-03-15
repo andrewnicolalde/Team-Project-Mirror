@@ -4,8 +4,8 @@
  */
 function getActiveTable() {
   // Construct a list of all orders in the document
-  var allOrders = document.querySelectorAll('[id^="order-title-"]');
-  for (var i = 0; i < allOrders.length; i++) {
+  const allOrders = document.querySelectorAll('[id^="order-title-"]');
+  for (let i = 0; i < allOrders.length; i++) {
     if (allOrders[i].classList.contains("active")) {
       activeTable = allOrders[i];
     }
@@ -23,20 +23,20 @@ function getActiveTable() {
 function loadOrder(orderId) {
   sessionStorage.setItem("orderId", orderId);
 
-  var orderIdToSend = JSON.stringify({orderId: orderId});
+  const orderIdToSend = JSON.stringify({orderId: orderId});
   post("/api/authStaff/getOrderItems", orderIdToSend, function (data) {
 
     // Parse JSON
-    var response = JSON.parse(data);
+    const response = JSON.parse(data);
 
     // Remove any existing elements in the current order list
-    var currentOrderElement = document.getElementById("current-order");
+    const currentOrderElement = document.getElementById("current-order");
     while (currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
 
     // Add each list item
-    for (var i = 0; i < response.length; i++) {
+    for (let i = 0; i < response.length; i++) {
       $("#current-order").append("<li class='list-group-item list-group-item-action'"
           + "id= \"order-item-" + i + "\">"
           + "<span class='span-bold'>"
@@ -48,23 +48,29 @@ function loadOrder(orderId) {
   });
 }
 
-
 /**
  * This function is responsible for retrieving and displaying the tables
  * (i.e. Table 1) in the Tables column in waiter-ui.html
  */
 function loadTables() {
   get("/api/authStaff/getTables", function (data) {
-    var response = JSON.parse(data);
-    var currentOrderElement = document.getElementById("tables-list");
+    const response = JSON.parse(data);
+    const currentOrderElement = document.getElementById("tables-list");
     while (currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
     // Add each Table to the list of tables
-    for(var i = 0; i < response.length; i++){
+    for (var i = 0; i < response.length; i++) {
+      const statusIcon = getTableIcon(response[i].status);
       $("#tables-list").append(
-          "<li data-tablenum='"+ response[i].number +"' id='table-"+response[i].number+"' class='list-group-item list-group-item-action' data-toggle='collapse' href='#table-" + response[i].number +"-orders-list'><span>Table "+ response[i].number +" - " + response[i].status
-          + "<ul id='table-"+ response[i].number+"-orders-list' ></ul>"
+          "<li data-tablenum='" + response[i].number + "' id='table-"
+          + response[i].number
+          + "' class='list-group-item list-group-item-action' data-toggle='collapse' data-target='#table-"
+          + response[i].number + "-orders-list'><span><div class='lst-table'>Table "
+          + response[i].number + " - " + response[i].status
+          + statusIcon
+          + tableBtns(response[i].status, response[i].tableId) +"</div>"
+          + "<ul id='table-" + response[i].number + "-orders-list' class='collapse'></ul>"
           + "</li>");
     }
     // Load all orders for each table
@@ -72,6 +78,21 @@ function loadTables() {
       loadOrderList(response[i].number);
     }
   });
+}
+
+function tableBtns(status, tableId) {
+  if (status === "Needs Help") {
+    return "<button id ='helpedButton-" + tableId + "' data-tableId=" + tableId
+        + " type='button' class='btn btn-helped' onclick=\"changeTableStatus(event, 'FILLED')\">Helped</button>"
+  } else if (status === "Needs Cleaning") {
+    return "<button id = 'cleanButton-" + tableId + "'data-tableId=" + tableId
+        + " type='button' class='btn btn-cleaned' onclick=\"changeTableStatus(event, 'FREE')\">Cleaned</button>"
+  } else if (status === "Free") {
+    return "<button id ='filledButton-" + tableId + "' data-tableId=" + tableId
+        + " type='button' class='btn btn-filled' onclick=\"changeTableStatus(event, 'FILLED')\">Filled</button>"
+  } else {
+    return "";
+  }
 }
 
 /**
@@ -82,26 +103,28 @@ function loadOrderList(tableNumber) {
   post("/api/authStaff/getOrdersByTable", JSON.stringify({
     tableNumber: tableNumber
   }), function (data) {
-    var orders = JSON.parse(data);
-    var currentOrderElement = document.getElementById("table-"+tableNumber+"-orders-list");
+    const orders = JSON.parse(data);
+    const currentOrderElement = document.getElementById("table-" + tableNumber
+        + "-orders-list");
     while (currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
-    for (var i = 0; i < orders.length; i++) {
-      var statusIcon = getOrderIcon(orders[i].orderStatus);
+    for (let i = 0; i < orders.length; i++) {
+      const statusIcon = getOrderIcon(orders[i].orderStatus);
       $(currentOrderElement).append( // Change back to orders list
           "<li"
           + " id='order-title-" + orders[i].foodOrderId + "'"
           + " data-ordernum='" + orders[i].foodOrderId + "'"
-          + " data-orderStatus='"+ orders[i].orderStatus +"'"
+          + " data-orderStatus='" + orders[i].orderStatus + "'"
           + " class='list-group-item list-group-item-action'"
           + " onclick=\""
-            + "event.stopPropagation();" // This prevents clicking on the orders resulting in collapsing the table
-            + "setActiveOrder(event); "
-            + "loadOrder(this.getAttribute('data-ordernum'));"
-            + "setButtons(this.getAttribute('data-orderStatus'));"
-            + "\">"
-          + "<span class='span-bold'>Order </span>" + orders[i].foodOrderId +" - "+ orders[i].orderStatus
+          + "event.stopPropagation();" // This prevents clicking on the orders resulting in collapsing the table
+          + "setActiveOrder(event); "
+          + "loadOrder(this.getAttribute('data-ordernum'));"
+          + "setButtons(this.getAttribute('data-orderStatus'));"
+          + "\">"
+          + "<span class='span-bold'>Order </span>" + orders[i].foodOrderId
+          + " - " + orders[i].orderStatus
           + statusIcon
           + "</li>"
       );
@@ -117,7 +140,6 @@ function setButtons(orderStatus) {
   document.getElementById('delivered_button').hidden = false;
   document.getElementById('edit_button').hidden = false;
   document.getElementById('cancel_button').hidden = false;
-
   getDisabled(orderStatus);
 }
 
@@ -125,14 +147,14 @@ function setButtons(orderStatus) {
  * This function sets which buttons should be disabled dependant on the the status
  */
 function getDisabled(orderStatus) {
-  var buttons = [
-      document.getElementById("confirm_button"),
-      document.getElementById("delivered_button"),
-      document.getElementById("edit_button"),
-      document.getElementById("cancel_button")
+  const buttons = [
+    document.getElementById("confirm_button"),
+    document.getElementById("delivered_button"),
+    document.getElementById("edit_button"),
+    document.getElementById("cancel_button")
   ];
 
-  for(var i = 0; i < buttons.length; i ++) {
+  for (var i = 0; i < buttons.length; i++) {
     if (buttons[i].getAttribute("disabled")) {
       buttons[i].removeAttribute("disabled");
     }
@@ -140,7 +162,7 @@ function getDisabled(orderStatus) {
 
   switch (orderStatus) {
     case 'Cancelled':
-      for (var i = 0; i < buttons.length; i ++) {
+      for (var i = 0; i < buttons.length; i++) {
         buttons[i].setAttribute("disabled", "disabled");
       }
       break;
@@ -151,7 +173,7 @@ function getDisabled(orderStatus) {
       buttons[1].setAttribute("disabled", "disabled");
       break;
     case 'Cooking':
-      for (var i = 0; i < buttons.length - 1; i ++) {
+      for (var i = 0; i < buttons.length - 1; i++) {
         buttons[i].setAttribute("disabled", "disabled");
       }
       break;
@@ -160,18 +182,36 @@ function getDisabled(orderStatus) {
       buttons[2].setAttribute("disabled", "disabled");
       break;
     case 'Delivered':
-      for (var i = 0; i < buttons.length; i ++) {
+      for (var i = 0; i < buttons.length; i++) {
         buttons[i].setAttribute("disabled", "disabled");
       }
       break;
   }
 }
 
+function getTableIcon(tableStatus) {
+  let statusIcon;
+  switch (tableStatus) {
+    case 'Free':
+      statusIcon = '<i class="far fa-circle table-icon" style="color: black; float: right; font-size: 25px"></i>';
+      break;
+    case 'Filled':
+      statusIcon = '<i class="fas fa-circle table-icon" style="color: black; float: right;font-size: 25px"></i>';
+      break;
+    case 'Needs Cleaning':
+      statusIcon = '<i class="fa fa-trash table-icon" style="color: red; float: right;font-size: 25px"></i>';
+      break;
+    case 'Needs Help':
+      statusIcon = '<i class="fa fa-exclamation table-icon" style="color: red; float: right;font-size: 25px"></i>';
+  }
+  return statusIcon;
+}
+
 /**
  * This method sets the icon for the order
  */
 function getOrderIcon(orderStatus) {
-  var statusIcon;
+  let statusIcon;
   switch (orderStatus) {
     case 'Cancelled':
       statusIcon = '<i class="fa fa-times" style="color: red; float: right; font-size: 25px"></i>';
@@ -206,29 +246,29 @@ function setActiveOrder(event) {
 
 
   // Get a list of every order in the entire document
-  var allTables = document.querySelectorAll('[id^="order-title-"]');
+  const allTables = document.querySelectorAll('[id^="order-title-"]');
 
   // Reset all orders to non-active
-  for (var i = 0; i < allTables.length; i++) {
+  for (let i = 0; i < allTables.length; i++) {
     allTables[i].className = "list-group-item list-group-item-action";
   }
 
   //Checks to see if the order has been deselected or cancelled.
-  if (event == null){
+  if (event == null) {
     //Hides buttons
     document.getElementById('confirm_button').hidden = true;
     document.getElementById('delivered_button').hidden = true;
     document.getElementById('edit_button').hidden = true;
     document.getElementById('cancel_button').hidden = true;
     //Remove current order
-    var currentOrderElement = document.getElementById("current-order");
+    const currentOrderElement = document.getElementById("current-order");
     while (currentOrderElement.firstChild) {
       currentOrderElement.removeChild(currentOrderElement.firstChild);
     }
     return;
   }
   // Set active element
-  var activeOrder = document.getElementById(event.currentTarget.id);
+  const activeOrder = document.getElementById(event.currentTarget.id);
   activeOrder.className += " active";
 }
 
@@ -237,7 +277,7 @@ function setActiveOrder(event) {
  * @param orderStatus The status you are making the order
  */
 function changeOrderStatus(orderStatus) {
-  var activeOrder = getActiveTable();
+  const activeOrder = getActiveTable();
   post("/api/authStaff/changeOrderStatus",
       JSON.stringify({
         orderId: activeOrder.getAttribute('data-ordernum'),
@@ -256,14 +296,29 @@ function confirmCancelOrder() {
   if (getActiveTable() == null) {
     bootbox.alert("There is no order selected");
   } else {
-    bootbox.confirm("Are you sure you want to cancel this order?", function (result) {
-      if(result){ // If the user hit okay (result == true)
-        changeOrderStatus('CANCELLED');
-        setActiveOrder(null);
-      }
-      // Otherwise do nothing
-    });
+    bootbox.confirm("Are you sure you want to cancel this order?",
+        function (result) {
+          if (result) { // If the user hit okay (result == true)
+            changeOrderStatus('CANCELLED');
+            setActiveOrder(null);
+          }
+          // Otherwise do nothing
+        });
   }
+}
+
+/**
+ * This method changes the table status, after the waiter has helped the customer.
+ */
+function changeTableStatus(event, status) {
+  event.stopPropagation();
+  const btn = document.getElementById(event.currentTarget.id);
+  console.log(event.currentTarget.id);
+  console.log(btn.id);
+  console.log(btn.dataset.tableid);
+  post("/api/authStaff/changeTableStatus",
+      JSON.stringify({newStatus: status, tableId: btn.dataset.tableid.toString()}),
+      function (data) {});
 }
 
 // Loads the menu and tables when the page loads.

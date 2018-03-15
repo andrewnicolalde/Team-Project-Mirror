@@ -7,9 +7,9 @@ import database.tables.OrderStatus;
  *
  * @author Roger Milroy
  */
-public class StatusOrderParams {
+class StatusOrderParams {
 
-  private OrderStatus orderStatus;
+  private final OrderStatus orderStatus;
 
   public StatusOrderParams(OrderStatus orderStatus) {
     this.orderStatus = orderStatus;

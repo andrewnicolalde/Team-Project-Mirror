@@ -1,16 +1,22 @@
 package endpoints.order;
 
 import database.DatabaseManager;
+import database.tables.Department;
 import database.tables.FoodOrder;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
-import database.tables.RestaurantTableStaff;
+import database.tables.StaffNotification;
 import database.tables.StaffSession;
 import database.tables.TableSession;
 import database.tables.Transaction;
 import database.tables.WaiterSale;
+import endpoints.notification.Notifications;
+import endpoints.transaction.TransactionIdParams;
+import endpoints.transaction.Transactions;
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -71,16 +77,7 @@ public class Orders {
         FoodOrder.class).setParameter("tableNo", tableOrderParams.getTableNumber())
         .getResultList();
 
-    // Apdated from https://stackoverflow.com/questions/4018090/sorting-listclass-by-one-of-its-variable
-    foodOrders.sort((t0, t1) -> {
-      if (t0.getOrderId() < t1.getOrderId()) {
-        return -1;
-      }
-      if (t0.getOrderId() > t1.getOrderId()) {
-        return 1;
-      }
-      return 0;
-    });
+    foodOrders.sort(Comparator.comparing(FoodOrder::getStatus));
 
     OrderData[] orderData = new OrderData[foodOrders.size()];
     for (int i = 0; i < orderData.length; i++) {
@@ -199,6 +196,31 @@ public class Orders {
 
     if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.COOKING) {
       foodOrder.setTimeConfirmed(new Timestamp(System.currentTimeMillis()));
+      List<StaffNotification> staffNotifications = entityManager
+          .createQuery("from StaffNotification staffNotification "
+              + "where staffNotification.staff.department = :department", StaffNotification.class)
+          .setParameter("department", Department.KITCHEN).getResultList();
+
+      List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
+              + "where foodOrder.status = :orderStatus",
+          FoodOrder.class).setParameter("orderStatus", OrderStatus.COOKING)
+          .getResultList();
+
+      foodOrders.sort(Comparator.comparing(FoodOrder::getTimeConfirmed));
+
+      OrderData[] orderData = new OrderData[foodOrders.size()];
+      for (int i = 0; i < orderData.length; i++) {
+        orderData[i] = new OrderData(foodOrders.get(i));
+      }
+      String message = JsonUtil.getInstance().toJson(orderData);
+      for (StaffNotification n : staffNotifications) {
+        try {
+          Notifications.sendPushMessage(n.getPushSubscription(), message.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+          e.printStackTrace();
+        }
+      }
+
     }
 
     if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.CANCELLED) {
@@ -241,55 +263,6 @@ public class Orders {
   }
 
   /**
-   * This method gets the current transaction for a table. If one doesn't exist it creates a new
-   * one.
-   *
-   * @param request A HTML request.
-   * @param response A HTML response.
-   * @return A transactionId in the form of a string.
-   */
-  public static String getTransactionId(Request request, Response response) {
-    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
-    TableSession tableSession = entityManager.find(TableSession.class,
-        request.session().attribute("TableSessionKey"));
-
-    Transaction transaction;
-
-    List<Transaction> transactions = entityManager.createQuery("from Transaction transaction where "
-        + "transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNo AND "
-        + "transaction.isPaid = false ", Transaction.class).setParameter("tableNo",
-        tableSession.getRestaurantTable().getTableNumber()).getResultList();
-
-    // If there isn't an unpaid transaction for the current table, create a new one.
-    if (transactions.size() == 0) {
-      entityManager.getTransaction().begin();
-      List<RestaurantTableStaff> servers = entityManager
-          .createQuery("from RestaurantTableStaff tableStaff "
-              + "where tableStaff.restaurantTable = :table", RestaurantTableStaff.class)
-          .setParameter(
-              "table", tableSession.getRestaurantTable()).getResultList();
-
-      RestaurantTableStaff temp;
-      if (servers.size() == 0) {
-        // If there are no waiters assigned to serve this table, then we have an issue...
-        return "failure";
-      } else {
-        temp = servers.get(0);
-      }
-      transaction = new Transaction(false, 0.0, null, false, temp);
-      entityManager.persist(transaction);
-      entityManager.getTransaction().commit();
-    } else {
-      transaction = transactions.get(0);
-    }
-
-    entityManager.close();
-
-    TransactionIdData transactionIdData = new TransactionIdData(transaction.getTransactionId());
-    return JsonUtil.getInstance().toJson(transactionIdData);
-  }
-
-  /**
    * This method gets the current foodOrderId for the table. If one doesn't exist it creates it.
    *
    * @param request A HTML request.
@@ -297,14 +270,14 @@ public class Orders {
    * @return A foodOrderId in the form of a string.
    */
   public static String getOrderId(Request request, Response response) {
-    OrderIdParams orderIdParams = JsonUtil.getInstance()
-        .fromJson(request.body(), OrderIdParams.class);
+    TransactionIdParams transactionIdParams = JsonUtil.getInstance()
+        .fromJson(request.body(), TransactionIdParams.class);
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder where "
             + "foodOrder.transaction.id = :transactionId and foodOrder.status = :ordering",
-        FoodOrder.class).setParameter("transactionId", orderIdParams.getTransactionId())
+        FoodOrder.class).setParameter("transactionId", transactionIdParams.getTransactionId())
         .setParameter("ordering", OrderStatus.ORDERING).getResultList();
 
     FoodOrder foodOrder;
@@ -312,7 +285,7 @@ public class Orders {
       entityManager.getTransaction().begin();
 
       foodOrder = new FoodOrder(OrderStatus.ORDERING, null, entityManager.find(Transaction.class,
-          orderIdParams.getTransactionId()));
+          transactionIdParams.getTransactionId()));
 
       entityManager.persist(foodOrder);
 
@@ -380,5 +353,41 @@ public class Orders {
       }
     }
     return true;
+  }
+
+  /**
+   * Returns a string representing a JSON array of all the orders, their status and their contents
+   *
+   * @param request The HTTP request
+   * @param response The HTTP response
+   * @return A string formatted to represent JSON.
+   */
+  public static String getAllOrdersForTable(Request request, Response response) {
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
+    TableSession tableSession = em.find(TableSession.class,
+        request.session().attribute("TableSessionKey"));
+    Transaction transaction = Transactions.getCurrentTransaction(tableSession.getRestaurantTable());
+
+    List<FoodOrder> orders = em
+        .createQuery("FROM FoodOrder foodorder WHERE foodorder.transaction = :transaction",
+            FoodOrder.class).setParameter("transaction", transaction).getResultList();
+    List<OrderWithContents> orderDetailsToSend = new ArrayList<>();
+
+    for (FoodOrder order : orders) {
+      List<OrderMenuItem> orderContents = em
+          .createQuery("FROM OrderMenuItem ordermenuitem WHERE ordermenuitem.foodOrder = :order",
+              OrderMenuItem.class).setParameter("order", order).getResultList();
+      List<OrderItemsData> orderItemDetails = new ArrayList<>();
+      for (OrderMenuItem item : orderContents) {
+        orderItemDetails.add(new OrderItemsData(item));
+      }
+      orderDetailsToSend.add(new OrderWithContents(order.getOrderId(), order.getStatus().toString(),
+          orderItemDetails));
+    }
+
+    em.close();
+
+    orderDetailsToSend.sort(Comparator.comparing(OrderWithContents::getOrderId));
+    return JsonUtil.getInstance().toJson(orderDetailsToSend);
   }
 }

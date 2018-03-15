@@ -6,6 +6,35 @@ package database.tables;
  * @author Marcus Messer
  */
 public enum Department {
-  WAITER,
-  KITCHEN
+  WAITER("Waiter"),
+  KITCHEN("Kitchen"),
+  MANAGER("Manager");
+
+  private final String name;
+
+  Department(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public String toString() {
+    return this.name;
+  }
+
+  public static Department fromString(String val) {
+    switch (val.toLowerCase()) {
+      case "waiter":
+        return WAITER;
+      case "kitchen":
+        return KITCHEN;
+      case "manager":
+        return MANAGER;
+      default:
+        return null;
+    }
+  }
+
+  public static String getJsonList() {
+    return "[\"Waiter\",\"Kitchen\",\"Manager\"]";
+  }
 }

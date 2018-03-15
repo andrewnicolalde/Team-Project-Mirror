@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * This table stores when waiters add menu items to an order, so manament can keep track of there
+ * This table stores when waiters add menu items to an order, so management can keep track of there
  * sales.
  *
  * @author Marcus Messer

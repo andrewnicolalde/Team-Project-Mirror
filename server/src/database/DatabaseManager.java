@@ -14,7 +14,7 @@ public class DatabaseManager {
   /**
    * This is the instance of the this class. It will be the only ever instance of this class.
    */
-  private static DatabaseManager ourInstance = new DatabaseManager();
+  private static final DatabaseManager ourInstance = new DatabaseManager();
 
   /**
    * This is the instance of the EntityManagerFactory that connects the database.

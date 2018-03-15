@@ -79,7 +79,7 @@ public class MenuItem {
   private Boolean isGlutenFree;
 
   /**
-   * Thus field stores where the picure is stored
+   * Thus field stores where the picture is stored
    */
   private String pictureSrc;
 

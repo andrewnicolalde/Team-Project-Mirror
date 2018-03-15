@@ -1,9 +1,10 @@
 package endpoints.order;
 
-public class OrderIdData {
-  private Long orderId;
+class OrderIdData {
 
-  public OrderIdData(Long orderId) {
+  private final Long orderId;
+
+  OrderIdData(Long orderId) {
     this.orderId = orderId;
   }
 
