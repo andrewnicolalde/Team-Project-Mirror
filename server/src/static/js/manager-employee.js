@@ -1,15 +1,15 @@
 let departments;
 
-$(document).ready(function () {
+$(document).ready(() => {
   loadEmployees();
   get("/api/authStaff/getDepartments",
-      function(data) {
+      (data) => {
         departments = JSON.parse(data);
       });
 });
 
 function loadEmployees() {
-  get("/api/authStaff/getEmployees", function(data) {
+  get("/api/authStaff/getEmployees", (data) => {
     const employees = JSON.parse(data);
     for (let i = 0; i < employees.length; i++) {
       const employee = employees[i];
@@ -54,7 +54,7 @@ function confirmEdit(id) {
 
   post("/api/authStaff/editStaff",
       dataToSend,
-      function(data) {
+      (data) => {
         if (data === "success") {
           $("#emp-first-" + id).html($("#emp-first-" + id + "-input").val());
           $("#emp-last-" + id).html($("#emp-last-" + id + "-input").val());
@@ -89,7 +89,7 @@ function confirmAdd() {
 
   post("/api/authStaff/addStaff",
       dataToSend,
-      function(data) {
+      (data) => {
         employee = JSON.parse(data);
         // Remove new employee form
         $("#new-employee-form").remove();
@@ -119,12 +119,13 @@ function checkPasswordsMatch() {
 }
 
 function remove(id) {
-  bootbox.confirm("Are you sure you want to remove this employee account?", function (result) {
+  bootbox.confirm("Are you sure you want to remove this employee account?",
+      (result) => {
     if(result) {
       const dataToSend = JSON.stringify({employeeNumber: id});
       post("/api/authStaff/removeStaff",
           dataToSend,
-          function (data) {
+          (data) => {
             if (data === "success") {
               $("#emp-" + id).remove();
             }

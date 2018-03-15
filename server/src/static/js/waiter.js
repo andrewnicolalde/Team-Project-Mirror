@@ -24,7 +24,7 @@ function loadOrder(orderId) {
   sessionStorage.setItem("orderId", orderId);
 
   const orderIdToSend = JSON.stringify({orderId: orderId});
-  post("/api/authStaff/getOrderItems", orderIdToSend, function (data) {
+  post("/api/authStaff/getOrderItems", orderIdToSend, (data) => {
 
     // Parse JSON
     const response = JSON.parse(data);
@@ -131,7 +131,7 @@ function tableBtns(status, tableId) {
 function loadOrderList(tableNumber) {
   post("/api/authStaff/getOrdersByTable", JSON.stringify({
     tableNumber: tableNumber
-  }), function (data) {
+  }), (data) => {
     const orders = JSON.parse(data);
     const currentOrderElement = document.getElementById("table-" + tableNumber
         + "-orders-list");
@@ -361,7 +361,7 @@ function confirmCancelOrder() {
     bootbox.alert("There is no order selected");
   } else {
     bootbox.confirm("Are you sure you want to cancel this order?",
-        function (result) {
+        (result) => {
           if (result) { // If the user hit okay (result == true)
             changeOrderStatus('CANCELLED');
             setActiveOrder(null);
@@ -382,7 +382,7 @@ function changeTableStatus(event, status) {
   console.log(btn.dataset.tableid);
   post("/api/authStaff/changeTableStatus",
       JSON.stringify({newStatus: status, tableId: btn.dataset.tableid.toString()}),
-      function (data) {});
+      null);
 }
 
 function changeTables() {
@@ -390,7 +390,7 @@ function changeTables() {
 }
 
 // Loads the menu and tables when the page loads.
-$(document).ready(function () {
+$(document).ready(() => {
   getMyTables();
 
   $("div.toggle").css("float", "right");
