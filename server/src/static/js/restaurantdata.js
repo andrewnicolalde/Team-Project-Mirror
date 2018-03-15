@@ -3,18 +3,18 @@ google.charts.setOnLoadCallback(drawChart);
 
 function drawChart() {
     var data = google.visualization.arrayToDataTable([
-        ['Time', 'Stock', 'Meat', 'Veg'],
-        ['8:00',  500,      400,   300],
-        ['12:00',  500,      460,  500],
-        ['15:00',  420,       300, 100],
-        ['18:00',  400,      120,  200],
-        ['21:00',  340,       100,  160],
-        ['24:00',  200,       50,  63]
+        ['Time',  'Meat', 'Veg'],
+        ['8:00',   400,   300],
+        ['12:00',  460,  500],
+        ['15:00',  300, 100],
+        ['18:00',  120,  200],
+        ['21:00',  100,  160],
+        ['24:00',  50,  63]
     ]);
 
 
     var options = {
-        title: 'Stock',
+        title: 'Main Ingredients',
         curveType: 'function',
         legend: { position: 'bottom' }
     };
