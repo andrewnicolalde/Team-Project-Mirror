@@ -408,6 +408,8 @@ $(document).ready(() => {
   }
 
   navigator.serviceWorker.addEventListener('message', (event) => {
-    console.log(event.data);
+    if (event.data === "update") {
+      getTables();
+    }
   });
 });
