@@ -5,6 +5,7 @@ import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
 import database.DatabaseManager;
+import endpoints.ingredient.IngredientEndPoint;
 import endpoints.authentication.AuthenticationEmployee;
 import endpoints.authentication.AuthenticationTable;
 import endpoints.manager.Employee;
@@ -43,9 +44,10 @@ public class Main {
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/getMenu", Menu::getMenu);
     get("/api/authStaff/getTables", Tables::getTables);
+    get("/api/authStaff/getAllTables", Tables::getAllTables);
     get("/api/authStaff/getEmployees", Employee::getEmployees);
     get("/api/authStaff/getDepartments", Employee::getDepartments);
-    get("/api/authStaff/getIngredients", Menu::getIngredients);
+    get("/api/authStaff/getIngredients", IngredientEndPoint::getIngredients);
     post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
     post("/api/authStaff/getOrdersByStatus", Orders::getOrdersByStatus);
     post("/api/authStaff/getOrderItems", Orders::getOrderItems);
@@ -61,6 +63,9 @@ public class Main {
     post("/api/authStaff/editMenuItem", Menu::editMenuItem);
     post("/api/authStaff/removeMenuItem", Menu::removeMenuItem);
     post("/api/authStaff/setFranchiseMenu", Menu::setFranchiseMenu);
+    post("/api/authStaff/newIngredient", IngredientEndPoint::newIngredient);
+    post("/api/authStaff/removeIngredient", IngredientEndPoint::removeIngredient);
+    post("/api/authStaff/renameIngredient", IngredientEndPoint::renameIngredient);
 
     get("/api/authTable/getMenu", Menu::getMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());
