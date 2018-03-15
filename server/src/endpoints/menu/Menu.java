@@ -221,4 +221,11 @@ public class Menu {
     entityManager.close();
     return "success";
   }
+
+  public static String getIngredients(Request request, Response response) {
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
+    List<Ingredient> ingredients = entityManager.createQuery("from Ingredient ingredient",
+        Ingredient.class).getResultList();
+  }
 }
