@@ -69,16 +69,14 @@ function loadMenu() {
 
 function filtername() {
 
-<<<<<<< HEAD
-  var input, filter, displayMenuItems, gluteninput;
-=======
-  let input, filter, displayMenuItems;
->>>>>>> development
+  var input, filter, displayMenuItems, gluteninput, vegetarianinput, veganinput;
 
   input = document.getElementById("mysearchbox");
   filter = input.value.toUpperCase();
   displayMenuItems = document.getElementsByClassName("menuitem");
   gluteninput = document.getElementById("glutencheckbox");
+  vegetarianinput = document.getElementById("vegetariancheckbox");
+  veganinput = document.getElementById("vegancheckbox");
 
   // If the filter has any text in it, then expand all the categories.
   // Otherwise, close them all
@@ -95,22 +93,60 @@ function filtername() {
     }
   }
 
-  for (var i = 0; i < displayMenuItems.length; i++) {
-    const mi = displayMenuItems[i];
-    for (let j = 0; j < mi.childNodes.length; j++) {
-      const node = mi.childNodes[j];
-      if (node.className === "bold") {
-        if(node.innerHTML.toUpperCase().indexOf(filter) > -1) {
-           if(gluteninput.checked == true && node.className === "img1") {
-               mi.style.display = "";
-             } else {
-               mi.style.display = "none";
-             }
-           }
+  if(gluteninput.checked == true){
+      for (var i = 0; i < displayMenuItems.length; i++) {
+        const mi = displayMenuItems[i];
+        for (var j = 0; j < mi.childNodes.length; j++) {
+          const node = mi.childNodes[j];
+          const node1 = mi.childNodes[j];
+          if (node.className === "bold") {
+            if(node.innerHTML.toUpperCase().indexOf(filter) > -1) {
+              if(node1.is_gluten_free) {
+                   mi.style.display = "";
+                 } else {
+                   mi.style.display = "none";
+                 }
+               }
+            }
+          }
         }
-      }
+  }
+
+  if(vegetariancheckbox.checked == true){
+        for (var i = 0; i < displayMenuItems.length; i++) {
+          const mi = displayMenuItems[i];
+          for (var j = 0; j < mi.childNodes.length; j++) {
+            const node = mi.childNodes[j];
+            if (node.className === "bold") {
+              if(node.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                 //if(node.className === "img2") {
+                     mi.style.display = "";
+                   } else {
+                     mi.style.display = "none";
+                   }
+                 }
+              //}
+            }
+          }
     }
 
+    if(vegancheckbox.checked == true){
+          for (var i = 0; i < displayMenuItems.length; i++) {
+            const mi = displayMenuItems[i];
+            for (var j = 0; j < mi.childNodes.length; j++) {
+              const node = mi.childNodes[j];
+              if (node.className === "bold") {
+                if(node.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                   //if(node.className === "img3") {
+                       mi.style.display = "";
+                     } else {
+                       mi.style.display = "none";
+                     }
+                   }
+                //}
+              }
+            }
+      }
 }
 
 /*
