@@ -60,9 +60,12 @@ public class CardChargeMaker {
       Charge charge = Charge.create(params);
       // Change status in database
       em.getTransaction().begin();
-      transaction.setDatetimePaid(new Timestamp(System.currentTimeMillis()));
+
+      Transaction temp = em.find(Transaction.class, transaction.getTransactionId());
+
+      temp.setDatetimePaid(new Timestamp(System.currentTimeMillis()));
+      temp.setIsPaid(true);
       session.getRestaurantTable().setStatus(TableStatus.NEEDS_CLEANING);
-      transaction.setIsPaid(true);
       em.getTransaction().commit();
       return "success";
     } catch (AuthenticationException | InvalidRequestException | CardException | APIConnectionException | APIException e) {
