@@ -42,4 +42,8 @@ public class StockEndPoints {
     return JsonUtil.getInstance().toJson(stockData);
   }
 
+  public static String setStock(Request request, Response response) {
+
+    return "success";
+  }
 }

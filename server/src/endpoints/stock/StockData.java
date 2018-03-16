@@ -28,6 +28,16 @@ public class StockData {
     this.stockCount = stock.getStockCount();
   }
 
+  /**
+   * This constructor take JSON and makes it into a usable object.
+   * @param ingredient The name of the ingredient.
+   * @param stockCount The stock count.
+   */
+  public StockData(String ingredient, int stockCount) {
+    this.ingredient = ingredient;
+    this.stockCount = stockCount;
+  }
+
   public String getIngredient() {
     return ingredient;
   }
