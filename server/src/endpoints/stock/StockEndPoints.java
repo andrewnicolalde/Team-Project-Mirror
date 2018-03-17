@@ -47,16 +47,30 @@ public class StockEndPoints {
     StockData stockData = JsonUtil.getInstance().fromJson(request.body(), StockData.class);
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
-    entityManager.getTransaction().begin();
-    Stock stock = entityManager.find(Stock.class, stockData.getId());
+    boolean failed = false;
+    try {
+      entityManager.getTransaction().begin();
+      Stock stock = entityManager.find(Stock.class, stockData.getId());
 
-    if (stockData.getIngredient() != null) {
-      stock.setIngredient(entityManager.createQuery("from Ingredient ingredient where ingredientName = :name", Ingredient.class).setParameter("name",
-          stockData.getIngredient()).getSingleResult());
+      if (stockData.getIngredient() != null) {
+        stock.setIngredient(entityManager.createQuery("from Ingredient ingredient where ingredientName = :name", Ingredient.class).setParameter("name",
+            stockData.getIngredient()).getSingleResult());
+      }
+
+      if (stockData.getStockCount() != null) {
+        stock.setStockCount(stockData.getStockCount());
+      }
+    } catch (Exception e) {
+      failed = false;
+    } finally {
+      if (entityManager.getTransaction().isActive()) {
+        entityManager.getTransaction().rollback();
+      }
+      entityManager.close();
     }
 
-    if (stockData.getStockCount() != null) {
-      stock.setStockCount(stockData.getStockCount());
+    if (failed) {
+      return "failed";
     }
 
     return "success";
