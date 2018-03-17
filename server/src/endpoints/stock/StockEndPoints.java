@@ -1,6 +1,7 @@
 package endpoints.stock;
 
 import database.DatabaseManager;
+import database.tables.Ingredient;
 import database.tables.StaffSession;
 import database.tables.Stock;
 import java.util.List;
@@ -43,6 +44,20 @@ public class StockEndPoints {
   }
 
   public static String setStock(Request request, Response response) {
+    StockData stockData = JsonUtil.getInstance().fromJson(request.body(), StockData.class);
+
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    entityManager.getTransaction().begin();
+    Stock stock = entityManager.find(Stock.class, stockData.getId());
+
+    if (stockData.getIngredient() != null) {
+      stock.setIngredient(entityManager.createQuery("from Ingredient ingredient where ingredientName = :name", Ingredient.class).setParameter("name",
+          stockData.getIngredient()).getSingleResult());
+    }
+
+    if (stockData.getStockCount() != null) {
+      stock.setStockCount(stockData.getStockCount());
+    }
 
     return "success";
   }

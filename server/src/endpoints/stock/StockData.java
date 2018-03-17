@@ -10,6 +10,10 @@ import database.tables.Stock;
 public class StockData {
 
   /**
+   * This field stores the id of the ingredient. Used for editing. Can be null.
+   */
+  private Long id;
+  /**
    * This field is the ingredient name.
    */
   private String ingredient;
@@ -17,10 +21,11 @@ public class StockData {
   /**
    * This field is the stock count for an ingredient.
    */
-  private int stockCount;
+  private Integer stockCount;
 
   /**
    * This constructor takes data from the database, and takes the key items from it.
+   *
    * @param stock A database object.
    */
   public StockData(Stock stock) {
@@ -30,6 +35,7 @@ public class StockData {
 
   /**
    * This constructor take JSON and makes it into a usable object.
+   *
    * @param ingredient The name of the ingredient.
    * @param stockCount The stock count.
    */
@@ -42,7 +48,11 @@ public class StockData {
     return ingredient;
   }
 
-  public int getStockCount() {
+  public Integer getStockCount() {
     return stockCount;
+  }
+
+  public Long getId() {
+    return id;
   }
 }

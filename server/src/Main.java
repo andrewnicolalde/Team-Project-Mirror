@@ -59,6 +59,7 @@ public class Main {
     post("/api/authStaff/changeTableStatus", Tables::changeTableStatus);
     post("/api/saveSubscription", Notifications::saveSubscription);
     post("/api/authStaff/getStock", StockEndPoints::getStock);
+    post("/api/authStaff/setStock", StockEndPoints::setStock);
 
     get("/api/authTable/getMenu", Menu::getMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());
