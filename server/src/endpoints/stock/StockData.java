@@ -14,12 +14,12 @@ public class StockData {
    */
   private Long id;
   /**
-   * This field is the ingredient name.
+   * This field is the ingredient name. null if not changed.
    */
   private String ingredient;
 
   /**
-   * This field is the stock count for an ingredient.
+   * This field is the stock count for an ingredient. null if not changed.
    */
   private Integer stockCount;
 
@@ -36,10 +36,12 @@ public class StockData {
   /**
    * This constructor take JSON and makes it into a usable object.
    *
+   * @param id The id of the stock item.
    * @param ingredient The name of the ingredient.
    * @param stockCount The stock count.
    */
-  public StockData(String ingredient, int stockCount) {
+  public StockData(Long id, String ingredient, int stockCount) {
+    this.id = id;
     this.ingredient = ingredient;
     this.stockCount = stockCount;
   }
