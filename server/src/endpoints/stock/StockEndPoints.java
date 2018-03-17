@@ -43,6 +43,13 @@ public class StockEndPoints {
     return JsonUtil.getInstance().toJson(stockData);
   }
 
+  /**
+   * This method takes JSON and makes changes to the stock file.
+   * For JSON details see <code>StockData</code>
+   * @param request A HTML request.
+   * @param response A HTML response.
+   * @return Success if it succeeds and failed if it crashes.
+   */
   public static String setStock(Request request, Response response) {
     StockData stockData = JsonUtil.getInstance().fromJson(request.body(), StockData.class);
 
