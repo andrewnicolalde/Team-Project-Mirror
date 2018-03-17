@@ -35,7 +35,7 @@ public class StockEndPoints {
 
     StockData[] stockData = new StockData[stocks.size()];
 
-    for (int i= 0; i < 0; i++) {
+    for (int i= 0; i < stocks.size(); i++) {
       stockData[i] = new StockData(stocks.get(i));
     }
 
