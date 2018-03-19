@@ -93,24 +93,31 @@ function filtername() {
     }
   }
 
-  if(gluteninput.checked == true){
-      for (var i = 0; i < displayMenuItems.length; i++) {
-        const mi = displayMenuItems[i];
-        for (var j = 0; j < mi.childNodes.length; j++) {
-          const node = mi.childNodes[j];
-          const node1 = mi.childNodes[j];
-          if (node.className === "bold") {
-            if(node.innerHTML.toUpperCase().indexOf(filter) > -1) {
-              if(node1.is_gluten_free) {
-                   mi.style.display = "";
-                 } else {
-                   mi.style.display = "none";
-                 }
-               }
+  get("/api/authTable/getMenu", function (menuData) {
+    menuItems = JSON.parse(menuData);
+    for (let i = 0; i < menuItems.length; i++) {
+      const menuItem = menuItems[i];
+          if(gluteninput.checked == true){
+            for (var i = 0; i < displayMenuItems.length; i++) {
+              const mi = displayMenuItems[i];
+              for (var j = 0; j < mi.childNodes.length; j++) {
+                const node = mi.childNodes[j];
+                  if (node.className === "bold") {
+                    if(node.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                      if(menuItem.is_gluten_free){
+                        mi.style.display = "";
+                      } else {
+                        mi.style.display = "none";
+                      }
+                    }
+                  }
+
+              }
             }
           }
-        }
-  }
+     }
+  });
+
 
   if(vegetariancheckbox.checked == true){
         for (var i = 0; i < displayMenuItems.length; i++) {
@@ -149,6 +156,33 @@ function filtername() {
       }
 }
 
+function loadmenufilter(){
+
+
+ var displayMenuItems;
+
+  displayMenuItems = document.getElementsByClassName("menuitem");
+
+    get("/api/authTable/getMenu", function (menuData) {
+          menuItems = JSON.parse(menuData);
+          for (let i = 0; i < menuItems.length; i++) {
+            const menuItem = menuItems[i];
+
+
+            for (var i = 0; i < displayMenuItems.length; i++) {
+                  const mi = displayMenuItems[i];
+                  for (var j = 0; j < mi.childNodes.length; j++) {
+                    const node = mi.childNodes[j];
+                        if (menuItem.is_gluten_free) {
+                            mi.style.display = "";
+                        } else {
+                            mi.style.display = "none";
+                        }
+                  }
+            }
+          }
+    });
+}
 /*
 function checked() {
 
