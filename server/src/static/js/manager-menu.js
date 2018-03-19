@@ -29,3 +29,11 @@ function getDietaryRequirements(menuItem) {
   }
   return htmlString;
 }
+
+function startNewMenuItem(name) {
+  const wizardBody = $("#wizard-body");
+  wizardBody.empty();
+  wizardBody.append("<label for='w-name'>Name</label>\n"
+      + "<input type='text' class='form-control' name='w-name' id='w-name' value='" + name + "'>");
+  $("#wizard").modal("show");
+}
