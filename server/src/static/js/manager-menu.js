@@ -1,3 +1,8 @@
+let mi = {
+  name: "",
+  description: ""
+};
+
 $(document).ready(function() {
   get("/api/authStaff/getMenu", function(data) {
     menuItems = JSON.parse(data);
@@ -30,10 +35,20 @@ function getDietaryRequirements(menuItem) {
   return htmlString;
 }
 
-function startNewMenuItem(name) {
+function wizardStart() {
   const wizardBody = $("#wizard-body");
   wizardBody.empty();
-  wizardBody.append("<label for='w-name'>Name</label>\n"
-      + "<input type='text' class='form-control' name='w-name' id='w-name' value='" + name + "'>");
+  wizardBody.append("<label for='w-name'>Name:</label>\n"
+      + "<input type='text' class='form-control' name='w-name' id='w-name' value='" + mi.name + "'>");
+  $("#wizard-next-btn").attr("onclick", "wizardDescription();");
+  $("#wizard").modal("show");
+}
+
+function wizardDescription() {
+  mi.name = $("#w-name").val();
+  const wizardBody = $("#wizard-body");
+  wizardBody.empty();
+  wizardBody.append("<label for='w-description'>Description:</label>\n"
+      + "<input type='text' class='form-control' name='w-description' id='w-description' value='" + mi.description + "'>");
   $("#wizard").modal("show");
 }
