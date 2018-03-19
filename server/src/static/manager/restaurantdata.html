@@ -68,20 +68,19 @@
     <div class="tab-content">
         <div class="row">
             <ul class="nav nav-pills" role="tablist">
-                <li class="nav-item"> <a class="nav-link active" data-toggle="pill" href="#one"> Tables </a> </li>
-                <li class="nav-item"> <a class="nav-link" data-toggle="pill" href="#two"> Stock </a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="pill" href="#one"> Stock </a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="pill" href="#two"> Tables </a> </li>
             </ul>
         </div>
 
         <div class="row stock tab-pane fade" role="tabpanel" aria-labelledby="home-tab" id="one">
-            <div id="iframe-div">
-                <iframe scrolling="no" id="tableFrame" src="../staff/waiter.html"></iframe>
-
-            </div>
-        </div>
-        <div class="row stock tab-pane fade" role="tabpanel" aria-labelledby="home-tab" id="two">
             <h4  class="header headerstock">Stock Data</h4>
             <div id="curve_chart" style="width: 600px; height: 300px"></div>
+        </div>
+        <div class="row stock tab-pane fade" role="tabpanel" aria-labelledby="home-tab" id="two">
+            <div id="iframe-div">
+                <iframe scrolling="no" id="tableFrame" src="../staff/waiter.html"></iframe>
+            </div>
         </div>
     </div>
 </div>

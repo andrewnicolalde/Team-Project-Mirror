@@ -23,10 +23,14 @@ h1.header {
     width: 300px;
 }
 
-iframe {
-    width: 400px;
+#iframe-div {
+    overflow: hidden;
+    width: 450px;
+}
+#tableFrame {
+    width: 450px;
     height: 600px;
     border: none;
-
+    margin-top: -177px;
 }
 
