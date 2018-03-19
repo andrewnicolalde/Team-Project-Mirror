@@ -8,6 +8,7 @@ $(document).ready(function () {
         function (data) {
             const response = JSON.parse(data);
             for (let i = 0; i < response.length; i++) {
+                const statusIcon = getOrderIcon(response[i].status);
                 // noinspection SpellCheckingInspection
                 $("#accordion").append("<div class=\"card\">" +
                     "<div class=\"card-header\" id=\"heading\"" + i
@@ -15,7 +16,7 @@ $(document).ready(function () {
                     + "\" aria-expanded=\"false\" aria-controls=\"collapse\"" + i
                     + " >" +
                     "<h5 class=\"mb-0\">" +
-                    "Order " + (i + 1) + " - " + response[i].status +
+                    "Order " + (i + 1) + " - " + response[i].status + " " + statusIcon +
                     "<div class='total' style='float: right'>" + "£" + (cost[i] = calculateOneTotal(response[i].orderContents, cost[i])) + "</div>" +
                     "</h5>" +
                     "</div>" +
@@ -95,6 +96,37 @@ function calculateAllTotals(cost) {
         total += parseFloat(order);
     }
     return total.toFixed(2);
+}
+
+/**
+ * returns an icon for order status.
+ * @param orderStatus the status of the given order.
+ * @returns {*} the icon to be returned.
+ */
+function getOrderIcon(orderStatus) {
+    let statusIcon;
+    switch (orderStatus) {
+        case 'Cancelled':
+            statusIcon = '<i class="fa fa-times" style="color: red; font-size: 25px"></i>';
+            break;
+        case 'Ordering':
+            statusIcon = '<i class="fa fa-ellipsis-h" style="font-size: 25px"></i>';
+            break;
+        case 'Ready To Confirm':
+            statusIcon = '<i class="fa fa-bell" style="color: #ffdb00;font-size: 25px"></i>';
+            break;
+        case 'Cooking':
+            statusIcon = '<i class="fa fa-fire" style="color: orange;font-size: 25px"></i>';
+            break;
+        case 'Ready To Deliver':
+            statusIcon = '<i class="fa fa-check" style="color: #00bf00; font-size: 25px"></i>';
+            break;
+        case 'Delivered':
+            statusIcon = '<i class="fas fa-utensils" style="font-size: 25px"></i>';
+            break;
+    }
+    return statusIcon;
+
 }
 
 /**
