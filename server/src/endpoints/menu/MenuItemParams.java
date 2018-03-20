@@ -3,7 +3,9 @@ package endpoints.menu;
 import database.DatabaseManager;
 import database.tables.Category;
 import database.tables.Ingredient;
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.xml.crypto.Data;
 
 /**
  * This class converts JSON to a usable Java object.
@@ -64,7 +66,7 @@ public class MenuItemParams {
   /**
    * This stores the category of item that is being added. NULL if not edited.
    */
-  private Category category;
+  private String category;
 
   /**
    * This stores if the menu item is being added to the franchise menu immediately or if its just
@@ -89,7 +91,7 @@ public class MenuItemParams {
    */
   public MenuItemParams(Long id, String name, Long[] ingredients, String description, Double price,
       Double calories, Boolean isVegan, Boolean isVegetarian, Boolean isGlutenFree,
-      String pictureSrc, Category category, Boolean addNow) {
+      String pictureSrc, String category, Boolean addNow) {
 
     this.id = id;
     this.name = name;
@@ -151,7 +153,11 @@ public class MenuItemParams {
   }
 
   public Category getCategory() {
-    return category;
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    List<Category> categoryList = entityManager.createQuery("from Category category where "
+        + "category.name = :name", Category.class).setParameter("name", this.category).getResultList();
+    entityManager.close();
+    return categoryList.get(0);
   }
 
   public Boolean getAddNow() {
