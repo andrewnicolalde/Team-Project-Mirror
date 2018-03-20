@@ -10,7 +10,7 @@ function get(url, callback) {
     type: "GET",
     url: url,
     success: callback,
-    error: function (jqXHR, textStatus, errorThrown) {
+    error: (jqXHR, textStatus, errorThrown) => {
       if (textStatus === "error") {
         if (errorThrown === "Unauthorized") {
           // 401 error, redirect to 401 page.
@@ -35,7 +35,7 @@ function post(url, data, callback) {
     url: url,
     data: data,
     success: callback,
-    error: function (jqXHR, textStatus, errorThrown) {
+    error: (jqXHR, textStatus, errorThrown) => {
       if (textStatus === "error") {
         if (errorThrown === "Unauthorized") {
           // 401 error, redirect to 401 page.
