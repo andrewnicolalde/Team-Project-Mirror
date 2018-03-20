@@ -87,8 +87,8 @@ public class TransactionTest {
       assertEquals("Check total", item.getTotal(), transaction.getTotal());
       assertEquals("Check timestamp", item.getDatetimePaid(), transaction.getDatetimePaid());
       assertEquals("Check resturant table id",
-          item.getRestaurantTableStaff().getRestaurntTableStaffId(),
-          transaction.getRestaurantTableStaff().getRestaurntTableStaffId());
+          item.getRestaurantTableStaff().getRestaurantTableStaffId(),
+          transaction.getRestaurantTableStaff().getRestaurantTableStaffId());
     }
 
     entityManager.getTransaction().commit();

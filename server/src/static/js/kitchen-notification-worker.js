@@ -2,7 +2,7 @@
  * Adds an EventListener waiting for push notifications.
  */
 self.addEventListener('push', function (event) {
-  var data = event.data.json();
+  const data = event.data.json();
   const pages = clients.matchAll(
       {type: 'window', includeUncontrolled: true}).then((windowClients) => {
 

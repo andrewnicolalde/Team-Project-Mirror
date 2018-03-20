@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 /**
  * Utility class to remove Gson objects floating around the project. credit DZone.com
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class JsonUtil {
 
   private static Gson instance = null;

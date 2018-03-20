@@ -16,7 +16,11 @@
   height: 95%;
 }
 
-/* Adpated from
+ul {
+  padding: 0;
+}
+
+/* Adapted from
 https://stackoverflow.com/questions/14750078/style-disabled-button-with-css
  */
 button:disabled,
@@ -45,21 +49,39 @@ button[disabled] {
   color: white;
   background-color: red;
   float: right;
+  margin-right: 5px;
 }
 
 .btn-cleaned {
   color: white;
   background-color: mediumorchid;
   float: right;
+  margin-right: 5px;
 }
 
 .btn-filled {
   color: white;
   background-color: darkorange;
   float: right;
+  margin-right: 5px;
 }
 
 .lst-table {
-  margin-bottom: 5%;
+  margin: 2.5% 0%;
 }
 
+i {
+  padding: 0 1%;
+}
+
+.toggle {
+  margin: 1.5% 0;
+}
+
+#table-header-container {
+  overflow: hidden;
+}
+
+#table-header {
+  display: inline-flex;
+}

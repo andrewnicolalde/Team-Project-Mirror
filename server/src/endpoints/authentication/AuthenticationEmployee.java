@@ -3,7 +3,6 @@ package endpoints.authentication;
 import static spark.Spark.halt;
 
 import database.DatabaseManager;
-import database.tables.Department;
 import database.tables.Staff;
 import database.tables.StaffSession;
 import java.util.List;
@@ -22,10 +21,10 @@ public class AuthenticationEmployee {
   /**
    * Checks if the given details correctly match an employee stored in the database.
    *
-   * @param ap An EmployeeAuthenticationParameters object which holds the given login details.
+   * @param ap An EmployeeAuthenticationParams object which holds the given login details.
    * @return The staff entity, or null is the parameters are invalid.
    */
-  private static Staff isValidLoginCombination(EmployeeAuthenticationParameters ap) {
+  private static Staff isValidLoginCombination(EmployeeAuthenticationParams ap) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
     Staff employee = em.find(Staff.class, ap.getEmployeeNumber());
     em.close();
@@ -51,7 +50,7 @@ public class AuthenticationEmployee {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
 
     // Convert the data from the client into an object
-    EmployeeAuthenticationParameters ap = new EmployeeAuthenticationParameters(
+    EmployeeAuthenticationParams ap = new EmployeeAuthenticationParams(
         new Long(request.queryParams("employeeNumber")), request.queryParams("password"));
 
     // Authenticate the given details
@@ -80,12 +79,19 @@ public class AuthenticationEmployee {
       request.session(true);
       request.session().attribute("StaffSessionKey", sessionKey);
 
-      if (staffSession.getStaff().getDepartment() == Department.WAITER) {
-        response.redirect("/staff/waiter.html");
-      } else if (staffSession.getStaff().getDepartment() == Department.KITCHEN) {
-        response.redirect("/staff/kitchen.html");
-      } else {
-        response.redirect("/");
+      switch (staffSession.getStaff().getDepartment()) {
+        case WAITER:
+          response.redirect("/staff/waiter.html");
+          break;
+        case KITCHEN:
+          response.redirect("/staff/kitchen.html");
+          break;
+        case MANAGER:
+          response.redirect("/manager/home.html");
+          break;
+        default:
+          response.redirect("/");
+          break;
       }
     } else {
       response.redirect("/");
@@ -96,7 +102,7 @@ public class AuthenticationEmployee {
 
   /**
    * Checks if the request has a valid staff session key. Will halt if not.
-   * No JSON input as it is intended to run before most get/posty requests - it just checks the
+   * No JSON input as it is intended to run before most get/post requests - it just checks the
    * session details.
    * @param request The HTTP request.
    * @param response The HTTP response.

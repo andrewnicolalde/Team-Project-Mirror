@@ -1,9 +1,9 @@
-var basket = [];
-var menuItems = [];
+const basket = [];
+let menuItems = [];
 
 // Hides the modal if the user clicks off of it.
 window.onclick = function (event) {
-  var modal = document.getElementById("addToOrderModal");
+  const modal = document.getElementById("addToOrderModal");
   if (event.target === modal) {
     modal.style.display = "none";
   }
@@ -16,13 +16,13 @@ $(document).ready(function () {
 
 function loadMenu() {
   // Load categories
-  var categories = null;
+  let categories = null;
 
   get("/api/authTable/getCategories", function (categoryData) {
     categories = JSON.parse(categoryData);
 
     for (var i = 0; i < categories.length; i++) {
-      var c = categories[i];
+      const c = categories[i];
       $("#categories").append("<div class='category'>\n"
           + "<button id='category-" + c.categoryId
           + "-button' type='button' class='btn btn-block category-button' data-toggle='collapse' data-target='#category-"
@@ -38,8 +38,8 @@ function loadMenu() {
     // Load menu
     get("/api/authTable/getMenu", function (menuData) {
       menuItems = JSON.parse(menuData);
-      for (var i = 0; i < menuItems.length; i++) {
-        var menuItem = menuItems[i];
+      for (let i = 0; i < menuItems.length; i++) {
+        const menuItem = menuItems[i];
         $("#category-" + menuItem.categoryId
             + "-list").append("<li id='menuitem-" + menuItem.id
             + "' class='menuitem list-group-item list-group-item-action' onclick='showItemModal("
@@ -69,7 +69,7 @@ function loadMenu() {
 
 function filtername() {
 
-  var input, filter, displayMenuItems;
+  let input, filter, displayMenuItems;
 
   input = document.getElementById("mysearchbox");
   filter = input.value.toUpperCase();
@@ -79,21 +79,21 @@ function filtername() {
   // Otherwise, close them all
 
   if (filter.length === 0) {
-    var elementsToHide = document.getElementsByClassName("collapse show");
+    const elementsToHide = document.getElementsByClassName("collapse show");
     for (var i = 0; i < elementsToHide.length; i++) {
       elementsToHide[i].classList.remove("show");
     }
   } else {
-    var elementsToShow = document.getElementsByClassName("collapse");
+    const elementsToShow = document.getElementsByClassName("collapse");
     for (var i = 0; i < elementsToShow.length; i++) {
       elementsToShow[i].classList.add("show");
     }
   }
 
   for (var i = 0; i < displayMenuItems.length; i++) {
-    var mi = displayMenuItems[i];
-    for (var j = 0; j < mi.childNodes.length; j++) {
-    var node = mi.childNodes[j];
+    const mi = displayMenuItems[i];
+    for (let j = 0; j < mi.childNodes.length; j++) {
+      const node = mi.childNodes[j];
       if (node.className === "bold") {
         if (node.innerHTML.toUpperCase().indexOf(filter) > -1) {
           mi.style.display = "";
@@ -106,12 +106,12 @@ function filtername() {
 }
 
 function loadOrder() {
-  var postData = {orderId: sessionStorage.getItem("orderId")};
+  const postData = {orderId: sessionStorage.getItem("orderId")};
   post("/api/authTable/getOrderItems", JSON.stringify(postData),
       function (data) {
-        var orderMenuItems = JSON.parse(data);
-        for (var i = 0; i < orderMenuItems.length; i++) {
-          var item = orderMenuItems[i];
+        const orderMenuItems = JSON.parse(data);
+        for (let i = 0; i < orderMenuItems.length; i++) {
+          const item = orderMenuItems[i];
           addItemToBasket(item);
         }
         calculateTotal();
@@ -119,7 +119,7 @@ function loadOrder() {
 }
 
 function addItemToBasket(item) {
-  var parent = $("#order");
+  const parent = $("#order");
 
   // Add item
   basket.push(item);
@@ -141,16 +141,16 @@ function addItemToBasket(item) {
 
 function calculateTotal() {
   // Remove old total order if it exists
-  var parent = document.getElementById("order");
-  var totalPrice = document.getElementById("total-price");
+  const parent = document.getElementById("order");
+  const totalPrice = document.getElementById("total-price");
   if (totalPrice != null) {
     parent.removeChild(totalPrice);
   }
 
   // Calculate total
-  var total = 0.0;
-  for (var i = 0; i < basket.length; i++) {
-    var item = basket[i];
+  let total = 0.0;
+  for (let i = 0; i < basket.length; i++) {
+    const item = basket[i];
     total += parseFloat(item.price);
   }
 
@@ -171,15 +171,15 @@ function confirmRemoveOrderMenuItem(itemId) {
 }
 
 function removeOrderMenuItem(itemId) {
-  var dataToSend = JSON.stringify({orderMenuItemId: itemId});
+  const dataToSend = JSON.stringify({orderMenuItemId: itemId});
   post("/api/authTable/removeItemFromOrder", dataToSend, function (data) {
     if (data === "success") {
-      var parent = document.getElementById("order");
-      var child = document.getElementById("ordermenuitem-" + itemId);
+      const parent = document.getElementById("order");
+      const child = document.getElementById("ordermenuitem-" + itemId);
       parent.removeChild(child);
 
       // Remove it from the basket array
-      for (var i = 0; i < basket.length; i++) {
+      for (let i = 0; i < basket.length; i++) {
         if (basket[i].id === itemId) {
           basket.splice(i, 1);
         }
@@ -192,7 +192,7 @@ function removeOrderMenuItem(itemId) {
 }
 
 function addToOrder(itemId, instructions) {
-  var dataToSend = JSON.stringify({
+  const dataToSend = JSON.stringify({
     menuItemId: itemId,
     instructions: instructions,
     orderId: sessionStorage.getItem("orderId")
@@ -200,7 +200,7 @@ function addToOrder(itemId, instructions) {
 
   post("/api/authTable/addItemToOrder", dataToSend, function (data) {
     if (data !== "failure") {
-      var item = JSON.parse(data);
+      const item = JSON.parse(data);
       addItemToBasket(item);
       calculateTotal();
     }
@@ -208,10 +208,10 @@ function addToOrder(itemId, instructions) {
 }
 
 function showItemModal(itemId) {
-  for (var i = 0; i < menuItems.length; i++) {
+  for (let i = 0; i < menuItems.length; i++) {
     if (menuItems[i].id === itemId) {
-      var item = menuItems[i];
-      var modal = document.getElementById("addToOrderModal");
+      const item = menuItems[i];
+      const modal = document.getElementById("addToOrderModal");
       modal.setAttribute("data-menuitemid", item.id);
       document.getElementById("name").innerText = item.name;
       document.getElementById("category").innerText = item.category;
@@ -223,7 +223,7 @@ function showItemModal(itemId) {
           + item.picture_src);
 
       // Remove any content info symbols that are already there
-      var node = document.getElementById("content-info");
+      const node = document.getElementById("content-info");
       while (node.firstChild) {
         node.removeChild(node.firstChild);
       }
@@ -258,7 +258,7 @@ function showItemModal(itemId) {
 }
 
 function showEditOrderMenuItem(orderMenuItemId, instructions) {
-  var span = $("#omi-instructions-" + orderMenuItemId);
+  const span = $("#omi-instructions-" + orderMenuItemId);
   span.empty();
   span.append("<input id='omi-instructions-input-" + orderMenuItemId
       + "' name='omi-instructions-input-" + orderMenuItemId
@@ -271,9 +271,9 @@ function showEditOrderMenuItem(orderMenuItemId, instructions) {
 }
 
 function confirmEditOrderMenuItem(orderMenuItemId) {
-  var span = $("#omi-instructions-" + orderMenuItemId);
-  var instructions = $("#omi-instructions-input-" + orderMenuItemId).val();
-  var data = JSON.stringify({
+  const span = $("#omi-instructions-" + orderMenuItemId);
+  const instructions = $("#omi-instructions-input-" + orderMenuItemId).val();
+  const data = JSON.stringify({
     orderMenuItemId: orderMenuItemId,
     instructions: instructions
   });
@@ -290,8 +290,8 @@ function confirmEditOrderMenuItem(orderMenuItemId) {
 }
 
 function confirmOrder() {
-  var orderId = sessionStorage.getItem("orderId");
-  var dataToSend = JSON.stringify({
+  const orderId = sessionStorage.getItem("orderId");
+  const dataToSend = JSON.stringify({
     orderId: orderId,
     newOrderStatus: "READY_TO_CONFIRM"
   });
@@ -304,7 +304,7 @@ function confirmOrder() {
 
 function callWaiterToTable() {
 
-  var dataToSend = JSON.stringify({newStatus: "NEEDS_HELP"});
+  const dataToSend = JSON.stringify({newStatus: "NEEDS_HELP"});
 
   post("/api/authTable/changeTableStatus", dataToSend, function (data) {
     if (data === "success") {
