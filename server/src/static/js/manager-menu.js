@@ -30,10 +30,7 @@ $(document).ready(function() {
   });
 
   get("/api/authStaff/getCategories", function (data) {
-    categoriesObjects = JSON.parse(data);
-    for (let i = 0; i < categoriesObjects.length; i++) {
-      categories.push(categoriesObjects[i].name);
-    }
+    categories = JSON.parse(data);
   });
 
   get("/api/authStaff/getIngredients", function(data) {
@@ -71,10 +68,10 @@ function wizardStart() {
   const categorySelect = $("#w-category");
   for (let i = 0; i < categories.length; i++) {
     const category = categories[i];
-    if (category === mi.category) {
-      categorySelect.append("<option value='" + category + "' selected>" + category + "</option>");
+    if (category.categoryId === mi.category) {
+      categorySelect.append("<option value='" + category.categoryId + "' selected>" + category.name + "</option>");
     } else {
-      categorySelect.append("<option value='" + category + "'>" + category + "</option>");
+      categorySelect.append("<option value='" + category.categoryId + "'>" + category.name + "</option>");
     }
   }
 
@@ -89,7 +86,8 @@ function wizardDietInfo() {
   mi.name = $("#w-name").val();
   mi.description = $("#w-description").val();
   mi.category = $("#w-category").val();
-  mi.price = $("#w-price");
+  mi.price = $("#w-price").val();
+  console.log(mi.category);
   wizardBody.empty();
 
   // Load the new contents
