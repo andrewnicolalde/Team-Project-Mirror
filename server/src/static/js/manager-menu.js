@@ -90,9 +90,9 @@ function wizardDietInfo() {
   // Load the new contents
   wizardBody.append("<label for='w-calories'>Calories:</label>\n"
       + "<input type='text' class='form-control' name='w-calories' id='w-calories' value='" + mi.calories + "'>\n"
-      + "<img id='w-isglutenfree' src=\"../images/gluten-free.svg\">\n"
-      + "<img id='w-isvegetarian' src=\"../images/vegetarian-mark.svg\">\n"
-      + "<img id='w-isvegan' src=\"../images/vegan-mark.svg\">\n");
+      + "<img id='w-isglutenfree' src=\"../images/gluten-free.svg\" onclick='toggleRequirement(this)'>\n"
+      + "<img id='w-isvegetarian' src=\"../images/vegetarian-mark.svg\" onclick='toggleRequirement(this)'>\n"
+      + "<img id='w-isvegan' src=\"../images/vegan-mark.svg\" onclick='toggleRequirement(this)'>\n");
   if (!mi.isGlutenFree) {
     $("#w-isglutenfree").fadeTo("fast", .5);
   }
@@ -105,5 +105,33 @@ function wizardDietInfo() {
 
   // Make sure the modal is showing (can't see why it wouldn't but just to make sure)
   $("#wizard").modal("show");
+}
+
+function toggleRequirement(item) {
+  if (item.id === "w-isglutenfree") {
+    if (mi.isGlutenFree === "true") {
+      $("#w-isglutenfree").fadeTo("fast", .5);
+      mi.isGlutenFree = "false";
+    } else {
+      $("#w-isglutenfree").fadeTo("fast", 1);
+      mi.isGlutenFree = "true";
+    }
+  } else if (item.id === "w-isvegetarian") {
+    if (mi.isVegetarian === "true") {
+      $("#w-isvegetarian").fadeTo("fast", .5);
+      mi.isVegetarian = "false";
+    } else {
+      $("#w-isvegetarian").fadeTo("fast", 1);
+      mi.isVegetarian = "true";
+    }
+  } else if (item.id === "w-isvegan") {
+    if (mi.isVegan === "true") {
+      $("#w-isvegan").fadeTo("fast", .5);
+      mi.isVegan = "false";
+    } else {
+      $("#w-isvegan").fadeTo("fast", 1);
+      mi.isVegan = "true";
+    }
+  }
 }
 
