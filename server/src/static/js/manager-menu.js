@@ -53,6 +53,23 @@ function getDietaryRequirements(menuItem) {
 }
 
 function wizardStart() {
+  // Reset the current values stored.
+  mi = {
+    name: "",
+    description: "",
+    category: "",
+    price: "",
+    calories: "",
+    isGlutenFree: false,
+    isVegetarian: false,
+    isVegan: false
+  };
+
+  // Start the wizard.
+  wizardBasic();
+}
+
+function wizardBasic() {
   const wizardBody = $("#wizard-body");
   wizardBody.empty();
   wizardBody.append("<label for='w-name'>Name:</label>\n"
@@ -75,7 +92,7 @@ function wizardStart() {
     }
   }
 
-  $("#wizard-next-btn").click(wizardDietInfo);
+  $("#wizard-next-btn").attr("onclick", "wizardDietInfo()");
   $("#wizard").modal("show");
 }
 
