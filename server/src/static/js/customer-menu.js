@@ -128,52 +128,6 @@ function filtername() {
    }
 }
 
-function loadmenufilter(){
-
-
- var displayMenuItems;
-
-  displayMenuItems = document.getElementsByClassName("menuitem");
-
-    get("/api/authTable/getMenu", function (menuData) {
-          menuItems = JSON.parse(menuData);
-          for (let i = 0; i < menuItems.length; i++) {
-            const menuItem = menuItems[i];
-
-
-            for (var i = 0; i < displayMenuItems.length; i++) {
-                  const mi = displayMenuItems[i];
-                  for (var j = 0; j < mi.childNodes.length; j++) {
-                    const node = mi.childNodes[j];
-                        if (menuItem.is_gluten_free) {
-                            mi.style.display = "";
-                        } else {
-                            mi.style.display = "none";
-                        }
-                  }
-            }
-          }
-    });
-}
-/*
-function checked() {
-
-    var displayMenuItems = document.getElementsByClassName("menuitem");
-    var gluteninput = document.getElementById("glutencheckbox");
-
-    for (var i = 0; i < displayMenuItems.length; i++) {
-      var mi = displayMenuItems[i];
-        for (var j = 0; j < mi.childNodes.length; j++) {
-        var node = mi.childNodes[j];
-          if(gluteninput.checked = true) {
-            if(node.className === "img1") {
-              mi.style.display = "";
-            }
-          }
-        }
-    }
-}
-*/
 function loadOrder() {
   const postData = {orderId: sessionStorage.getItem("orderId")};
   post("/api/authTable/getOrderItems", JSON.stringify(postData),
