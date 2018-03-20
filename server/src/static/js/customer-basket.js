@@ -45,7 +45,16 @@ $(document).ready(function () {
                 //Page currently doesn't load when this function is called
                 //Page can take a few seconds to load and sometimes freezes when right clicking
             }
-            $("#total").append("<button type=\"button\" class=\"btn btn-info\">" + "Total: £" + calculateAllTotals(cost) + "</button>");
+            $("#totalcard").append("<div class=\"card\">" +
+                "<div class=\"card-header\" id=\"headingOne\">" +
+                "<h5 class=\"mb-0\">" +
+                "Total: " +
+                "<div class='total' style='float: right'>" + "£" + calculateAllTotals(cost) + "</div>" +
+                "</h5>" +
+                "</div>"
+
+
+            );
         });
 });
 
@@ -127,6 +136,18 @@ function getOrderIcon(orderStatus) {
     }
     return statusIcon;
 
+}
+
+function callWaiterToTable() {
+
+    const dataToSend = JSON.stringify({newStatus: "NEEDS_HELP"});
+
+    post("/api/authTable/changeTableStatus", dataToSend, function (data) {
+        if (data === "success") {
+            bootbox.alert(
+                "Your waiter has been called, and will be with you shortly.");
+        }
+    })
 }
 
 /**

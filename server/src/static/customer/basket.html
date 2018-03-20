@@ -32,12 +32,14 @@
     <!--js appends to this accordion-->
     <div id="accordion">
     </div>
+    <div id="totalcard">
+    </div>
 
     <div style="padding-bottom: 10px"><!--Some padding between the accordion and buttons--></div>
     <!--buttons load on the right hand side of the page-->
     <div class="pull-right">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-success" style="float: right;" data-toggle="modal" data-target="#myModal">
+        <button type="button" class="btn btn-success" style="float: right;" data-toggle="modal" data-target="#myModal" onclick="callWaiterToTable()">
             Call waiter
         </button>
 
@@ -60,7 +62,6 @@
         </div>
     </div>
         <!--div for the total-->
-        <div id="total" style="float: right"></div>
         <a href="menu.html" class="btn" style="float: right;">Back to menu</a>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#paymentModal">Pay</button>
         <!-- Payment options modal -->
