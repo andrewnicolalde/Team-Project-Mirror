@@ -11,6 +11,7 @@ import endpoints.manager.Employee;
 import endpoints.menu.Menu;
 import endpoints.notification.Notifications;
 import endpoints.order.Orders;
+import endpoints.stock.StockEndPoints;
 import endpoints.tables.Tables;
 import endpoints.transaction.Transactions;
 
@@ -57,6 +58,8 @@ public class Main {
     post("/api/authStaff/removeStaff", Employee::removeEmployee);
     post("/api/authStaff/changeTableStatus", Tables::changeTableStatus);
     post("/api/saveSubscription", Notifications::saveSubscription);
+    post("/api/authStaff/getStock", StockEndPoints::getStock);
+    post("/api/authStaff/setStock", StockEndPoints::setStock);
 
     get("/api/authTable/getMenu", Menu::getMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());
