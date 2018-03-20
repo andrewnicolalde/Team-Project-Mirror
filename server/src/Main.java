@@ -43,6 +43,7 @@ public class Main {
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/getMenu", Menu::getMenu);
+    get("/api/authStaff/getCategories", (req, res) -> Menu.getCategories());
     get("/api/authStaff/getTables", Tables::getTables);
     get("/api/authStaff/getAllTables", Tables::getAllTables);
     get("/api/authStaff/getEmployees", Employee::getEmployees);
