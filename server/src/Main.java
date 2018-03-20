@@ -9,7 +9,7 @@ import endpoints.authentication.AuthenticationEmployee;
 import endpoints.authentication.AuthenticationTable;
 import endpoints.manager.Employee;
 import endpoints.menu.Menu;
-import endpoints.notification.Notifications;
+import endpoints.notification.NotificationEndpoint;
 import endpoints.order.Orders;
 import endpoints.tables.Tables;
 import endpoints.transaction.Transactions;
@@ -56,7 +56,7 @@ public class Main {
     post("/api/authStaff/addStaff", Employee::addEmployee);
     post("/api/authStaff/removeStaff", Employee::removeEmployee);
     post("/api/authStaff/changeTableStatus", Tables::changeTableStatus);
-    post("/api/saveSubscription", Notifications::saveSubscription);
+    post("/api/saveSubscription", NotificationEndpoint::saveSubscription);
 
     get("/api/authTable/getMenu", Menu::getMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());

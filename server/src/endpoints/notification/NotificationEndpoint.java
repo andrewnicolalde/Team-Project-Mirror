@@ -21,7 +21,7 @@ import util.JsonUtil;
  * @author Roger Milroy
  */
 @SuppressWarnings("SpellCheckingInspection")
-public class Notifications {
+public class NotificationEndpoint {
 
   /**
    * Route to save PushSubscriptions from the client.

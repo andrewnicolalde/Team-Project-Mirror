@@ -11,7 +11,7 @@ import database.tables.StaffSession;
 import database.tables.TableSession;
 import database.tables.Transaction;
 import database.tables.WaiterSale;
-import endpoints.notification.Notifications;
+import endpoints.notification.NotificationEndpoint;
 import endpoints.transaction.TransactionIdParams;
 import endpoints.transaction.Transactions;
 import java.io.UnsupportedEncodingException;
@@ -438,7 +438,7 @@ public class Orders {
     // send the notifications.
     for (StaffNotification n : staffNotifications) {
       try {
-        Notifications.sendPushMessage(n.getPushSubscription(), message.getBytes("UTF-8"));
+        NotificationEndpoint.sendPushMessage(n.getPushSubscription(), message.getBytes("UTF-8"));
       } catch (UnsupportedEncodingException e) {
         e.printStackTrace();
       }
