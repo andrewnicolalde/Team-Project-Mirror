@@ -8,8 +8,20 @@ import spark.Request;
 import spark.Response;
 import util.JsonUtil;
 
+/**
+ * This class has the endpoints for assigning waiters to tables.
+ *
+ * @author  Marcus Messer
+ */
 public class TableAssign {
 
+  /**
+   * This gets the assigments of watiers to tables.
+   * For the JSON details see <code>TableAssignParams</code>
+   * @param request A HTML request.
+   * @param response A HTML response.
+   * @return A list of table assignments in JSON.
+   */
   public static String getTableAssignments(Request request, Response response) {
     TableAssignParams tableAssignParams = JsonUtil.getInstance()
         .fromJson(request.body(), TableAssignParams.class);

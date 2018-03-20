@@ -12,6 +12,7 @@ import endpoints.menu.Menu;
 import endpoints.notification.Notifications;
 import endpoints.order.Orders;
 import endpoints.payment.CardChargeMaker;
+import endpoints.tables.TableAssign;
 import endpoints.tables.Tables;
 import endpoints.transaction.Transactions;
 
@@ -47,6 +48,7 @@ public class Main {
     get("/api/authStaff/getAllTables", Tables::getAllTables);
     get("/api/authStaff/getEmployees", Employee::getEmployees);
     get("/api/authStaff/getDepartments", Employee::getDepartments);
+    get("/api/authStaff/getTableAssignments", TableAssign::getTableAssignments);
     post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
     post("/api/authStaff/getOrdersByStatus", Orders::getOrdersByStatus);
     post("/api/authStaff/getOrderItems", Orders::getOrderItems);
