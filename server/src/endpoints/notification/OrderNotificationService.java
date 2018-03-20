@@ -1,14 +1,105 @@
 package endpoints.notification;
 
+import database.DatabaseManager;
+import database.tables.Department;
 import database.tables.FoodOrder;
+import database.tables.OrderStatus;
+import database.tables.StaffNotification;
+import endpoints.order.OrderData;
+import java.io.UnsupportedEncodingException;
+import java.util.Comparator;
+import java.util.List;
+import javax.persistence.EntityManager;
+import util.JsonUtil;
 
-public class OrderNotificationService implements NotificationService, Runnable{
+public class OrderNotificationService implements NotificationService, Runnable {
+
+  private FoodOrder foodOrder;
 
   public OrderNotificationService(FoodOrder foodOrder) {
+    this.foodOrder = foodOrder;
   }
 
   @Override
   public void run() {
-
+    sendNotifications();
   }
+
+  @Override
+  public void sendNotifications() {
+    List<StaffNotification> staffNotifications = getStaffToNotify(foodOrder);
+    // test message to verify it works.
+    String message = getDataToNotify(foodOrder);
+    // send the notifications.
+    for (StaffNotification n : staffNotifications) {
+      try {
+        NotificationEndpoint.sendPushMessage(n.getPushSubscription(), message.getBytes("UTF-8"));
+      } catch (UnsupportedEncodingException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  /**
+   * Helper method that finds the staff that need to be notified about a change of order status.
+   *
+   * @param foodOrder The FoodOrder that has changed status.
+   * @return A List of StaffNotification objects.
+   */
+  private static List<StaffNotification> getStaffToNotify(FoodOrder foodOrder) {
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    List<StaffNotification> staffNotifications = null;
+    // If the order has just been cooked we want the relevant waiter.
+    if (foodOrder.getStatus() == OrderStatus.READY_TO_DELIVER) {
+      // get a list of waiters on a table.
+      staffNotifications = entityManager
+          .createQuery("from StaffNotification staffNotification"
+                  + " where staffNotification.staff.department = :department and staffNotification.staff.employeeNumber = :serverNumber",
+              StaffNotification.class).setParameter("department", Department.WAITER)
+          .setParameter("serverNumber",
+              foodOrder.getTransaction().getRestaurantTableStaff().getStaff().getEmployeeNumber())
+          .getResultList();
+      // If the order has just been confirmed we want to tell the kitchen.
+    } else if (foodOrder.getStatus() == OrderStatus.COOKING) {
+
+      staffNotifications = entityManager
+          .createQuery("from StaffNotification staffNotification "
+              + "where staffNotification.staff.department = :department", StaffNotification.class)
+          .setParameter("department", Department.KITCHEN).getResultList();
+    }
+    return staffNotifications;
+  }
+
+  /**
+   * Helper method that constructs an appropriate data packet to send in the notification.
+   *
+   * @param foodOrder The FoodOrder that's change of status triggered the notification.
+   * @return A String normally JSON to be sent in the notification.
+   */
+  private static String getDataToNotify(FoodOrder foodOrder) {
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    // some default message.
+    String message = "{\"hello\":\"world\"}";
+    // The order has just been confirmed we send all the orders to update the page.
+    if (foodOrder.getStatus() == OrderStatus.COOKING) {
+      List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
+              + "where foodOrder.status = :orderStatus",
+          FoodOrder.class).setParameter("orderStatus", OrderStatus.COOKING)
+          .getResultList();
+      // We have to add the order in question because the change hasn't been committed yet.
+      foodOrders.add(foodOrder);
+
+      foodOrders.sort(Comparator.comparing(FoodOrder::getTimeConfirmed));
+
+      OrderData[] orderData = new OrderData[foodOrders.size()];
+      for (int i = 0; i < orderData.length; i++) {
+        orderData[i] = new OrderData(foodOrders.get(i));
+      }
+      message = JsonUtil.getInstance().toJson(orderData);
+    } else if (foodOrder.getStatus() == OrderStatus.READY_TO_DELIVER) {
+      message = "An Order is Ready to Deliver!";
+    }
+    return message;
+  }
+
 }

@@ -58,6 +58,16 @@ public class NotificationEndpoint {
     return "success"; //TODO replace with JSON or request.ok or something like that.
   }
 
+  public static <T> void startNotificationService(T input) {
+    try {
+      Thread notify = NotificationServiceFactory.getNotificationService(input);
+      notify.start();
+    } catch (IncorrectTypeException e) {
+      e.printStackTrace();
+    }
+
+  }
+
   /**
    * Sends a push message containing a byte array to the client via a PushService.
    * @param pushSubscription The PushSubscription object from the client.

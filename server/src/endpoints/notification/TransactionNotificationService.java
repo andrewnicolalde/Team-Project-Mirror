@@ -11,4 +11,9 @@ public class TransactionNotificationService implements NotificationService, Runn
   public void run() {
 
   }
+
+  @Override
+  public void sendNotifications() {
+
+  }
 }
