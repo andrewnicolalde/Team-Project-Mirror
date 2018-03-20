@@ -1,7 +1,11 @@
 let mi = {
   name: "",
-  description: ""
+  description: "",
+  category: "",
+  price: ""
 };
+
+let categories = [];
 
 $(document).ready(function() {
   get("/api/authStaff/getMenu", function(data) {
@@ -17,6 +21,13 @@ $(document).ready(function() {
           + "<td>" + item.ingredients + "</td>\n"
           + "<td>" + item.picture_src + "</td>\n"
           + "<td></td></tr>");
+    }
+  });
+
+  get("/api/authStaff/getCategories", function (data) {
+    categoriesObjects = JSON.parse(data);
+    for (let i = 0; i < categoriesObjects.length; i++) {
+      categories.push(categoriesObjects[i].name);
     }
   });
 });
@@ -39,16 +50,41 @@ function wizardStart() {
   const wizardBody = $("#wizard-body");
   wizardBody.empty();
   wizardBody.append("<label for='w-name'>Name:</label>\n"
-      + "<input type='text' class='form-control' name='w-name' id='w-name' value='" + mi.name + "'>");
-  $("#wizard-next-btn").attr("onclick", "wizardDescription();");
+      + "<input type='text' class='form-control' name='w-name' id='w-name' value='" + mi.name + "'>"
+      + "<label for='w-description'>Description:</label>\n"
+      + "<input type='text' class='form-control' name='w-description' id='w-description' value='" + mi.description + "'>\n"
+      + "<label for='w-category'>Category:</label><br>\n"
+      + "<select id='w-category' name='w-category'>\n"
+      + "</select><br>\n"
+      + "<label for='w-price'>Price:</label>\n"
+      + "<input type='text' class='form-control' name='w-price' id='w-price' value='" + mi.price + "'>");
+
+  const categorySelect = $("#w-category");
+  for (let i = 0; i < categories.length; i++) {
+    const category = categories[i];
+    if (category === mi.category) {
+      categorySelect.append("<option value='" + category + "' selected>" + category + "</option>");
+    } else {
+      categorySelect.append("<option value='" + category + "'>" + category + "</option>");
+    }
+  }
+
+  $("#wizard-next-btn").click(wizardDietInfo);
   $("#wizard").modal("show");
 }
 
-function wizardDescription() {
+function wizardDietInfo() {
+  // Save the previous info and clear the modal
   mi.name = $("#w-name").val();
+  mi.description = $("#w-description").val();
+  mi.category = $("#w-category").val();
+  mi.price = $("#w-price");
   const wizardBody = $("#wizard-body");
   wizardBody.empty();
-  wizardBody.append("<label for='w-description'>Description:</label>\n"
-      + "<input type='text' class='form-control' name='w-description' id='w-description' value='" + mi.description + "'>");
+
+  // Load the new contents
+
+  // Make sure the modal is showing (can't see why it wouldn't but just to make sure)
   $("#wizard").modal("show");
 }
+
