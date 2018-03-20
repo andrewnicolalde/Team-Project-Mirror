@@ -43,7 +43,7 @@ function loadMenu() {
         $("#category-" + menuItem.categoryId
             + "-list").append("<li id='menuitem-" + menuItem.id
             + "' class='menuitem list-group-item list-group-item-action' onclick='showItemModal("
-            + menuItem.id + ")'>\n"
+            + menuItem.id + ")' data-glutenfree='" + menuItem.is_gluten_free + "' data-vegetarian='" + menuItem.is_vegetarian + "' data-vegan='" + menuItem.is_vegetarian + "'>\n"
             + "<span class='bold'>" + menuItem.name + "</span> - £"
             + menuItem.price + "\n"
             + "<br>\n"
@@ -67,6 +67,22 @@ function loadMenu() {
   });
 }
 
+function meetsDietaryRequirements(mi) {
+  gluteninput = document.getElementById("glutencheckbox");
+  vegetarianinput = document.getElementById("vegetariancheckbox");
+  veganinput = document.getElementById("vegancheckbox");
+
+  if (!gluteninput.checked | (gluteninput.checked == true & mi.dataset.glutenfree === "true")) {
+    if (!vegetarianinput.checked | (vegetarianinput.checked == true & mi.dataset.vegetarian === "true")) {
+     if (!veganinput.checked | (veganinput.checked == true & mi.dataset.vegan === "true")) {
+       return true;
+     }
+    }
+  }
+  return false;
+
+}
+
 function filtername() {
 
   var input, filter, displayMenuItems, gluteninput, vegetarianinput, veganinput;
@@ -74,9 +90,7 @@ function filtername() {
   input = document.getElementById("mysearchbox");
   filter = input.value.toUpperCase();
   displayMenuItems = document.getElementsByClassName("menuitem");
-  gluteninput = document.getElementById("glutencheckbox");
-  vegetarianinput = document.getElementById("vegetariancheckbox");
-  veganinput = document.getElementById("vegancheckbox");
+
 
   // If the filter has any text in it, then expand all the categories.
   // Otherwise, close them all
@@ -93,67 +107,25 @@ function filtername() {
     }
   }
 
-  get("/api/authTable/getMenu", function (menuData) {
-    menuItems = JSON.parse(menuData);
-    for (let i = 0; i < menuItems.length; i++) {
-      const menuItem = menuItems[i];
-          if(gluteninput.checked == true){
-            for (var i = 0; i < displayMenuItems.length; i++) {
-              const mi = displayMenuItems[i];
-              for (var j = 0; j < mi.childNodes.length; j++) {
-                const node = mi.childNodes[j];
-                  if (node.className === "bold") {
-                    if(node.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                      if(menuItem.is_gluten_free){
-                        mi.style.display = "";
-                      } else {
-                        mi.style.display = "none";
-                      }
-                    }
-                  }
+  for (var i = 0; i < displayMenuItems.length; i++) {
+    const mi = displayMenuItems[i];
+    console.log(mi.dataset.glutenfree);
+    for (var j = 0; j < mi.childNodes.length; j++) {
+      const node = mi.childNodes[j];
+      if (node.className === "bold") {
+        if(node.innerHTML.toUpperCase().indexOf(filter) > -1) {
+           if (meetsDietaryRequirements(mi)) {
+            mi.style.display = "";
+           } else {
+            mi.style.display = "none";
+           }
 
-              }
-            }
-          }
-     }
-  });
-
-
-  if(vegetariancheckbox.checked == true){
-        for (var i = 0; i < displayMenuItems.length; i++) {
-          const mi = displayMenuItems[i];
-          for (var j = 0; j < mi.childNodes.length; j++) {
-            const node = mi.childNodes[j];
-            if (node.className === "bold") {
-              if(node.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                 //if(node.className === "img2") {
-                     mi.style.display = "";
-                   } else {
-                     mi.style.display = "none";
-                   }
-                 }
-              //}
-            }
-          }
-    }
-
-    if(vegancheckbox.checked == true){
-          for (var i = 0; i < displayMenuItems.length; i++) {
-            const mi = displayMenuItems[i];
-            for (var j = 0; j < mi.childNodes.length; j++) {
-              const node = mi.childNodes[j];
-              if (node.className === "bold") {
-                if(node.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                   //if(node.className === "img3") {
-                       mi.style.display = "";
-                     } else {
-                       mi.style.display = "none";
-                     }
-                   }
-                //}
-              }
-            }
+        } else {
+           mi.style.display = "none";
+        }
       }
+    }
+   }
 }
 
 function loadmenufilter(){
