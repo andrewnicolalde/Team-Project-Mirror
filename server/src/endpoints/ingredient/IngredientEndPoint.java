@@ -2,6 +2,7 @@ package endpoints.ingredient;
 
 import database.DatabaseManager;
 import database.tables.Ingredient;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -18,10 +19,17 @@ public class IngredientEndPoint {
   public static String getIngredients(Request request, Response response) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
-    List<IngredientEndPoint> ingredients = entityManager.createQuery("from Ingredient ingredient",
-        IngredientEndPoint.class).getResultList();
+    List<Ingredient> ingredients = entityManager.createQuery("from Ingredient ingredient",
+        Ingredient.class).getResultList();
 
-    return JsonUtil.getInstance().toJson(ingredients);
+    entityManager.close();
+
+    List<IngredientParams> ingredientsToSend = new ArrayList<>();
+    for (Ingredient i : ingredients) {
+      ingredientsToSend.add(new IngredientParams(i));
+    }
+
+    return JsonUtil.getInstance().toJson(ingredientsToSend);
   }
 
   /**

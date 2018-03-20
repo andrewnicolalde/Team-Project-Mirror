@@ -10,6 +10,7 @@ let mi = {
 };
 
 let categories = [];
+let ingredients = [];
 
 $(document).ready(function() {
   get("/api/authStaff/getMenu", function(data) {
@@ -33,6 +34,10 @@ $(document).ready(function() {
     for (let i = 0; i < categoriesObjects.length; i++) {
       categories.push(categoriesObjects[i].name);
     }
+  });
+
+  get("/api/authStaff/getIngredients", function(data) {
+    ingredients = JSON.parse(data);
   });
 });
 

@@ -1,5 +1,7 @@
 package endpoints.ingredient;
 
+import database.tables.Ingredient;
+
 /**
  * This class takes JSON and creates it into a usable object.
  *
@@ -19,6 +21,11 @@ public class IngredientParams {
 
   public IngredientParams(String ingredientName) {
     this.ingredientName = ingredientName;
+  }
+
+  public IngredientParams(Ingredient ingredient) {
+    this.id = ingredient.getIngredientId();
+    this.ingredientName = ingredient.getIngredientName();
   }
 
   public String getIngredientName() {
