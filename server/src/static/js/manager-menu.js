@@ -90,9 +90,18 @@ function wizardDietInfo() {
   // Load the new contents
   wizardBody.append("<label for='w-calories'>Calories:</label>\n"
       + "<input type='text' class='form-control' name='w-calories' id='w-calories' value='" + mi.calories + "'>\n"
-      + "<input type='checkbox' name='w-isglutenfree' id='w-isglutenfree'> <img src=\"../images/gluten-free.svg\">\n"
-      + "<input type='checkbox' name='w-isvegetarian' id='w-isvegetarian'> <img src=\"../images/vegetarian-mark.svg\">\n"
-      + "<input type='checkbox' name='w-isvegan' id='w-isvegan'> <img src=\"../images/vegan-mark.svg\">\n");
+      + "<img id='w-isglutenfree' src=\"../images/gluten-free.svg\">\n"
+      + "<img id='w-isvegetarian' src=\"../images/vegetarian-mark.svg\">\n"
+      + "<img id='w-isvegan' src=\"../images/vegan-mark.svg\">\n");
+  if (!mi.isGlutenFree) {
+    $("#w-isglutenfree").fadeTo("fast", .5);
+  }
+  if (!mi.isVegetarian) {
+    $("#w-isvegetarian").fadeTo("fast", .5);
+  }
+  if (!mi.isVegan) {
+    $("#w-isvegan").fadeTo("fast", .5);
+  }
 
   // Make sure the modal is showing (can't see why it wouldn't but just to make sure)
   $("#wizard").modal("show");
