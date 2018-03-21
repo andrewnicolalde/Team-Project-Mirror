@@ -164,7 +164,27 @@ function wizardIngredients() {
         + "</div>")
   }
 
+  $("#wizard-next-btn").attr("onclick", "wizardSubmit()");
+
   $("#wizard").modal("show");
+}
+
+function wizardSubmit() {
+  const wizardBody = $("#wizard-body");
+
+  // Clear the ingredients list
+  mi.ingredients = [];
+
+  // Set the ingredients list.
+  $(".ingredient-check").each(function(index) {
+    const currentIngredient = $(this)[0]; // Returns an array with one element for some reason? So index out.
+    if (currentIngredient.checked) {
+      mi.ingredients.push(currentIngredient.value);
+    }
+  });
+
+  // Hide the modal
+  $("#wizard").modal("hide");
 }
 
 function toggleRequirement(item) {
