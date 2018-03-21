@@ -6,13 +6,12 @@ import database.tables.FoodOrder;
 import database.tables.OrderStatus;
 import database.tables.StaffNotification;
 import endpoints.order.OrderData;
-import java.io.UnsupportedEncodingException;
 import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import util.JsonUtil;
 
-public class OrderNotificationService implements NotificationService, Runnable {
+public class OrderNotificationService extends NotificationService implements Runnable {
 
   private FoodOrder foodOrder;
 
@@ -26,20 +25,12 @@ public class OrderNotificationService implements NotificationService, Runnable {
   }
 
   @Override
-  public void sendNotifications() {
+  void sendNotifications() {
     List<StaffNotification> staffNotifications = getStaffToNotify(foodOrder);
     // test message to verify it works.
     String message = getDataToNotify(foodOrder);
     // send the notifications.
-    if (staffNotifications != null) {
-      for (StaffNotification n : staffNotifications) {
-        try {
-          NotificationEndpoint.sendPushMessage(n.getPushSubscription(), message.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-        }
-      }
-    }
+    send(staffNotifications, message);
   }
 
   /**

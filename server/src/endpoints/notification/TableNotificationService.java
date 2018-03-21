@@ -6,15 +6,14 @@ import database.tables.RestaurantTable;
 import database.tables.RestaurantTableStaff;
 import database.tables.StaffNotification;
 import database.tables.TableStatus;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import javax.persistence.EntityManager;
 
-public class TableNotificationService implements NotificationService, Runnable{
+public class TableNotificationService extends NotificationService implements Runnable {
 
   private RestaurantTable table;
 
-  public TableNotificationService(RestaurantTable table) {
+  TableNotificationService(RestaurantTable table) {
     this.table = table;
   }
 
@@ -31,14 +30,17 @@ public class TableNotificationService implements NotificationService, Runnable{
           + "staffNotification.staff = :waiter", StaffNotification.class)
           .setParameter("department", Department.WAITER).setParameter("waiter",
               tableStaff.getStaff()).getResultList();
+    } else {
+      staffNotifications = entityManager.createQuery("from StaffNotification staffNotification "
+          + "where staffNotification.staff.department = :department", StaffNotification.class)
+          .setParameter("department", Department.WAITER).getResultList();
     }
 
     return staffNotifications;
   }
 
   private static String getDataToNotify(RestaurantTable table) {
-    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
-    String message = "";
+    String message = "update";
     if (table.getStatus() == TableStatus.NEEDS_HELP) {
       message = "Table " + table
           .getTableNumber() + " "
@@ -55,19 +57,11 @@ public class TableNotificationService implements NotificationService, Runnable{
   }
 
   @Override
-  public void sendNotifications() {
+  void sendNotifications() {
     List<StaffNotification> staffNotifications = getStaffToNotify(table);
     // test message to verify it works.
     String message = getDataToNotify(table);
     // send the notifications.
-    if (staffNotifications != null) {
-      for (StaffNotification n : staffNotifications) {
-        try {
-          NotificationEndpoint.sendPushMessage(n.getPushSubscription(), message.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-        }
-      }
-    }
+    send(staffNotifications, message);
   }
 }

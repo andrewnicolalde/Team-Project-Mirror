@@ -377,9 +377,6 @@ function confirmCancelOrder() {
 function changeTableStatus(event, status) {
   event.stopPropagation();
   const btn = document.getElementById(event.currentTarget.id);
-  console.log(event.currentTarget.id);
-  console.log(btn.id);
-  console.log(btn.dataset.tableid);
   post("/api/authStaff/changeTableStatus",
       JSON.stringify({newStatus: status, tableId: btn.dataset.tableid.toString()}),
       null);
