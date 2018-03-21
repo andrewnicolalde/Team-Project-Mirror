@@ -31,11 +31,13 @@ public class OrderNotificationService implements NotificationService, Runnable {
     // test message to verify it works.
     String message = getDataToNotify(foodOrder);
     // send the notifications.
-    for (StaffNotification n : staffNotifications) {
-      try {
-        NotificationEndpoint.sendPushMessage(n.getPushSubscription(), message.getBytes("UTF-8"));
-      } catch (UnsupportedEncodingException e) {
-        e.printStackTrace();
+    if (staffNotifications != null) {
+      for (StaffNotification n : staffNotifications) {
+        try {
+          NotificationEndpoint.sendPushMessage(n.getPushSubscription(), message.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+          e.printStackTrace();
+        }
       }
     }
   }
