@@ -16,7 +16,7 @@ public class OrderNotificationService implements NotificationService, Runnable {
 
   private FoodOrder foodOrder;
 
-  public OrderNotificationService(FoodOrder foodOrder) {
+  OrderNotificationService(FoodOrder foodOrder) {
     this.foodOrder = foodOrder;
   }
 
@@ -49,8 +49,9 @@ public class OrderNotificationService implements NotificationService, Runnable {
   private static List<StaffNotification> getStaffToNotify(FoodOrder foodOrder) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     List<StaffNotification> staffNotifications = null;
+    OrderStatus orderStatus = foodOrder.getStatus();
     // If the order has just been cooked we want the relevant waiter.
-    if (foodOrder.getStatus() == OrderStatus.READY_TO_DELIVER) {
+    if (orderStatus == OrderStatus.READY_TO_DELIVER | orderStatus == OrderStatus.READY_TO_CONFIRM) {
       // get a list of waiters on a table.
       staffNotifications = entityManager
           .createQuery("from StaffNotification staffNotification"
@@ -60,7 +61,7 @@ public class OrderNotificationService implements NotificationService, Runnable {
               foodOrder.getTransaction().getRestaurantTableStaff().getStaff().getEmployeeNumber())
           .getResultList();
       // If the order has just been confirmed we want to tell the kitchen.
-    } else if (foodOrder.getStatus() == OrderStatus.COOKING) {
+    } else if (orderStatus == OrderStatus.COOKING) {
 
       staffNotifications = entityManager
           .createQuery("from StaffNotification staffNotification "
@@ -78,10 +79,11 @@ public class OrderNotificationService implements NotificationService, Runnable {
    */
   private static String getDataToNotify(FoodOrder foodOrder) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    OrderStatus orderStatus = foodOrder.getStatus();
     // some default message.
     String message = "{\"hello\":\"world\"}";
     // The order has just been confirmed we send all the orders to update the page.
-    if (foodOrder.getStatus() == OrderStatus.COOKING) {
+    if (orderStatus == OrderStatus.COOKING) {
       List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
               + "where foodOrder.status = :orderStatus",
           FoodOrder.class).setParameter("orderStatus", OrderStatus.COOKING)
@@ -96,8 +98,10 @@ public class OrderNotificationService implements NotificationService, Runnable {
         orderData[i] = new OrderData(foodOrders.get(i));
       }
       message = JsonUtil.getInstance().toJson(orderData);
-    } else if (foodOrder.getStatus() == OrderStatus.READY_TO_DELIVER) {
+    } else if (orderStatus == OrderStatus.READY_TO_DELIVER) {
       message = "An Order is Ready to Deliver!";
+    } else if (orderStatus == OrderStatus.READY_TO_CONFIRM) {
+      message = "A table is ready to confirm their order!";
     }
     return message;
   }

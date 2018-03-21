@@ -198,12 +198,12 @@ public class Orders {
       foodOrder.setTimeConfirmed(new Timestamp(System.currentTimeMillis()));
     }
 
-    NotificationEndpoint.startNotificationService(foodOrder);
-
     if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.CANCELLED) {
       foodOrder.getTransaction()
           .setTotal(foodOrder.getTransaction().getTotal() - foodOrder.getTotal());
     }
+
+    NotificationEndpoint.startNotificationService(foodOrder);
 
     entityManager.getTransaction().commit();
     entityManager.close();
