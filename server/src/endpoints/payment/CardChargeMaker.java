@@ -13,6 +13,7 @@ import database.DatabaseManager;
 import database.tables.TableSession;
 import database.tables.TableStatus;
 import database.tables.Transaction;
+import endpoints.notification.NotificationEndpoint;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,6 +68,7 @@ public class CardChargeMaker {
       temp.setIsPaid(true);
       session.getRestaurantTable().setStatus(TableStatus.NEEDS_CLEANING);
       em.getTransaction().commit();
+      NotificationEndpoint.startNotificationService(temp);
       return "success";
     } catch (AuthenticationException | InvalidRequestException | CardException | APIConnectionException | APIException e) {
       e.printStackTrace();
