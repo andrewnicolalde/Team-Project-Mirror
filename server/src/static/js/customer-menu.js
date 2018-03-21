@@ -93,11 +93,13 @@ function filtername() {
   filter = input.value.toUpperCase();
   displayMenuItems = document.getElementsByClassName("menuitem");
 
+  //if there is no input on search bar, keep all menu items hidden.
   if (filter.length === 0) {
     const elementsToHide = document.getElementsByClassName("collapse show");
     for (var i = 0; i < elementsToHide.length; i++) {
       elementsToHide[i].classList.remove("show");
     }
+  //else, when there is input, show the menu.
   } else {
     const elementsToShow = document.getElementsByClassName("collapse");
     for (var i = 0; i < elementsToShow.length; i++) {
@@ -105,6 +107,7 @@ function filtername() {
     }
   }
 
+  //goes through all childnodes of each menu item, and displays the items that meet the search and category criteria.
   for (var i = 0; i < displayMenuItems.length; i++) {
     const mi = displayMenuItems[i];
     console.log(mi.dataset.glutenfree);
