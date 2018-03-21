@@ -39,10 +39,7 @@ public class MenuItem {
   /**
    * This field holds the information about the ingredients information.
    */
-  @ManyToMany(fetch = FetchType.EAGER, cascade = {
-      CascadeType.PERSIST,
-      CascadeType.MERGE,
-  })
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
   @JoinTable(name = "INGREDIENT_MENU_ITEM",
       joinColumns = @JoinColumn(name = "menuItemId"),
       inverseJoinColumns = @JoinColumn(name = "ingredientId"))

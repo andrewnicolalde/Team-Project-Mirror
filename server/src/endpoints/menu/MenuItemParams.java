@@ -66,7 +66,7 @@ public class MenuItemParams {
   /**
    * This stores the category of item that is being added. NULL if not edited.
    */
-  private String category;
+  private Long category;
 
   /**
    * This stores if the menu item is being added to the franchise menu immediately or if its just
@@ -86,12 +86,12 @@ public class MenuItemParams {
    * @param isVegetarian If the item is vegetarian.
    * @param isGlutenFree If the item is gluten free.
    * @param pictureSrc Where the picture is stored.
-   * @param category The category of the item.
+   * @param category The id of the category of the item.
    * @param addNow If the item is being added to the franchise table.
    */
   public MenuItemParams(Long id, String name, Long[] ingredients, String description, Double price,
       Double calories, Boolean isVegan, Boolean isVegetarian, Boolean isGlutenFree,
-      String pictureSrc, String category, Boolean addNow) {
+      String pictureSrc, Long category, Boolean addNow) {
 
     this.id = id;
     this.name = name;
@@ -154,10 +154,9 @@ public class MenuItemParams {
 
   public Category getCategory() {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
-    List<Category> categoryList = entityManager.createQuery("from Category category where "
-        + "category.name = :name", Category.class).setParameter("name", this.category).getResultList();
+    Category category = entityManager.find(Category.class, this.category);
     entityManager.close();
-    return categoryList.get(0);
+    return category;
   }
 
   public Boolean getAddNow() {

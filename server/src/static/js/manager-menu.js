@@ -1,5 +1,5 @@
 let mi = {
-  id: "",
+  id: null,
   addNow: "",
   name: "",
   description: "",
@@ -9,7 +9,8 @@ let mi = {
   isGlutenFree: false,
   isVegetarian: false,
   isVegan: false,
-  ingredients: []
+  ingredients: [],
+  pictureSrc: ""
 };
 
 let categories = [];
@@ -58,7 +59,7 @@ function getDietaryRequirements(menuItem) {
 function wizardStart() {
   // Reset the current values stored.
   mi = {
-    id: "",
+    id: null,
     addNow: "",
     name: "",
     description: "",
@@ -68,7 +69,8 @@ function wizardStart() {
     isGlutenFree: false,
     isVegetarian: false,
     isVegan: false,
-    ingredients: []
+    ingredients: [],
+    pictureSrc: ""
   };
 
   // Add the "Add to franchise" checkbox
@@ -170,6 +172,7 @@ function wizardIngredients() {
 }
 
 function wizardSubmit() {
+  const wizard = $("#wizard");
   const wizardBody = $("#wizard-body");
 
   // Clear the ingredients list
@@ -183,8 +186,20 @@ function wizardSubmit() {
     }
   });
 
+  if (wizard.attr("data-mode") === "add") {
+    // Add mode
+    mi.addNow = true;
+    console.log(mi);
+    post("/api/authStaff/createMenuItem", JSON.stringify(mi), function(data) {
+      console.log(data);
+    });
+
+  } else {
+    // Edit mode.
+  }
+
   // Hide the modal
-  $("#wizard").modal("hide");
+  wizard.modal("hide");
 }
 
 function toggleRequirement(item) {

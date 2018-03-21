@@ -94,6 +94,7 @@ public class Menu {
    */
   public static String createMenuItem(Request request, Response response) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+    System.out.println(request.body());
 
     MenuItemParams menuItemParams = JsonUtil.getInstance().fromJson(request.body(),
         MenuItemParams.class);
