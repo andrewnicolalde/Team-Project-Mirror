@@ -6,7 +6,8 @@ let mi = {
   calories: "",
   isGlutenFree: false,
   isVegetarian: false,
-  isVegan: false
+  isVegan: false,
+  ingredients: []
 };
 
 let categories = [];
@@ -62,7 +63,8 @@ function wizardStart() {
     calories: "",
     isGlutenFree: false,
     isVegetarian: false,
-    isVegan: false
+    isVegan: false,
+    ingredients: []
   };
 
   // Start the wizard.
@@ -104,7 +106,6 @@ function wizardDietInfo() {
   mi.description = $("#w-description").val();
   mi.category = $("#w-category").val();
   mi.price = $("#w-price").val();
-  console.log(mi.category);
   wizardBody.empty();
 
   // Load the new contents
@@ -123,7 +124,35 @@ function wizardDietInfo() {
     $("#w-isvegan").fadeTo("fast", .5);
   }
 
+  $("#wizard-next-btn").attr("onclick", "wizardIngredients()");
+
   // Make sure the modal is showing (can't see why it wouldn't but just to make sure)
+  $("#wizard").modal("show");
+}
+
+function precheckIngredient(ingredient) {
+  for (let i = 0; i < mi.ingredients.length; i++) {
+    if (ingredient.id === mi.ingredients[i]) {
+      return " checked";
+    }
+  }
+  return "";
+}
+
+function wizardIngredients() {
+  const wizardBody = $("#wizard-body");
+
+  mi.calories = $("#w-calories").val();
+
+  wizardBody.empty();
+
+  for (let i = 0; i < ingredients.length; i++) {
+    const ingredient = ingredients[i];
+    wizardBody.append("<div class='checkbox'>\n"
+        + "<label><input class='ingredient-check' type='checkbox' value='" + ingredient.id + "'" + precheckIngredient(ingredient) + "> " + ingredient.ingredientName + "</label>"
+        + "</div>")
+  }
+
   $("#wizard").modal("show");
 }
 
