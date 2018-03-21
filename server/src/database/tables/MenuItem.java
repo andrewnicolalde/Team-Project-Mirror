@@ -107,10 +107,9 @@ public class MenuItem {
    * @param isGlutenFree If the item is gluten free.
    * @param category The category the item belongs in.
    */
-  public MenuItem(String name, Set<Ingredient> ingredients, String description, Double calories,
-      Double price,
-      Boolean isVegan, Boolean isVegetarian, Boolean isGlutenFree, String pictureSrc,
-      Category category) {
+  public MenuItem(String name, Set<Ingredient> ingredients, String description, Double price,
+      Double calories, Boolean isVegan, Boolean isVegetarian, Boolean isGlutenFree,
+      String pictureSrc, Category category) {
     this.name = name;
     this.ingredients = ingredients;
     this.description = description;
