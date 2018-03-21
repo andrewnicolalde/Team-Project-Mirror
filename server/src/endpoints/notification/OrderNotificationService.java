@@ -51,7 +51,14 @@ public class OrderNotificationService implements NotificationService, Runnable {
     List<StaffNotification> staffNotifications = null;
     OrderStatus orderStatus = foodOrder.getStatus();
     // If the order has just been cooked we want the relevant waiter.
-    if (orderStatus == OrderStatus.READY_TO_DELIVER | orderStatus == OrderStatus.READY_TO_CONFIRM) {
+    if (orderStatus == OrderStatus.COOKING) {
+
+      staffNotifications = entityManager
+          .createQuery("from StaffNotification staffNotification "
+              + "where staffNotification.staff.department = :department", StaffNotification.class)
+          .setParameter("department", Department.KITCHEN).getResultList();
+    } else if (orderStatus == OrderStatus.READY_TO_DELIVER | orderStatus == OrderStatus
+        .READY_TO_CONFIRM) {
       // get a list of waiters on a table.
       staffNotifications = entityManager
           .createQuery("from StaffNotification staffNotification"
@@ -61,12 +68,6 @@ public class OrderNotificationService implements NotificationService, Runnable {
               foodOrder.getTransaction().getRestaurantTableStaff().getStaff().getEmployeeNumber())
           .getResultList();
       // If the order has just been confirmed we want to tell the kitchen.
-    } else if (orderStatus == OrderStatus.COOKING) {
-
-      staffNotifications = entityManager
-          .createQuery("from StaffNotification staffNotification "
-              + "where staffNotification.staff.department = :department", StaffNotification.class)
-          .setParameter("department", Department.KITCHEN).getResultList();
     }
     return staffNotifications;
   }
