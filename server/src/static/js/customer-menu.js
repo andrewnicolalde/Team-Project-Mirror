@@ -67,6 +67,7 @@ function loadMenu() {
   });
 }
 
+//Finds which menu items are gluten free/vegetarian/vegan and links them with their corresponding checkboxes.
 function meetsDietaryRequirements(mi) {
   gluteninput = document.getElementById("glutencheckbox");
   vegetarianinput = document.getElementById("vegetariancheckbox");
@@ -83,6 +84,7 @@ function meetsDietaryRequirements(mi) {
 
 }
 
+//Combines searching through the menu by name as well as specifying which category(s) are required (gluten free/vegetarian/vegan)
 function filtername() {
 
   var input, filter, displayMenuItems, gluteninput, vegetarianinput, veganinput;
@@ -90,10 +92,6 @@ function filtername() {
   input = document.getElementById("mysearchbox");
   filter = input.value.toUpperCase();
   displayMenuItems = document.getElementsByClassName("menuitem");
-
-
-  // If the filter has any text in it, then expand all the categories.
-  // Otherwise, close them all
 
   if (filter.length === 0) {
     const elementsToHide = document.getElementsByClassName("collapse show");
@@ -127,6 +125,7 @@ function filtername() {
     }
    }
 }
+
 
 function loadOrder() {
   const postData = {orderId: sessionStorage.getItem("orderId")};
