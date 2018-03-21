@@ -11,6 +11,7 @@ import endpoints.manager.Employee;
 import endpoints.menu.Menu;
 import endpoints.notification.NotificationEndpoint;
 import endpoints.order.Orders;
+import endpoints.payment.CardChargeMaker;
 import endpoints.tables.Tables;
 import endpoints.transaction.Transactions;
 
@@ -70,6 +71,7 @@ public class Main {
     post("/api/authTable/changeOrderInstructions", Orders::changeOrderInstructions);
     post("/api/authTable/changeTableStatus", Tables::changeTableStatus);
     post("/api/authTable/getTransactionTotal", Transactions::getTransactionTotal);
+    post("/api/authTable/createCardCharge", CardChargeMaker::createCharge);
 
     System.out.println("Visit: http://localhost:4567");
 

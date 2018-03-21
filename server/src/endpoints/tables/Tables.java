@@ -97,8 +97,6 @@ public class Tables {
   public static String changeTableStatus(Request request, Response response) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
-    System.out.println(request.body());
-
     ChangeTableStatus cts = JsonUtil.getInstance()
         .fromJson(request.body(), ChangeTableStatus.class);
 
