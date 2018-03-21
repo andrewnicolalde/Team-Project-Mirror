@@ -13,9 +13,36 @@ function getEmployees() {
           + " data-toggle=\"collapse\" data-target=\"#collapse" + i
           + "\" aria-expanded=\"false\" aria-controls=\"collapse\"" + i
           + " >"
-          + employee.firstName + " " + employee.lastName);
-          + <div 
-
+          + employee.firstName + " " + employee.lastName
+          + "<div id=\"collapse\"" + i
+          + "\" class=\"collapse\" aria-labelledby=\"heading\"" + i
+          + " data-parent=\"#accordion\">"
+          + "<div class=\"card-body\">"
+          + "<ul id='list-tables-'" + employee.staffId + ">"
+          + "</ul>"
+          + "</div>"
+          + "</div>"
+          + "</div>");
     }
   });
+}
+
+function getTableAssignments(staffId) {
+    post("/api/authStaff/getTableAssignments", JSON.stringify({
+          staffId: staffId
+        }),
+        (data) => {
+          const tables = JSON.parse(data);
+          const currentWaiter = document.getElementById("list-tables-" + staffId);
+
+          for (let i = 0; i < tables.length; i++) {
+            $(currentWaiter).append(
+                "<li"
+                + "id='table-" + tables[i].tableNumber +"'"
+                + "<span>Table </span>" + tables[i].tableNumber
+                + "</li>"
+            )
+          }
+        }
+    )
 }

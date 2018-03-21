@@ -17,8 +17,8 @@ import util.JsonUtil;
 public class TableAssign {
 
   /**
-   * This gets the assignments of waiterss to tables.
-   * For the JSON details see <code>TableAssignParams</code>
+   * This gets the assignments of waiterss to tables. For the JSON details see
+   * <code>TableAssignParams</code>
    *
    * @param request A HTML request.
    * @param response A HTML response.
@@ -30,8 +30,9 @@ public class TableAssign {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery(
         "from RestaurantTableStaff tableStaff where "
-            + "tableStaff.restaurantTable.franchise = :franchise", RestaurantTableStaff.class)
-        .setParameter("franchise", tableAssignParams.getFranchise()).getResultList();
+            + "tableStaff.staff.id = :staff",
+        RestaurantTableStaff.class).setParameter("staff", tableAssignParams.getStaffId())
+        .getResultList();
 
     TableAssignParams[] out = new TableAssignParams[restaurantTableStaffs.size()];
 
@@ -42,8 +43,9 @@ public class TableAssign {
   }
 
   /**
-   * This sets the assignments of waiters to tables.
-   * See <code>TableAssignParams</code> for JSON details.
+   * This sets the assignments of waiters to tables. See <code>TableAssignParams</code> for JSON
+   * details.
+   *
    * @param request A HTML request.
    * @param response A HTML response.
    * @return success or fail
@@ -63,7 +65,7 @@ public class TableAssign {
           .getSingleResult();
 
       restaurantTableStaff.setRestaurantTable(
-          entityManager.find(RestaurantTable.class, tableAssignParams.getTableId()));
+          entityManager.find(RestaurantTable.class, tableAssignParams.getTableNumber()));
       entityManager.getTransaction().commit();
     } catch (Exception e) {
       return "failed";
