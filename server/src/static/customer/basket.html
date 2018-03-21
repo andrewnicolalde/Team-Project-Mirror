@@ -13,6 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://checkout.stripe.com/checkout.js"></script>
     <script src="../js/ajax-wrapper.js"></script>
     <script src="../js/customer-basket.js"></script>
@@ -31,12 +32,14 @@
     <!--js appends to this accordion-->
     <div id="accordion">
     </div>
+    <div id="totalcard">
+    </div>
 
     <div style="padding-bottom: 10px"><!--Some padding between the accordion and buttons--></div>
     <!--buttons load on the right hand side of the page-->
     <div class="pull-right">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-success" style="float: right;" data-toggle="modal" data-target="#myModal">
+        <button type="button" class="btn btn-success" style="float: right;" data-toggle="modal" data-target="#myModal" onclick="callWaiterToTable()">
             Call waiter
         </button>
 
@@ -57,41 +60,84 @@
                 </div>
             </div>
         </div>
-        <a href="menu.html" class="btn" style="float: right;">Back to menu</a>
-        <button type="button" class="btn btn-primary" data-toggle="modal" id='paymentButton' data-target="#paymentModal">Pay</button>
-        <script>
-          const handler = StripeCheckout.configure({
-            key: 'pk_test_kYhdU5MRbncuBXn23zkDXhb0',
-            image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
-            locale: 'auto',
-            allowRememberMe: false,
-            token: function (token) {
-              // You can access the token ID with `token.id`.
-              // Get the token ID to your server-side code for use.
-              post("/api/authTable/createCardCharge", JSON.stringify(token), window.location.href="/customer/home.html");
-            }
-          });
-
-          document.getElementById('paymentButton').addEventListener('click', function(e) {
-            // Open Checkout with further options:
-            // Get order total from endpoint
-            getTransactionId().then(getTransactionTotal).then(function (total) {
-              handler.open({
-                name: 'Oaxaca',
-                description: 'Your meal',
-                currency: 'gbp',
-                amount: Math.floor(total * 100)
-              });
-            });
-            e.preventDefault();
-          });
-
-          // Close Checkout on page navigation:
-          window.addEventListener('popstate', function() {
-            handler.close();
-          });
-        </script>
     </div>
+        <!--div for the total-->
+        <a href="menu.html" class="btn" style="float: right;">Back to menu</a>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#paymentModal">Pay</button>
+        <!-- Payment options modal -->
+        <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentOptionsModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="paymentOptionsModalLabel">Payment methods</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Thank you for coming to Oaxaca! Please select a payment method.
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" id="payWithCashButton" class="btn btn-success" data-toggle="modal" data-target="#cashPaymentModal" onclick="hidePaymentModal()" style="width: 300px">Cash</button>
+                        <button type="button" id="payWithCardButton" class="btn btn-primary" onclick="hidePaymentModal()" style="width: 300px">Card</button>
+                        <script>
+                          const handler = StripeCheckout.configure({
+                            key: 'pk_test_kYhdU5MRbncuBXn23zkDXhb0',
+                            image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+                            locale: 'auto',
+                            allowRememberMe: false,
+                            token: function (token) {
+                              // You can access the token ID with `token.id`.
+                              // Get the token ID to your server-side code for use.
+                            }
+                          });
+
+                          document.getElementById('payWithCardButton').addEventListener('click', function(e) {
+                            // Open Checkout with further options:
+                            // Get order total from endpoint
+                            getTransactionId().then(getTransactionTotal).then(function (total) {
+                              handler.open({
+                                name: 'Oaxaca',
+                                description: 'Your meal',
+                                currency: 'gbp',
+                                amount: Math.floor(total * 100)
+                              });
+                            });
+                            e.preventDefault();
+                          });
+
+                          // Close Checkout on page navigation:
+                          window.addEventListener('popstate', function() {
+                            handler.close();
+                          });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Cash payment modal -->
+        <div class="modal fade" id="cashPaymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentOptionsModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cashModalLabel">Cash Payment</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div id="cashPaymentModalBody" class="modal-body">Your total is</div>
+                    <script>
+                      getTransactionId().then(getTransactionTotal).then(function (total){
+                        document.getElementById("cashPaymentModalBody").innerText += " £"+total;
+                      })
+                    </script>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success btn-block" onclick="hideCashPaymentModal(); callWaiterToTable()">Call Waiter</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div style="padding-bottom: 50px"><!--Some padding between the accordion and buttons--></div>
 </div>
 </body>
 </html>
