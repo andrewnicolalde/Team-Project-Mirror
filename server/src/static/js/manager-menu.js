@@ -1,4 +1,6 @@
 let mi = {
+  id: "",
+  addNow: "",
   name: "",
   description: "",
   category: "",
@@ -56,6 +58,8 @@ function getDietaryRequirements(menuItem) {
 function wizardStart() {
   // Reset the current values stored.
   mi = {
+    id: "",
+    addNow: "",
     name: "",
     description: "",
     category: "",
@@ -66,6 +70,14 @@ function wizardStart() {
     isVegan: false,
     ingredients: []
   };
+
+  // Add the "Add to franchise" checkbox
+  // Remove "Add to franchise" checkbox if it is already there
+  $("#addtofranchise").remove();
+  $("#wizard-footer").prepend("<label id='addtofranchise'><input type=\"checkbox\" id=\"w-addtofranchise\" checked>  Add this item to the franchise?</label>");
+
+  // Set the mode to add
+  $("#wizard").attr("data-mode", "add");
 
   // Start the wizard.
   wizardBasic();
@@ -79,8 +91,7 @@ function wizardBasic() {
       + "<label for='w-description'>Description:</label>\n"
       + "<input type='text' class='form-control' name='w-description' id='w-description' value='" + mi.description + "'>\n"
       + "<label for='w-category'>Category:</label><br>\n"
-      + "<select id='w-category' name='w-category'>\n"
-      + "</select><br>\n"
+      + "<select id='w-category' name='w-category' class='form-control'></select>\n"
       + "<label for='w-price'>Price:</label>\n"
       + "<input type='text' class='form-control' name='w-price' id='w-price' value='" + mi.price + "'>");
 
