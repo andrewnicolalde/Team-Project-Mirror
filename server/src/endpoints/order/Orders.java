@@ -73,7 +73,8 @@ public class Orders {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
-            + "where foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNo",
+            + "where foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = "
+            + ":tableNo and foodOrder.transaction.isPaid = false",
         FoodOrder.class).setParameter("tableNo", tableOrderParams.getTableNumber())
         .getResultList();
 
