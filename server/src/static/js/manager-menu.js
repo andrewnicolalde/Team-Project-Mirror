@@ -100,6 +100,9 @@ function wizardEdit(id) {
   // Set the mode to edit
   $("#wizard").attr("data-mode", "edit");
 
+  // Set the title
+  $("#wizard-title").text("Edit a Menu Item");
+
   // Start the wizard
   wizardBasic();
 }
@@ -129,6 +132,9 @@ function wizardStart() {
 
   // Set the mode to add
   $("#wizard").attr("data-mode", "add");
+
+  // Set the title
+  $("#wizard-title").text("Create a New Menu Item");
 
   // Start the wizard.
   wizardBasic();
@@ -238,14 +244,17 @@ function wizardSubmit() {
   if (wizard.attr("data-mode") === "add") {
     // Add mode
     mi.addNow = true;
-    console.log(mi);
     post("/api/authStaff/createMenuItem", JSON.stringify(mi), function(data) {
       console.log(data);
+      location.reload();
     });
 
   } else {
     // Edit mode.
-
+    post("/api/authStaff/editMenuItem", JSON.stringify(mi), function(data) {
+      console.log(data);
+      location.reload();
+    });
   }
 
   // Hide the modal
