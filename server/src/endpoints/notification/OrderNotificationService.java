@@ -62,6 +62,8 @@ public class OrderNotificationService extends NotificationService implements Run
           .getResultList();
       // If the order has just been confirmed we want to tell the kitchen.
     }
+    entityManager.close();
+
     return staffNotifications;
   }
 
@@ -97,6 +99,8 @@ public class OrderNotificationService extends NotificationService implements Run
     } else if (orderStatus == OrderStatus.READY_TO_CONFIRM) {
       message = "A table is ready to confirm their order!";
     }
+    entityManager.close();
+
     return message;
   }
 

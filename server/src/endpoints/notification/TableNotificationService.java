@@ -37,6 +37,7 @@ public class TableNotificationService extends NotificationService implements Run
           .setParameter("department", Department.WAITER).getResultList();
     }
 
+    entityManager.close();
     return staffNotifications;
   }
 

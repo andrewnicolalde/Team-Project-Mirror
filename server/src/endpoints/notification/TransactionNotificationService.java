@@ -36,6 +36,7 @@ public class TransactionNotificationService extends NotificationService implemen
           .setParameter("department", Department.WAITER).setParameter("waiter",
               transaction.getRestaurantTableStaff().getStaff()).getResultList();
     }
+    entityManager.close();
 
     return staffNotifications;
   }
