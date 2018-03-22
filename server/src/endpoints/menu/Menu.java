@@ -159,22 +159,24 @@ public class Menu {
   }
 
   /**
-   * This method removes a menu item from the database. See <code>RemoveMenuItemParams</code> for
-   * JSON details.
-   *
+   * This method unassigns a menu item from a franchise.
    * @param request A HTML request.
    * @param response A HTML response.
-   * @return Success after an item is removed.
+   * @return Success after the menu item has been unassigned.
    */
-  public static String removeMenuItem(Request request, Response response) {
-    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
-
-    RemoveMenuItemParams removeMenuItemParams = JsonUtil.getInstance().fromJson(request.body(),
-        RemoveMenuItemParams.class);
-
-    entityManager.remove(entityManager.find(MenuItem.class, removeMenuItemParams.getId()));
-
-    entityManager.close();
+  public static String unassignMenuItem(Request request, Response response) {
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
+    StaffSession session = em
+        .find(StaffSession.class, request.session().attribute("StaffSessionKey"));
+    Franchise franchise = session.getStaff().getFranchise();
+    MenuItem mi = em.find(MenuItem.class, Long.parseLong(request.body()));
+    FranchiseMenuItem fmi = (FranchiseMenuItem)em
+        .createQuery("from FranchiseMenuItem where franchise = :franchise and menuItem = :menuItem")
+        .setParameter("franchise", franchise).setParameter("menuItem", mi).getResultList().get(0);
+    em.getTransaction().begin();
+    em.remove(fmi);
+    em.getTransaction().commit();
+    em.close();
     return "success";
   }
 

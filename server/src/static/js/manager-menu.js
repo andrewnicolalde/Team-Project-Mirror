@@ -34,7 +34,7 @@ $(document).ready(function() {
             + "<td>" + getDietaryRequirements(item) + "</td>\n"
             + "<td>" + getIngredientsList(item.ingredients) + "</td>\n"
             + "<td>" + item.picture_src + "</td>\n"
-            + "<td><i id='edit-" + item.id + "' class=\"fas fa-edit fa-lg edit\" onclick='wizardEdit(" + item.id + ");'></i></td>\n"
+            + "<td><i id='edit-" + item.id + "' class=\"fas fa-edit fa-lg edit\" onclick='wizardEdit(" + item.id + ");'></i><i class=\"fa fa-times fa-lg remove\" onclick='unassign(" + item.id + ");'></i></td>\n"
             + "</tr>");
       }
     });
@@ -44,6 +44,14 @@ $(document).ready(function() {
     categories = JSON.parse(data);
   });
 });
+
+function unassign(id) {
+ post("/api/authStaff/unassignMenuItem", String(id), function(data) {
+   if (data === "success") {
+     location.reload();
+   }
+ });
+}
 
 function getIngredientsList(ingredientIds) {
   let displayString = "";

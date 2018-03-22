@@ -62,7 +62,7 @@ public class Main {
     post("/api/saveSubscription", Notifications::saveSubscription);
     post("/api/authStaff/createMenuItem", Menu::createMenuItem);
     post("/api/authStaff/editMenuItem", Menu::editMenuItem);
-    post("/api/authStaff/removeMenuItem", Menu::removeMenuItem);
+    post("/api/authStaff/unassignMenuItem", Menu::unassignMenuItem);
     post("/api/authStaff/setFranchiseMenu", Menu::setFranchiseMenu);
     post("/api/authStaff/newIngredient", IngredientEndPoint::newIngredient);
     post("/api/authStaff/removeIngredient", IngredientEndPoint::removeIngredient);
