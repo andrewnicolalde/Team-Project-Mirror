@@ -33,7 +33,7 @@ public class Tables {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from "
-            + "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = :staffId",
+            + "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = :staffId and tableStaff.isActive = true",
         RestaurantTableStaff.class).setParameter("staffId", staffId).getResultList();
 
     // This sorts by the table status.
