@@ -73,6 +73,10 @@ public class Menu {
     return JsonUtil.getInstance().toJson(menuData);
   }
 
+  /**
+   * Returns a JSON representation of all the menu categories.
+   * @return A string holding the JSON representation.
+   */
   public static String getCategories() {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
 
@@ -184,6 +188,12 @@ public class Menu {
     return "success";
   }
 
+  /**
+   * Assigns a menu item to a franchise.
+   * @param request A HTTP request.
+   * @param response A HTTP response.
+   * @return The string "success" if there was no problem creating the assignment.
+   */
   public static String assignMenuItem(Request request, Response response) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
 
