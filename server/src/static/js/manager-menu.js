@@ -47,13 +47,39 @@ function addMenuItem(item) {
 }
 
 function getActions(item) {
-  return "<i id='edit-" + item.id + "' class=\"fas fa-edit fa-lg edit\" onclick='wizardEdit(" + item.id + ");'></i><i class=\"fa fa-times fa-lg remove\" onclick='unassign(" + item.id + ");'></i>";
+  if (item.partOfFranchise) {
+    return "<i id='edit-" + item.id + "' class=\"fas fa-edit fa-lg edit\" onclick='wizardEdit(" + item.id + ");'></i><i class=\"fa fa-times fa-lg remove\" onclick='unassign(" + item.id + ");'></i>";
+  } else {
+    return "<i id='edit-" + item.id + "' class=\"fas fa-edit fa-lg edit\" onclick='wizardEdit(" + item.id + ");'></i><i class=\"fas fa-plus fa-lg confirm\" onclick='addToFranchise(" + item.id + ");'></i>";
+
+  }
+}
+
+function getMenuItem(id) {
+  for (let i = 0; i < menuItems.length; i++) {
+    if (menuItems[i].id === id) {
+      return menuItems[i];
+    }
+  }
+  return null;
+}
+
+function addToFranchise(id) {
+  const item = getMenuItem(id);
+  post("/api/authStaff/assignMenuItem", String(id), function(data) {
+    if(data === "success") {
+      item.partOfFranchise = true;
+      reloadMenuItems();
+    }
+  })
 }
 
 function unassign(id) {
+  const item = getMenuItem(id);
  post("/api/authStaff/unassignMenuItem", String(id), function(data) {
    if (data === "success") {
-     location.reload();
+     item.partOfFranchise = false;
+     reloadMenuItems();
    }
  });
 }
