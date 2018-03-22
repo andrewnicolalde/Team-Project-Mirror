@@ -34,7 +34,7 @@ public class Tables {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from "
-            + "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = :staffId",
+            + "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = :staffId and tableStaff.isActive = true",
         RestaurantTableStaff.class).setParameter("staffId", staffId).getResultList();
 
     // This sorts by the table status.
@@ -51,7 +51,9 @@ public class Tables {
 
     TableData[] tableData = new TableData[restaurantTableStaffs.size()];
     for (int i = 0; i < tableData.length; i++) {
-      tableData[i] = new TableData(restaurantTableStaffs.get(i));
+      RestaurantTable temp = restaurantTableStaffs.get(i).getRestaurantTable();
+      tableData[i] = new TableData(temp.getTableNumber(), temp.getStatus().toString(),
+          temp.getFranchise().toString(), temp.getTableId());
     }
 
     entityManager.close();
@@ -80,7 +82,9 @@ public class Tables {
 
     TableData[] tableData = new TableData[restaurantTableStaffs.size()];
     for (int i = 0; i < tableData.length; i++) {
-      tableData[i] = new TableData(restaurantTableStaffs.get(i));
+      RestaurantTable temp = restaurantTableStaffs.get(i).getRestaurantTable();
+      tableData[i] = new TableData(temp.getTableNumber(), temp.getStatus().toString(),
+          temp.getFranchise().toString(), temp.getTableId());
     }
 
     entityManager.close();
@@ -100,7 +104,6 @@ public class Tables {
 
     ChangeTableStatus cts = JsonUtil.getInstance()
         .fromJson(request.body(), ChangeTableStatus.class);
-
 
     Long tableId;
     if (request.session().attribute("TableSessionKey") != null) {

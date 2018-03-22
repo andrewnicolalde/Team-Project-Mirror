@@ -42,6 +42,11 @@ public class RestaurantTableStaff {
   private RestaurantTable restaurantTable;
 
   /**
+   * This field is used to store if the table assignment is the current assignment.
+   */
+  private Boolean isActive;
+
+  /**
    * This empty constructor is used by Hibernate.
    */
   public RestaurantTableStaff() {
@@ -50,13 +55,15 @@ public class RestaurantTableStaff {
 
   /**
    * This constructor is used to create new entities in this table.
-   *
-   * @param staff This is the staff member that will be serving the table.
+   *  @param staff This is the staff member that will be serving the table.
    * @param restaurantTable This is the table that will be served by the staff member.
+   * @param isActive This stores if the table assignement is current.
    */
-  public RestaurantTableStaff(Staff staff, RestaurantTable restaurantTable) {
+  public RestaurantTableStaff(Staff staff, RestaurantTable restaurantTable,
+      Boolean isActive) {
     this.staff = staff;
     this.restaurantTable = restaurantTable;
+    this.isActive = isActive;
   }
 
   public Long getRestaurantTableStaffId() {
@@ -90,5 +97,13 @@ public class RestaurantTableStaff {
         ", staff=" + staff +
         ", restaurantTable=" + restaurantTable +
         '}';
+  }
+
+  public Boolean getActive() {
+    return isActive;
+  }
+
+  public void setIsActive(Boolean active) {
+    this.isActive = active;
   }
 }

@@ -13,6 +13,7 @@ import endpoints.menu.Menu;
 import endpoints.notification.NotificationEndpoint;
 import endpoints.order.Orders;
 import endpoints.payment.CardChargeMaker;
+import endpoints.tables.TableAssign;
 import endpoints.tables.Tables;
 import endpoints.transaction.Transactions;
 
@@ -44,11 +45,17 @@ public class Main {
 
     // These end points all return JSON and are meant to be requested via AJAX requests.
     get("/api/authStaff/getMenu", Menu::getMenu);
-    get("/api/authStaff/getCategories", (req, res) -> Menu.getCategories());
     get("/api/authStaff/getTables", Tables::getTables);
     get("/api/authStaff/getAllTables", Tables::getAllTables);
     get("/api/authStaff/getEmployees", Employee::getEmployees);
+    get("/api/authStaff/getWaiters", Employee::getWaiters);
     get("/api/authStaff/getDepartments", Employee::getDepartments);
+    get("/api/authStaff/getCategories", (req, res) -> Menu.getCategories());
+    post("/api/authStaff/getUnAssignedTables", TableAssign::getUnassignedTables);
+    post("/api/authStaff/getAllTablesAssignments", TableAssign::getTablesWithAssignmentCount);
+    post("/api/authStaff/getTableAssignments", TableAssign::getTableAssignments);
+    post("/api/authStaff/setTableAssignment", TableAssign::setTableAssignments);
+    post("/api/authStaff/removeTableAssignment", TableAssign::removeAssignment);
     get("/api/authStaff/getIngredients", IngredientEndPoint::getIngredients);
     post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
     post("/api/authStaff/getOrdersByStatus", Orders::getOrdersByStatus);
