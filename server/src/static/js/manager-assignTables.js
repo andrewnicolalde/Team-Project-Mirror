@@ -45,10 +45,10 @@ function getTableAssignments(staffId) {
 
         for (let i = 0; i < tables.length; i++) {
           currentWaiter.append(
-              "<li "
+              "<li class='list-group-item' "
               + "id='table-" + tables[i].tableNumber + "'>"
               + "<span>Table </span>" + tables[i].tableNumber
-              + "<i class=\"fas fa-arrow-circle-right\"></i>"
+              + "<i class=\"fas fa-arrow-circle-right right\"></i>"
               + "</li>"
           )
         }
@@ -56,6 +56,11 @@ function getTableAssignments(staffId) {
   );
 }
 
+/**
+ * This function gets all the tables that aren't assigned to the clicked staff
+ * member.
+ * @param staffId The staff member we want to assign tables to.
+ */
 function getTables(staffId) {
   post("/api/authStaff/getAllTablesAssignments", String(staffId), (data) => {
      const tables = JSON.parse(data);
@@ -66,8 +71,8 @@ function getTables(staffId) {
           + "<div class='card-header' id='heading" + i + "'"
             + ">"
             + "<i class=\"fas fa-arrow-circle-left\"></i>"
-            + "<span>Table " + tables[i].tableNumber + "</span>"
-            + "<span class='bold'> (" + tables[i].assignments + ")</span>"
+            + "<span class='right'>Table " + tables[i].tableNumber + "</span>"
+            + "<span class='bold right'> (" + tables[i].assignments + ")</span>"
             + "</div>"
             + "</div>");
      }
