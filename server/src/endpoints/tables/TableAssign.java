@@ -60,7 +60,7 @@ public class TableAssign {
 
     List<RestaurantTableStaff> restaurantTables = entityManager.createQuery(
         "from RestaurantTableStaff table where table.restaurantTable.franchise = :franchise and "
-            + "table.staff.id != :staff order by table.restaurantTable.tableNumber asc ",
+            + "table.staff.id != :staff or (table.staff.id = :staff and table.isActive = false) order by table.restaurantTable.tableNumber asc ",
         RestaurantTableStaff.class)
         .setParameter("franchise", staffSession.getStaff().getFranchise())
         .setParameter("staff", Long.parseLong(request.body()))
