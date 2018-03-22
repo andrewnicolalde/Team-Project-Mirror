@@ -50,9 +50,13 @@ public class Menu {
       return "";
     }
 
+    List<MenuItem> menuItems = entityManager.createQuery("from MenuItem", MenuItem.class).getResultList();
+
+    /*
     List<FranchiseMenuItem> menuItems = entityManager.createQuery("from FranchiseMenuItem "
         + "menuItem where menuItem.franchise = :franchise", FranchiseMenuItem.class)
         .setParameter("franchise", franchise).getResultList();
+    */
 
     entityManager.close();
 
@@ -63,7 +67,7 @@ public class Menu {
     MenuData[] menuData = new MenuData[menuItems.size()];
 
     for (int i = 0; i < menuData.length; i++) {
-      menuData[i] = new MenuData(menuItems.get(i).getMenuItem());
+      menuData[i] = new MenuData(menuItems.get(i), franchise);
     }
 
     return JsonUtil.getInstance().toJson(menuData);

@@ -1,7 +1,12 @@
 package endpoints.menu;
 
+import database.DatabaseManager;
+import database.tables.Franchise;
+import database.tables.FranchiseMenuItem;
 import database.tables.MenuItem;
 import java.text.DecimalFormat;
+import java.util.List;
+import javax.persistence.EntityManager;
 
 /**
  * This class is to map the query result into some GSON can convert into JSON.
@@ -22,13 +27,14 @@ class MenuData {
   private final Boolean is_vegetarian;
   private final Boolean is_gluten_free;
   private final String picture_src;
+  private final Boolean partOfFranchise;
 
   /**
    * This constructor create new menu data items that can be converted into JSON.
    *
    * @param menuItem the item from the database.
    */
-  public MenuData(MenuItem menuItem) {
+  public MenuData(MenuItem menuItem, Franchise franchise) {
     this.id = menuItem.getMenuItemId();
     this.name = menuItem.getName();
     this.categoryId = menuItem.getCategory().getCategoryId();
@@ -42,6 +48,19 @@ class MenuData {
     this.is_vegetarian = menuItem.getVegetarian();
     this.is_gluten_free = menuItem.getGlutenFree();
     this.picture_src = menuItem.getPictureSrc();
+
+    EntityManager em = DatabaseManager.getInstance().getEntityManager();
+    List<FranchiseMenuItem> fmi = em
+        .createQuery("from FranchiseMenuItem where menuItem = :menuItem and franchise = :franchise",
+            FranchiseMenuItem.class).setParameter("menuItem", menuItem)
+        .setParameter("franchise", franchise).getResultList();
+    em.close();
+
+    if (fmi.size() > 0) {
+      partOfFranchise = true;
+    } else {
+      partOfFranchise = false;
+    }
   }
 
   public Long getId() {
@@ -90,5 +109,9 @@ class MenuData {
 
   public Double getCalories() {
     return calories;
+  }
+
+  public Boolean getPartOfFranchise() {
+    return partOfFranchise;
   }
 }

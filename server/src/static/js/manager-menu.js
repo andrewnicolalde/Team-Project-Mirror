@@ -23,20 +23,7 @@ $(document).ready(function() {
 
     get("/api/authStaff/getMenu", function(data) {
       menuItems = JSON.parse(data);
-      for (let i = 0; i < menuItems.length; i++) {
-        const item = menuItems[i];
-        $("#menu").append("<tr id='mi-" + item.id + "'>\n"
-            + "<td>" + item.name + "</td>\n"
-            + "<td>" + item.description + "</td>\n"
-            + "<td>" + item.category + "</td>"
-            + "<td>£" + parseFloat(item.price).toFixed(2) + "</td>\n"
-            + "<td>" + item.calories + "kCal</td>\n"
-            + "<td>" + getDietaryRequirements(item) + "</td>\n"
-            + "<td>" + getIngredientsList(item.ingredients) + "</td>\n"
-            + "<td>" + item.picture_src + "</td>\n"
-            + "<td><i id='edit-" + item.id + "' class=\"fas fa-edit fa-lg edit\" onclick='wizardEdit(" + item.id + ");'></i><i class=\"fa fa-times fa-lg remove\" onclick='unassign(" + item.id + ");'></i></td>\n"
-            + "</tr>");
-      }
+      reloadMenuItems(menuItems);
     });
   });
 
@@ -45,12 +32,46 @@ $(document).ready(function() {
   });
 });
 
+function addMenuItem(item) {
+  $("#menu").append("<tr id='mi-" + item.id + "'>\n"
+      + "<td>" + item.name + "</td>\n"
+      + "<td>" + item.description + "</td>\n"
+      + "<td>" + item.category + "</td>"
+      + "<td>£" + parseFloat(item.price).toFixed(2) + "</td>\n"
+      + "<td>" + item.calories + "kCal</td>\n"
+      + "<td>" + getDietaryRequirements(item) + "</td>\n"
+      + "<td>" + getIngredientsList(item.ingredients) + "</td>\n"
+      + "<td>" + item.picture_src + "</td>\n"
+      + "<td>" + getActions(item) + "</td>\n"
+      + "</tr>");
+}
+
+function getActions(item) {
+  return "<i id='edit-" + item.id + "' class=\"fas fa-edit fa-lg edit\" onclick='wizardEdit(" + item.id + ");'></i><i class=\"fa fa-times fa-lg remove\" onclick='unassign(" + item.id + ");'></i>";
+}
+
 function unassign(id) {
  post("/api/authStaff/unassignMenuItem", String(id), function(data) {
    if (data === "success") {
      location.reload();
    }
  });
+}
+
+function reloadMenuItems() {
+  $("#menu").empty();
+  for (let i = 0; i < menuItems.length; i++) {
+    const item = menuItems[i];
+    if ($("#see-all-menuitems")[0].checked) {
+      // Showing all menu items
+      addMenuItem(item);
+    } else {
+      // Only show item if it is part of the franchise
+      if (item.partOfFranchise) {
+        addMenuItem(item);
+      }
+    }
+  }
 }
 
 function getIngredientsList(ingredientIds) {
