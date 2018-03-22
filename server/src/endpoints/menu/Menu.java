@@ -1,20 +1,16 @@
 package endpoints.menu;
 
 import database.DatabaseManager;
-import database.tables.FranchiseMenuItem;
 import database.tables.Category;
 import database.tables.Franchise;
-import database.tables.Ingredient;
+import database.tables.FranchiseMenuItem;
 import database.tables.MenuItem;
-import database.tables.Staff;
 import database.tables.StaffSession;
 import database.tables.TableSession;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.xml.crypto.Data;
-import org.hibernate.boot.model.relational.Database;
 import spark.Request;
 import spark.Response;
 import util.JsonUtil;
@@ -34,7 +30,7 @@ public class Menu {
    * @param response A Spark response
    * @return The menu in JSON as a string
    */
-  public static String getMenu(Request request, Response response) {
+  public static String getCustomerMenu(Request request, Response response) {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
@@ -52,11 +48,39 @@ public class Menu {
 
     List<MenuItem> menuItems = entityManager.createQuery("from MenuItem", MenuItem.class).getResultList();
 
-    /*
-    List<FranchiseMenuItem> menuItems = entityManager.createQuery("from FranchiseMenuItem "
-        + "menuItem where menuItem.franchise = :franchise", FranchiseMenuItem.class)
-        .setParameter("franchise", franchise).getResultList();
-    */
+    entityManager.close();
+
+    if (menuItems.size() == 0) {
+      return "[]";
+    }
+
+    CustomerMenuData[] menuData = new CustomerMenuData[menuItems.size()];
+
+    for (int i = 0; i < menuData.length; i++) {
+      menuData[i] = new CustomerMenuData(menuItems.get(i), franchise);
+    }
+
+    return JsonUtil.getInstance().toJson(menuData);
+  }
+
+  public static String getMenu(Request request, Response response) {
+
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
+    Franchise franchise = null;
+
+    if (request.session().attribute("TableSessionKey") != null) {
+      franchise = entityManager.find(TableSession.class, request.session().attribute(
+          "TableSessionKey")).getRestaurantTable().getFranchise();
+    } else if (request.session().attribute("StaffSessionKey") != null) {
+      franchise = entityManager.find(StaffSession.class, request.session().attribute(
+          "StaffSessionKey")).getStaff().getFranchise();
+    } else {
+      return "";
+    }
+
+    List<MenuItem> menuItems = entityManager.createQuery("from MenuItem", MenuItem.class)
+        .getResultList();
 
     entityManager.close();
 
@@ -72,7 +96,6 @@ public class Menu {
 
     return JsonUtil.getInstance().toJson(menuData);
   }
-
   /**
    * Returns a JSON representation of all the menu categories.
    * @return A string holding the JSON representation.

@@ -69,7 +69,7 @@ public class Main {
     post("/api/authStaff/removeIngredient", IngredientEndPoint::removeIngredient);
     post("/api/authStaff/renameIngredient", IngredientEndPoint::renameIngredient);
 
-    get("/api/authTable/getMenu", Menu::getMenu);
+    get("/api/authTable/getMenu", Menu::getCustomerMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());
     get("/api/authTable/getTransactionId", Transactions::getTransactionId);
     get("/api/authTable/getAllOrdersForTable", Orders::getAllOrdersForTable);

@@ -1,4 +1,4 @@
-var cost = [];
+let cost = [];
 
 /**
  * This is the script that runs when the page loads. It creates an accordion that will contain one order in each of its cards.
@@ -17,7 +17,8 @@ $(document).ready(function () {
               + " >" +
               "<h5 class=\"mb-0\">" +
               "Order " + (i + 1) + " - " + response[i].status + " " + statusIcon +
-              "<div class='total' style='float: right'>" + "£" + (cost[i] = calculateOneTotal(response[i].orderContents, cost[i])) + "</div>" +
+              "<div class='total' style='float: right'>" + "£"
+              + (calculateOneTotal(response[i], i)) + "</div>" +
               "</h5>" +
               "</div>" +
               "<div id=\"collapse" + i
@@ -77,17 +78,18 @@ function loadOrder(current) {
 /**
  * This function returns the cost of all the items in one order.
  * @param current the current order.
- * @param cost The table for which we want to calculate the cost for.
+ * @param number The index of the order in the JSON.
  */
-function calculateOneTotal(current, cost) {
+function calculateOneTotal(current, number) {
   let currentcost = 0.0;
-  if (current.length == 0) {
-    return "0";
+  console.log(current);
+  if (!current.status === "Cancelled" && !current.orderContents.length === 0) {
+    for (let i = 0; i < current.length; i++) {
+      const item = current[i].price;
+      currentcost += parseFloat(item);
+    }
   }
-  for (let i = 0; i < current.length; i++) {
-    const item = current[i].price;
-    currentcost += parseFloat(item);
-  }
+  cost[number] = currentcost.toFixed(2);
   return currentcost.toFixed(2);
 }
 
