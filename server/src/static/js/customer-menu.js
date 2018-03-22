@@ -43,7 +43,9 @@ function loadMenu() {
         $("#category-" + menuItem.categoryId
             + "-list").append("<li id='menuitem-" + menuItem.id
             + "' class='menuitem list-group-item list-group-item-action' onclick='showItemModal("
-            + menuItem.id + ")' data-glutenfree='" + menuItem.is_gluten_free + "' data-vegetarian='" + menuItem.is_vegetarian + "' data-vegan='" + menuItem.is_vegetarian + "'>\n"
+            + menuItem.id + ")' data-glutenfree='" + menuItem.is_gluten_free
+            + "' data-vegetarian='" + menuItem.is_vegetarian + "' data-vegan='"
+            + menuItem.is_vegan + "'>\n"
             + "<span class='bold'>" + menuItem.name + "</span> - £"
             + menuItem.price + "\n"
             + "<br>\n"
@@ -73,9 +75,12 @@ function meetsDietaryRequirements(mi) {
   vegetarianinput = document.getElementById("vegetariancheckbox");
   veganinput = document.getElementById("vegancheckbox");
 
-  if (!gluteninput.checked | (gluteninput.checked == true & mi.dataset.glutenfree === "true")) {
-    if (!vegetarianinput.checked | (vegetarianinput.checked == true & mi.dataset.vegetarian === "true")) {
-     if (!veganinput.checked | (veganinput.checked == true & mi.dataset.vegan === "true")) {
+  if (!gluteninput.checked || (gluteninput.checked === true
+          & mi.dataset.glutenfree === "true")) {
+    if (!vegetarianinput.checked || (vegetarianinput.checked === true
+            & mi.dataset.vegetarian === "true")) {
+      if (!veganinput.checked || (veganinput.checked === true & mi.dataset.vegan
+              === "true")) {
        return true;
      }
     }
