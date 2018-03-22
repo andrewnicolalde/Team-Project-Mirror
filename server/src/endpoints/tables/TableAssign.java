@@ -46,6 +46,13 @@ public class TableAssign {
     return JsonUtil.getInstance().toJson(out);
   }
 
+  /**
+   * This method gets the list of all unassigned tables.
+   *
+   * @param request A HTML request.
+   * @param response A HTML response.
+   * @return A JSON list of unassigned tables.
+   */
   public static String getUnassignedTables(Request request, Response response) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
@@ -153,6 +160,35 @@ public class TableAssign {
 
     if (entityManager.getTransaction().isActive()) {
       entityManager.getTransaction().rollback();
+    }
+    entityManager.close();
+    return "success";
+  }
+
+  /**
+   * This method removes waiters assigned to tables.
+   *
+   * @param request A HTML request.
+   * @param response A HTML response.
+   * @return success or failed
+   */
+  public static String removeAssignment(Request request, Response response) {
+    TableAssignParams tableAssignParams = JsonUtil.getInstance()
+        .fromJson(request.body(), TableAssignParams.class);
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
+    try {
+      entityManager.getTransaction().begin();
+      RestaurantTableStaff restaurantTableStaff = entityManager
+          .createQuery(
+              "from RestaurantTableStaff tableStaff where tableStaff.staff.id = :staffId and restaurantTable.tableNumber= :tableNumber",
+              RestaurantTableStaff.class).setParameter("staffId", tableAssignParams.getStaffId())
+          .setParameter("tableNumber", tableAssignParams.getTableNumber()).getSingleResult();
+
+      restaurantTableStaff.setIsActive(false);
+      entityManager.getTransaction().commit();
+    } catch (Exception e) {
+      return "failed";
     }
     entityManager.close();
     return "success";

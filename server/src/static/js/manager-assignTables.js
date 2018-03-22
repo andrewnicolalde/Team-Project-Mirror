@@ -49,7 +49,9 @@ function getTableAssignments(staffId) {
               + "' class='list-group-item' "
               + "id='table-" + tables[i].tableNumber + "'>"
               + "<span>Table </span>" + tables[i].tableNumber
-              + "<i class=\"fas fa-arrow-circle-right right\"></i>"
+              + "<i onclick='event.stopPropagation(); removeAssignment("
+              + staffId + ", " + tables[i].tableNumber
+              + ");' class=\"fas fa-arrow-circle-right right\"></i>"
               + "</li>"
           )
         }
@@ -72,7 +74,7 @@ function getTables(staffId) {
           + "<div data-tableNum='" + tables[i].tableNumber
           + "' class='card-header' id='heading" + i + "'"
           + ">"
-          + "<i class=\"fas fa-arrow-circle-left\" onclick='event.stopPropagation(); addAssigment("
+          + "<i class=\"fas fa-arrow-circle-left\" onclick='event.stopPropagation(); addAssignment("
           + staffId + ", " + tables[i].tableNumber + ")'></i>"
           + "<span class='right'>Table " + tables[i].tableNumber + "</span>"
           + "</div>"
@@ -86,13 +88,28 @@ function getTables(staffId) {
  * @param staffId The staff member that is being assigned a table.
  * @param tableId The table that is being assigned.
  */
-function addAssigment(staffId, tableId) {
+function addAssignment(staffId, tableId) {
   post("/api/authStaff/setTableAssignment",
       JSON.stringify({staffId: staffId, tableNumber: tableId}), (data) => {
         if (data !== "failure") {
           getTableAssignments(staffId);
+          getTables(staffId);
         }
       }
   );
 }
 
+/**
+ * This function removes a table assignment from a waiter.
+ * @param staffId The staff member that the assignment is being removed
+ * @param tableId The table that is being unassigned from the waiter.
+ */
+function removeAssignment(staffId, tableId) {
+  post("/api/authStaff/removeTableAssignment",
+      JSON.stringify({staffId: staffId, tableNumber: tableId}), (data) => {
+        if (data !== "failure") {
+          getTableAssignments(staffId);
+          getTables(staffId);
+        }
+      });
+}

@@ -53,6 +53,7 @@ public class Main {
     post("/api/authStaff/getAllTablesAssignments", TableAssign::getTablesWithAssignmentCount);
     post("/api/authStaff/getTableAssignments", TableAssign::getTableAssignments);
     post("/api/authStaff/setTableAssignment", TableAssign::setTableAssignments);
+    post("/api/authStaff/removeTableAssignment", TableAssign::removeAssignment);
     post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
     post("/api/authStaff/getOrdersByStatus", Orders::getOrdersByStatus);
     post("/api/authStaff/getOrderItems", Orders::getOrderItems);
