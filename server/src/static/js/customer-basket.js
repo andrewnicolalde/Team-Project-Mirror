@@ -81,16 +81,15 @@ function loadOrder(current) {
  * @param number The index of the order in the JSON.
  */
 function calculateOneTotal(current, number) {
-  let currentcost = 0.0;
-  console.log(current);
-  if (!current.status === "Cancelled" && !current.orderContents.length === 0) {
-    for (let i = 0; i < current.length; i++) {
-      const item = current[i].price;
-      currentcost += parseFloat(item);
+  let currentCost = 0.0;
+  if (current.status !== "Cancelled") {
+    for (let i = 0; i < current.orderContents.length; i++) {
+      const item = current.orderContents[i].price;
+      currentCost += parseFloat(item);
     }
   }
-  cost[number] = currentcost.toFixed(2);
-  return currentcost.toFixed(2);
+  cost[number] = currentCost.toFixed(2);
+  return currentCost.toFixed(2);
 }
 
 /**
