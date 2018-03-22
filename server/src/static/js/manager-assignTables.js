@@ -45,7 +45,8 @@ function getTableAssignments(staffId) {
 
         for (let i = 0; i < tables.length; i++) {
           currentWaiter.append(
-              "<li class='list-group-item' "
+              "<li data-tableNum='" + tables[i].tableNumber
+              + "' class='list-group-item' "
               + "id='table-" + tables[i].tableNumber + "'>"
               + "<span>Table </span>" + tables[i].tableNumber
               + "<i class=\"fas fa-arrow-circle-right right\"></i>"
@@ -63,18 +64,25 @@ function getTableAssignments(staffId) {
  */
 function getTables(staffId) {
   post("/api/authStaff/getAllTablesAssignments", String(staffId), (data) => {
-     const tables = JSON.parse(data);
+    const tables = JSON.parse(data);
     const list = $("#table-list");
     list.empty();
-     for (let i = 0; i < tables.length; i++) {
-        list.append("<div class='card' id='cardTable "+ i + "'>"
-          + "<div class='card-header' id='heading" + i + "'"
-            + ">"
-            + "<i class=\"fas fa-arrow-circle-left\"></i>"
-            + "<span class='right'>Table " + tables[i].tableNumber + "</span>"
-            + "<span class='bold right'> (" + tables[i].assignments + ")</span>"
-            + "</div>"
-            + "</div>");
-     }
+    for (let i = 0; i < tables.length; i++) {
+      list.append("<div class='card' id='cardTable " + i + "'>"
+          + "<div data-tableNum='" + tables[i].tableNumber
+          + "' class='card-header' id='heading" + i + "'"
+          + ">"
+          + "<i class=\"fas fa-arrow-circle-left\" onclick='event.stopPropagation() addAssigment("
+          + staffId + ", " + tables[i].tableNumber + ")'></i>"
+          + "<span class='right'>Table " + tables[i].tableNumber + "</span>"
+          + "<span class='bold right'> (" + tables[i].assignments + ")</span>"
+          + "</div>"
+          + "</div>");
+    }
   });
+}
+
+function addAssigment(staffId, tableId) {
+  console.log(staffId);
+  console.log(tableId);
 }
