@@ -42,6 +42,7 @@ public class AuthenticationEmployee {
 
   /**
    * Authenticates the log in request, and redirects them if successful.
+   *
    * @param request The HTTP request
    * @param response The response to give.
    * @return A JSON response showing whether is was successful and if so, the session key.
@@ -50,48 +51,49 @@ public class AuthenticationEmployee {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
 
     // Convert the data from the client into an object
-    EmployeeAuthenticationParams ap = new EmployeeAuthenticationParams(
-        new Long(request.queryParams("employeeNumber")), request.queryParams("password"));
+    if (validateParams(request)) {
+      EmployeeAuthenticationParams ap = new EmployeeAuthenticationParams(
+          new Long(request.queryParams("employeeNumber")), request.queryParams("password"));
+      // Authenticate the given details
+      Staff employee = isValidLoginCombination(ap);
 
-    // Authenticate the given details
-    Staff employee = isValidLoginCombination(ap);
+      // employee will be null if the details are invalid.
+      if (employee != null) {
+        // Check if there are any existing sessions with the current user, and end them.
+        List<StaffSession> currentSessions = em.createQuery("SELECT s FROM StaffSession s "
+            + "WHERE s.staff = :staff", StaffSession.class).setParameter(
+            "staff", employee).getResultList();
+        for (StaffSession session : currentSessions) {
+          em.getTransaction().begin();
+          em.remove(session);
+          em.getTransaction().commit();
+        }
 
-    // employee will be null if the details are invalid.
-    if (employee != null) {
-      // Check if there are any existing sessions with the current user, and end them.
-      List<StaffSession> currentSessions = em.createQuery("SELECT s FROM StaffSession s "
-          + "WHERE s.staff = :staff", StaffSession.class).setParameter(
-          "staff", employee).getResultList();
-      for (StaffSession session : currentSessions) {
+        // Create a new session with the current user.
+        String sessionKey = BCrypt.gensalt();
+        StaffSession staffSession = new StaffSession(sessionKey, employee);
         em.getTransaction().begin();
-        em.remove(session);
+        em.persist(staffSession);
         em.getTransaction().commit();
-      }
 
-      // Create a new session with the current user.
-      String sessionKey = BCrypt.gensalt();
-      StaffSession staffSession = new StaffSession(sessionKey, employee);
-      em.getTransaction().begin();
-      em.persist(staffSession);
-      em.getTransaction().commit();
+        // Create the spark session and set the session key.
+        request.session(true);
+        request.session().attribute("StaffSessionKey", sessionKey);
 
-      // Create the spark session and set the session key.
-      request.session(true);
-      request.session().attribute("StaffSessionKey", sessionKey);
-
-      switch (staffSession.getStaff().getDepartment()) {
-        case WAITER:
-          response.redirect("/staff/waiter.html");
-          break;
-        case KITCHEN:
-          response.redirect("/staff/kitchen.html");
-          break;
-        case MANAGER:
-          response.redirect("/manager/home.html");
-          break;
-        default:
-          response.redirect("/");
-          break;
+        switch (staffSession.getStaff().getDepartment()) {
+          case WAITER:
+            response.redirect("/staff/waiter.html");
+            break;
+          case KITCHEN:
+            response.redirect("/staff/kitchen.html");
+            break;
+          case MANAGER:
+            response.redirect("/manager/home.html");
+            break;
+          default:
+            response.redirect("/");
+            break;
+        }
       }
     } else {
       response.redirect("/");
@@ -101,9 +103,9 @@ public class AuthenticationEmployee {
   }
 
   /**
-   * Checks if the request has a valid staff session key. Will halt if not.
-   * No JSON input as it is intended to run before most get/post requests - it just checks the
-   * session details.
+   * Checks if the request has a valid staff session key. Will halt if not. No JSON input as it is
+   * intended to run before most get/post requests - it just checks the session details.
+   *
    * @param request The HTTP request.
    * @param response The HTTP response.
    */
@@ -146,5 +148,10 @@ public class AuthenticationEmployee {
     response.redirect("/");
     em.close();
     return response;
+  }
+
+  private static boolean validateParams(Request request) {
+    return request.queryParams("employeeNumber").matches("[0-9]+") && !(request.queryParams
+        ("password").equals(""));
   }
 }
