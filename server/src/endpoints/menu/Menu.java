@@ -30,8 +30,8 @@ public class Menu {
    * Gets the full menu from the database and returns it in JSON. No JSON input as it is a get
    * request.
    *
-   * @param request A HTML request
-   * @param response A HTML response
+   * @param request A Spark request
+   * @param response A Spark response
    * @return The menu in JSON as a string
    */
   public static String getMenu(Request request, Response response) {
