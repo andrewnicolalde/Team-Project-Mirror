@@ -29,6 +29,7 @@ public class Transactions {
               "table", table).getResultList();
       RestaurantTableStaff temp;
       if (servers.size() == 0) {
+        em.close();
         // If there are no waiters assigned to serve this table, then we have an issue...
         return null;
       } else {
@@ -75,6 +76,7 @@ public class Transactions {
     TransactionIdParams orderIdParams = JsonUtil.getInstance()
         .fromJson(request.body(), TransactionIdParams.class);
     Transaction transaction = em.find(Transaction.class, orderIdParams.getTransactionId());
+    em.close();
     return JsonUtil.getInstance().toJson(transaction.getTotal());
   }
 }

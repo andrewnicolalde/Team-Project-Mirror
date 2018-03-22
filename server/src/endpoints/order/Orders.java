@@ -1,12 +1,10 @@
 package endpoints.order;
 
 import database.DatabaseManager;
-import database.tables.Department;
 import database.tables.FoodOrder;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
-import database.tables.StaffNotification;
 import database.tables.StaffSession;
 import database.tables.TableSession;
 import database.tables.Transaction;
@@ -14,7 +12,6 @@ import database.tables.WaiterSale;
 import endpoints.notification.NotificationEndpoint;
 import endpoints.transaction.TransactionIdParams;
 import endpoints.transaction.Transactions;
-import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -324,11 +321,14 @@ public class Orders {
       if (foodOrder.getTransaction().getRestaurantTableStaff().getRestaurantTable()
           == tableSession
           .getRestaurantTable()) {
+        entityManager.close();
         //Checks if the table is in the correct status.
         return foodOrder.getStatus() != OrderStatus.ORDERING
             && foodOrder.getStatus() != OrderStatus.READY_TO_CONFIRM;
       }
+      entityManager.close();
     }
+
     return true;
   }
 

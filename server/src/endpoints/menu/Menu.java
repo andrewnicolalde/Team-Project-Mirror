@@ -43,6 +43,7 @@ public class Menu {
       franchise = entityManager.find(StaffSession.class, request.session().attribute(
           "StaffSessionKey")).getStaff().getFranchise();
     } else {
+      entityManager.close();
       return "";
     }
 
@@ -76,6 +77,7 @@ public class Menu {
       franchise = entityManager.find(StaffSession.class, request.session().attribute(
           "StaffSessionKey")).getStaff().getFranchise();
     } else {
+      entityManager.close();
       return "";
     }
 
