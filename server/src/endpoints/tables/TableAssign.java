@@ -25,6 +25,7 @@ public class TableAssign {
    * @return A list of table assignments in JSON.
    */
   public static String getTableAssignments(Request request, Response response) {
+    System.out.println(request.body());
     TableAssignParams tableAssignParams = JsonUtil.getInstance()
         .fromJson(request.body(), TableAssignParams.class);
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
@@ -37,7 +38,8 @@ public class TableAssign {
     TableAssignParams[] out = new TableAssignParams[restaurantTableStaffs.size()];
 
     for (int i = 0; i < out.length; i++) {
-      out[i] = new TableAssignParams(restaurantTableStaffs.get(i));
+      out[i] = new TableAssignParams(restaurantTableStaffs.get(i).getStaff().getEmployeeNumber(),
+          restaurantTableStaffs.get(i).getRestaurantTable().getTableNumber());
     }
     return JsonUtil.getInstance().toJson(out);
   }

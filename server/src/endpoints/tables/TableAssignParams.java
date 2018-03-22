@@ -29,15 +29,6 @@ public class TableAssignParams {
     this.tableNumber = tableNumber;
   }
 
-  /**
-   * This is used to convert database results to JSON..
-   * @param restaurantTableStaff The result from the database.
-   */
-  public TableAssignParams(RestaurantTableStaff restaurantTableStaff) {
-    this.staffId = restaurantTableStaff.getStaff().getEmployeeNumber();
-    this.tableNumber = restaurantTableStaff.getRestaurantTable().getTableNumber();
-  }
-
   public Long getStaffId() {
     return staffId;
   }
