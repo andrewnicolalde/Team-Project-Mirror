@@ -58,7 +58,7 @@ public class RestaurantTableStaffTest {
     //Create new RestaurantTableStaff
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    entityManager.persist(new RestaurantTableStaff(staff, restaurantTable));
+    entityManager.persist(new RestaurantTableStaff(staff, restaurantTable, ));
     entityManager.getTransaction().commit();
     entityManager.close();
 

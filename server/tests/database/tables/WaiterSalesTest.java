@@ -51,7 +51,7 @@ public class WaiterSalesTest {
 
     //Create new Server
     entityManager.getTransaction().begin();
-    RestaurantTableStaff restaurantTableStaff = new RestaurantTableStaff(staff, restaurantTable);
+    RestaurantTableStaff restaurantTableStaff = new RestaurantTableStaff(staff, restaurantTable, );
     entityManager.persist(restaurantTableStaff);
     entityManager.getTransaction().commit();
 
