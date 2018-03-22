@@ -13,14 +13,14 @@ public class TableAssignData {
   /**
    * This fields stores the number of assignments for a table.
    */
-  private int assignments;
+  private Long assignments;
 
   /**
    * This constructor takes data from the database to be used to create JSON.
    * @param tableNumber The table number that is related to the number of assignments.
    * @param assignments The number of assignments for a table.
    */
-  public TableAssignData(int tableNumber, int assignments) {
+  public TableAssignData(int tableNumber, Long assignments) {
     this.tableNumber = tableNumber;
     this.assignments = assignments;
   }
@@ -29,7 +29,7 @@ public class TableAssignData {
     return tableNumber;
   }
 
-  public int getAssignments() {
+  public Long getAssignments() {
     return assignments;
   }
 }

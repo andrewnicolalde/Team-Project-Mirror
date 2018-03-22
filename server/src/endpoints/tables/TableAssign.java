@@ -18,7 +18,7 @@ import util.JsonUtil;
 public class TableAssign {
 
   /**
-   * This gets the assignments of waiterss to tables. For the JSON details see
+   * This gets the assignments of waiters to tables. For the JSON details see
    * <code>TableAssignParams</code>
    *
    * @param request A HTML request.
@@ -45,31 +45,35 @@ public class TableAssign {
   }
 
   /**
-   * This method gets the all tables sorted by there IDs and how many waiters are assigned to them
+   * This method gets the all tables sorted by there IDs and how many waiters are assigned to them.
    *
    * @param request A HTML request
    * @param response A HTML response
    * @return A JSON list of all tables
    */
   public static String getTablesWithAssignmentCount(Request request, Response response) {
+    System.out.println(request.body());
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     StaffSession staffSession = entityManager
         .find(StaffSession.class, request.session().attribute("StaffSessionKey"));
 
-    List<RestaurantTable> restaurantTables = entityManager.createQuery(
-        "from RestaurantTable table where table.franchise = :franchise order by table.tableNumber asc ",
-        RestaurantTable.class).setParameter("franchise", staffSession.getStaff().getFranchise())
+    List<RestaurantTableStaff> restaurantTables = entityManager.createQuery(
+        "from RestaurantTableStaff table where table.restaurantTable.franchise = :franchise and "
+            + "table.staff.id != :staff order by table.restaurantTable.tableNumber asc ",
+        RestaurantTableStaff.class)
+        .setParameter("franchise", staffSession.getStaff().getFranchise())
+        .setParameter("staff", Long.parseLong(request.body()))
         .getResultList();
 
     TableAssignData[] tableAssignData = new TableAssignData[restaurantTables.size()];
 
     for (int i = 0; i < tableAssignData.length; i++) {
-      RestaurantTable temp = restaurantTables.get(i);
+      RestaurantTable temp = restaurantTables.get(i).getRestaurantTable();
 
-      int assignments = entityManager.createQuery(
-          "select count(*) from RestaurantTableStaff tableStaff where tableStaff.restaurantTable = :table",
-          int.class).setParameter("table", temp).getSingleResult();
+      Long assignments = (Long) entityManager.createQuery(
+          "select count(*) from RestaurantTableStaff tableStaff where tableStaff.restaurantTable = :table"
+      ).setParameter("table", temp).getSingleResult();
 
       tableAssignData[i] = new TableAssignData(temp.getTableNumber(), assignments);
     }
