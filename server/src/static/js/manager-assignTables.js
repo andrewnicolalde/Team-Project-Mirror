@@ -2,7 +2,9 @@ $(document).ready(() => {
   getEmployees();
 });
 
-
+/**
+ * This function gets a list of waiters and displays them.
+ */
 function getEmployees() {
   get("/api/authStaff/getWaiters", (data) => {
     const employees = JSON.parse(data);
@@ -28,6 +30,10 @@ function getEmployees() {
   });
 }
 
+/**
+ * This function gets a list of assigned tables for a waiter.
+ * @param staffId The employee number of the waiter.
+ */
 function getTableAssignments(staffId) {
     post("/api/authStaff/getTableAssignments", JSON.stringify({
           staffId: staffId
