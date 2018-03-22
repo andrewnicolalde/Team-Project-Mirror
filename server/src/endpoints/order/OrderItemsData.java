@@ -31,7 +31,7 @@ class OrderItemsData {
     this.id = orderMenuItem.getOrderMenuItemId();
     this.name = orderMenuItem.getMenuItem().getName();
     this.category = orderMenuItem.getMenuItem().getCategory().getName();
-    this.ingredients = orderMenuItem.getMenuItem().getIngredients();
+    this.ingredients = orderMenuItem.getMenuItem().getIngredientsString();
     this.instructions = orderMenuItem.getInstructions();
     this.description = orderMenuItem.getMenuItem().getDescription();
     this.calories = orderMenuItem.getMenuItem().getCalories();

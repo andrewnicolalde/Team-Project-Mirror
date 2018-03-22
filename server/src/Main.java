@@ -5,11 +5,12 @@ import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
 import database.DatabaseManager;
+import endpoints.ingredient.IngredientEndPoint;
 import endpoints.authentication.AuthenticationEmployee;
 import endpoints.authentication.AuthenticationTable;
 import endpoints.manager.Employee;
 import endpoints.menu.Menu;
-import endpoints.notification.Notifications;
+import endpoints.notification.NotificationEndpoint;
 import endpoints.order.Orders;
 import endpoints.payment.CardChargeMaker;
 import endpoints.tables.TableAssign;
@@ -54,6 +55,7 @@ public class Main {
     post("/api/authStaff/getTableAssignments", TableAssign::getTableAssignments);
     post("/api/authStaff/setTableAssignment", TableAssign::setTableAssignments);
     post("/api/authStaff/removeTableAssignment", TableAssign::removeAssignment);
+    get("/api/authStaff/getIngredients", IngredientEndPoint::getIngredients);
     post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
     post("/api/authStaff/getOrdersByStatus", Orders::getOrdersByStatus);
     post("/api/authStaff/getOrderItems", Orders::getOrderItems);
@@ -65,6 +67,14 @@ public class Main {
     post("/api/authStaff/removeStaff", Employee::removeEmployee);
     post("/api/authStaff/changeTableStatus", Tables::changeTableStatus);
     post("/api/saveSubscription", Notifications::saveSubscription);
+    post("/api/authStaff/createMenuItem", Menu::createMenuItem);
+    post("/api/authStaff/editMenuItem", Menu::editMenuItem);
+    post("/api/authStaff/unassignMenuItem", Menu::unassignMenuItem);
+    post("/api/authStaff/assignMenuItem", Menu::assignMenuItem);
+    post("/api/authStaff/newIngredient", IngredientEndPoint::newIngredient);
+    post("/api/authStaff/removeIngredient", IngredientEndPoint::removeIngredient);
+    post("/api/authStaff/renameIngredient", IngredientEndPoint::renameIngredient);
+    post("/api/saveSubscription", NotificationEndpoint::saveSubscription);
 
     get("/api/authTable/getMenu", Menu::getMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());
