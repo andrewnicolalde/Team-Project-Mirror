@@ -5,9 +5,9 @@ import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
 import database.DatabaseManager;
-import endpoints.ingredient.IngredientEndPoint;
 import endpoints.authentication.AuthenticationEmployee;
 import endpoints.authentication.AuthenticationTable;
+import endpoints.ingredient.IngredientEndPoint;
 import endpoints.manager.Employee;
 import endpoints.menu.Menu;
 import endpoints.notification.NotificationEndpoint;
@@ -66,7 +66,7 @@ public class Main {
     post("/api/authStaff/addStaff", Employee::addEmployee);
     post("/api/authStaff/removeStaff", Employee::removeEmployee);
     post("/api/authStaff/changeTableStatus", Tables::changeTableStatus);
-    post("/api/saveSubscription", Notifications::saveSubscription);
+    post("/api/authStaff/saveSubscription", NotificationEndpoint::saveSubscription);
     post("/api/authStaff/createMenuItem", Menu::createMenuItem);
     post("/api/authStaff/editMenuItem", Menu::editMenuItem);
     post("/api/authStaff/unassignMenuItem", Menu::unassignMenuItem);
@@ -74,7 +74,6 @@ public class Main {
     post("/api/authStaff/newIngredient", IngredientEndPoint::newIngredient);
     post("/api/authStaff/removeIngredient", IngredientEndPoint::removeIngredient);
     post("/api/authStaff/renameIngredient", IngredientEndPoint::renameIngredient);
-    post("/api/saveSubscription", NotificationEndpoint::saveSubscription);
 
     get("/api/authTable/getMenu", Menu::getMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());
