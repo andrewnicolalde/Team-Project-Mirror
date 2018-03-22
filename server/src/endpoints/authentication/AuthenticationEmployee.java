@@ -151,7 +151,7 @@ public class AuthenticationEmployee {
   }
 
   private static boolean validateParams(Request request) {
-    return request.queryParams("employeeNumber").matches("[0-9*]") && !(request.queryParams
+    return request.queryParams("employeeNumber").matches("[0-9]+") && !(request.queryParams
         ("password").equals(""));
   }
 }

@@ -18,6 +18,7 @@ public class AuthenticationTable {
   /**
    * Checks if the given details correctly match a franchise stored in the database, and that the
    * table exists
+   *
    * @param ap A TableAuthenticationParams object which holds the given login details.
    * @return The RestaurantTable entity, or null is the parameters are invalid.
    */
@@ -37,11 +38,11 @@ public class AuthenticationTable {
 
     // Check the table with the given number exists for the given franchise.
     List<RestaurantTable> table = em.createQuery("SELECT t "
-            + "FROM RestaurantTable t "
-            + "WHERE t.franchise = :franchise "
-            + "AND t.tableNumber = :tablenumber", RestaurantTable.class).setParameter(
-                    "franchise", franchise).setParameter(
-                            "tablenumber", ap.getTableNumber()).getResultList();
+        + "FROM RestaurantTable t "
+        + "WHERE t.franchise = :franchise "
+        + "AND t.tableNumber = :tablenumber", RestaurantTable.class).setParameter(
+        "franchise", franchise).setParameter(
+        "tablenumber", ap.getTableNumber()).getResultList();
     if (table.size() != 1) {
       // Either the table does not exist, or there are too many tables?
       // Either way, bail out.
@@ -53,45 +54,53 @@ public class AuthenticationTable {
 
   /**
    * Authenticates the log in request, and redirects them if successful.
+   *
    * @param request The HTTP request
    * @param response The response to give.
    * @return The response object passed in.
    */
   public static Response logInTable(Request request, Response response) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
-    TableAuthenticationParams tap = new TableAuthenticationParams(request.queryParams(
-        "franchiseName"), request.queryParams("tablepwd"), Integer.parseInt(request.queryParams(
-            "tableNumber")));
+    if (validateParams(request)) {
+      TableAuthenticationParams tap = new TableAuthenticationParams
+          (request
+              .queryParams(
+                  "franchiseName"), request.queryParams("tablepwd"),
+              Integer.parseInt(request.queryParams(
+                  "tableNumber")));
 
-    RestaurantTable table = isValidLoginCombination(tap);
+      RestaurantTable table = isValidLoginCombination(tap);
 
-    if (table == null) {
-      response.redirect("/");
-      return response;
-    }
+      if (table == null) {
+        response.redirect("/");
+        return response;
+      }
 
-    // Delete any old sessions
-    List<TableSession> sessions = em.createQuery("SELECT s FROM TableSession s WHERE "
-        + "s.restaurantTable = :table", TableSession.class).setParameter("table", table)
-        .getResultList();
+      // Delete any old sessions
+      List<TableSession> sessions = em.createQuery("SELECT s FROM TableSession s WHERE "
+          + "s.restaurantTable = :table", TableSession.class).setParameter("table", table)
+          .getResultList();
 
-    for (TableSession s : sessions) {
+      for (TableSession s : sessions) {
+        em.getTransaction().begin();
+        em.remove(s);
+        em.getTransaction().commit();
+      }
+
+      // Create a new session
+      String sessionKey = BCrypt.gensalt();
+      TableSession session = new TableSession(sessionKey, table);
       em.getTransaction().begin();
-      em.remove(s);
+      em.persist(session);
       em.getTransaction().commit();
+
+      // Assign the session key to the session.
+      request.session().attribute("TableSessionKey", sessionKey);
+
+      response.redirect("customer/home.html");
+    } else {
+      response.redirect("/");
     }
-
-    // Create a new session
-    String sessionKey = BCrypt.gensalt();
-    TableSession session = new TableSession(sessionKey, table);
-    em.getTransaction().begin();
-    em.persist(session);
-    em.getTransaction().commit();
-
-    // Assign the session key to the session.
-    request.session().attribute("TableSessionKey", sessionKey);
-
-    response.redirect("customer/home.html");
     return response;
   }
 
@@ -129,5 +138,10 @@ public class AuthenticationTable {
     response.redirect("/");
     em.close();
     return response;
+  }
+
+  private static boolean validateParams(Request request) {
+    return (!request.queryParams("franchiseName").equals("") && !request.queryParams("tablepwd")
+        .equals("") && request.queryParams("tableNumber").matches("[0-9]+"));
   }
 }
