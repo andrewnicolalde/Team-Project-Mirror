@@ -21,7 +21,7 @@ import util.JsonUtil;
  * @author Roger Milroy
  */
 @SuppressWarnings("SpellCheckingInspection")
-public class Notifications {
+public class NotificationEndpoint {
 
   /**
    * Route to save PushSubscriptions from the client.
@@ -56,6 +56,16 @@ public class Notifications {
     entityManager.close();
 
     return "success"; //TODO replace with JSON or request.ok or something like that.
+  }
+
+  public static <T> void startNotificationService(T input) {
+    try {
+      Thread notify = NotificationServiceFactory.getNotificationService(input);
+      notify.start();
+    } catch (IncorrectTypeException e) {
+      e.printStackTrace();
+    }
+
   }
 
   /**

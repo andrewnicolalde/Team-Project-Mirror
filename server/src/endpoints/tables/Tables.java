@@ -6,6 +6,7 @@ import database.tables.RestaurantTableStaff;
 import database.tables.StaffSession;
 import database.tables.TableSession;
 import database.tables.TableStatus;
+import endpoints.notification.NotificationEndpoint;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -119,6 +120,8 @@ public class Tables {
         .setParameter("id", tableId).getSingleResult();
 
     restaurantTable.setStatus(TableStatus.valueOf(cts.getNewStatus()));
+
+    NotificationEndpoint.startNotificationService(restaurantTable);
 
     entityManager.getTransaction().commit();
     entityManager.close();
