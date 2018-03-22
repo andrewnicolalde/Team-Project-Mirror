@@ -42,7 +42,7 @@ function getTableAssignments(staffId) {
       (data) => {
         const tables = JSON.parse(data);
         const currentWaiter = $("#list-tables-" + staffId);
-
+        currentWaiter.empty();
         for (let i = 0; i < tables.length; i++) {
           currentWaiter.append(
               "<li data-tableNum='" + tables[i].tableNumber
@@ -63,7 +63,7 @@ function getTableAssignments(staffId) {
  * @param staffId The staff member we want to assign tables to.
  */
 function getTables(staffId) {
-  post("/api/authStaff/getAllTablesAssignments", String(staffId), (data) => {
+  post("/api/authStaff/getUnAssignedTables", String(staffId), (data) => {
     const tables = JSON.parse(data);
     const list = $("#table-list");
     list.empty();
@@ -72,17 +72,27 @@ function getTables(staffId) {
           + "<div data-tableNum='" + tables[i].tableNumber
           + "' class='card-header' id='heading" + i + "'"
           + ">"
-          + "<i class=\"fas fa-arrow-circle-left\" onclick='event.stopPropagation() addAssigment("
+          + "<i class=\"fas fa-arrow-circle-left\" onclick='event.stopPropagation(); addAssigment("
           + staffId + ", " + tables[i].tableNumber + ")'></i>"
           + "<span class='right'>Table " + tables[i].tableNumber + "</span>"
-          + "<span class='bold right'> (" + tables[i].assignments + ")</span>"
           + "</div>"
           + "</div>");
     }
   });
 }
 
+/**
+ * This function adds table assignments to a waiter.
+ * @param staffId The staff member that is being assigned a table.
+ * @param tableId The table that is being assigned.
+ */
 function addAssigment(staffId, tableId) {
-  console.log(staffId);
-  console.log(tableId);
+  post("/api/authStaff/setTableAssignment",
+      JSON.stringify({staffId: staffId, tableNumber: tableId}), (data) => {
+        if (data !== "failure") {
+          getTableAssignments(staffId);
+        }
+      }
+  );
 }
+

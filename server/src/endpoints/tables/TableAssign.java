@@ -3,6 +3,7 @@ package endpoints.tables;
 import database.DatabaseManager;
 import database.tables.RestaurantTable;
 import database.tables.RestaurantTableStaff;
+import database.tables.Staff;
 import database.tables.StaffSession;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -44,6 +45,29 @@ public class TableAssign {
     return JsonUtil.getInstance().toJson(out);
   }
 
+  public static String getUnassignedTables(Request request, Response response) {
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
+    StaffSession staffSession = entityManager
+        .find(StaffSession.class, request.session().attribute("StaffSessionKey"));
+
+    List<RestaurantTable> restaurantTables = entityManager
+        .createQuery(
+            "select table from RestaurantTableStaff tableStaff left outer join "
+                + "tableStaff.restaurantTable as table where (tableStaff = null "
+                + "and table.franchise = :franchise) or "
+                + "(tableStaff.isActive = false and table.franchise = :franchise) order by table.tableNumber asc",
+            RestaurantTable.class).setParameter("franchise", staffSession.getStaff().getFranchise())
+        .getResultList();
+
+    TableAssignData[] tableAssignData = new TableAssignData[restaurantTables.size()];
+
+    for (int i = 0; i < tableAssignData.length; i++) {
+      tableAssignData[i] = new TableAssignData(restaurantTables.get(i).getTableNumber(), 0L);
+    }
+    return JsonUtil.getInstance().toJson(tableAssignData);
+  }
+
   /**
    * This method gets the all tables sorted by there IDs and how many waiters are assigned to them.
    *
@@ -52,7 +76,6 @@ public class TableAssign {
    * @return A JSON list of all tables
    */
   public static String getTablesWithAssignmentCount(Request request, Response response) {
-    System.out.println(request.body());
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     StaffSession staffSession = entityManager
@@ -98,14 +121,17 @@ public class TableAssign {
 
     try {
       entityManager.getTransaction().begin();
-      RestaurantTableStaff restaurantTableStaff = entityManager
-          .createQuery(
-              "from RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = :staffId",
-              RestaurantTableStaff.class).setParameter("staffId", tableAssignParams.getStaffId())
-          .getSingleResult();
 
-      restaurantTableStaff.setRestaurantTable(
-          entityManager.find(RestaurantTable.class, tableAssignParams.getTableNumber()));
+      Staff staff = entityManager.find(Staff.class, tableAssignParams.getStaffId());
+      RestaurantTable restaurantTable = entityManager.createQuery(
+          "from RestaurantTable table where table.franchise = :franchise and table.tableNumber = :tableNo",
+          RestaurantTable.class)
+          .setParameter("franchise", staff.getFranchise())
+          .setParameter("tableNo", tableAssignParams.getTableNumber()).getSingleResult();
+      RestaurantTableStaff restaurantTableStaff = new RestaurantTableStaff(staff, restaurantTable,
+          true);
+
+      entityManager.persist(restaurantTableStaff);
       entityManager.getTransaction().commit();
     } catch (Exception e) {
       return "failed";

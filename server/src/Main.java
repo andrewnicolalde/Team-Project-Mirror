@@ -49,8 +49,10 @@ public class Main {
     get("/api/authStaff/getEmployees", Employee::getEmployees);
     get("/api/authStaff/getWaiters", Employee::getWaiters);
     get("/api/authStaff/getDepartments", Employee::getDepartments);
+    post("/api/authStaff/getUnAssignedTables", TableAssign::getUnassignedTables);
     post("/api/authStaff/getAllTablesAssignments", TableAssign::getTablesWithAssignmentCount);
     post("/api/authStaff/getTableAssignments", TableAssign::getTableAssignments);
+    post("/api/authStaff/setTableAssignment", TableAssign::setTableAssignments);
     post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
     post("/api/authStaff/getOrdersByStatus", Orders::getOrdersByStatus);
     post("/api/authStaff/getOrderItems", Orders::getOrderItems);
