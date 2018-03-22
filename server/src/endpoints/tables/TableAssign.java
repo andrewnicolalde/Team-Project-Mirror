@@ -7,6 +7,7 @@ import database.tables.Staff;
 import database.tables.StaffSession;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import spark.Request;
 import spark.Response;
 import util.JsonUtil;
@@ -32,7 +33,7 @@ public class TableAssign {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery(
         "from RestaurantTableStaff tableStaff where "
-            + "tableStaff.staff.id = :staff",
+            + "tableStaff.staff.id = :staff and tableStaff.isActive = true ",
         RestaurantTableStaff.class).setParameter("staff", tableAssignParams.getStaffId())
         .getResultList();
 
@@ -124,7 +125,9 @@ public class TableAssign {
 
       Staff staff = entityManager.find(Staff.class, tableAssignParams.getStaffId());
       RestaurantTable restaurantTable = entityManager.createQuery(
-          "from RestaurantTable table where table.franchise = :franchise and table.tableNumber = :tableNo",
+          "select table from RestaurantTableStaff tableStaff left outer join "
+              + "tableStaff.restaurantTable as table "
+              + "where tableStaff = null and table.franchise = :franchise and table.tableNumber = :tableNo",
           RestaurantTable.class)
           .setParameter("franchise", staff.getFranchise())
           .setParameter("tableNo", tableAssignParams.getTableNumber()).getSingleResult();
@@ -132,6 +135,17 @@ public class TableAssign {
           true);
 
       entityManager.persist(restaurantTableStaff);
+      entityManager.getTransaction().commit();
+    } catch (NoResultException e) {
+      entityManager.getTransaction().rollback();
+      entityManager.getTransaction().begin();
+
+      RestaurantTableStaff restaurantTableStaff = entityManager.createQuery(
+          "from RestaurantTableStaff tableStaff where tableStaff.staff.id = :staff and tableStaff.restaurantTable.tableNumber = :tableNumber",
+          RestaurantTableStaff.class).setParameter("staff", tableAssignParams.getStaffId())
+          .setParameter("tableNumber", tableAssignParams.getTableNumber()).getSingleResult();
+      restaurantTableStaff.setIsActive(true);
+
       entityManager.getTransaction().commit();
     } catch (Exception e) {
       return "failed";

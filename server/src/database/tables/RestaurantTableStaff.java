@@ -102,4 +102,8 @@ public class RestaurantTableStaff {
   public Boolean getActive() {
     return isActive;
   }
+
+  public void setIsActive(Boolean active) {
+    this.isActive = active;
+  }
 }
