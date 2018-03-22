@@ -15,13 +15,15 @@ let mi = {
 
 let categories = [];
 let ingredients = [];
+let menuItems = [];
 
 $(document).ready(function() {
   get("/api/authStaff/getMenu", function(data) {
     menuItems = JSON.parse(data);
     for (let i = 0; i < menuItems.length; i++) {
       const item = menuItems[i];
-      $("#menu").append("<tr><td>" + item.name + "</td>\n"
+      $("#menu").append("<tr id='mi-" + item.id + "'>\n"
+          + "<td>" + item.name + "</td>\n"
           + "<td>" + item.description + "</td>\n"
           + "<td>" + item.category + "</td>"
           + "<td>£" + parseFloat(item.price).toFixed(2) + "</td>\n"
@@ -29,7 +31,8 @@ $(document).ready(function() {
           + "<td>" + getDietaryRequirements(item) + "</td>\n"
           + "<td>" + item.ingredients + "</td>\n"
           + "<td>" + item.picture_src + "</td>\n"
-          + "<td></td></tr>");
+          + "<td><i id='edit-" + item.id + "' class=\"fas fa-edit fa-lg edit\" onclick='wizardEdit(" + item.id + ");'></i></td>\n"
+          + "</tr>");
     }
   });
 
@@ -56,6 +59,36 @@ function getDietaryRequirements(menuItem) {
   return htmlString;
 }
 
+function wizardEdit(id) {
+  for (let i = 0; i < menuItems.length; i++) {
+    if (menuItems[i].id === id) {
+      mi = {
+        id: menuItems[i].id,
+        addNow: null,
+        name: menuItems[i].name,
+        description: menuItems[i].description,
+        category: menuItems[i].description,
+        price: menuItems[i].price,
+        calories: menuItems[i].calories,
+        isGlutenFree: menuItems[i].isGlutenFree,
+        isVegetarian: menuItems[i].isVegetarian,
+        isVegan: menuItems[i].isVegan,
+        ingredients: menuItems[i].ingredients,
+        pictureSrc: menuItems[i].pictureSrc
+      }
+    }
+  }
+
+  // Remove "Add to franchise" checkbox if it is already there
+  $("#addtofranchise").remove();
+
+  // Set the mode to edit
+  $("#wizard").attr("data-mode", "edit");
+
+  // Start the wizard
+  wizardBasic();
+}
+
 function wizardStart() {
   // Reset the current values stored.
   mi = {
@@ -73,9 +106,10 @@ function wizardStart() {
     pictureSrc: ""
   };
 
-  // Add the "Add to franchise" checkbox
+
   // Remove "Add to franchise" checkbox if it is already there
   $("#addtofranchise").remove();
+  // Add the "Add to franchise" checkbox
   $("#wizard-footer").prepend("<label id='addtofranchise'><input type=\"checkbox\" id=\"w-addtofranchise\" checked>  Add this item to the franchise?</label>");
 
   // Set the mode to add

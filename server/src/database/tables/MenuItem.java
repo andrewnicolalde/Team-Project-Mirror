@@ -99,9 +99,9 @@ public class MenuItem {
    *
    * @param name The name of menu item.
    * @param ingredients The ingredients info for the item.
-   * @param description The description for the item.
-   * @param calories The amount of calories for the item.
+   * @param description The description for the item,
    * @param price The price of the item.
+   * @param calories The amount of calories for the item.
    * @param isVegan If the item is suitable for Vegans.
    * @param isVegetarian If the item is suitable for vegetarians.
    * @param isGlutenFree If the item is gluten free.
