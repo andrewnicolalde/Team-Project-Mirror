@@ -20,8 +20,9 @@ public class TableNotificationService extends NotificationService implements Run
   private static List<StaffNotification> getStaffToNotify(RestaurantTable table) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     List<StaffNotification> staffNotifications = null;
+    TableStatus tableStatus = table.getStatus();
 
-    if (table.getStatus() == TableStatus.NEEDS_HELP) {
+    if (tableStatus == TableStatus.NEEDS_HELP | tableStatus == TableStatus.NEEDS_CLEANING) {
       RestaurantTableStaff tableStaff = entityManager.createQuery("from RestaurantTableStaff "
           + "tableStaff where tableStaff.restaurantTable = :table", RestaurantTableStaff.class)
           .setParameter("table", table).getSingleResult();
@@ -40,14 +41,12 @@ public class TableNotificationService extends NotificationService implements Run
   }
 
   private static String getDataToNotify(RestaurantTable table) {
-    String message = "update";
+    String message = "A table status has changed";
     if (table.getStatus() == TableStatus.NEEDS_HELP) {
-      message = "Table " + table
-          .getTableNumber() + " "
-          + "needs "
-          + "assistance!";
+      message = "Table " + table.getTableNumber() + " needs assistance!";
+    } else if (table.getStatus() == TableStatus.NEEDS_CLEANING) {
+      message = "Table " + table.getTableNumber() + " needs cleaning.";
     }
-
     return message;
   }
 
