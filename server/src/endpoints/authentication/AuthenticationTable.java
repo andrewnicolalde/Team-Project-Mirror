@@ -109,6 +109,7 @@ public class AuthenticationTable {
     // Check if the session has a TableSessionKey
     if (request.session().attribute("TableSessionKey") == null) {
       if (request.session().attribute("StaffSessionKey") == null) {
+        em.close();
         halt(401, "error_401");
       }
     }
@@ -124,6 +125,8 @@ public class AuthenticationTable {
       if (request.session().attribute("StaffSessionKey") == null) {
         halt(401, "error_401");
       }
+    } finally {
+      em.close();
     }
   }
 

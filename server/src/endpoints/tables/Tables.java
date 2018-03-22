@@ -23,6 +23,7 @@ public class Tables {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     StaffSession staffSession = entityManager.find(StaffSession.class, request.session().attribute(
         "StaffSessionKey"));
+    entityManager.close();
     return getWaiterTableData(staffSession.getStaff().getEmployeeNumber());
   }
 
@@ -37,6 +38,8 @@ public class Tables {
             + "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = :staffId and tableStaff.isActive = true",
         RestaurantTableStaff.class).setParameter("staffId", staffId).getResultList();
 
+    entityManager.close();
+
     // This sorts by the table status.
     restaurantTableStaffs.sort((t0, t1) -> {
       if (t0.getRestaurantTable().getStatus().compareTo(t1.getRestaurantTable().getStatus())
@@ -55,8 +58,6 @@ public class Tables {
       tableData[i] = new TableData(temp.getTableNumber(), temp.getStatus().toString(),
           temp.getFranchise().toString(), temp.getTableId());
     }
-
-    entityManager.close();
 
     return JsonUtil.getInstance().toJson(tableData);
   }
@@ -68,6 +69,8 @@ public class Tables {
             + "RestaurantTableStaff tableStaff",
         RestaurantTableStaff.class).getResultList();
 
+    entityManager.close();
+
     // This sorts by the table status.
     restaurantTableStaffs.sort((t0, t1) -> {
       if (t0.getRestaurantTable().getStatus().compareTo(t1.getRestaurantTable().getStatus())
@@ -86,8 +89,6 @@ public class Tables {
       tableData[i] = new TableData(temp.getTableNumber(), temp.getStatus().toString(),
           temp.getFranchise().toString(), temp.getTableId());
     }
-
-    entityManager.close();
 
     return JsonUtil.getInstance().toJson(tableData);
   }
