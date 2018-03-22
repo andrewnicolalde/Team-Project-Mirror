@@ -50,7 +50,9 @@ public class Tables {
 
     TableData[] tableData = new TableData[restaurantTableStaffs.size()];
     for (int i = 0; i < tableData.length; i++) {
-      tableData[i] = new TableData(restaurantTableStaffs.get(i));
+      RestaurantTable temp = restaurantTableStaffs.get(i).getRestaurantTable();
+      tableData[i] = new TableData(temp.getTableNumber(), temp.getStatus().toString(),
+          temp.getFranchise().toString(), temp.getTableId());
     }
 
     entityManager.close();
@@ -79,7 +81,9 @@ public class Tables {
 
     TableData[] tableData = new TableData[restaurantTableStaffs.size()];
     for (int i = 0; i < tableData.length; i++) {
-      tableData[i] = new TableData(restaurantTableStaffs.get(i));
+      RestaurantTable temp = restaurantTableStaffs.get(i).getRestaurantTable();
+      tableData[i] = new TableData(temp.getTableNumber(), temp.getStatus().toString(),
+          temp.getFranchise().toString(), temp.getTableId());
     }
 
     entityManager.close();
@@ -99,7 +103,6 @@ public class Tables {
 
     ChangeTableStatus cts = JsonUtil.getInstance()
         .fromJson(request.body(), ChangeTableStatus.class);
-
 
     Long tableId;
     if (request.session().attribute("TableSessionKey") != null) {

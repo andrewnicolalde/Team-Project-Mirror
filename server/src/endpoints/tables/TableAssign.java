@@ -3,6 +3,7 @@ package endpoints.tables;
 import database.DatabaseManager;
 import database.tables.RestaurantTable;
 import database.tables.RestaurantTableStaff;
+import database.tables.StaffSession;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -25,7 +26,6 @@ public class TableAssign {
    * @return A list of table assignments in JSON.
    */
   public static String getTableAssignments(Request request, Response response) {
-    System.out.println(request.body());
     TableAssignParams tableAssignParams = JsonUtil.getInstance()
         .fromJson(request.body(), TableAssignParams.class);
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
@@ -42,6 +42,40 @@ public class TableAssign {
           restaurantTableStaffs.get(i).getRestaurantTable().getTableNumber());
     }
     return JsonUtil.getInstance().toJson(out);
+  }
+
+  /**
+   * This method gets the all tables sorted by there IDs and how many waiters are assigned to them
+   *
+   * @param request A HTML request
+   * @param response A HTML response
+   * @return A JSON list of all tables
+   */
+  public static String getTablesWithAssignmentCount(Request request, Response response) {
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
+    StaffSession staffSession = entityManager
+        .find(StaffSession.class, request.session().attribute("StaffSessionKey"));
+
+    List<RestaurantTable> restaurantTables = entityManager.createQuery(
+        "from RestaurantTable table where table.franchise = :franchise order by table.tableNumber asc ",
+        RestaurantTable.class).setParameter("franchise", staffSession.getStaff().getFranchise())
+        .getResultList();
+
+    TableAssignData[] tableAssignData = new TableAssignData[restaurantTables.size()];
+
+    for (int i = 0; i < tableAssignData.length; i++) {
+      RestaurantTable temp = restaurantTables.get(i);
+
+      int assignments = entityManager.createQuery(
+          "select count(*) from RestaurantTableStaff tableStaff where tableStaff.restaurantTable = :table",
+          int.class).setParameter("table", temp).getSingleResult();
+
+      tableAssignData[i] = new TableAssignData(temp.getTableNumber(), assignments);
+    }
+    entityManager.close();
+
+    return JsonUtil.getInstance().toJson(tableAssignData);
   }
 
   /**
