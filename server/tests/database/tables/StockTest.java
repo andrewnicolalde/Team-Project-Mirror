@@ -52,7 +52,7 @@ public class StockTest {
 
     //Create new Server
     entityManager.getTransaction().begin();
-    RestaurantTableStaff restaurantTableStaff = new RestaurantTableStaff(staff, restaurantTable, );
+    RestaurantTableStaff restaurantTableStaff = new RestaurantTableStaff(staff, restaurantTable, true);
     entityManager.persist(restaurantTableStaff);
     entityManager.getTransaction().commit();
 
@@ -136,7 +136,7 @@ public class StockTest {
 
     //Create new Server
     entityManager.getTransaction().begin();
-    RestaurantTableStaff restaurantTableStaff = new RestaurantTableStaff(staff, restaurantTable, );
+    RestaurantTableStaff restaurantTableStaff = new RestaurantTableStaff(staff, restaurantTable, true);
     entityManager.persist(restaurantTableStaff);
     entityManager.getTransaction().commit();
 
