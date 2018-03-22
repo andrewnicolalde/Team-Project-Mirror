@@ -1,26 +1,42 @@
-google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChart);
+google.charts.load('current', {'packages':['bar']});
+google.charts.setOnLoadCallback(drawStuff);
 
-function drawChart() {
-    var data = google.visualization.arrayToDataTable([
-        ['Time',  'Meat', 'Veg'],
-        ['8:00',   400,   300],
-        ['12:00',  460,  500],
-        ['15:00',  300, 100],
-        ['18:00',  120,  200],
-        ['21:00',  100,  160],
-        ['24:00',  50,  63]
-    ]);
+function fillChartStock() {
+    get("/api/authStaff/getStock", function (data) {
+        const stocks = JSON.parse(data);
 
-
-    var options = {
-        title: 'Main Ingredients',
-        curveType: 'function',
-        legend: { position: 'bottom' }
-    };
-
-    var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-    chart.draw(data, options);
+        var stocknum = [['Ingredient', 'Stock count']];
+        for(var i = 0; i < stocks.length; i++){
+            const stock = stocks[i];
+            stocknum.push([stock.ingredient, stock.stockCount]);
+        }
+    });
 }
 
+function drawStuff() {
+    var data = new google.visualization.arrayToDataTable([
+        ['Ingredient', 'Stock count'],
+        ["Apple", 44],
+        ["Carrots", 22],
+        ["Cheese", 10],
+    ]);
+
+    var options = {
+        width: 800,
+        height: 600,
+        legend: { position: 'none' },
+        chart: {
+            title: 'Ingredient',
+            subtitle: 'Stock Count' },
+        axes: {
+            x: {
+                0: { side: 'top', label: ''} // Top x-axis.
+            }
+        },
+        bar: { groupWidth: "90%" }
+    };
+
+    var chart = new google.charts.Bar(document.getElementById('chart'));
+    // Convert the Classic options to Material options.
+    chart.draw(data, google.charts.Bar.convertOptions(options));
+};

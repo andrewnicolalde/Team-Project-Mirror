@@ -7,19 +7,18 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
-
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
     <!-- Popper JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
-
     <!-- Latest JavaScript -->
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/restaurantdata.css">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
@@ -30,16 +29,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
     <script type="text/javascript" src="../js/ajax-wrapper.js"></script>
 
-
     <!-- Restaurant JavaScript -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript" src="../js/manager-restaurantdata.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" type="text/javascript"> </script>
-
-    <meta charset="UTF-8">
-
-   <link rel="stylesheet" href="../css/restaurantdata.css">
+    <script type="text/javascript" src="../js/manager-restaurantdata.js"></script>
 
 </head>
 <body>
@@ -72,9 +65,10 @@
             </ul>
         </div>
 
+
         <div class="row stock tab-pane fade" role="tabpanel" aria-labelledby="home-tab" id="one">
             <h4  class="header headerstock">Stock Data</h4>
-            <div id="curve_chart" style="width: 600px; height: 300px"></div>
+            <div id="chart" style="width: 300px; height: 300px;"></div>
         </div>
         <div class="row stock tab-pane fade" role="tabpanel" aria-labelledby="home-tab" id="two">
             <div id="iframe-div">

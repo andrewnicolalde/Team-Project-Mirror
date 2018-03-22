@@ -21,15 +21,23 @@
 h1.header {
     text-align: center;
     width: 300px;
+
 }
+
+
+#one{
+    height: 600px;
+}
+
 
 #iframe-div {
     overflow: hidden;
     width: 450px;
+    height: 1000px;
 }
 #tableFrame {
     width: 450px;
-    height: 600px;
+    height: 1000px;
     border: none;
     margin-top: -177px;
 }

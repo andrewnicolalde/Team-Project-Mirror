@@ -47,6 +47,7 @@ public class Main {
     get("/api/authStaff/getAllTables", Tables::getAllTables);
     get("/api/authStaff/getEmployees", Employee::getEmployees);
     get("/api/authStaff/getDepartments", Employee::getDepartments);
+    get("/api/authStaff/getStock", StockEndPoints::getStock);
     post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
     post("/api/authStaff/getOrdersByStatus", Orders::getOrdersByStatus);
     post("/api/authStaff/getOrderItems", Orders::getOrderItems);
@@ -58,7 +59,6 @@ public class Main {
     post("/api/authStaff/removeStaff", Employee::removeEmployee);
     post("/api/authStaff/changeTableStatus", Tables::changeTableStatus);
     post("/api/saveSubscription", Notifications::saveSubscription);
-    post("/api/authStaff/getStock", StockEndPoints::getStock);
     post("/api/authStaff/setStock", StockEndPoints::setStock);
 
     get("/api/authTable/getMenu", Menu::getMenu);
