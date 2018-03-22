@@ -6,3 +6,11 @@
 .close {
   float: right;
 }
+
+.off {
+  background-color: #28A745;
+}
+
+.toggle {
+  margin-bottom: 10px;
+}
