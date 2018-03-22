@@ -32,6 +32,10 @@ $(document).ready(function() {
   });
 });
 
+/**
+ * Adds a new menu item to the table
+ * @param item The menu item to add
+ */
 function addMenuItem(item) {
   $("#menu").append("<tr id='mi-" + item.id + "'>\n"
       + "<td>" + item.name + "</td>\n"
@@ -46,6 +50,11 @@ function addMenuItem(item) {
       + "</tr>");
 }
 
+/**
+ * Gets the action buttons to display to the user
+ * @param item The menu item the actions perfrom on.
+ * @returns The HTML representing the action buttons.
+ */
 function getActions(item) {
   if (item.partOfFranchise) {
     return "<i id='edit-" + item.id + "' class=\"fas fa-edit fa-lg edit\" onclick='wizardEdit(" + item.id + ");'></i><i class=\"fa fa-times fa-lg remove\" onclick='unassign(" + item.id + ");'></i>";
@@ -55,6 +64,11 @@ function getActions(item) {
   }
 }
 
+/**
+ * Finds the menu item with the given id, or returns null if it does not exist.
+ * @param id The id to search for.
+ * @returns The menu item, or null if it is not found.
+ */
 function getMenuItem(id) {
   for (let i = 0; i < menuItems.length; i++) {
     if (menuItems[i].id === id) {
@@ -64,6 +78,10 @@ function getMenuItem(id) {
   return null;
 }
 
+/**
+ * Assigns a menu item to a franchise
+ * @param id The id of the menu item to assign
+ */
 function addToFranchise(id) {
   const item = getMenuItem(id);
   post("/api/authStaff/assignMenuItem", String(id), function(data) {
@@ -74,6 +92,10 @@ function addToFranchise(id) {
   })
 }
 
+/**
+ * Unassigns a menu item from a franchise.
+ * @param id The id of the item to unassign.
+ */
 function unassign(id) {
   const item = getMenuItem(id);
  post("/api/authStaff/unassignMenuItem", String(id), function(data) {
@@ -84,6 +106,9 @@ function unassign(id) {
  });
 }
 
+/**
+ * Clears what is currently displayed, and displays all the menuItems currently loaded.
+ */
 function reloadMenuItems() {
   $("#menu").empty();
   for (let i = 0; i < menuItems.length; i++) {
@@ -100,6 +125,11 @@ function reloadMenuItems() {
   }
 }
 
+/**
+ * Returns a human readable string representing the ingredients in the menu item.
+ * @param ingredientIds An array of ids of the ingredients in the item.
+ * @returns A human readable string of ingredients.
+ */
 function getIngredientsList(ingredientIds) {
   let displayString = "";
   for (let i = 0; i < ingredientIds.length; i++) {
@@ -115,6 +145,11 @@ function getIngredientsList(ingredientIds) {
   return displayString.slice(0, -2);
 }
 
+/**
+ * Retuns the html of the dietary requirements for a menu item
+ * @param menuItem The menu item the dietary requirements are of.
+ * @returns A string of HTML holding the images to represent the dietary requirements.
+ */
 function getDietaryRequirements(menuItem) {
   let htmlString = "";
   if (menuItem.is_gluten_free) {
@@ -129,6 +164,10 @@ function getDietaryRequirements(menuItem) {
   return htmlString;
 }
 
+/**
+ * Starts the wizard in edit mode, loading an existing menu item into the fields.
+ * @param id The id of the menu item to load.
+ */
 function wizardEdit(id) {
   for (let i = 0; i < menuItems.length; i++) {
     if (menuItems[i].id === id) {
@@ -162,6 +201,9 @@ function wizardEdit(id) {
   wizardBasic();
 }
 
+/**
+ * Starts the wizard in start mode, making sure the fields are all in their default state.
+ */
 function wizardStart() {
   // Reset the current values stored.
   mi = {
@@ -195,6 +237,9 @@ function wizardStart() {
   wizardBasic();
 }
 
+/**
+ * Shows the basic information display of the wizard
+ */
 function wizardBasic() {
   const wizardBody = $("#wizard-body");
   wizardBody.empty();
@@ -221,6 +266,9 @@ function wizardBasic() {
   $("#wizard").modal("show");
 }
 
+/**
+ * Shows the diet info display of the wizard. Also saves the values of the basic info wizard display.
+ */
 function wizardDietInfo() {
   const wizardBody = $("#wizard-body");
 
@@ -253,6 +301,11 @@ function wizardDietInfo() {
   $("#wizard").modal("show");
 }
 
+/**
+ * Returns a string to be inserted into the ingredients checklist if they should be checked before displaying to the user.
+ * @param ingredient The ingredient to check
+ * @returns Either the string ' checked' if it should be prechecked, or a blank string if not.
+ */
 function precheckIngredient(ingredient) {
   for (let i = 0; i < mi.ingredients.length; i++) {
     if (ingredient.id === mi.ingredients[i]) {
@@ -262,6 +315,9 @@ function precheckIngredient(ingredient) {
   return "";
 }
 
+/**
+ * Displays the ingredient check list wizard display. Also saves the values from the diet info display.
+ */
 function wizardIngredients() {
   const wizardBody = $("#wizard-body");
 
@@ -281,6 +337,9 @@ function wizardIngredients() {
   $("#wizard").modal("show");
 }
 
+/**
+ * Saves the values of the ingredients wizard display and submits it to the server.
+ */
 function wizardSubmit() {
   const wizard = $("#wizard");
   const wizardBody = $("#wizard-body");
@@ -323,6 +382,10 @@ function wizardSubmit() {
   wizard.modal("hide");
 }
 
+/**
+ * Handles toggling the diet requirements in the diet info wizard.
+ * @param item
+ */
 function toggleRequirement(item) {
   if (item.id === "w-isglutenfree") {
     if (mi.isGlutenFree === "true") {
