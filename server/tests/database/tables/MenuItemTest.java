@@ -62,7 +62,7 @@ public class MenuItemTest {
     for (MenuItem item : result) {
       assertEquals("Check id", item.getMenuItemId(), menuItem.getMenuItemId());
       assertEquals("Check name", item.getName(), menuItem.getName());
-      assertEquals("Check ingredients info", item.getIngredients(), menuItem.getIngredients());
+      assertEquals("Check ingredients info", item.getIngredientsString(), menuItem.getIngredientsString());
       assertEquals("Check desc", item.getDescription(), menuItem.getDescription());
       assertEquals("Check price", item.getPrice(), menuItem.getPrice());
       assertEquals("Check isVegan", item.getVegan(), menuItem.getVegan());

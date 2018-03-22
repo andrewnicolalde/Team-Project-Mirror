@@ -43,7 +43,7 @@ function loadMenu() {
         $("#category-" + menuItem.categoryId
             + "-list").append("<li id='menuitem-" + menuItem.id
             + "' class='menuitem list-group-item list-group-item-action' onclick='showItemModal("
-            + menuItem.id + ")'>\n"
+            + menuItem.id + ")' data-glutenfree='" + menuItem.is_gluten_free + "' data-vegetarian='" + menuItem.is_vegetarian + "' data-vegan='" + menuItem.is_vegetarian + "'>\n"
             + "<span class='bold'>" + menuItem.name + "</span> - £"
             + menuItem.price + "\n"
             + "<br>\n"
@@ -52,37 +52,54 @@ function loadMenu() {
             + "</li>");
         if (menuItem.is_gluten_free) {
           $("#menuitem-" + menuItem.id).append(
-              "<img src='../images/gluten-free.svg' alt='Gluten Free'>");
+              "<img class='img1' src='../images/gluten-free.svg' alt='Gluten Free'>");
         }
         if (menuItem.is_vegetarian) {
           $("#menuitem-" + menuItem.id).append(
-              "<img src='../images/vegetarian-mark.svg' alt='Vegetarian'>");
+              "<img class='img2' src='../images/vegetarian-mark.svg' alt='Vegetarian'>");
         }
         if (menuItem.is_vegan) {
           $("#menuitem-" + menuItem.id).append(
-              "<img src='../images/vegan-mark.svg' alt='Vegan'>");
+              "<img class='img3' src='../images/vegan-mark.svg' alt='Vegan'>");
         }
       }
     });
   });
 }
 
+//Finds which menu items are gluten free/vegetarian/vegan and links them with their corresponding checkboxes.
+function meetsDietaryRequirements(mi) {
+  gluteninput = document.getElementById("glutencheckbox");
+  vegetarianinput = document.getElementById("vegetariancheckbox");
+  veganinput = document.getElementById("vegancheckbox");
+
+  if (!gluteninput.checked | (gluteninput.checked == true & mi.dataset.glutenfree === "true")) {
+    if (!vegetarianinput.checked | (vegetarianinput.checked == true & mi.dataset.vegetarian === "true")) {
+     if (!veganinput.checked | (veganinput.checked == true & mi.dataset.vegan === "true")) {
+       return true;
+     }
+    }
+  }
+  return false;
+
+}
+
+//Combines searching through the menu by name as well as specifying which category(s) are required (gluten free/vegetarian/vegan)
 function filtername() {
 
-  let input, filter, displayMenuItems;
+  var input, filter, displayMenuItems, gluteninput, vegetarianinput, veganinput;
 
   input = document.getElementById("mysearchbox");
   filter = input.value.toUpperCase();
   displayMenuItems = document.getElementsByClassName("menuitem");
 
-  // If the filter has any text in it, then expand all the categories.
-  // Otherwise, close them all
-
+  //if there is no input on search bar, keep all menu items hidden.
   if (filter.length === 0) {
     const elementsToHide = document.getElementsByClassName("collapse show");
     for (var i = 0; i < elementsToHide.length; i++) {
       elementsToHide[i].classList.remove("show");
     }
+  //else, when there is input, show the menu.
   } else {
     const elementsToShow = document.getElementsByClassName("collapse");
     for (var i = 0; i < elementsToShow.length; i++) {
@@ -90,20 +107,28 @@ function filtername() {
     }
   }
 
+  //goes through all childnodes of each menu item, and displays the items that meet the search and category criteria.
   for (var i = 0; i < displayMenuItems.length; i++) {
     const mi = displayMenuItems[i];
-    for (let j = 0; j < mi.childNodes.length; j++) {
+    console.log(mi.dataset.glutenfree);
+    for (var j = 0; j < mi.childNodes.length; j++) {
       const node = mi.childNodes[j];
       if (node.className === "bold") {
-        if (node.innerHTML.toUpperCase().indexOf(filter) > -1) {
-          mi.style.display = "";
+        if(node.innerHTML.toUpperCase().indexOf(filter) > -1) {
+           if (meetsDietaryRequirements(mi)) {
+            mi.style.display = "";
+           } else {
+            mi.style.display = "none";
+           }
+
         } else {
-          mi.style.display = "none";
+           mi.style.display = "none";
         }
       }
     }
-  }
+   }
 }
+
 
 function loadOrder() {
   const postData = {orderId: sessionStorage.getItem("orderId")};

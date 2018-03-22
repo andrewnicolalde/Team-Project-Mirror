@@ -1,7 +1,5 @@
 package endpoints.tables;
 
-import database.tables.RestaurantTableStaff;
-
 /**
  * This class maps the query result for the tables into something GSON can use.
  *
@@ -14,11 +12,11 @@ class TableData {
   private final String status;
   private final String franchise;
 
-  public TableData(RestaurantTableStaff restaurantTableStaff) {
-    this.number = restaurantTableStaff.getRestaurantTable().getTableNumber();
-    this.status = restaurantTableStaff.getRestaurantTable().getStatus().toString();
-    this.franchise = restaurantTableStaff.getRestaurantTable().getFranchise().getName();
-    this.tableId = restaurantTableStaff.getRestaurantTable().getTableId();
+  public TableData(int number, String status, String franchise, Long tableId) {
+    this.number = number;
+    this.status = status;
+    this.franchise = franchise;
+    this.tableId = tableId;
   }
 
   public int getNumber() {

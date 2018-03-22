@@ -4,6 +4,21 @@
  */
 $(document).ready(function () {
   getCookingOrders();
+
+  if (browserSupportsPush()) {
+    // add a button users can click to get push notifications.
+    if (!havePermissions()) {
+      const button = "<button id='notify' class='btn' onclick='getPermissionAndSubscribe(\"kitchen-notification-worker.js\")'>Notifications</button>";
+      $('.nav').append(button);
+    } else {
+      setUpPush('kitchen-notification-worker.js');
+    }
+  }
+
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    displayOrders(JSON.stringify(event.data));
+    console.log(event.data); // TODO remove!
+  });
 });
 
 function getCookingOrders() {
@@ -35,7 +50,7 @@ function displayOrders(data) {
 
       if(!orderPresent(sideId)){
         $("#sidebar-orders").append("<li id='" + sideId + "' data-timeConfirmed='" + response[i].timeConfirmed + "'>\n"
-        + "<h4>Order No: " + sideId + "</h4>"
+            + "<h4>Order " + sideId + "</h4>"
         + "</li>");
       }
     }
@@ -67,7 +82,7 @@ function displayOrders(data) {
 function shortTime(time) {
   const orderTime = new Date(time);
   const shortTime = paddedTime(orderTime.getHours()) + ":" + paddedTime(
-      orderTime.getMinutes()) + "." + paddedTime(orderTime.getSeconds());
+      orderTime.getMinutes());
   return shortTime;
 }
 

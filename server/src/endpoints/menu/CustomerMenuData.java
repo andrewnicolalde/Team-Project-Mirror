@@ -13,13 +13,13 @@ import javax.persistence.EntityManager;
  *
  * @author Marcus Messer
  */
-class MenuData {
+class CustomerMenuData {
 
   private final Long id;
   private final String name;
   private final Long categoryId;
   private final String category;
-  private final Long[] ingredients;
+  private final String ingredients;
   private final String description;
   private final Double calories;
   private final String price;
@@ -34,12 +34,12 @@ class MenuData {
    *
    * @param menuItem the item from the database.
    */
-  public MenuData(MenuItem menuItem, Franchise franchise) {
+  public CustomerMenuData(MenuItem menuItem, Franchise franchise) {
     this.id = menuItem.getMenuItemId();
     this.name = menuItem.getName();
     this.categoryId = menuItem.getCategory().getCategoryId();
     this.category = menuItem.getCategory().getName();
-    this.ingredients = menuItem.getIngredientsIds();
+    this.ingredients = menuItem.getIngredientsString();
     this.description = menuItem.getDescription();
     this.calories = menuItem.getCalories();
     DecimalFormat priceFormat = new DecimalFormat("#.00");
@@ -56,11 +56,7 @@ class MenuData {
         .setParameter("franchise", franchise).getResultList();
     em.close();
 
-    if (fmi.size() > 0) {
-      partOfFranchise = true;
-    } else {
-      partOfFranchise = false;
-    }
+    partOfFranchise = fmi.size() > 0;
   }
 
   public Long getId() {
@@ -75,7 +71,7 @@ class MenuData {
     return category;
   }
 
-  public Long[] getIngredients() {
+  public String getIngredients() {
     return ingredients;
   }
 
