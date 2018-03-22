@@ -23,7 +23,6 @@ import util.JsonUtil;
  * This class returns the menu items in a JSON format.
  *
  * @author Marcus Messer
- *
  */
 public class Menu {
 
@@ -88,6 +87,7 @@ public class Menu {
   /**
    * This method takes JSON to create a new menu item. For details on what JSON is needed view
    * <code>MenuItemParams</code>.
+   *
    * @param request A HTML request.
    * @param response A HTML response.
    * @return Success after it adds the item.
@@ -109,13 +109,13 @@ public class Menu {
     entityManager.persist(menuItem);
     entityManager.getTransaction().commit();
 
-
     if (menuItemParams.getAddNow()) {
       StaffSession staffSession = entityManager.find(StaffSession.class,
           request.session().attribute("StaffSessionKey"));
 
       entityManager.getTransaction().begin();
-      entityManager.persist(new FranchiseMenuItem(staffSession.getStaff().getFranchise(), menuItem));
+      entityManager
+          .persist(new FranchiseMenuItem(staffSession.getStaff().getFranchise(), menuItem));
       entityManager.getTransaction().commit();
     }
 
@@ -124,8 +124,9 @@ public class Menu {
   }
 
   /**
-   * This method takes JSON and make menu items editable. For detials on what JSON is needed view
+   * This method takes JSON and make menu items editable. For details on what JSON is needed view
    * <code>MenuItemParams</code>.
+   *
    * @param request A HTML request.
    * @param response A HTML response.
    * @return Success after it adds the item.
@@ -140,36 +141,16 @@ public class Menu {
 
     entityManager.getTransaction().begin();
 
-    if (menuItemParams.getName() != null) {
-      menuItem.setName(menuItemParams.getName());
-    }
-    if (menuItemParams.getIngredients() != null) {
-      menuItem.setIngredientsSet(new HashSet<>(Arrays.asList(menuItemParams.getIngredients())));
-    }
-    if (menuItemParams.getDescription() != null) {
-      menuItem.setDescription(menuItemParams.getDescription());
-    }
-    if (menuItemParams.getPrice() != null) {
-      menuItem.setPrice(menuItemParams.getPrice());
-    }
-    if (menuItemParams.getCalories() != null) {
-      menuItem.setCalories(menuItemParams.getCalories());
-    }
-    if (menuItemParams.getVegan() != null) {
-      menuItem.setVegan(menuItemParams.getVegan());
-    }
-    if (menuItemParams.getVegertarian() != null) {
-      menuItem.setVegetarian(menuItemParams.getVegertarian());
-    }
-    if (menuItemParams.getGlutenFree() != null) {
-      menuItem.setGlutenFree(menuItemParams.getGlutenFree());
-    }
-    if (menuItemParams.getPictureSrc() != null) {
-      menuItem.setPictureSrc(menuItemParams.getPictureSrc());
-    }
-    if (menuItemParams.getCategory() != null) {
-      menuItem.setCategory(menuItemParams.getCategory());
-    }
+    menuItem.setName(menuItemParams.getName());
+    menuItem.setIngredientsSet(new HashSet<>(Arrays.asList(menuItemParams.getIngredients())));
+    menuItem.setDescription(menuItemParams.getDescription());
+    menuItem.setPrice(menuItemParams.getPrice());
+    menuItem.setCalories(menuItemParams.getCalories());
+    menuItem.setVegan(menuItemParams.getVegan());
+    menuItem.setVegetarian(menuItemParams.getVegertarian());
+    menuItem.setGlutenFree(menuItemParams.getGlutenFree());
+    menuItem.setPictureSrc(menuItemParams.getPictureSrc());
+    menuItem.setCategory(menuItemParams.getCategory());
 
     entityManager.getTransaction().commit();
 
@@ -178,8 +159,9 @@ public class Menu {
   }
 
   /**
-   * This method removes a menu item from the database. See <code>RemoveMenuItemParams</code>
-   * for JSON details.
+   * This method removes a menu item from the database. See <code>RemoveMenuItemParams</code> for
+   * JSON details.
+   *
    * @param request A HTML request.
    * @param response A HTML response.
    * @return Success after an item is removed.
@@ -198,6 +180,7 @@ public class Menu {
 
   /**
    * This method sets the franchise menu. See <code>FranchiseMenuParams</code> for JSON details.
+   *
    * @param request A HTML request.
    * @param response A HTML response.
    * @return Success after the menu items have been added to the franchise menu.

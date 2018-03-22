@@ -245,6 +245,7 @@ function wizardSubmit() {
 
   } else {
     // Edit mode.
+
   }
 
   // Hide the modal
