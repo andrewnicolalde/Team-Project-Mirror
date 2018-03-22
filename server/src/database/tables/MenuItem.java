@@ -142,7 +142,7 @@ public class MenuItem {
     ingredient.getMenuItems().remove(this);
   }
 
-  public String getIngredients() {
+  public String getIngredientsString() {
     StringBuilder stringBuilder = new StringBuilder();
 
     //Taken from https://stackoverflow.com/questions/3395286/remove-last-character-of-a-stringbuilder
@@ -156,6 +156,15 @@ public class MenuItem {
     }
 
     return stringBuilder.toString();
+  }
+
+  public Long[] getIngredientsIds() {
+    Long[] ids = new Long[ingredients.size()];
+    Ingredient[] ingredients = this.ingredients.toArray(new Ingredient[0]);
+    for (int i = 0; i < ingredients.length; i++) {
+      ids[i] = ingredients[i].getIngredientId();
+    }
+    return ids;
   }
 
   public String getName() {

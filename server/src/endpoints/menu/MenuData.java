@@ -14,7 +14,7 @@ class MenuData {
   private final String name;
   private final Long categoryId;
   private final String category;
-  private final String ingredients;
+  private final Long[] ingredients;
   private final String description;
   private final Double calories;
   private final String price;
@@ -33,7 +33,7 @@ class MenuData {
     this.name = menuItem.getName();
     this.categoryId = menuItem.getCategory().getCategoryId();
     this.category = menuItem.getCategory().getName();
-    this.ingredients = menuItem.getIngredients();
+    this.ingredients = menuItem.getIngredientsIds();
     this.description = menuItem.getDescription();
     this.calories = menuItem.getCalories();
     DecimalFormat priceFormat = new DecimalFormat("#.00");
@@ -56,7 +56,7 @@ class MenuData {
     return category;
   }
 
-  public String getIngredients() {
+  public Long[] getIngredients() {
     return ingredients;
   }
 

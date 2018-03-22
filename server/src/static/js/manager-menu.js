@@ -18,32 +18,47 @@ let ingredients = [];
 let menuItems = [];
 
 $(document).ready(function() {
-  get("/api/authStaff/getMenu", function(data) {
-    menuItems = JSON.parse(data);
-    for (let i = 0; i < menuItems.length; i++) {
-      const item = menuItems[i];
-      $("#menu").append("<tr id='mi-" + item.id + "'>\n"
-          + "<td>" + item.name + "</td>\n"
-          + "<td>" + item.description + "</td>\n"
-          + "<td>" + item.category + "</td>"
-          + "<td>£" + parseFloat(item.price).toFixed(2) + "</td>\n"
-          + "<td>" + item.calories + "kCal</td>\n"
-          + "<td>" + getDietaryRequirements(item) + "</td>\n"
-          + "<td>" + item.ingredients + "</td>\n"
-          + "<td>" + item.picture_src + "</td>\n"
-          + "<td><i id='edit-" + item.id + "' class=\"fas fa-edit fa-lg edit\" onclick='wizardEdit(" + item.id + ");'></i></td>\n"
-          + "</tr>");
-    }
+  get("/api/authStaff/getIngredients", function(data) {
+    ingredients = JSON.parse(data);
+
+    get("/api/authStaff/getMenu", function(data) {
+      menuItems = JSON.parse(data);
+      for (let i = 0; i < menuItems.length; i++) {
+        const item = menuItems[i];
+        $("#menu").append("<tr id='mi-" + item.id + "'>\n"
+            + "<td>" + item.name + "</td>\n"
+            + "<td>" + item.description + "</td>\n"
+            + "<td>" + item.category + "</td>"
+            + "<td>£" + parseFloat(item.price).toFixed(2) + "</td>\n"
+            + "<td>" + item.calories + "kCal</td>\n"
+            + "<td>" + getDietaryRequirements(item) + "</td>\n"
+            + "<td>" + getIngredientsList(item.ingredients) + "</td>\n"
+            + "<td>" + item.picture_src + "</td>\n"
+            + "<td><i id='edit-" + item.id + "' class=\"fas fa-edit fa-lg edit\" onclick='wizardEdit(" + item.id + ");'></i></td>\n"
+            + "</tr>");
+      }
+    });
   });
 
   get("/api/authStaff/getCategories", function (data) {
     categories = JSON.parse(data);
   });
-
-  get("/api/authStaff/getIngredients", function(data) {
-    ingredients = JSON.parse(data);
-  });
 });
+
+function getIngredientsList(ingredientIds) {
+  let displayString = "";
+  for (let i = 0; i < ingredientIds.length; i++) {
+    let ingredientName = "";
+    for (let j = 0; j < ingredients.length; j++) {
+      if (ingredients[j].id === ingredientIds[i]) {
+        ingredientName = ingredients[j].ingredientName;
+        break;
+      }
+    }
+    displayString = displayString + ingredientName + ", ";
+  }
+  return displayString.slice(0, -2);
+}
 
 function getDietaryRequirements(menuItem) {
   let htmlString = "";
