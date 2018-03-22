@@ -106,5 +106,11 @@
             <artifactId>web-push</artifactId>
             <version>3.0.2</version>
         </dependency>
+        <!-- https://stripe.com/docs/libraries -->
+        <dependency>
+            <groupId>com.stripe</groupId>
+            <artifactId>stripe-java</artifactId>
+            <version>5.31.0</version>
+        </dependency>
     </dependencies>
 </project>

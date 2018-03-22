@@ -36,7 +36,7 @@
   float: right;
 }
 .col-3 {
-  max-width: 20%;
+  flex: 0 0 15%;
 }
 
 .list-group h2 {

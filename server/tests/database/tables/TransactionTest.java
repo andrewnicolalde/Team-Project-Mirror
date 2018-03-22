@@ -60,7 +60,7 @@ public class TransactionTest {
     //Create new Server
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    RestaurantTableStaff restaurantTableStaff = new RestaurantTableStaff(staff, restaurantTable);
+    RestaurantTableStaff restaurantTableStaff = new RestaurantTableStaff(staff, restaurantTable, true);
     entityManager.persist(restaurantTableStaff);
     entityManager.getTransaction().commit();
     entityManager.close();

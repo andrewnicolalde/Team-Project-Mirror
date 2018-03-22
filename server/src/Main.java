@@ -7,11 +7,14 @@ import static spark.Spark.staticFileLocation;
 import database.DatabaseManager;
 import endpoints.authentication.AuthenticationEmployee;
 import endpoints.authentication.AuthenticationTable;
+import endpoints.ingredient.IngredientEndPoint;
 import endpoints.manager.Employee;
 import endpoints.menu.Menu;
-import endpoints.notification.Notifications;
+import endpoints.notification.NotificationEndpoint;
 import endpoints.order.Orders;
 import endpoints.stock.StockEndPoints;
+import endpoints.payment.CardChargeMaker;
+import endpoints.tables.TableAssign;
 import endpoints.tables.Tables;
 import endpoints.transaction.Transactions;
 
@@ -46,7 +49,15 @@ public class Main {
     get("/api/authStaff/getTables", Tables::getTables);
     get("/api/authStaff/getAllTables", Tables::getAllTables);
     get("/api/authStaff/getEmployees", Employee::getEmployees);
+    get("/api/authStaff/getWaiters", Employee::getWaiters);
     get("/api/authStaff/getDepartments", Employee::getDepartments);
+    get("/api/authStaff/getCategories", (req, res) -> Menu.getCategories());
+    post("/api/authStaff/getUnAssignedTables", TableAssign::getUnassignedTables);
+    post("/api/authStaff/getAllTablesAssignments", TableAssign::getTablesWithAssignmentCount);
+    post("/api/authStaff/getTableAssignments", TableAssign::getTableAssignments);
+    post("/api/authStaff/setTableAssignment", TableAssign::setTableAssignments);
+    post("/api/authStaff/removeTableAssignment", TableAssign::removeAssignment);
+    get("/api/authStaff/getIngredients", IngredientEndPoint::getIngredients);
     get("/api/authStaff/getStock", StockEndPoints::getStock);
     post("/api/authStaff/getOrdersByTable", Orders::getOrdersByTable);
     post("/api/authStaff/getOrdersByStatus", Orders::getOrdersByStatus);
@@ -58,10 +69,18 @@ public class Main {
     post("/api/authStaff/addStaff", Employee::addEmployee);
     post("/api/authStaff/removeStaff", Employee::removeEmployee);
     post("/api/authStaff/changeTableStatus", Tables::changeTableStatus);
-    post("/api/saveSubscription", Notifications::saveSubscription);
+    post("/api/authStaff/saveSubscription", NotificationEndpoint::saveSubscription);
+    post("/api/authStaff/createMenuItem", Menu::createMenuItem);
+    post("/api/authStaff/editMenuItem", Menu::editMenuItem);
+    post("/api/authStaff/unassignMenuItem", Menu::unassignMenuItem);
+    post("/api/authStaff/assignMenuItem", Menu::assignMenuItem);
+    post("/api/authStaff/newIngredient", IngredientEndPoint::newIngredient);
+    post("/api/authStaff/removeIngredient", IngredientEndPoint::removeIngredient);
+    post("/api/authStaff/renameIngredient", IngredientEndPoint::renameIngredient);
+    post("/api/authStaff/getStock", StockEndPoints::getStock);
     post("/api/authStaff/setStock", StockEndPoints::setStock);
 
-    get("/api/authTable/getMenu", Menu::getMenu);
+    get("/api/authTable/getMenu", Menu::getCustomerMenu);
     get("/api/authTable/getCategories", (req, res) -> Menu.getCategories());
     get("/api/authTable/getTransactionId", Transactions::getTransactionId);
     get("/api/authTable/getAllOrdersForTable", Orders::getAllOrdersForTable);
@@ -73,6 +92,7 @@ public class Main {
     post("/api/authTable/changeOrderInstructions", Orders::changeOrderInstructions);
     post("/api/authTable/changeTableStatus", Tables::changeTableStatus);
     post("/api/authTable/getTransactionTotal", Transactions::getTransactionTotal);
+    post("/api/authTable/createCardCharge", CardChargeMaker::createCharge);
 
     System.out.println("Visit: http://localhost:4567");
 

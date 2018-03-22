@@ -2,15 +2,15 @@
  * This function returns the selected table.
  * @returns The web element representing the current table
  */
-function getActiveTable() {
+function getActiveOrder() {
   // Construct a list of all orders in the document
   const allOrders = document.querySelectorAll('[id^="order-title-"]');
   for (let i = 0; i < allOrders.length; i++) {
     if (allOrders[i].classList.contains("active")) {
-      activeTable = allOrders[i];
+      activeOrder = allOrders[i];
     }
   }
-  return activeTable;
+  return activeOrder;
 }
 
 /**
@@ -24,7 +24,7 @@ function loadOrder(orderId) {
   sessionStorage.setItem("orderId", orderId);
 
   const orderIdToSend = JSON.stringify({orderId: orderId});
-  post("/api/authStaff/getOrderItems", orderIdToSend, function (data) {
+  post("/api/authStaff/getOrderItems", orderIdToSend, (data) => {
 
     // Parse JSON
     const response = JSON.parse(data);
@@ -131,7 +131,7 @@ function tableBtns(status, tableId) {
 function loadOrderList(tableNumber) {
   post("/api/authStaff/getOrdersByTable", JSON.stringify({
     tableNumber: tableNumber
-  }), function (data) {
+  }), (data) => {
     const orders = JSON.parse(data);
     const currentOrderElement = document.getElementById("table-" + tableNumber
         + "-orders-list");
@@ -341,7 +341,7 @@ function setActiveOrder(event) {
  * @param orderStatus The status you are making the order
  */
 function changeOrderStatus(orderStatus) {
-  const activeOrder = getActiveTable();
+  const activeOrder = getActiveOrder();
   post("/api/authStaff/changeOrderStatus",
       JSON.stringify({
         orderId: activeOrder.getAttribute('data-ordernum'),
@@ -357,11 +357,11 @@ function changeOrderStatus(orderStatus) {
  * a waiter does not cancel an order by mistake.
  */
 function confirmCancelOrder() {
-  if (getActiveTable() == null) {
+  if (getActiveOrder() == null) {
     bootbox.alert("There is no order selected");
   } else {
     bootbox.confirm("Are you sure you want to cancel this order?",
-        function (result) {
+        (result) => {
           if (result) { // If the user hit okay (result == true)
             changeOrderStatus('CANCELLED');
             setActiveOrder(null);
@@ -377,12 +377,9 @@ function confirmCancelOrder() {
 function changeTableStatus(event, status) {
   event.stopPropagation();
   const btn = document.getElementById(event.currentTarget.id);
-  console.log(event.currentTarget.id);
-  console.log(btn.id);
-  console.log(btn.dataset.tableid);
   post("/api/authStaff/changeTableStatus",
       JSON.stringify({newStatus: status, tableId: btn.dataset.tableid.toString()}),
-      function (data) {});
+      null);
 }
 
 function changeTables() {
@@ -390,10 +387,26 @@ function changeTables() {
 }
 
 // Loads the menu and tables when the page loads.
-$(document).ready(function () {
+$(document).ready(() => {
   getMyTables();
 
-  $("div.toggle").css("float", "right");
+  $("div.toggle").css("float", "right").addClass("btn-success");
   $("#table-header").css("margin", "3% 0");
   $("#order-header").css("margin", "1.5% 0");
+
+  if (browserSupportsPush()) {
+    // add a button users can click to get push notifications.
+    if (!havePermissions()) {
+      const button = "<button id='notify' class='btn' onclick='getPermissionAndSubscribe(\"waiter-notification-worker.js\")'>Notifications</button>";
+      $('.nav').append(button);
+    } else {
+      setUpPush('waiter-notification-worker.js');
+    }
+  }
+
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    if (event.data === "update") {
+      getTables();
+    }
+  });
 });

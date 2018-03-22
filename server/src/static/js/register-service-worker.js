@@ -3,21 +3,7 @@
  * Individual methods have the attribution. Some are modified.
  */
 
-document.addEventListener('DOMContentLoaded', function (event) {
-  if (browserSupportsPush()) {
-    // add a button users can click to get push notifications.
-    if (!havePermissions()) {
-      const button = "<button id='notify' class='btn' onclick='getPermissionAndSubscribe()'>Notifications</button>";
-      $('.nav').append(button);
-    } else {
-      setUpPush();
-    }
-  }
-  navigator.serviceWorker.addEventListener('message', (event) => {
-    displayOrders(JSON.stringify(event.data));
-  });
-});
-
+domainURL = "http://localhost:4567/js/";
 /**
  * Verify if the browser supports service workers and Push.
  * @return {boolean} true if the browser supports it, false otherwise.
@@ -83,14 +69,14 @@ function registerServiceWorker(worker) {
  * Wrapper method that asks for permission, subscribes the user to push,
  * then sends the subscription to the backend.
  */
-function getPermissionAndSubscribe() {
+function getPermissionAndSubscribe(worker) {
   // Async checking of permission. wait for result.
   Notification.requestPermission().then((result) => {
     // if it is a success then we subscribe the user to push.
     if (result === 'granted') {
       $('#notify').remove();
       // the main part of registering, subscribing and pushing. All async meaning thens are needed.
-      registerServiceWorker('/js/kitchen-notification-worker.js').then(
+      registerServiceWorker('/js/' + worker).then(
           (registration) => {
             console.log("Service worker registered.");
             subscribeUserToPush(registration)
@@ -106,10 +92,11 @@ function getPermissionAndSubscribe() {
 /**
  * Wrapper method to initialise the push notifications.
  */
-function setUpPush() {
+function setUpPush(worker) {
   navigator.serviceWorker.getRegistration('/js/')
   .then((registration) => {
-    if (registration !== undefined) {
+    if (registration !== undefined &&
+        registration.active.scriptURL === (domainURL + worker)) {
       console.log("Have a service worker");
       // we have a service worker already.
       getCurrentSubscription(registration)
@@ -125,7 +112,7 @@ function setUpPush() {
 
     } else {
       console.log("No service worker.");
-      registerServiceWorker('/js/kitchen-notification-worker.js')
+      registerServiceWorker('/js/' + worker)
       .then((registration) => {
         subscribeUserToPush(registration);
       })
@@ -146,10 +133,10 @@ function subscribeUserToPush(registration) {
     userVisibleOnly: true,
     applicationServerKey: serverKey
   };
-    registration.pushManager.subscribe(subscribeOptions)
-    .then((pushSubscription) => {
-      sendSubscriptionToBackEnd(pushSubscription);
-    });
+  registration.pushManager.subscribe(subscribeOptions)
+  .then((pushSubscription) => {
+    sendSubscriptionToBackEnd(pushSubscription);
+  });
 }
 
 /**

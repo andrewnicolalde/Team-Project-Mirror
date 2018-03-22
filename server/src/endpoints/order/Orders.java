@@ -11,7 +11,7 @@ import database.tables.StaffSession;
 import database.tables.TableSession;
 import database.tables.Transaction;
 import database.tables.WaiterSale;
-import endpoints.notification.Notifications;
+import endpoints.notification.NotificationEndpoint;
 import endpoints.transaction.TransactionIdParams;
 import endpoints.transaction.Transactions;
 import java.io.UnsupportedEncodingException;
@@ -194,39 +194,16 @@ public class Orders {
 
     foodOrder.setStatus(OrderStatus.valueOf(cos.getNewOrderStatus()));
 
-    if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.COOKING) {
+    if (foodOrder.getStatus() == OrderStatus.COOKING) {
       foodOrder.setTimeConfirmed(new Timestamp(System.currentTimeMillis()));
-      List<StaffNotification> staffNotifications = entityManager
-          .createQuery("from StaffNotification staffNotification "
-              + "where staffNotification.staff.department = :department", StaffNotification.class)
-          .setParameter("department", Department.KITCHEN).getResultList();
-
-      List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
-              + "where foodOrder.status = :orderStatus",
-          FoodOrder.class).setParameter("orderStatus", OrderStatus.COOKING)
-          .getResultList();
-
-      foodOrders.sort(Comparator.comparing(FoodOrder::getTimeConfirmed));
-
-      OrderData[] orderData = new OrderData[foodOrders.size()];
-      for (int i = 0; i < orderData.length; i++) {
-        orderData[i] = new OrderData(foodOrders.get(i));
-      }
-      String message = JsonUtil.getInstance().toJson(orderData);
-      for (StaffNotification n : staffNotifications) {
-        try {
-          Notifications.sendPushMessage(n.getPushSubscription(), message.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-        }
-      }
-
     }
 
     if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.CANCELLED) {
       foodOrder.getTransaction()
           .setTotal(foodOrder.getTransaction().getTotal() - foodOrder.getTotal());
     }
+
+    NotificationEndpoint.startNotificationService(foodOrder);
 
     entityManager.getTransaction().commit();
     entityManager.close();
@@ -390,4 +367,6 @@ public class Orders {
     orderDetailsToSend.sort(Comparator.comparing(OrderWithContents::getOrderId));
     return JsonUtil.getInstance().toJson(orderDetailsToSend);
   }
+
+
 }

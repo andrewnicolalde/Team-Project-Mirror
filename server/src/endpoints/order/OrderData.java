@@ -8,7 +8,7 @@ import java.sql.Timestamp;
  *
  * @author Marcus Messer
  */
-class OrderData {
+public class OrderData {
 
   private final Long foodOrderId;
   private final String orderStatus;
