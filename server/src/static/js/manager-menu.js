@@ -243,7 +243,14 @@ function wizardSubmit() {
 
   if (wizard.attr("data-mode") === "add") {
     // Add mode
-    mi.addNow = true;
+
+    // Check the addNow
+    if ($("#w-addtofranchise")[0].checked) {
+      mi.addNow = true;
+    } else {
+      mi.addNow = false;
+    }
+    console.log(mi.addNow);
     post("/api/authStaff/createMenuItem", JSON.stringify(mi), function(data) {
       console.log(data);
       location.reload();
