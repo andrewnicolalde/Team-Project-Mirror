@@ -50,6 +50,7 @@ public class Main {
     get("/api/authStaff/getEmployees", Employee::getEmployees);
     get("/api/authStaff/getWaiters", Employee::getWaiters);
     get("/api/authStaff/getDepartments", Employee::getDepartments);
+    get("/api/authStaff/getCategories", (req, res) -> Menu.getCategories());
     post("/api/authStaff/getUnAssignedTables", TableAssign::getUnassignedTables);
     post("/api/authStaff/getAllTablesAssignments", TableAssign::getTablesWithAssignmentCount);
     post("/api/authStaff/getTableAssignments", TableAssign::getTableAssignments);
