@@ -14,6 +14,9 @@ $(document).ready(function () {
   loadOrder();
 });
 
+/**
+ * Loads the menu and displays it to the user.
+ */
 function loadMenu() {
   // Load categories
   let categories = null;
@@ -69,7 +72,11 @@ function loadMenu() {
   });
 }
 
-//Finds which menu items are gluten free/vegetarian/vegan and links them with their corresponding checkboxes.
+/**
+ * Checks whether a menu item meets the filter criteria and should be displayed to the user.
+ * @param mi The menu item to check
+ * @returns A boolean value representing whether or not it should be displayed.
+ */
 function meetsDietaryRequirements(mi) {
   gluteninput = document.getElementById("glutencheckbox");
   vegetarianinput = document.getElementById("vegetariancheckbox");
@@ -89,7 +96,9 @@ function meetsDietaryRequirements(mi) {
 
 }
 
-//Combines searching through the menu by name as well as specifying which category(s) are required (gluten free/vegetarian/vegan)
+/**
+ * Filters the menu items based on the customers search and diet filters
+ */
 function filtername() {
 
   var input, filter, displayMenuItems, gluteninput, vegetarianinput, veganinput;
@@ -134,7 +143,9 @@ function filtername() {
    }
 }
 
-
+/**
+ * Loads the current items in the customers order
+ */
 function loadOrder() {
   const postData = {orderId: sessionStorage.getItem("orderId")};
   post("/api/authTable/getOrderItems", JSON.stringify(postData),
@@ -148,6 +159,10 @@ function loadOrder() {
       });
 }
 
+/**
+ * Adds an item to the customers basket.
+ * @param item The item to add to the basket
+ */
 function addItemToBasket(item) {
   const parent = $("#order");
 
@@ -169,6 +184,9 @@ function addItemToBasket(item) {
       + "</li>");
 }
 
+/**
+ * Calculates the total cost of all the items in the customers basket.
+ */
 function calculateTotal() {
   // Remove old total order if it exists
   const parent = document.getElementById("order");
@@ -191,6 +209,10 @@ function calculateTotal() {
       + "</li>");
 }
 
+/**
+ * Shows a confirmation dialog box to confirm the user wants to remove an item from their basket
+ * @param itemId The item the customer wishes to remove,
+ */
 function confirmRemoveOrderMenuItem(itemId) {
   bootbox.confirm("Are you sure you want to remove this item?",
       function (result) {
@@ -200,6 +222,10 @@ function confirmRemoveOrderMenuItem(itemId) {
       });
 }
 
+/**
+ * Removes a menu item from the customers order
+ * @param itemId The id of the item to remove.
+ */
 function removeOrderMenuItem(itemId) {
   const dataToSend = JSON.stringify({orderMenuItemId: itemId});
   post("/api/authTable/removeItemFromOrder", dataToSend, function (data) {
@@ -221,6 +247,11 @@ function removeOrderMenuItem(itemId) {
   })
 }
 
+/**
+ * Adds an item to the customers order.
+ * @param itemId The id of the menu item to order.
+ * @param instructions Any instructions that need to be added to the order.
+ */
 function addToOrder(itemId, instructions) {
   const dataToSend = JSON.stringify({
     menuItemId: itemId,
@@ -237,6 +268,10 @@ function addToOrder(itemId, instructions) {
   })
 }
 
+/**
+ * Shows the product details and the add to order button to the user in a model.
+ * @param itemId The item id of the menu item the customer clicked on.
+ */
 function showItemModal(itemId) {
   for (let i = 0; i < menuItems.length; i++) {
     if (menuItems[i].id === itemId) {
@@ -287,6 +322,11 @@ function showItemModal(itemId) {
   }
 }
 
+/**
+ * Changes the instructions to a text field the user can edit.
+ * @param orderMenuItemId The id of the order menu item being edited
+ * @param instructions The current instructions of the order menu item.
+ */
 function showEditOrderMenuItem(orderMenuItemId, instructions) {
   const span = $("#omi-instructions-" + orderMenuItemId);
   span.empty();
@@ -300,6 +340,10 @@ function showEditOrderMenuItem(orderMenuItemId, instructions) {
   $("#omi-edit-" + orderMenuItemId).hide();
 }
 
+/**
+ * Changes the text box with the new instructions back to a normal text and sends the updated instructions to the server.
+ * @param orderMenuItemId The id of the order menu item being changed.
+ */
 function confirmEditOrderMenuItem(orderMenuItemId) {
   const span = $("#omi-instructions-" + orderMenuItemId);
   const instructions = $("#omi-instructions-input-" + orderMenuItemId).val();
@@ -319,6 +363,9 @@ function confirmEditOrderMenuItem(orderMenuItemId) {
   });
 }
 
+/**
+ * Confirms the order so the waiter can confirm and send it to the kitchen.
+ */
 function confirmOrder() {
   const orderId = sessionStorage.getItem("orderId");
   const dataToSend = JSON.stringify({
@@ -332,6 +379,9 @@ function confirmOrder() {
   });
 }
 
+/**
+ * Sends a request to the waiter to let them know you need help.
+ */
 function callWaiterToTable() {
 
   const dataToSend = JSON.stringify({newStatus: "NEEDS_HELP"});
