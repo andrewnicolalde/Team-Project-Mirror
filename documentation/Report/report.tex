@@ -4,6 +4,7 @@
 \usepackage{fancyhdr}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{hyperref}
 
 \title{CS2810 - Group Report}
 \author{Marcus Messer, Toby Such, Roger Milroy, Andrew Nicolalde,\\
@@ -19,6 +20,7 @@ Jonathan Lewin, Robin Chabouk, Johan Rehman}
 
 \chapter*{Description Of Components}
 \section*{Views}
+See \textit{\nameref{sec:static}} for links to the Java Script Documentation.
 \subsection*{Customer}
 \subsubsection*{Start Order Page}
 
@@ -106,8 +108,8 @@ This view gives the customer a good idea of what is going on with their orders a
 
 \section*{Server}
 The server is responsible for providing communication and authentication between the user interface and the database.
-We use Spark to handle the communication between the front end and the server itself. We have created numerous classes for the purpose, more detail is provided in \textit{\label{section:endpoints}}.
-Also handled by the server is the communication and the creation of the database, we use the Hibernate ORM and JPA to create and communicate to the PostgreSQL database. More detail on how this is done is provided in \textit{\label{section:database}}.
+We use Spark to handle the communication between the front end and the server itself. We have created numerous classes for the purpose, more detail is provided in \textit{\nameref{sec:endpoints}}.
+Also handled by the server is the communication and the creation of the database, we use the Hibernate ORM and JPA to create and communicate to the PostgreSQL database. More detail on how this is done is provided in \textit{\nameref{sec:database}}.
 
 \section*{Database}
 
@@ -125,7 +127,19 @@ The database was designed to allow the user to start multiple orders and store t
 \end{figure}
 
 \chapter*{Description Of Packages}
-\section*{PACKAGE}
+\section*{Database}\label{sec:database}
+\subsection*{Implemented Components}
+\subsection*{Functionality}
+
+\section*{Endpoints}\label{sec:endpoints}
+\subsection*{Implemented Components}
+\subsection*{Functionality}
+
+\section*{Static}\label{sec:static}
+\subsection*{Implemented Components}
+\subsection*{Functionality}
+
+\section*{Utility}\label{sec:util}
 \subsection*{Implemented Components}
 \subsection*{Functionality}
 
