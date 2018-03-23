@@ -23,6 +23,14 @@ Jonathan Lewin, Robin Chabouk, Johan Rehman}
 %See \textit{\nameref{sec:static}} for links to the Java Script Documentation.
 \subsection*{Customer}
 \subsubsection*{Start Order Page}
+The Customer Start Order page is the initial page the customer sees. It contains a carousel element, a Start Order button, and three images. The central Start Order button directs the customer to the menu page. See \textit{Figure \ref{fig:startOrder}}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=10cm]{startOrder.png}
+  \caption{The customer landing page}
+  \label{fig:startOrder}
+\end{figure}
 
 \subsubsection*{Menu Page}
 Once the customer has clicked Start Order, they will be brought to the Menu Page. The customer can now pick which items they want to order by searching through four different categories. See \textit{Figure \ref{fig:menuClosed}} and \textit{Figure \ref{fig:menuOpen}}.
@@ -109,6 +117,24 @@ Upon successful payment, the customer will be redirected to the start order page
 \subsubsection*{Edit Order View}
 
 \subsection*{Kitchen}
+This is the view the kitchen staff see. The orders are displayed with the oldest (and most important) in the main part of the page, the background colours are visual cues for the kitchen staff to quickly assess the backlog. If there are more than 4 orders the list overflows to the sidebar still with background colour indicating priority. As older Orders are finished they pop off the sidebar onto the main page. See \textit{Figure \ref{fig:kitchen1}}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=10cm]{Kitchen1.png}
+  \caption{The Kitchen Page}
+  \label{fig:kitchen1}
+\end{figure}
+
+When orders are confirmed by the waiter a notification is shown for the kitchen, this also updates the page.
+See \textit{Figure \ref{fig:kitchen2}}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=10cm]{Kitchen2.png}
+  \caption{Kitchen Notifications}
+  \label{fig:kitchen2}
+\end{figure}
 
 \subsection*{Manager}
 \subsubsection*{Manager Home Page}
