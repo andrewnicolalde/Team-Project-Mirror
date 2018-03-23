@@ -139,7 +139,18 @@ For details on the functionality see \textit{\href{run:../JavaDoc/database/packa
 
 \section*{Endpoints}\label{sec:endpoints}
 \subsection*{Implemented Components}
-\
+This package contains classes that link the front end to the database.
+\begin{itemize}
+  \item Authentication classes to authenticate a users login to stop unauthorized access.
+  \item Ingredient classes to provide end points that interact with the ingredient table in the database.
+  \item Manger classes to provide the end points necessary to create the implemented manager user stories.
+  \item Menu classes to provide the end points needed to load and edit the menu.
+  \item Notification classes that provide our push notification service, including auto updating the web pages.
+  \item Order classes to provide the ability to create, view and edits for both the customer view and the waiter view.
+  \item Payment classes to provide the Stripe functionality so they customers can pay by card.
+  \item Table classes to get the list of table, change there status and change which waiters are assigned to which table.
+  \item Transaction classes to allow the front end to get details on the current transaction.
+\end{itemize}
 \subsection*{Functionality}
 
 \section*{Static}\label{sec:static}
