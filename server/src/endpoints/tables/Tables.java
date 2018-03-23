@@ -6,6 +6,7 @@ import database.tables.RestaurantTableStaff;
 import database.tables.StaffSession;
 import database.tables.TableSession;
 import database.tables.TableStatus;
+import endpoints.notification.NotificationEndpoint;
 import java.util.List;
 import javax.persistence.EntityManager;
 import spark.Request;
@@ -22,15 +23,22 @@ public class Tables {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     StaffSession staffSession = entityManager.find(StaffSession.class, request.session().attribute(
         "StaffSessionKey"));
-    return getTableData(staffSession.getStaff().getEmployeeNumber());
+    entityManager.close();
+    return getWaiterTableData(staffSession.getStaff().getEmployeeNumber());
   }
 
-  private static String getTableData(Long staffId) {
+  public static String getAllTables(Request request, Response response) {
+    return getAllTableData();
+  }
+
+  private static String getWaiterTableData(Long staffId) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
     List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from "
-            + "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = " + staffId,
-        RestaurantTableStaff.class).getResultList();
+            + "RestaurantTableStaff tableStaff where tableStaff.staff.employeeNumber = :staffId and tableStaff.isActive = true",
+        RestaurantTableStaff.class).setParameter("staffId", staffId).getResultList();
+
+    entityManager.close();
 
     // This sorts by the table status.
     restaurantTableStaffs.sort((t0, t1) -> {
@@ -46,10 +54,41 @@ public class Tables {
 
     TableData[] tableData = new TableData[restaurantTableStaffs.size()];
     for (int i = 0; i < tableData.length; i++) {
-      tableData[i] = new TableData(restaurantTableStaffs.get(i));
+      RestaurantTable temp = restaurantTableStaffs.get(i).getRestaurantTable();
+      tableData[i] = new TableData(temp.getTableNumber(), temp.getStatus().toString(),
+          temp.getFranchise().toString(), temp.getTableId());
     }
 
+    return JsonUtil.getInstance().toJson(tableData);
+  }
+
+  private static String getAllTableData() {
+    EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
+
+    List<RestaurantTableStaff> restaurantTableStaffs = entityManager.createQuery("from "
+            + "RestaurantTableStaff tableStaff",
+        RestaurantTableStaff.class).getResultList();
+
     entityManager.close();
+
+    // This sorts by the table status.
+    restaurantTableStaffs.sort((t0, t1) -> {
+      if (t0.getRestaurantTable().getStatus().compareTo(t1.getRestaurantTable().getStatus())
+          == 0 && t0.getRestaurantTable().getNeedsHelpTime() != null
+          && t1.getRestaurantTable().getNeedsHelpTime() != null) {
+        return t0.getRestaurantTable().getNeedsHelpTime()
+            .compareTo(t1.getRestaurantTable().getNeedsHelpTime());
+      } else {
+        return t0.getRestaurantTable().getStatus().compareTo(t1.getRestaurantTable().getStatus());
+      }
+    });
+
+    TableData[] tableData = new TableData[restaurantTableStaffs.size()];
+    for (int i = 0; i < tableData.length; i++) {
+      RestaurantTable temp = restaurantTableStaffs.get(i).getRestaurantTable();
+      tableData[i] = new TableData(temp.getTableNumber(), temp.getStatus().toString(),
+          temp.getFranchise().toString(), temp.getTableId());
+    }
 
     return JsonUtil.getInstance().toJson(tableData);
   }
@@ -64,11 +103,8 @@ public class Tables {
   public static String changeTableStatus(Request request, Response response) {
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
 
-    System.out.println(request.body());
-
     ChangeTableStatus cts = JsonUtil.getInstance()
         .fromJson(request.body(), ChangeTableStatus.class);
-
 
     Long tableId;
     if (request.session().attribute("TableSessionKey") != null) {
@@ -88,6 +124,8 @@ public class Tables {
         .setParameter("id", tableId).getSingleResult();
 
     restaurantTable.setStatus(TableStatus.valueOf(cts.getNewStatus()));
+
+    NotificationEndpoint.startNotificationService(restaurantTable);
 
     entityManager.getTransaction().commit();
     entityManager.close();

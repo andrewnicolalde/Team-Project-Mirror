@@ -8,21 +8,21 @@ import java.text.DecimalFormat;
  *
  * @author Marcus Messer
  */
-public class OrderItemsData {
+class OrderItemsData {
 
 
-  private Long id;
-  private String name;
-  private String category;
-  private String ingredients;
-  private String instructions;
-  private String description;
-  private Double calories;
-  private String price;
-  private Boolean is_vegan;
-  private Boolean is_vegetarian;
-  private Boolean is_gluten_free;
-  private String picture_src;
+  private final Long id;
+  private final String name;
+  private final String category;
+  private final String ingredients;
+  private final String instructions;
+  private final String description;
+  private final Double calories;
+  private final String price;
+  private final Boolean is_vegan;
+  private final Boolean is_vegetarian;
+  private final Boolean is_gluten_free;
+  private final String picture_src;
 
   /**
    * This function creates the objects that can be converted to JSON.
@@ -31,7 +31,7 @@ public class OrderItemsData {
     this.id = orderMenuItem.getOrderMenuItemId();
     this.name = orderMenuItem.getMenuItem().getName();
     this.category = orderMenuItem.getMenuItem().getCategory().getName();
-    this.ingredients = orderMenuItem.getMenuItem().getIngredients();
+    this.ingredients = orderMenuItem.getMenuItem().getIngredientsString();
     this.instructions = orderMenuItem.getInstructions();
     this.description = orderMenuItem.getMenuItem().getDescription();
     this.calories = orderMenuItem.getMenuItem().getCalories();

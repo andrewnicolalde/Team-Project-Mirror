@@ -60,7 +60,7 @@ public class TransactionTest {
     //Create new Server
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    RestaurantTableStaff restaurantTableStaff = new RestaurantTableStaff(staff, restaurantTable);
+    RestaurantTableStaff restaurantTableStaff = new RestaurantTableStaff(staff, restaurantTable, true);
     entityManager.persist(restaurantTableStaff);
     entityManager.getTransaction().commit();
     entityManager.close();
@@ -87,8 +87,8 @@ public class TransactionTest {
       assertEquals("Check total", item.getTotal(), transaction.getTotal());
       assertEquals("Check timestamp", item.getDatetimePaid(), transaction.getDatetimePaid());
       assertEquals("Check resturant table id",
-          item.getRestaurantTableStaff().getRestaurntTableStaffId(),
-          transaction.getRestaurantTableStaff().getRestaurntTableStaffId());
+          item.getRestaurantTableStaff().getRestaurantTableStaffId(),
+          transaction.getRestaurantTableStaff().getRestaurantTableStaffId());
     }
 
     entityManager.getTransaction().commit();

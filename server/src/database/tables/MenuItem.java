@@ -39,10 +39,7 @@ public class MenuItem {
   /**
    * This field holds the information about the ingredients information.
    */
-  @ManyToMany(fetch = FetchType.EAGER, cascade = {
-      CascadeType.PERSIST,
-      CascadeType.MERGE,
-  })
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
   @JoinTable(name = "INGREDIENT_MENU_ITEM",
       joinColumns = @JoinColumn(name = "menuItemId"),
       inverseJoinColumns = @JoinColumn(name = "ingredientId"))
@@ -79,7 +76,7 @@ public class MenuItem {
   private Boolean isGlutenFree;
 
   /**
-   * Thus field stores where the picure is stored
+   * Thus field stores where the picture is stored
    */
   private String pictureSrc;
 
@@ -102,18 +99,17 @@ public class MenuItem {
    *
    * @param name The name of menu item.
    * @param ingredients The ingredients info for the item.
-   * @param description The description for the item.
-   * @param calories The amount of calories for the item.
+   * @param description The description for the item,
    * @param price The price of the item.
+   * @param calories The amount of calories for the item.
    * @param isVegan If the item is suitable for Vegans.
    * @param isVegetarian If the item is suitable for vegetarians.
    * @param isGlutenFree If the item is gluten free.
    * @param category The category the item belongs in.
    */
-  public MenuItem(String name, Set<Ingredient> ingredients, String description, Double calories,
-      Double price,
-      Boolean isVegan, Boolean isVegetarian, Boolean isGlutenFree, String pictureSrc,
-      Category category) {
+  public MenuItem(String name, Set<Ingredient> ingredients, String description, Double price,
+      Double calories, Boolean isVegan, Boolean isVegetarian, Boolean isGlutenFree,
+      String pictureSrc, Category category) {
     this.name = name;
     this.ingredients = ingredients;
     this.description = description;
@@ -146,7 +142,7 @@ public class MenuItem {
     ingredient.getMenuItems().remove(this);
   }
 
-  public String getIngredients() {
+  public String getIngredientsString() {
     StringBuilder stringBuilder = new StringBuilder();
 
     //Taken from https://stackoverflow.com/questions/3395286/remove-last-character-of-a-stringbuilder
@@ -160,6 +156,15 @@ public class MenuItem {
     }
 
     return stringBuilder.toString();
+  }
+
+  public Long[] getIngredientsIds() {
+    Long[] ids = new Long[ingredients.size()];
+    Ingredient[] ingredients = this.ingredients.toArray(new Ingredient[0]);
+    for (int i = 0; i < ingredients.length; i++) {
+      ids[i] = ingredients[i].getIngredientId();
+    }
+    return ids;
   }
 
   public String getName() {

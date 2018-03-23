@@ -1,20 +1,17 @@
 package endpoints.order;
 
 import database.DatabaseManager;
-import database.tables.Department;
 import database.tables.FoodOrder;
 import database.tables.MenuItem;
 import database.tables.OrderMenuItem;
 import database.tables.OrderStatus;
-import database.tables.StaffNotification;
 import database.tables.StaffSession;
 import database.tables.TableSession;
 import database.tables.Transaction;
 import database.tables.WaiterSale;
-import endpoints.notification.Notifications;
+import endpoints.notification.NotificationEndpoint;
 import endpoints.transaction.TransactionIdParams;
 import endpoints.transaction.Transactions;
-import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -73,7 +70,8 @@ public class Orders {
 
     EntityManager entityManager = DatabaseManager.getInstance().getEntityManager();
     List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
-            + "where foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = :tableNo",
+            + "where foodOrder.transaction.restaurantTableStaff.restaurantTable.tableNumber = "
+            + ":tableNo and foodOrder.transaction.isPaid = false",
         FoodOrder.class).setParameter("tableNo", tableOrderParams.getTableNumber())
         .getResultList();
 
@@ -194,39 +192,16 @@ public class Orders {
 
     foodOrder.setStatus(OrderStatus.valueOf(cos.getNewOrderStatus()));
 
-    if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.COOKING) {
+    if (foodOrder.getStatus() == OrderStatus.COOKING) {
       foodOrder.setTimeConfirmed(new Timestamp(System.currentTimeMillis()));
-      List<StaffNotification> staffNotifications = entityManager
-          .createQuery("from StaffNotification staffNotification "
-              + "where staffNotification.staff.department = :department", StaffNotification.class)
-          .setParameter("department", Department.KITCHEN).getResultList();
-
-      List<FoodOrder> foodOrders = entityManager.createQuery("from FoodOrder foodOrder "
-              + "where foodOrder.status = :orderStatus",
-          FoodOrder.class).setParameter("orderStatus", OrderStatus.COOKING)
-          .getResultList();
-
-      foodOrders.sort(Comparator.comparing(FoodOrder::getTimeConfirmed));
-
-      OrderData[] orderData = new OrderData[foodOrders.size()];
-      for (int i = 0; i < orderData.length; i++) {
-        orderData[i] = new OrderData(foodOrders.get(i));
-      }
-      String message = JsonUtil.getInstance().toJson(orderData);
-      for (StaffNotification n : staffNotifications) {
-        try {
-          Notifications.sendPushMessage(n.getPushSubscription(), message.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-        }
-      }
-
     }
 
     if (OrderStatus.valueOf(cos.getNewOrderStatus()) == OrderStatus.CANCELLED) {
       foodOrder.getTransaction()
           .setTotal(foodOrder.getTransaction().getTotal() - foodOrder.getTotal());
     }
+
+    NotificationEndpoint.startNotificationService(foodOrder);
 
     entityManager.getTransaction().commit();
     entityManager.close();
@@ -347,20 +322,15 @@ public class Orders {
       if (foodOrder.getTransaction().getRestaurantTableStaff().getRestaurantTable()
           == tableSession
           .getRestaurantTable()) {
+        entityManager.close();
         //Checks if the table is in the correct status.
         return foodOrder.getStatus() != OrderStatus.ORDERING
             && foodOrder.getStatus() != OrderStatus.READY_TO_CONFIRM;
       }
+      entityManager.close();
     }
-    return true;
-  }
 
-  /**
-   * Returns the total price of an order.
-   */
-  public static int getOrderTotal(Request request) {
-    EntityManager em = DatabaseManager.getInstance().getEntityManager();
-    return 10;
+    return true;
   }
 
   /**
@@ -368,7 +338,7 @@ public class Orders {
    *
    * @param request The HTTP request
    * @param response The HTTP response
-   * @return A strign formatted to represent JSON.
+   * @return A string formatted to represent JSON.
    */
   public static String getAllOrdersForTable(Request request, Response response) {
     EntityManager em = DatabaseManager.getInstance().getEntityManager();
@@ -398,4 +368,6 @@ public class Orders {
     orderDetailsToSend.sort(Comparator.comparing(OrderWithContents::getOrderId));
     return JsonUtil.getInstance().toJson(orderDetailsToSend);
   }
+
+
 }

@@ -14,7 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author Marcus Messer
  */
 @Entity
-@Table(name = "RESTURANT_TABLE_STAFF")
+@Table(name = "RESTAURANT_TABLE_STAFF")
 public class RestaurantTableStaff {
 
   /**
@@ -23,7 +23,7 @@ public class RestaurantTableStaff {
   @Id
   @GeneratedValue(generator = "increment")
   @GenericGenerator(name = "increment", strategy = "increment")
-  private Long restaurntTableStaffId;
+  private Long restaurantTableStaffId;
 
   /**
    * This field is used to map the relationship between this table and the <code>Staff</code>
@@ -42,6 +42,11 @@ public class RestaurantTableStaff {
   private RestaurantTable restaurantTable;
 
   /**
+   * This field is used to store if the table assignment is the current assignment.
+   */
+  private Boolean isActive;
+
+  /**
    * This empty constructor is used by Hibernate.
    */
   public RestaurantTableStaff() {
@@ -50,21 +55,23 @@ public class RestaurantTableStaff {
 
   /**
    * This constructor is used to create new entities in this table.
-   *
-   * @param staff This is the staff member that will be serving the table.
+   *  @param staff This is the staff member that will be serving the table.
    * @param restaurantTable This is the table that will be served by the staff member.
+   * @param isActive This stores if the table assignement is current.
    */
-  public RestaurantTableStaff(Staff staff, RestaurantTable restaurantTable) {
+  public RestaurantTableStaff(Staff staff, RestaurantTable restaurantTable,
+      Boolean isActive) {
     this.staff = staff;
     this.restaurantTable = restaurantTable;
+    this.isActive = isActive;
   }
 
-  public Long getRestaurntTableStaffId() {
-    return restaurntTableStaffId;
+  public Long getRestaurantTableStaffId() {
+    return restaurantTableStaffId;
   }
 
-  public void setRestaurntTableStaffId(Long restaurntTableStaffId) {
-    this.restaurntTableStaffId = restaurntTableStaffId;
+  public void setRestaurantTableStaffId(Long restaurantTableStaffId) {
+    this.restaurantTableStaffId = restaurantTableStaffId;
   }
 
   public Staff getStaff() {
@@ -86,9 +93,17 @@ public class RestaurantTableStaff {
   @Override
   public String toString() {
     return "RestaurantTableStaff{" +
-        "restaurntTableStaffId=" + restaurntTableStaffId +
+        "restaurantTableStaffId=" + restaurantTableStaffId +
         ", staff=" + staff +
         ", restaurantTable=" + restaurantTable +
         '}';
+  }
+
+  public Boolean getActive() {
+    return isActive;
+  }
+
+  public void setIsActive(Boolean active) {
+    this.isActive = active;
   }
 }

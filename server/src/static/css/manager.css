@@ -6,3 +6,19 @@
 .close {
   float: right;
 }
+
+.bold {
+  font-weight: bold;
+}
+
+.off {
+  background-color: #28A745;
+}
+
+.right{
+  float: right;
+}
+
+.toggle {
+  margin-bottom: 10px;
+}

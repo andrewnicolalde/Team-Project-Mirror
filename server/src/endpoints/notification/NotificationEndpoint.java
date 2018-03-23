@@ -20,7 +20,8 @@ import util.JsonUtil;
  * Class containing most server side logic for sending push notifications.
  * @author Roger Milroy
  */
-public class Notifications {
+@SuppressWarnings("SpellCheckingInspection")
+public class NotificationEndpoint {
 
   /**
    * Route to save PushSubscriptions from the client.
@@ -39,8 +40,10 @@ public class Notifications {
     request.session().attribute("StaffSessionKey");
     if (request.session().attribute("StaffSessionKey") == null) {
       if (request.session().attribute("TableSessionKey") == null) {
+        entityManager.close();
         return "failed"; // TODO replace with proper error message.
       } else {
+        entityManager.close();
         return "failed"; // for now, maybe replace. TODO think about customer notifications.
       }
     } else {
@@ -55,6 +58,16 @@ public class Notifications {
     entityManager.close();
 
     return "success"; //TODO replace with JSON or request.ok or something like that.
+  }
+
+  public static <T> void startNotificationService(T input) {
+    try {
+      Thread notify = NotificationServiceFactory.getNotificationService(input);
+      notify.start();
+    } catch (IncorrectTypeException e) {
+      e.printStackTrace();
+    }
+
   }
 
   /**

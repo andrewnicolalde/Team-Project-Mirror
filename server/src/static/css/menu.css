@@ -12,10 +12,12 @@
   margin-bottom: 10px;
 }
 
+/*noinspection SpellCheckingInspection*/
 .menuitems {
   margin-top: 10px;
 }
 
+/*noinspection SpellCheckingInspection*/
 .menuitem {
   text-align: center;
 }
@@ -62,6 +64,7 @@
   margin-bottom: 10px;
 }
 
+/*noinspection SpellCheckingInspection*/
 .bootbox-confirm {
   z-index: 1041;
 }

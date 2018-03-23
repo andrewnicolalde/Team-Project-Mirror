@@ -10,9 +10,9 @@ import java.sql.Timestamp;
  */
 public class OrderData {
 
-  private Long foodOrderId;
-  private String orderStatus;
-  private Timestamp timeConfirmed;
+  private final Long foodOrderId;
+  private final String orderStatus;
+  private final Timestamp timeConfirmed;
 
   public OrderData(FoodOrder foodOrder) {
     foodOrderId = foodOrder.getOrderId();

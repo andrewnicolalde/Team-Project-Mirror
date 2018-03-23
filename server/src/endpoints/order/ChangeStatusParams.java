@@ -5,10 +5,10 @@ package endpoints.order;
  *
  * @author Marcus Messer
  */
-public class ChangeStatusParams {
+class ChangeStatusParams {
 
-  private String newOrderStatus;
-  private Long orderId;
+  private final String newOrderStatus;
+  private final Long orderId;
 
   public ChangeStatusParams(Long orderId, String newOrderStatus) {
     this.newOrderStatus = newOrderStatus;
