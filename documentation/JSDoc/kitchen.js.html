@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: kitchen.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: kitchen.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * The document ready function for the kitchen page.
+ * Sets up all the pages jQuery functions.
+ */
+$(document).ready(function () {
+  getCookingOrders();
+
+  if (browserSupportsPush()) {
+    // add a button users can click to get push notifications.
+    if (!havePermissions()) {
+      const button = "&lt;button id='notify' class='btn' onclick='getPermissionAndSubscribe(\"kitchen-notification-worker.js\")'>Notifications&lt;/button>";
+      $('.nav').append(button);
+    } else {
+      setUpPush('kitchen-notification-worker.js');
+    }
+  }
+
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    displayOrders(JSON.stringify(event.data));
+    console.log(event.data); // TODO remove!
+  });
+});
+
+function getCookingOrders() {
+  const statusCooking = "COOKING";
+  post("/api/authStaff/getOrdersByStatus",
+      JSON.stringify({ orderStatus:statusCooking }),
+      function (data) {
+        displayOrders(data);
+        checkSidebarTimes();
+  });
+}
+
+/**
+ * Takes JSON of all orders that are cooking. Appends the least important ones
+ * to the sidebar.
+ * @param data JSON of cooking orders.
+ */
+function displayOrders(data) {
+
+  const response = JSON.parse(data);
+
+  const currentOrderElement = $("sidebar-orders");
+  currentOrderElement.empty();
+
+  // If there are more than 4 orders. Add the last ones to the sidebar.
+  if (response.length > 4) {
+    for (let i = 4; i &lt; response.length; i++) {
+      const sideId = response[i].foodOrderId;
+
+      if(!orderPresent(sideId)){
+        $("#sidebar-orders").append("&lt;li id='" + sideId + "' data-timeConfirmed='" + response[i].timeConfirmed + "'>\n"
+            + "&lt;h4>Order " + sideId + "&lt;/h4>"
+        + "&lt;/li>");
+      }
+    }
+  }
+  // Add the first 4 to the page in lists of items.
+  for (let j = 0; j &lt; response.length &amp;&amp; j &lt; 4; j++) {
+    const Id = response[j].foodOrderId;
+    if(!orderPresent(Id)){
+
+      $("#row").append("&lt;div class='col' id='"+ Id +"' data-timeConfirmed = '"+ response[j].timeConfirmed +"'>"
+          + "&lt;ul class='list-group' id='list-"+ Id +"'>"
+          + "&lt;li class='list-group-item'> "
+          + "&lt;h2>Order " + Id + "&lt;/h2> "
+          + "&lt;div>" + shortTime(response[j].timeConfirmed)
+          + "&lt;button type='button' class='btn btn-success' data-orderId='"+ Id +"' onclick='orderDone(this.getAttribute(\"data-orderId\"))'>Done&lt;/button>&lt;/div>"
+          + "&lt;/li>"
+          + "&lt;/ul>"
+          + "&lt;/div>");
+      getOrderItems(Id);
+    }
+  }
+}
+
+/**
+ * Reduces the full time stamp to just the hours minutes and seconds.
+ * @param time The full timestamp.
+ * @return {string} The condensed time.
+ */
+function shortTime(time) {
+  const orderTime = new Date(time);
+  const shortTime = paddedTime(orderTime.getHours()) + ":" + paddedTime(
+      orderTime.getMinutes());
+  return shortTime;
+}
+
+/**
+ * Helper function to ensure time is formatted correctly.
+ * @param time The original time.
+ * @return {string} A formatted string of the time.
+ */
+function paddedTime(time) {
+  let padded;
+  if (time &lt; 10) {
+    padded = "0" + time;
+  } else {
+    padded = time;
+  }
+  return padded;
+}
+
+/**
+ * Callback function to change the status of an order.
+ * @param orderId The ID of the order to be changed.
+ */
+function orderDone(orderId) {
+  // post to api/authStaff/changeOrderStatus
+  const statusReady = "READY_TO_DELIVER";
+  post("/api/authStaff/changeOrderStatus",
+      JSON.stringify({
+        orderId:orderId,
+        newOrderStatus:statusReady
+      }), function (data) {
+        removeFromScreen(data, orderId);
+      });
+}
+
+/**
+ * Gets the items from the order from the database. Displays them.
+ * @param foodOrderId The ID of the Order which we are getting the items of.
+ */
+function getOrderItems(foodOrderId) {
+  // get the order items.
+  post("/api/authStaff/getOrderItems",
+      JSON.stringify({orderId:foodOrderId}),
+      function (data) {
+        displayOrderItems(data, foodOrderId);
+        checkMainPageTimes();
+      });
+}
+
+/**
+ * Add the Order Items to the DOM to be displayed.
+ * @param data The JSON returned by the post request.
+ * @param foodOrder The ID of the order. To add the elements to the right column.
+ */
+function displayOrderItems(data, foodOrder) {
+  const response = JSON.parse(data);
+
+  for (let i = 0; i &lt; response.length; i++) {
+    let item = "&lt;li class='list-group-item'>&lt;div>&lt;b>" + response[i].name
+        + "&lt;/b>&lt;input type='checkbox' class='custom-checkbox'>&lt;/div>";
+    if (!(response[i].instructions === "")) {
+      item += response[i].instructions
+    }
+    item += "&lt;/li>";
+    $("#list-" + foodOrder).append(item);
+  }
+}
+
+/**
+ * Removes a particular Order from the screen.
+ * @param data The response from the server.
+ * @param Id The Id of the Order to be removed.
+ */
+function removeFromScreen(data, Id) {
+
+  if (data !== "success") {
+    throw new Error();
+  } else {
+    const parent = document.getElementById("row");
+    const child = document.getElementById(Id);
+    parent.removeChild(child);
+    getCookingOrders();
+  }
+}
+
+/**
+ * Check if an order number is being displayed on the screen.
+ * @param orderNum The order number to be checked.
+ * @returns {boolean} True if present on page, False if not.
+ */
+function orderPresent(orderNum) {
+  return Boolean(document.getElementById(orderNum) !== null);
+}
+
+/**
+ * Helper function to calculate the difference between the current time and the given time in milliseconds.
+ * @param id Id of the order to get the time from.
+ * @return {number} The difference in milliseconds.
+ */
+function getTimeDifference(id) {
+  const currentTime = Date.now();
+  const orderDate = new Date(
+      document.getElementById(id).getAttribute("data-timeConfirmed"));
+  const orderTime = orderDate.getTime();
+  return (currentTime - orderTime);
+}
+
+function checkSidebarTimes() {
+  const orders = $("#sidebar-orders").find("> li");
+  for (let i = 0; i &lt; orders.length; i++) {
+    const difference = getTimeDifference(orders[i].id);
+    if (difference > 1200000) {
+      if ($(orders[i].id).hasClass("yellow")) {
+        $(orders[i].id).removeClass("yellow");
+      }
+      orders[i].classList.add("red");
+    } else if (difference > 600000) {
+      if ($(orders[i].id).hasClass("green")) {
+        $(orders[i].id).removeClass("green");
+      }
+      orders[i].classList.add("yellow");
+    } else {
+      orders[i].classList.add("green");
+    }
+  }
+}
+
+function checkMainPageTimes() {
+  const orders = $("#row").find("> .col");
+  for (let i = 0; i &lt; orders.length; i++) {
+    const difference = getTimeDifference(orders[i].id);
+    const items = $("#list-" + orders[i].id).find("> li");
+    if (difference > 1200000) {
+      for(var j = 0; j &lt; items.length; j++) {
+        if ($(items[j].id).hasClass("yellow")) {
+          $(items[j].id).removeClass("yellow");
+        }
+        items[j].classList.add("red");
+      }
+    } else if (difference > 600000) {
+      for(var j = 0; j &lt; items.length; j++) {
+        if ($(items[j].id).hasClass("green")) {
+          $(items[j].id).removeClass("green");
+        }
+        items[j].classList.add("yellow");
+      }
+    } else {
+      for(var j = 0; j &lt; items.length; j++) {
+        items[j].classList.add("green");
+      }
+    }
+  }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addAssignment">addAssignment</a></li><li><a href="global.html#addItemToBasket">addItemToBasket</a></li><li><a href="global.html#addMenuItem">addMenuItem</a></li><li><a href="global.html#addOrderStatusToTable">addOrderStatusToTable</a></li><li><a href="global.html#addToFranchise">addToFranchise</a></li><li><a href="global.html#addToOrder">addToOrder</a></li><li><a href="global.html#browserSupportsPush">browserSupportsPush</a></li><li><a href="global.html#calculateAllTotals">calculateAllTotals</a></li><li><a href="global.html#calculateOneTotal">calculateOneTotal</a></li><li><a href="global.html#calculateTotal">calculateTotal</a></li><li><a href="global.html#callWaiterToTable">callWaiterToTable</a></li><li><a href="global.html#changeOrderStatus">changeOrderStatus</a></li><li><a href="global.html#changeTableStatus">changeTableStatus</a></li><li><a href="global.html#confirmCancelOrder">confirmCancelOrder</a></li><li><a href="global.html#confirmEditOrderMenuItem">confirmEditOrderMenuItem</a></li><li><a href="global.html#confirmOrder">confirmOrder</a></li><li><a href="global.html#confirmRemoveOrderMenuItem">confirmRemoveOrderMenuItem</a></li><li><a href="global.html#displayOrderItems">displayOrderItems</a></li><li><a href="global.html#displayOrders">displayOrders</a></li><li><a href="global.html#domainURL">domainURL</a></li><li><a href="global.html#filtername">filtername</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getActions">getActions</a></li><li><a href="global.html#getActiveOrder">getActiveOrder</a></li><li><a href="global.html#getAllTables">getAllTables</a></li><li><a href="global.html#getCurrentSubscription">getCurrentSubscription</a></li><li><a href="global.html#getDietaryRequirements">getDietaryRequirements</a></li><li><a href="global.html#getDisabled">getDisabled</a></li><li><a href="global.html#getEmployees">getEmployees</a></li><li><a href="global.html#getIngredientsList">getIngredientsList</a></li><li><a href="global.html#getMenuItem">getMenuItem</a></li><li><a href="global.html#getMyTables">getMyTables</a></li><li><a href="global.html#getOrderIcon">getOrderIcon</a></li><li><a href="global.html#getOrderItems">getOrderItems</a></li><li><a href="global.html#getPermissionAndSubscribe">getPermissionAndSubscribe</a></li><li><a href="global.html#getTableAssignments">getTableAssignments</a></li><li><a href="global.html#getTables">getTables</a></li><li><a href="global.html#getTimeDifference">getTimeDifference</a></li><li><a href="global.html#getTransactionId">getTransactionId</a></li><li><a href="global.html#getTransactionTotal">getTransactionTotal</a></li><li><a href="global.html#havePermissions">havePermissions</a></li><li><a href="global.html#loadMenu">loadMenu</a></li><li><a href="global.html#loadOrder">loadOrder</a></li><li><a href="global.html#loadOrderList">loadOrderList</a></li><li><a href="global.html#loadTables">loadTables</a></li><li><a href="global.html#meetsDietaryRequirements">meetsDietaryRequirements</a></li><li><a href="global.html#orderDone">orderDone</a></li><li><a href="global.html#orderPresent">orderPresent</a></li><li><a href="global.html#paddedTime">paddedTime</a></li><li><a href="global.html#post">post</a></li><li><a href="global.html#precheckIngredient">precheckIngredient</a></li><li><a href="global.html#registerServiceWorker">registerServiceWorker</a></li><li><a href="global.html#reloadMenuItems">reloadMenuItems</a></li><li><a href="global.html#removeAssignment">removeAssignment</a></li><li><a href="global.html#removeFromScreen">removeFromScreen</a></li><li><a href="global.html#removeOrderMenuItem">removeOrderMenuItem</a></li><li><a href="global.html#sendSubscriptionToBackEnd">sendSubscriptionToBackEnd</a></li><li><a href="global.html#setActiveOrder">setActiveOrder</a></li><li><a href="global.html#setButtons">setButtons</a></li><li><a href="global.html#setUpPush">setUpPush</a></li><li><a href="global.html#shortTime">shortTime</a></li><li><a href="global.html#showEditOrderMenuItem">showEditOrderMenuItem</a></li><li><a href="global.html#showItemModal">showItemModal</a></li><li><a href="global.html#subscribeUserToPush">subscribeUserToPush</a></li><li><a href="global.html#toggleRequirement">toggleRequirement</a></li><li><a href="global.html#unassign">unassign</a></li><li><a href="global.html#urlB64ToUint8Array">urlB64ToUint8Array</a></li><li><a href="global.html#wizardBasic">wizardBasic</a></li><li><a href="global.html#wizardDietInfo">wizardDietInfo</a></li><li><a href="global.html#wizardEdit">wizardEdit</a></li><li><a href="global.html#wizardIngredients">wizardIngredients</a></li><li><a href="global.html#wizardStart">wizardStart</a></li><li><a href="global.html#wizardSubmit">wizardSubmit</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Mar 23 2018 02:29:12 GMT+0000 (GMT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

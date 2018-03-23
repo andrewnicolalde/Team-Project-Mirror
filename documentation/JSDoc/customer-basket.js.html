@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: customer-basket.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: customer-basket.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>let cost = [];
+
+/**
+ * This is the script that runs when the page loads. It creates an accordion that will contain one order in each of its cards.
+ */
+$(document).ready(function () {
+  get("/api/authTable/getAllOrdersForTable",
+      function (data) {
+        const response = JSON.parse(data);
+        for (let i = 0; i &lt; response.length; i++) {
+          const statusIcon = getOrderIcon(response[i].status);
+          // noinspection SpellCheckingInspection
+          $("#accordion").append("&lt;div class=\"card\">" +
+              "&lt;div class=\"card-header\" id=\"heading\"" + i
+              + " data-toggle=\"collapse\" data-target=\"#collapse" + i
+              + "\" aria-expanded=\"false\" aria-controls=\"collapse\"" + i
+              + " >" +
+              "&lt;h5 class=\"mb-0\">" +
+              "Order " + (i + 1) + " - " + response[i].status + " " + statusIcon +
+              "&lt;div class='total' style='float: right'>" + "£"
+              + (calculateOneTotal(response[i], i)) + "&lt;/div>" +
+              "&lt;/h5>" +
+              "&lt;/div>" +
+              "&lt;div id=\"collapse" + i
+              + "\"  class=\"collapse\" aria-labelledby=\"heading\"" + i
+              + " data-parent=\"#accordion\">" +
+              "&lt;div class=\"card-body\">" +
+              "&lt;table class=\"table table-hover\">" +
+              //names of the columns of the table, to be displayed in table head (thead)
+              "&lt;thead>" +
+              "&lt;tr>" +
+              "&lt;th scope=\"col\">Name&lt;/th>" +
+              "&lt;th scope=\"col\">Description&lt;/th>" +
+              "&lt;th scope=\"col\">Instructions&lt;/th>" +
+              "&lt;th scope=\"col\">Price&lt;/th>" +
+              "&lt;/tr>" +
+              "&lt;/thead>" +
+              "&lt;tbody id=\"table-body" + i + "\">" +
+              loadOrder(response[i].orderContents) +
+              "&lt;/tbody>" +
+              "&lt;/table>" +
+              "&lt;/div>" +
+              "&lt;/div>" +
+              "&lt;/div>"
+          );
+          //Page currently doesn't load when this function is called
+          //Page can take a few seconds to load and sometimes freezes when right clicking
+        }
+        $("#totalcard").append("&lt;div class=\"card\">" +
+            "&lt;div class=\"card-header\" id=\"headingOne\">" +
+            "&lt;h5 class=\"mb-0\">" +
+            "Total: " +
+            "&lt;div class='total' style='float: right'>" + "£" + calculateAllTotals(cost) + "&lt;/div>" +
+            "&lt;/h5>" +
+            "&lt;/div>"
+        );
+      });
+});
+
+/**
+ * This function loads one order
+ * @param current the current order to be loaded
+ * @returns {string} A string of html to be appended to the table-body in the script that calls this function.
+ */
+function loadOrder(current) {
+  let order = "";
+  for (let i = 0; i &lt; current.length; i++) {
+    order += "&lt;tr>"
+        + "&lt;td>" + current[i].name + "&lt;/td>"
+        + "&lt;td>" + current[i].description + "&lt;/td>"
+        + "&lt;td>" + current[i].instructions + "&lt;/td>"
+        + "&lt;td>£" + current[i].price + "&lt;/td>"
+        + "&lt;/tr>"
+  }
+  return order;
+}
+
+/**
+ * This function returns the cost of all the items in one order.
+ * @param current the current order.
+ * @param number The index of the order in the JSON.
+ */
+function calculateOneTotal(current, number) {
+  let currentCost = 0.0;
+  if (current.status !== "Cancelled") {
+    for (let i = 0; i &lt; current.orderContents.length; i++) {
+      const item = current.orderContents[i].price;
+      currentCost += parseFloat(item);
+    }
+  }
+  cost[number] = currentCost.toFixed(2);
+  return currentCost.toFixed(2);
+}
+
+/**
+ * This function returns the cost to two decimal places of all orders for a transaction.
+ * @param cost An array holding the costs for all the orders in the transaction.
+ * @returns {string} The cost is returned as a string to be appended to the 'total' div in basket.html.
+ */
+function calculateAllTotals(cost) {
+  let total = 0.0;
+  for (let i = 0; i &lt; cost.length; i++) {
+    const order = cost[i];
+    total += parseFloat(order);
+  }
+  return total.toFixed(2);
+}
+
+/**
+ * returns an icon for order status.
+ * @param orderStatus the status of the given order.
+ * @returns {*} the icon to be returned.
+ */
+function getOrderIcon(orderStatus) {
+  let statusIcon;
+  switch (orderStatus) {
+    case 'Cancelled':
+      statusIcon = '&lt;i class="fa fa-times" style="color: red; font-size: 25px">&lt;/i>';
+      break;
+    case 'Ordering':
+      statusIcon = '&lt;i class="fa fa-ellipsis-h" style="font-size: 25px">&lt;/i>';
+      break;
+    case 'Ready To Confirm':
+      statusIcon = '&lt;i class="fa fa-bell" style="color: #ffdb00;font-size: 25px">&lt;/i>';
+      break;
+    case 'Cooking':
+      statusIcon = '&lt;i class="fa fa-fire" style="color: orange;font-size: 25px">&lt;/i>';
+      break;
+    case 'Ready To Deliver':
+      statusIcon = '&lt;i class="fa fa-check" style="color: #00bf00; font-size: 25px">&lt;/i>';
+      break;
+    case 'Delivered':
+      statusIcon = '&lt;i class="fas fa-utensils" style="font-size: 25px">&lt;/i>';
+      break;
+  }
+  return statusIcon;
+
+}
+
+function callWaiterToTable() {
+
+  const dataToSend = JSON.stringify({newStatus: "NEEDS_HELP"});
+
+  post("/api/authTable/changeTableStatus", dataToSend, function (data) {
+    if (data === "success") {
+      bootbox.alert(
+          "Your waiter has been called, and will be with you shortly.");
+    }
+  })
+}
+
+/**
+ * This function is a helper function which gives getTransactionTotal a
+ * transactionId.
+ * @returns {Promise} transaction ID
+ */
+function getTransactionId() {
+  return new Promise(function (resolve, reject) {
+    get("/api/authTable/getTransactionId", function (data) {
+      const response = JSON.parse(data);
+      //console.log(response.transactionId);
+      resolve(response.transactionId);
+    });
+  });
+}
+
+/**
+ * This function is responsible for
+ * @param transactionId
+ * @returns the total price of the transaction
+ */
+function getTransactionTotal(transactionId) {
+  const dataToSend = JSON.stringify({
+    transactionId: transactionId
+  });
+  return new Promise(function (resolve, reject) {
+    post("/api/authTable/getTransactionTotal", dataToSend, function (data) {
+      resolve(data);
+    });
+  });
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addAssignment">addAssignment</a></li><li><a href="global.html#addItemToBasket">addItemToBasket</a></li><li><a href="global.html#addMenuItem">addMenuItem</a></li><li><a href="global.html#addOrderStatusToTable">addOrderStatusToTable</a></li><li><a href="global.html#addToFranchise">addToFranchise</a></li><li><a href="global.html#addToOrder">addToOrder</a></li><li><a href="global.html#browserSupportsPush">browserSupportsPush</a></li><li><a href="global.html#calculateAllTotals">calculateAllTotals</a></li><li><a href="global.html#calculateOneTotal">calculateOneTotal</a></li><li><a href="global.html#calculateTotal">calculateTotal</a></li><li><a href="global.html#callWaiterToTable">callWaiterToTable</a></li><li><a href="global.html#changeOrderStatus">changeOrderStatus</a></li><li><a href="global.html#changeTableStatus">changeTableStatus</a></li><li><a href="global.html#confirmCancelOrder">confirmCancelOrder</a></li><li><a href="global.html#confirmEditOrderMenuItem">confirmEditOrderMenuItem</a></li><li><a href="global.html#confirmOrder">confirmOrder</a></li><li><a href="global.html#confirmRemoveOrderMenuItem">confirmRemoveOrderMenuItem</a></li><li><a href="global.html#displayOrderItems">displayOrderItems</a></li><li><a href="global.html#displayOrders">displayOrders</a></li><li><a href="global.html#domainURL">domainURL</a></li><li><a href="global.html#filtername">filtername</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getActions">getActions</a></li><li><a href="global.html#getActiveOrder">getActiveOrder</a></li><li><a href="global.html#getAllTables">getAllTables</a></li><li><a href="global.html#getCurrentSubscription">getCurrentSubscription</a></li><li><a href="global.html#getDietaryRequirements">getDietaryRequirements</a></li><li><a href="global.html#getDisabled">getDisabled</a></li><li><a href="global.html#getEmployees">getEmployees</a></li><li><a href="global.html#getIngredientsList">getIngredientsList</a></li><li><a href="global.html#getMenuItem">getMenuItem</a></li><li><a href="global.html#getMyTables">getMyTables</a></li><li><a href="global.html#getOrderIcon">getOrderIcon</a></li><li><a href="global.html#getOrderItems">getOrderItems</a></li><li><a href="global.html#getPermissionAndSubscribe">getPermissionAndSubscribe</a></li><li><a href="global.html#getTableAssignments">getTableAssignments</a></li><li><a href="global.html#getTables">getTables</a></li><li><a href="global.html#getTimeDifference">getTimeDifference</a></li><li><a href="global.html#getTransactionId">getTransactionId</a></li><li><a href="global.html#getTransactionTotal">getTransactionTotal</a></li><li><a href="global.html#havePermissions">havePermissions</a></li><li><a href="global.html#loadMenu">loadMenu</a></li><li><a href="global.html#loadOrder">loadOrder</a></li><li><a href="global.html#loadOrderList">loadOrderList</a></li><li><a href="global.html#loadTables">loadTables</a></li><li><a href="global.html#meetsDietaryRequirements">meetsDietaryRequirements</a></li><li><a href="global.html#orderDone">orderDone</a></li><li><a href="global.html#orderPresent">orderPresent</a></li><li><a href="global.html#paddedTime">paddedTime</a></li><li><a href="global.html#post">post</a></li><li><a href="global.html#precheckIngredient">precheckIngredient</a></li><li><a href="global.html#registerServiceWorker">registerServiceWorker</a></li><li><a href="global.html#reloadMenuItems">reloadMenuItems</a></li><li><a href="global.html#removeAssignment">removeAssignment</a></li><li><a href="global.html#removeFromScreen">removeFromScreen</a></li><li><a href="global.html#removeOrderMenuItem">removeOrderMenuItem</a></li><li><a href="global.html#sendSubscriptionToBackEnd">sendSubscriptionToBackEnd</a></li><li><a href="global.html#setActiveOrder">setActiveOrder</a></li><li><a href="global.html#setButtons">setButtons</a></li><li><a href="global.html#setUpPush">setUpPush</a></li><li><a href="global.html#shortTime">shortTime</a></li><li><a href="global.html#showEditOrderMenuItem">showEditOrderMenuItem</a></li><li><a href="global.html#showItemModal">showItemModal</a></li><li><a href="global.html#subscribeUserToPush">subscribeUserToPush</a></li><li><a href="global.html#toggleRequirement">toggleRequirement</a></li><li><a href="global.html#unassign">unassign</a></li><li><a href="global.html#urlB64ToUint8Array">urlB64ToUint8Array</a></li><li><a href="global.html#wizardBasic">wizardBasic</a></li><li><a href="global.html#wizardDietInfo">wizardDietInfo</a></li><li><a href="global.html#wizardEdit">wizardEdit</a></li><li><a href="global.html#wizardIngredients">wizardIngredients</a></li><li><a href="global.html#wizardStart">wizardStart</a></li><li><a href="global.html#wizardSubmit">wizardSubmit</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Mar 23 2018 02:29:12 GMT+0000 (GMT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: manager-menu.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: manager-menu.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>let mi = {
+  id: null,
+  addNow: "",
+  name: "",
+  description: "",
+  category: "",
+  price: "",
+  calories: "",
+  isGlutenFree: false,
+  isVegetarian: false,
+  isVegan: false,
+  ingredients: [],
+  pictureSrc: ""
+};
+
+let categories = [];
+let ingredients = [];
+let menuItems = [];
+
+$(document).ready(function() {
+  get("/api/authStaff/getIngredients", function(data) {
+    ingredients = JSON.parse(data);
+
+    get("/api/authStaff/getMenu", function(data) {
+      menuItems = JSON.parse(data);
+      reloadMenuItems(menuItems);
+    });
+  });
+
+  get("/api/authStaff/getCategories", function (data) {
+    categories = JSON.parse(data);
+  });
+});
+
+/**
+ * Adds a new menu item to the table
+ * @param item The menu item to add
+ */
+function addMenuItem(item) {
+  $("#menu").append("&lt;tr id='mi-" + item.id + "'>\n"
+      + "&lt;td>" + item.name + "&lt;/td>\n"
+      + "&lt;td>" + item.description + "&lt;/td>\n"
+      + "&lt;td>" + item.category + "&lt;/td>"
+      + "&lt;td>£" + parseFloat(item.price).toFixed(2) + "&lt;/td>\n"
+      + "&lt;td>" + item.calories + "kCal&lt;/td>\n"
+      + "&lt;td>" + getDietaryRequirements(item) + "&lt;/td>\n"
+      + "&lt;td>" + getIngredientsList(item.ingredients) + "&lt;/td>\n"
+      + "&lt;td>" + item.picture_src + "&lt;/td>\n"
+      + "&lt;td>" + getActions(item) + "&lt;/td>\n"
+      + "&lt;/tr>");
+}
+
+/**
+ * Gets the action buttons to display to the user
+ * @param item The menu item the actions perfrom on.
+ * @returns The HTML representing the action buttons.
+ */
+function getActions(item) {
+  if (item.partOfFranchise) {
+    return "&lt;i id='edit-" + item.id + "' class=\"fas fa-edit fa-lg edit\" onclick='wizardEdit(" + item.id + ");'>&lt;/i>&lt;i class=\"fa fa-times fa-lg remove\" onclick='unassign(" + item.id + ");'>&lt;/i>";
+  } else {
+    return "&lt;i id='edit-" + item.id + "' class=\"fas fa-edit fa-lg edit\" onclick='wizardEdit(" + item.id + ");'>&lt;/i>&lt;i class=\"fas fa-plus fa-lg confirm\" onclick='addToFranchise(" + item.id + ");'>&lt;/i>";
+
+  }
+}
+
+/**
+ * Finds the menu item with the given id, or returns null if it does not exist.
+ * @param id The id to search for.
+ * @returns The menu item, or null if it is not found.
+ */
+function getMenuItem(id) {
+  for (let i = 0; i &lt; menuItems.length; i++) {
+    if (menuItems[i].id === id) {
+      return menuItems[i];
+    }
+  }
+  return null;
+}
+
+/**
+ * Assigns a menu item to a franchise
+ * @param id The id of the menu item to assign
+ */
+function addToFranchise(id) {
+  const item = getMenuItem(id);
+  post("/api/authStaff/assignMenuItem", String(id), function(data) {
+    if(data === "success") {
+      item.partOfFranchise = true;
+      reloadMenuItems();
+    }
+  })
+}
+
+/**
+ * Unassigns a menu item from a franchise.
+ * @param id The id of the item to unassign.
+ */
+function unassign(id) {
+  const item = getMenuItem(id);
+ post("/api/authStaff/unassignMenuItem", String(id), function(data) {
+   if (data === "success") {
+     item.partOfFranchise = false;
+     reloadMenuItems();
+   }
+ });
+}
+
+/**
+ * Clears what is currently displayed, and displays all the menuItems currently loaded.
+ */
+function reloadMenuItems() {
+  $("#menu").empty();
+  for (let i = 0; i &lt; menuItems.length; i++) {
+    const item = menuItems[i];
+    if ($("#see-all-menuitems")[0].checked) {
+      // Showing all menu items
+      addMenuItem(item);
+    } else {
+      // Only show item if it is part of the franchise
+      if (item.partOfFranchise) {
+        addMenuItem(item);
+      }
+    }
+  }
+}
+
+/**
+ * Returns a human readable string representing the ingredients in the menu item.
+ * @param ingredientIds An array of ids of the ingredients in the item.
+ * @returns A human readable string of ingredients.
+ */
+function getIngredientsList(ingredientIds) {
+  let displayString = "";
+  for (let i = 0; i &lt; ingredientIds.length; i++) {
+    let ingredientName = "";
+    for (let j = 0; j &lt; ingredients.length; j++) {
+      if (ingredients[j].id === ingredientIds[i]) {
+        ingredientName = ingredients[j].ingredientName;
+        break;
+      }
+    }
+    displayString = displayString + ingredientName + ", ";
+  }
+  return displayString.slice(0, -2);
+}
+
+/**
+ * Retuns the html of the dietary requirements for a menu item
+ * @param menuItem The menu item the dietary requirements are of.
+ * @returns A string of HTML holding the images to represent the dietary requirements.
+ */
+function getDietaryRequirements(menuItem) {
+  let htmlString = "";
+  if (menuItem.is_gluten_free) {
+    htmlString = htmlString + "&lt;img src=\"../images/gluten-free.svg\">";
+  }
+  if (menuItem.is_vegetarian) {
+    htmlString = htmlString + "&lt;img src=\"../images/vegetarian-mark.svg\">";
+  }
+  if (menuItem.is_vegan) {
+    htmlString = htmlString + "&lt;img src=\"../images/vegan-mark.svg\">";
+  }
+  return htmlString;
+}
+
+/**
+ * Starts the wizard in edit mode, loading an existing menu item into the fields.
+ * @param id The id of the menu item to load.
+ */
+function wizardEdit(id) {
+  for (let i = 0; i &lt; menuItems.length; i++) {
+    if (menuItems[i].id === id) {
+      mi = {
+        id: menuItems[i].id,
+        addNow: null,
+        name: menuItems[i].name,
+        description: menuItems[i].description,
+        category: menuItems[i].description,
+        price: menuItems[i].price,
+        calories: menuItems[i].calories,
+        isGlutenFree: menuItems[i].isGlutenFree,
+        isVegetarian: menuItems[i].isVegetarian,
+        isVegan: menuItems[i].isVegan,
+        ingredients: menuItems[i].ingredients,
+        pictureSrc: menuItems[i].pictureSrc
+      }
+    }
+  }
+
+  // Remove "Add to franchise" checkbox if it is already there
+  $("#addtofranchise").remove();
+
+  // Set the mode to edit
+  $("#wizard").attr("data-mode", "edit");
+
+  // Set the title
+  $("#wizard-title").text("Edit a Menu Item");
+
+  // Start the wizard
+  wizardBasic();
+}
+
+/**
+ * Starts the wizard in start mode, making sure the fields are all in their default state.
+ */
+function wizardStart() {
+  // Reset the current values stored.
+  mi = {
+    id: null,
+    addNow: "",
+    name: "",
+    description: "",
+    category: "",
+    price: "",
+    calories: "",
+    isGlutenFree: false,
+    isVegetarian: false,
+    isVegan: false,
+    ingredients: [],
+    pictureSrc: ""
+  };
+
+
+  // Remove "Add to franchise" checkbox if it is already there
+  $("#addtofranchise").remove();
+  // Add the "Add to franchise" checkbox
+  $("#wizard-footer").prepend("&lt;label id='addtofranchise'>&lt;input type=\"checkbox\" id=\"w-addtofranchise\" checked>  Add this item to the franchise?&lt;/label>");
+
+  // Set the mode to add
+  $("#wizard").attr("data-mode", "add");
+
+  // Set the title
+  $("#wizard-title").text("Create a New Menu Item");
+
+  // Start the wizard.
+  wizardBasic();
+}
+
+/**
+ * Shows the basic information display of the wizard
+ */
+function wizardBasic() {
+  const wizardBody = $("#wizard-body");
+  wizardBody.empty();
+  wizardBody.append("&lt;label for='w-name'>Name:&lt;/label>\n"
+      + "&lt;input type='text' class='form-control' name='w-name' id='w-name' value='" + mi.name + "'>"
+      + "&lt;label for='w-description'>Description:&lt;/label>\n"
+      + "&lt;input type='text' class='form-control' name='w-description' id='w-description' value='" + mi.description + "'>\n"
+      + "&lt;label for='w-category'>Category:&lt;/label>&lt;br>\n"
+      + "&lt;select id='w-category' name='w-category' class='form-control'>&lt;/select>\n"
+      + "&lt;label for='w-price'>Price:&lt;/label>\n"
+      + "&lt;input type='text' class='form-control' name='w-price' id='w-price' value='" + mi.price + "'>");
+
+  const categorySelect = $("#w-category");
+  for (let i = 0; i &lt; categories.length; i++) {
+    const category = categories[i];
+    if (category.categoryId === mi.category) {
+      categorySelect.append("&lt;option value='" + category.categoryId + "' selected>" + category.name + "&lt;/option>");
+    } else {
+      categorySelect.append("&lt;option value='" + category.categoryId + "'>" + category.name + "&lt;/option>");
+    }
+  }
+
+  $("#wizard-next-btn").attr("onclick", "wizardDietInfo()");
+  $("#wizard").modal("show");
+}
+
+/**
+ * Shows the diet info display of the wizard. Also saves the values of the basic info wizard display.
+ */
+function wizardDietInfo() {
+  const wizardBody = $("#wizard-body");
+
+  // Save the previous info and clear the modal
+  mi.name = $("#w-name").val();
+  mi.description = $("#w-description").val();
+  mi.category = $("#w-category").val();
+  mi.price = $("#w-price").val();
+  wizardBody.empty();
+
+  // Load the new contents
+  wizardBody.append("&lt;label for='w-calories'>Calories:&lt;/label>\n"
+      + "&lt;input type='text' class='form-control' name='w-calories' id='w-calories' value='" + mi.calories + "'>\n"
+      + "&lt;img id='w-isglutenfree' src=\"../images/gluten-free.svg\" onclick='toggleRequirement(this)'>\n"
+      + "&lt;img id='w-isvegetarian' src=\"../images/vegetarian-mark.svg\" onclick='toggleRequirement(this)'>\n"
+      + "&lt;img id='w-isvegan' src=\"../images/vegan-mark.svg\" onclick='toggleRequirement(this)'>\n");
+  if (!mi.isGlutenFree) {
+    $("#w-isglutenfree").fadeTo("fast", .5);
+  }
+  if (!mi.isVegetarian) {
+    $("#w-isvegetarian").fadeTo("fast", .5);
+  }
+  if (!mi.isVegan) {
+    $("#w-isvegan").fadeTo("fast", .5);
+  }
+
+  $("#wizard-next-btn").attr("onclick", "wizardIngredients()");
+
+  // Make sure the modal is showing (can't see why it wouldn't but just to make sure)
+  $("#wizard").modal("show");
+}
+
+/**
+ * Returns a string to be inserted into the ingredients checklist if they should be checked before displaying to the user.
+ * @param ingredient The ingredient to check
+ * @returns Either the string ' checked' if it should be prechecked, or a blank string if not.
+ */
+function precheckIngredient(ingredient) {
+  for (let i = 0; i &lt; mi.ingredients.length; i++) {
+    if (ingredient.id === mi.ingredients[i]) {
+      return " checked";
+    }
+  }
+  return "";
+}
+
+/**
+ * Displays the ingredient check list wizard display. Also saves the values from the diet info display.
+ */
+function wizardIngredients() {
+  const wizardBody = $("#wizard-body");
+
+  mi.calories = $("#w-calories").val();
+
+  wizardBody.empty();
+
+  for (let i = 0; i &lt; ingredients.length; i++) {
+    const ingredient = ingredients[i];
+    wizardBody.append("&lt;div class='checkbox'>\n"
+        + "&lt;label>&lt;input class='ingredient-check' type='checkbox' value='" + ingredient.id + "'" + precheckIngredient(ingredient) + "> " + ingredient.ingredientName + "&lt;/label>"
+        + "&lt;/div>")
+  }
+
+  $("#wizard-next-btn").attr("onclick", "wizardSubmit()");
+
+  $("#wizard").modal("show");
+}
+
+/**
+ * Saves the values of the ingredients wizard display and submits it to the server.
+ */
+function wizardSubmit() {
+  const wizard = $("#wizard");
+  const wizardBody = $("#wizard-body");
+
+  // Clear the ingredients list
+  mi.ingredients = [];
+
+  // Set the ingredients list.
+  $(".ingredient-check").each(function(index) {
+    const currentIngredient = $(this)[0]; // Returns an array with one element for some reason? So index out.
+    if (currentIngredient.checked) {
+      mi.ingredients.push(currentIngredient.value);
+    }
+  });
+
+  if (wizard.attr("data-mode") === "add") {
+    // Add mode
+
+    // Check the addNow
+    if ($("#w-addtofranchise")[0].checked) {
+      mi.addNow = true;
+    } else {
+      mi.addNow = false;
+    }
+    console.log(mi.addNow);
+    post("/api/authStaff/createMenuItem", JSON.stringify(mi), function(data) {
+      console.log(data);
+      location.reload();
+    });
+
+  } else {
+    // Edit mode.
+    post("/api/authStaff/editMenuItem", JSON.stringify(mi), function(data) {
+      console.log(data);
+      location.reload();
+    });
+  }
+
+  // Hide the modal
+  wizard.modal("hide");
+}
+
+/**
+ * Handles toggling the diet requirements in the diet info wizard.
+ * @param item
+ */
+function toggleRequirement(item) {
+  if (item.id === "w-isglutenfree") {
+    if (mi.isGlutenFree === "true") {
+      $("#w-isglutenfree").fadeTo("fast", .5);
+      mi.isGlutenFree = "false";
+    } else {
+      $("#w-isglutenfree").fadeTo("fast", 1);
+      mi.isGlutenFree = "true";
+    }
+  } else if (item.id === "w-isvegetarian") {
+    if (mi.isVegetarian === "true") {
+      $("#w-isvegetarian").fadeTo("fast", .5);
+      mi.isVegetarian = "false";
+    } else {
+      $("#w-isvegetarian").fadeTo("fast", 1);
+      mi.isVegetarian = "true";
+    }
+  } else if (item.id === "w-isvegan") {
+    if (mi.isVegan === "true") {
+      $("#w-isvegan").fadeTo("fast", .5);
+      mi.isVegan = "false";
+    } else {
+      $("#w-isvegan").fadeTo("fast", 1);
+      mi.isVegan = "true";
+    }
+  }
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addAssignment">addAssignment</a></li><li><a href="global.html#addItemToBasket">addItemToBasket</a></li><li><a href="global.html#addMenuItem">addMenuItem</a></li><li><a href="global.html#addOrderStatusToTable">addOrderStatusToTable</a></li><li><a href="global.html#addToFranchise">addToFranchise</a></li><li><a href="global.html#addToOrder">addToOrder</a></li><li><a href="global.html#browserSupportsPush">browserSupportsPush</a></li><li><a href="global.html#calculateAllTotals">calculateAllTotals</a></li><li><a href="global.html#calculateOneTotal">calculateOneTotal</a></li><li><a href="global.html#calculateTotal">calculateTotal</a></li><li><a href="global.html#callWaiterToTable">callWaiterToTable</a></li><li><a href="global.html#changeOrderStatus">changeOrderStatus</a></li><li><a href="global.html#changeTableStatus">changeTableStatus</a></li><li><a href="global.html#confirmCancelOrder">confirmCancelOrder</a></li><li><a href="global.html#confirmEditOrderMenuItem">confirmEditOrderMenuItem</a></li><li><a href="global.html#confirmOrder">confirmOrder</a></li><li><a href="global.html#confirmRemoveOrderMenuItem">confirmRemoveOrderMenuItem</a></li><li><a href="global.html#displayOrderItems">displayOrderItems</a></li><li><a href="global.html#displayOrders">displayOrders</a></li><li><a href="global.html#domainURL">domainURL</a></li><li><a href="global.html#filtername">filtername</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getActions">getActions</a></li><li><a href="global.html#getActiveOrder">getActiveOrder</a></li><li><a href="global.html#getAllTables">getAllTables</a></li><li><a href="global.html#getCurrentSubscription">getCurrentSubscription</a></li><li><a href="global.html#getDietaryRequirements">getDietaryRequirements</a></li><li><a href="global.html#getDisabled">getDisabled</a></li><li><a href="global.html#getEmployees">getEmployees</a></li><li><a href="global.html#getIngredientsList">getIngredientsList</a></li><li><a href="global.html#getMenuItem">getMenuItem</a></li><li><a href="global.html#getMyTables">getMyTables</a></li><li><a href="global.html#getOrderIcon">getOrderIcon</a></li><li><a href="global.html#getOrderItems">getOrderItems</a></li><li><a href="global.html#getPermissionAndSubscribe">getPermissionAndSubscribe</a></li><li><a href="global.html#getTableAssignments">getTableAssignments</a></li><li><a href="global.html#getTables">getTables</a></li><li><a href="global.html#getTimeDifference">getTimeDifference</a></li><li><a href="global.html#getTransactionId">getTransactionId</a></li><li><a href="global.html#getTransactionTotal">getTransactionTotal</a></li><li><a href="global.html#havePermissions">havePermissions</a></li><li><a href="global.html#loadMenu">loadMenu</a></li><li><a href="global.html#loadOrder">loadOrder</a></li><li><a href="global.html#loadOrderList">loadOrderList</a></li><li><a href="global.html#loadTables">loadTables</a></li><li><a href="global.html#meetsDietaryRequirements">meetsDietaryRequirements</a></li><li><a href="global.html#orderDone">orderDone</a></li><li><a href="global.html#orderPresent">orderPresent</a></li><li><a href="global.html#paddedTime">paddedTime</a></li><li><a href="global.html#post">post</a></li><li><a href="global.html#precheckIngredient">precheckIngredient</a></li><li><a href="global.html#registerServiceWorker">registerServiceWorker</a></li><li><a href="global.html#reloadMenuItems">reloadMenuItems</a></li><li><a href="global.html#removeAssignment">removeAssignment</a></li><li><a href="global.html#removeFromScreen">removeFromScreen</a></li><li><a href="global.html#removeOrderMenuItem">removeOrderMenuItem</a></li><li><a href="global.html#sendSubscriptionToBackEnd">sendSubscriptionToBackEnd</a></li><li><a href="global.html#setActiveOrder">setActiveOrder</a></li><li><a href="global.html#setButtons">setButtons</a></li><li><a href="global.html#setUpPush">setUpPush</a></li><li><a href="global.html#shortTime">shortTime</a></li><li><a href="global.html#showEditOrderMenuItem">showEditOrderMenuItem</a></li><li><a href="global.html#showItemModal">showItemModal</a></li><li><a href="global.html#subscribeUserToPush">subscribeUserToPush</a></li><li><a href="global.html#toggleRequirement">toggleRequirement</a></li><li><a href="global.html#unassign">unassign</a></li><li><a href="global.html#urlB64ToUint8Array">urlB64ToUint8Array</a></li><li><a href="global.html#wizardBasic">wizardBasic</a></li><li><a href="global.html#wizardDietInfo">wizardDietInfo</a></li><li><a href="global.html#wizardEdit">wizardEdit</a></li><li><a href="global.html#wizardIngredients">wizardIngredients</a></li><li><a href="global.html#wizardStart">wizardStart</a></li><li><a href="global.html#wizardSubmit">wizardSubmit</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Mar 23 2018 02:29:12 GMT+0000 (GMT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

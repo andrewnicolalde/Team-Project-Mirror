@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: customer-menu.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: customer-menu.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const basket = [];
+let menuItems = [];
+
+// Hides the modal if the user clicks off of it.
+window.onclick = function (event) {
+  const modal = document.getElementById("addToOrderModal");
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+};
+
+$(document).ready(function () {
+  loadMenu();
+  loadOrder();
+});
+
+/**
+ * Loads the menu and displays it to the user.
+ */
+function loadMenu() {
+  // Load categories
+  let categories = null;
+
+  get("/api/authTable/getCategories", function (categoryData) {
+    categories = JSON.parse(categoryData);
+
+    for (var i = 0; i &lt; categories.length; i++) {
+      const c = categories[i];
+      $("#categories").append("&lt;div class='category'>\n"
+          + "&lt;button id='category-" + c.categoryId
+          + "-button' type='button' class='btn btn-block category-button' data-toggle='collapse' data-target='#category-"
+          + c.categoryId + "'>" + c.name + "&lt;/button>\n"
+          + "&lt;div id='category-" + c.categoryId + "' class='collapse'>\n"
+          + "&lt;ul id='category-" + c.categoryId
+          + "-list' class='menuitems list-group collapse'>\n"
+          + "&lt;/ul>\n"
+          + "&lt;/div>\n"
+          + "&lt;/div>");
+    }
+
+    // Load menu
+    get("/api/authTable/getMenu", function (menuData) {
+      menuItems = JSON.parse(menuData);
+      for (let i = 0; i &lt; menuItems.length; i++) {
+        const menuItem = menuItems[i];
+        $("#category-" + menuItem.categoryId
+            + "-list").append("&lt;li id='menuitem-" + menuItem.id
+            + "' class='menuitem list-group-item list-group-item-action' onclick='showItemModal("
+            + menuItem.id + ")' data-glutenfree='" + menuItem.is_gluten_free
+            + "' data-vegetarian='" + menuItem.is_vegetarian + "' data-vegan='"
+            + menuItem.is_vegan + "'>\n"
+            + "&lt;span class='bold'>" + menuItem.name + "&lt;/span> - £"
+            + menuItem.price + "\n"
+            + "&lt;br>\n"
+            + menuItem.description + "\n"
+            + "&lt;br>\n"
+            + "&lt;/li>");
+        if (menuItem.is_gluten_free) {
+          $("#menuitem-" + menuItem.id).append(
+              "&lt;img class='img1' src='../images/gluten-free.svg' alt='Gluten Free'>");
+        }
+        if (menuItem.is_vegetarian) {
+          $("#menuitem-" + menuItem.id).append(
+              "&lt;img class='img2' src='../images/vegetarian-mark.svg' alt='Vegetarian'>");
+        }
+        if (menuItem.is_vegan) {
+          $("#menuitem-" + menuItem.id).append(
+              "&lt;img class='img3' src='../images/vegan-mark.svg' alt='Vegan'>");
+        }
+      }
+    });
+  });
+}
+
+/**
+ * Checks whether a menu item meets the filter criteria and should be displayed to the user.
+ * @param mi The menu item to check
+ * @returns A boolean value representing whether or not it should be displayed.
+ */
+function meetsDietaryRequirements(mi) {
+  gluteninput = document.getElementById("glutencheckbox");
+  vegetarianinput = document.getElementById("vegetariancheckbox");
+  veganinput = document.getElementById("vegancheckbox");
+
+  if (!gluteninput.checked || (gluteninput.checked === true
+          &amp; mi.dataset.glutenfree === "true")) {
+    if (!vegetarianinput.checked || (vegetarianinput.checked === true
+            &amp; mi.dataset.vegetarian === "true")) {
+      if (!veganinput.checked || (veganinput.checked === true &amp; mi.dataset.vegan
+              === "true")) {
+       return true;
+     }
+    }
+  }
+  return false;
+
+}
+
+/**
+ * Filters the menu items based on the customers search and diet filters
+ */
+function filtername() {
+
+  var input, filter, displayMenuItems, gluteninput, vegetarianinput, veganinput;
+
+  input = document.getElementById("mysearchbox");
+  filter = input.value.toUpperCase();
+  displayMenuItems = document.getElementsByClassName("menuitem");
+
+  //if there is no input on search bar, keep all menu items hidden.
+  if (filter.length === 0) {
+    const elementsToHide = document.getElementsByClassName("collapse show");
+    for (var i = 0; i &lt; elementsToHide.length; i++) {
+      elementsToHide[i].classList.remove("show");
+    }
+  //else, when there is input, show the menu.
+  } else {
+    const elementsToShow = document.getElementsByClassName("collapse");
+    for (var i = 0; i &lt; elementsToShow.length; i++) {
+      elementsToShow[i].classList.add("show");
+    }
+  }
+
+  //goes through all childnodes of each menu item, and displays the items that meet the search and category criteria.
+  for (var i = 0; i &lt; displayMenuItems.length; i++) {
+    const mi = displayMenuItems[i];
+    console.log(mi.dataset.glutenfree);
+    for (var j = 0; j &lt; mi.childNodes.length; j++) {
+      const node = mi.childNodes[j];
+      if (node.className === "bold") {
+        if(node.innerHTML.toUpperCase().indexOf(filter) > -1) {
+           if (meetsDietaryRequirements(mi)) {
+            mi.style.display = "";
+           } else {
+            mi.style.display = "none";
+           }
+
+        } else {
+           mi.style.display = "none";
+        }
+      }
+    }
+   }
+}
+
+/**
+ * Loads the current items in the customers order
+ */
+function loadOrder() {
+  const postData = {orderId: sessionStorage.getItem("orderId")};
+  post("/api/authTable/getOrderItems", JSON.stringify(postData),
+      function (data) {
+        const orderMenuItems = JSON.parse(data);
+        for (let i = 0; i &lt; orderMenuItems.length; i++) {
+          const item = orderMenuItems[i];
+          addItemToBasket(item);
+        }
+        calculateTotal();
+      });
+}
+
+/**
+ * Adds an item to the customers basket.
+ * @param item The item to add to the basket
+ */
+function addItemToBasket(item) {
+  const parent = $("#order");
+
+  // Add item
+  basket.push(item);
+  parent.append("&lt;li id='ordermenuitem-" + item.id
+      + "' class='list-group-item list-group-item-action'>\n"
+      + "  &lt;span class='bold'>" + item.name + "&lt;/span>"
+      + "  &lt;span class='span-right'>£" + item.price + "&lt;/span>\n"
+      + "  &lt;br>\n"
+      + "  &lt;span id='omi-instructions-" + item.id
+      + "'>&lt;span id='omi-instructions-" + item.id + "-text'>"
+      + item.instructions + "&lt;/span>&lt;/span>\n"
+      + "  &lt;span class='span-right'>&lt;i id='omi-edit-" + item.id
+      + "' class='fa fa-edit fa-lg edit' onclick='showEditOrderMenuItem("
+      + item.id + ", \"" + item.instructions
+      + "\");'>&lt;/i>&lt;i class='fa fa-times fa-lg remove' onclick='confirmRemoveOrderMenuItem("
+      + item.id + ");'>&lt;/i>&lt;/span>\n"
+      + "&lt;/li>");
+}
+
+/**
+ * Calculates the total cost of all the items in the customers basket.
+ */
+function calculateTotal() {
+  // Remove old total order if it exists
+  const parent = document.getElementById("order");
+  const totalPrice = document.getElementById("total-price");
+  if (totalPrice != null) {
+    parent.removeChild(totalPrice);
+  }
+
+  // Calculate total
+  let total = 0.0;
+  for (let i = 0; i &lt; basket.length; i++) {
+    const item = basket[i];
+    total += parseFloat(item.price);
+  }
+
+  // Display it.
+  $("#order").append("&lt;li id='total-price' class='list-group-item list-group-item-info'>\n"
+      + "&lt;span class='bold'>Total:&lt;/span>"
+      + "&lt;span class='span-right'>£" + total.toFixed(2) + "&lt;/span>\n"
+      + "&lt;/li>");
+}
+
+/**
+ * Shows a confirmation dialog box to confirm the user wants to remove an item from their basket
+ * @param itemId The item the customer wishes to remove,
+ */
+function confirmRemoveOrderMenuItem(itemId) {
+  bootbox.confirm("Are you sure you want to remove this item?",
+      function (result) {
+        if (result) {
+          removeOrderMenuItem(itemId);
+        }
+      });
+}
+
+/**
+ * Removes a menu item from the customers order
+ * @param itemId The id of the item to remove.
+ */
+function removeOrderMenuItem(itemId) {
+  const dataToSend = JSON.stringify({orderMenuItemId: itemId});
+  post("/api/authTable/removeItemFromOrder", dataToSend, function (data) {
+    if (data === "success") {
+      const parent = document.getElementById("order");
+      const child = document.getElementById("ordermenuitem-" + itemId);
+      parent.removeChild(child);
+
+      // Remove it from the basket array
+      for (let i = 0; i &lt; basket.length; i++) {
+        if (basket[i].id === itemId) {
+          basket.splice(i, 1);
+        }
+      }
+
+      // Recalculate the price
+      calculateTotal();
+    }
+  })
+}
+
+/**
+ * Adds an item to the customers order.
+ * @param itemId The id of the menu item to order.
+ * @param instructions Any instructions that need to be added to the order.
+ */
+function addToOrder(itemId, instructions) {
+  const dataToSend = JSON.stringify({
+    menuItemId: itemId,
+    instructions: instructions,
+    orderId: sessionStorage.getItem("orderId")
+  });
+
+  post("/api/authTable/addItemToOrder", dataToSend, function (data) {
+    if (data !== "failure") {
+      const item = JSON.parse(data);
+      addItemToBasket(item);
+      calculateTotal();
+    }
+  })
+}
+
+/**
+ * Shows the product details and the add to order button to the user in a model.
+ * @param itemId The item id of the menu item the customer clicked on.
+ */
+function showItemModal(itemId) {
+  for (let i = 0; i &lt; menuItems.length; i++) {
+    if (menuItems[i].id === itemId) {
+      const item = menuItems[i];
+      const modal = document.getElementById("addToOrderModal");
+      modal.setAttribute("data-menuitemid", item.id);
+      document.getElementById("name").innerText = item.name;
+      document.getElementById("category").innerText = item.category;
+      document.getElementById("description").innerText = item.description;
+      document.getElementById("price").innerText = item.price;
+      document.getElementById("calories").innerText = item.calories;
+      document.getElementById("ingredients").innerText = item.ingredients;
+      document.getElementById("picture").setAttribute("src", "../images/"
+          + item.picture_src);
+
+      // Remove any content info symbols that are already there
+      const node = document.getElementById("content-info");
+      while (node.firstChild) {
+        node.removeChild(node.firstChild);
+      }
+
+      if (item.is_gluten_free) {
+        $("#content-info").append(
+            "&lt;img src='../images/gluten-free.svg' alt='Gluten Free'>");
+      }
+      if (item.is_vegetarian) {
+        $("#content-info").append(
+            "&lt;img src='../images/vegetarian-mark.svg' alt='Vegetarian'>");
+      }
+      if (item.is_vegan) {
+        $("#content-info").append(
+            "&lt;img src='../images/vegan-mark.svg' alt='Vegan'>");
+      }
+
+      // Clear the extra instructions text input
+      document.getElementById("instructions").value = "";
+
+      // Set the onclick for the add to order button
+      document.getElementById("addToOrderButton").onclick = function () {
+        addToOrder(document.getElementById("addToOrderModal").getAttribute(
+            "data-menuitemid"), document.getElementById("instructions").value);
+        document.getElementById('addToOrderModal').style.display = 'none';
+      };
+
+      modal.style.display = "block";
+      break;
+    }
+  }
+}
+
+/**
+ * Changes the instructions to a text field the user can edit.
+ * @param orderMenuItemId The id of the order menu item being edited
+ * @param instructions The current instructions of the order menu item.
+ */
+function showEditOrderMenuItem(orderMenuItemId, instructions) {
+  const span = $("#omi-instructions-" + orderMenuItemId);
+  span.empty();
+  span.append("&lt;input id='omi-instructions-input-" + orderMenuItemId
+      + "' name='omi-instructions-input-" + orderMenuItemId
+      + "' class='instructions-box' type='text' placeholder='Any extra instructions' value='"
+      + instructions + "'>");
+  span.append("&lt;i id='omi-confirm-" + orderMenuItemId
+      + "' class='fa fa-check fa-lg confirm' onclick='confirmEditOrderMenuItem("
+      + orderMenuItemId + ")'>&lt;/i>");
+  $("#omi-edit-" + orderMenuItemId).hide();
+}
+
+/**
+ * Changes the text box with the new instructions back to a normal text and sends the updated instructions to the server.
+ * @param orderMenuItemId The id of the order menu item being changed.
+ */
+function confirmEditOrderMenuItem(orderMenuItemId) {
+  const span = $("#omi-instructions-" + orderMenuItemId);
+  const instructions = $("#omi-instructions-input-" + orderMenuItemId).val();
+  const data = JSON.stringify({
+    orderMenuItemId: orderMenuItemId,
+    instructions: instructions
+  });
+  post("/api/authTable/changeOrderInstructions", data, function (data) {
+    if (data === "success") {
+      $("#omi-confirm-" + orderMenuItemId).remove();
+      $("#omi-instructions-input-" + orderMenuItemId).remove();
+      $("#omi-edit-" + orderMenuItemId).show();
+      $("#omi-instructions-"
+          + orderMenuItemId).append("&lt;span id='omi-instructions-"
+          + orderMenuItemId + "-text'>" + instructions + "&lt;/span>")
+    }
+  });
+}
+
+/**
+ * Confirms the order so the waiter can confirm and send it to the kitchen.
+ */
+function confirmOrder() {
+  const orderId = sessionStorage.getItem("orderId");
+  const dataToSend = JSON.stringify({
+    orderId: orderId,
+    newOrderStatus: "READY_TO_CONFIRM"
+  });
+  post("/api/authTable/changeOrderStatus", dataToSend, function (data) {
+    if (data === "success") {
+      window.location.replace("/customer/basket.html");
+    }
+  });
+}
+
+/**
+ * Sends a request to the waiter to let them know you need help.
+ */
+function callWaiterToTable() {
+
+  const dataToSend = JSON.stringify({newStatus: "NEEDS_HELP"});
+
+  post("/api/authTable/changeTableStatus", dataToSend, function (data) {
+    if (data === "success") {
+      bootbox.alert(
+          "Your waiter has been called, and will be with you shortly.");
+    }
+  })
+
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addAssignment">addAssignment</a></li><li><a href="global.html#addItemToBasket">addItemToBasket</a></li><li><a href="global.html#addMenuItem">addMenuItem</a></li><li><a href="global.html#addOrderStatusToTable">addOrderStatusToTable</a></li><li><a href="global.html#addToFranchise">addToFranchise</a></li><li><a href="global.html#addToOrder">addToOrder</a></li><li><a href="global.html#browserSupportsPush">browserSupportsPush</a></li><li><a href="global.html#calculateAllTotals">calculateAllTotals</a></li><li><a href="global.html#calculateOneTotal">calculateOneTotal</a></li><li><a href="global.html#calculateTotal">calculateTotal</a></li><li><a href="global.html#callWaiterToTable">callWaiterToTable</a></li><li><a href="global.html#changeOrderStatus">changeOrderStatus</a></li><li><a href="global.html#changeTableStatus">changeTableStatus</a></li><li><a href="global.html#confirmCancelOrder">confirmCancelOrder</a></li><li><a href="global.html#confirmEditOrderMenuItem">confirmEditOrderMenuItem</a></li><li><a href="global.html#confirmOrder">confirmOrder</a></li><li><a href="global.html#confirmRemoveOrderMenuItem">confirmRemoveOrderMenuItem</a></li><li><a href="global.html#displayOrderItems">displayOrderItems</a></li><li><a href="global.html#displayOrders">displayOrders</a></li><li><a href="global.html#domainURL">domainURL</a></li><li><a href="global.html#filtername">filtername</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getActions">getActions</a></li><li><a href="global.html#getActiveOrder">getActiveOrder</a></li><li><a href="global.html#getAllTables">getAllTables</a></li><li><a href="global.html#getCurrentSubscription">getCurrentSubscription</a></li><li><a href="global.html#getDietaryRequirements">getDietaryRequirements</a></li><li><a href="global.html#getDisabled">getDisabled</a></li><li><a href="global.html#getEmployees">getEmployees</a></li><li><a href="global.html#getIngredientsList">getIngredientsList</a></li><li><a href="global.html#getMenuItem">getMenuItem</a></li><li><a href="global.html#getMyTables">getMyTables</a></li><li><a href="global.html#getOrderIcon">getOrderIcon</a></li><li><a href="global.html#getOrderItems">getOrderItems</a></li><li><a href="global.html#getPermissionAndSubscribe">getPermissionAndSubscribe</a></li><li><a href="global.html#getTableAssignments">getTableAssignments</a></li><li><a href="global.html#getTables">getTables</a></li><li><a href="global.html#getTimeDifference">getTimeDifference</a></li><li><a href="global.html#getTransactionId">getTransactionId</a></li><li><a href="global.html#getTransactionTotal">getTransactionTotal</a></li><li><a href="global.html#havePermissions">havePermissions</a></li><li><a href="global.html#loadMenu">loadMenu</a></li><li><a href="global.html#loadOrder">loadOrder</a></li><li><a href="global.html#loadOrderList">loadOrderList</a></li><li><a href="global.html#loadTables">loadTables</a></li><li><a href="global.html#meetsDietaryRequirements">meetsDietaryRequirements</a></li><li><a href="global.html#orderDone">orderDone</a></li><li><a href="global.html#orderPresent">orderPresent</a></li><li><a href="global.html#paddedTime">paddedTime</a></li><li><a href="global.html#post">post</a></li><li><a href="global.html#precheckIngredient">precheckIngredient</a></li><li><a href="global.html#registerServiceWorker">registerServiceWorker</a></li><li><a href="global.html#reloadMenuItems">reloadMenuItems</a></li><li><a href="global.html#removeAssignment">removeAssignment</a></li><li><a href="global.html#removeFromScreen">removeFromScreen</a></li><li><a href="global.html#removeOrderMenuItem">removeOrderMenuItem</a></li><li><a href="global.html#sendSubscriptionToBackEnd">sendSubscriptionToBackEnd</a></li><li><a href="global.html#setActiveOrder">setActiveOrder</a></li><li><a href="global.html#setButtons">setButtons</a></li><li><a href="global.html#setUpPush">setUpPush</a></li><li><a href="global.html#shortTime">shortTime</a></li><li><a href="global.html#showEditOrderMenuItem">showEditOrderMenuItem</a></li><li><a href="global.html#showItemModal">showItemModal</a></li><li><a href="global.html#subscribeUserToPush">subscribeUserToPush</a></li><li><a href="global.html#toggleRequirement">toggleRequirement</a></li><li><a href="global.html#unassign">unassign</a></li><li><a href="global.html#urlB64ToUint8Array">urlB64ToUint8Array</a></li><li><a href="global.html#wizardBasic">wizardBasic</a></li><li><a href="global.html#wizardDietInfo">wizardDietInfo</a></li><li><a href="global.html#wizardEdit">wizardEdit</a></li><li><a href="global.html#wizardIngredients">wizardIngredients</a></li><li><a href="global.html#wizardStart">wizardStart</a></li><li><a href="global.html#wizardSubmit">wizardSubmit</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Mar 23 2018 02:29:12 GMT+0000 (GMT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
