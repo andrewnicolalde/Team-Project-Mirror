@@ -1,3 +1,7 @@
+/**
+ * @module Manager-Employee
+ */
+
 let departments;
 
 $(document).ready(() => {

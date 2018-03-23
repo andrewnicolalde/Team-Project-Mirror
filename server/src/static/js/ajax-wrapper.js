@@ -1,4 +1,8 @@
 /**
+ * @module AJAX_Wrapper
+ */
+
+/**
  * This function wraps a get request and allows unauthorized requests to be
  * redirected.
  *

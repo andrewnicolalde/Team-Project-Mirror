@@ -1,3 +1,7 @@
+/**
+ * @module Customer-Basket
+ */
+
 let cost = [];
 
 /**
@@ -137,6 +141,9 @@ function getOrderIcon(orderStatus) {
 
 }
 
+/**
+ * This function notifies the server that the customer needs help.
+ */
 function callWaiterToTable() {
 
   const dataToSend = JSON.stringify({newStatus: "NEEDS_HELP"});

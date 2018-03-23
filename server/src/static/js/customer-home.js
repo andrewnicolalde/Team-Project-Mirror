@@ -1,3 +1,9 @@
+/**
+ * @module Customer-Home
+ */
+/**
+ * This function gets the current transaction id.
+ */
 function getTransactionId() {
   get("/api/authTable/getTransactionId", function (data) {
     const response = JSON.parse(data);
@@ -8,6 +14,11 @@ function getTransactionId() {
   });
 }
 
+/**
+ * This function gets the current order Id.
+ *
+ * @param transactionId The current transaction.
+ */
 function getOrderId(transactionId) {
   post("/api/authTable/getOrderId", JSON.stringify({
     transactionId: transactionId

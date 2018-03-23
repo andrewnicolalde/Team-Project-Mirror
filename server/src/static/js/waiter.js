@@ -1,4 +1,8 @@
 /**
+ * @module Waiter
+ */
+
+/**
  * This function returns the selected table.
  * @returns The web element representing the current table
  */

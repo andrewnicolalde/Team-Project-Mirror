@@ -1,4 +1,8 @@
 /**
+ * @module Register-Service-Worker
+ */
+
+/**
  * Credit for much code to Matt Gaunt from Google. https://developers.google.com/web/fundamentals/push-notifications/
  * Individual methods have the attribution. Some are modified.
  */

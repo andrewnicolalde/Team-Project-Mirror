@@ -1,4 +1,8 @@
 /**
+ * @module Kitchen
+ */
+
+/**
  * The document ready function for the kitchen page.
  * Sets up all the pages jQuery functions.
  */

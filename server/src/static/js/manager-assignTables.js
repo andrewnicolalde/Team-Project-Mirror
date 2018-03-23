@@ -1,3 +1,7 @@
+/**
+ * @module Manager-Assign Tables
+ */
+
 $(document).ready(() => {
   getEmployees();
 });

@@ -1,3 +1,7 @@
+/**
+ * @module Manager-Menu
+ */
+
 let mi = {
   id: null,
   addNow: "",

@@ -1,7 +1,14 @@
+/**
+ * @module Customer-Menu
+ */
+
 const basket = [];
 let menuItems = [];
 
-// Hides the modal if the user clicks off of it.
+/**
+ * Hides the modal if the user clicks off of it.
+ * @param event The click event.
+ */
 window.onclick = function (event) {
   const modal = document.getElementById("addToOrderModal");
   if (event.target === modal) {
@@ -9,6 +16,9 @@ window.onclick = function (event) {
   }
 };
 
+/**
+ * This function loads the menu and the current order on page load.
+ */
 $(document).ready(function () {
   loadMenu();
   loadOrder();
@@ -210,6 +220,7 @@ function calculateTotal() {
 }
 
 /**
+ * module:Customer-Menu.confirmRemoveOrderMenuItem
  * Shows a confirmation dialog box to confirm the user wants to remove an item from their basket
  * @param itemId The item the customer wishes to remove,
  */
