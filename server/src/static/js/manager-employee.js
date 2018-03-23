@@ -8,6 +8,9 @@ $(document).ready(() => {
       });
 });
 
+/**
+ * Loads the employees from the database and displays them in the table.
+ */
 function loadEmployees() {
   get("/api/authStaff/getEmployees", (data) => {
     const employees = JSON.parse(data);
@@ -33,6 +36,11 @@ function loadEmployees() {
   });
 }
 
+/**
+ * Constructs the option tag for a department, checking if it should be selected or not.
+ * @param department The department to make the tag from.
+ * @returns A HTML option string.
+ */
 function createDepartmentOptions(department) {
   let departmentsOptions = "";
   for (let i = 0; i < departments.length; i++) {
@@ -46,6 +54,10 @@ function createDepartmentOptions(department) {
   return departmentsOptions;
 }
 
+/**
+ * Changes an employee row to the edit mode, changing the text to text boxes the user can edit.
+ * @param id The id of the employee to edit.
+ */
 function startEdit(id) {
   $("#emp-first-" + id).html("<input id='emp-first-" + id + "-input' value='"
       + $("#emp-first-" + id).text() + "'>");
@@ -60,6 +72,10 @@ function startEdit(id) {
       + ")'></i>");
 }
 
+/**
+ * Changes the edit employee form back to the display view and sends the edits back to the server.
+ * @param id The id of the employee to change.
+ */
 function confirmEdit(id) {
   const dataToSend = JSON.stringify({
     employeeNumber: id,
@@ -84,6 +100,9 @@ function confirmEdit(id) {
       });
 }
 
+/**
+ * Creates a new row in the table to allow the user to put the new employee data in.
+ */
 function startAdd() {
   $("#employees").append("<tr id='new-employee-form'>\n"
       + "<td id='emp-id-new'></td>\n"
@@ -96,10 +115,9 @@ function startAdd() {
   $("#add-staff-btn").hide();
 }
 
-function showPasswordModal() {
-
-}
-
+/**
+ * Sends the new employee data back to the server and displays them in the table.
+ */
 function confirmAdd() {
   const dataToSend = JSON.stringify({
     firstName: $("#emp-first-new-input").val(),
@@ -134,6 +152,9 @@ function confirmAdd() {
       });
 }
 
+/**
+ * Check the passwords in the password modals match
+ */
 function checkPasswordsMatch() {
   const pwd1 = $("#pwd1");
   const pwd2 = $("#pwd2");
@@ -147,6 +168,10 @@ function checkPasswordsMatch() {
   }
 }
 
+/**
+ * Deletes an employee.
+ * @param id
+ */
 function remove(id) {
   bootbox.confirm("Are you sure you want to remove this employee account?",
       (result) => {
