@@ -129,10 +129,17 @@ The database was designed to allow the user to start multiple orders and store t
 \chapter*{Description Of Packages}
 \section*{Database}\label{sec:database}
 \subsection*{Implemented Components}
+This package implements the following components:
+\begin{itemize}
+  \item A fully relational database in hopefully third normal form. All created with Hibernate ORM.
+  \item A Database Manager Singleton for easy access to creating JPA Entity Managers, without the need of creating more than one factory.
+\end{itemize}
 \subsection*{Functionality}
+For details on the functionality see \textit{\href{run:../JavaDoc/database/package-summary.html}{the Database Package overview}} and \textit{\href{run:../JavaDoc/database/tables/package-summary.html}{the Table Package overview}}.
 
 \section*{Endpoints}\label{sec:endpoints}
 \subsection*{Implemented Components}
+\
 \subsection*{Functionality}
 
 \section*{Static}\label{sec:static}
