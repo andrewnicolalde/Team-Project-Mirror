@@ -40,10 +40,10 @@ public class NotificationEndpoint {
     request.session().attribute("StaffSessionKey");
     if (request.session().attribute("StaffSessionKey") == null) {
       if (request.session().attribute("TableSessionKey") == null) {
-        entityManager.close();
+
         return "failed"; // TODO replace with proper error message.
       } else {
-        entityManager.close();
+
         return "failed"; // for now, maybe replace. TODO think about customer notifications.
       }
     } else {

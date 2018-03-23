@@ -148,7 +148,7 @@ function sendSubscriptionToBackEnd(subscription) {
   const pubKey = subscription.getKey('p256dh');
   const auth = subscription.getKey('auth');
   console.log('sending to backend');
-  post('/api/saveSubscription', JSON.stringify({
+  post('/api/authStaff/saveSubscription', JSON.stringify({
     endpoint: subscription.endpoint,
     expirationTime: subscription.expirationTime,
     publicKey: btoa(String.fromCharCode.apply(null, new Uint8Array(pubKey))),
