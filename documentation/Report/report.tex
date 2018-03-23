@@ -145,38 +145,44 @@ The database was designed to allow the user to start multiple orders and store t
 This package implements the following components:
 \begin{itemize}
   \item A fully relational database in hopefully third normal form. All created with Hibernate ORM.
+
+    See \textit{\href{run:../JavaDoc/database/tables/package-summary.html}{Table Overview}} for more details.
   \item A Database Manager Singleton for easy access to creating JPA Entity Managers, without the need of creating more than one factory.
+
+    See \textit{\href{run:../JavaDoc/database/package-summary.html}{Database Overview}} for more details.
 \end{itemize}
-\subsection*{Functionality}
-For details on the functionality see \textit{\href{run:../JavaDoc/database/package-summary.html}{the Database Package overview}} and \textit{\href{run:../JavaDoc/database/tables/package-summary.html}{the Table Package overview}}.
 
 \section*{Endpoints}\label{sec:endpoints}
 \subsection*{Implemented Components}
 This package contains classes that link the front end to the database.
 \begin{itemize}
-  \item Authentication classes to authenticate a users login to stop unauthorized access.
-  \item Ingredient classes to provide end points that interact with the ingredient table in the database.
-  \item Manger classes to provide the end points necessary to create the implemented manager user stories.
-  \item Menu classes to provide the end points needed to load and edit the menu.
-  \item Notification classes that provide our push notification service, including auto updating the web pages.
-  \item Order classes to provide the ability to create, view and edits for both the customer view and the waiter view.
-  \item Payment classes to provide the Stripe functionality so they customers can pay by card.
-  \item Table classes to get the list of table, change there status and change which waiters are assigned to which table.
-  \item Transaction classes to allow the front end to get details on the current transaction.
-\end{itemize}
+  \item Authentication classes to authenticate a users login to stop unauthorized access. 
 
-\subsection*{Functionality}
-See the following Java Doc overviews for more details:
-\begin{itemize}
-  \item \textit{\href{run:../JavaDoc/endpoints/authentication/package-summary.html}{Authentication}}
-  \item \textit{\href{run:../JavaDoc/endpoints/ingredient/package-summary.html}{Ingredients}}
-  \item \textit{\href{run:../JavaDoc/endpoints/manager/package-summary.html}{Manger}}
-  \item \textit{\href{run:../JavaDoc/endpoints/menu/package-summary.html}{Menu}}
-  \item \textit{\href{run:../JavaDoc/endpoints/notification/package-summary.html}{Notification}}
-  \item \textit{\href{run:../JavaDoc/endpoints/order/package-summary.html}{Order}}
-  \item \textit{\href{run:../JavaDoc/endpoints/payment/package-summary.html}{Payment}}
-  \item \textit{\href{run:../JavaDoc/endpoints/tables/package-summary.html}{Tables}}
-  \item \textit{\href{run:../JavaDoc/endpoints/transaction/package-summary.html}{Transaction}}
+    See \textit{\href{run:../JavaDoc/endpoints/authentication/package-summary.html}{Authentication Overview}} for details.
+  \item Ingredient classes to provide end points that interact with the ingredient table in the database.
+
+    See \textit{\href{run:../JavaDoc/endpoints/ingredient/package-summary.html}{Ingredients Overview}} for details.
+  \item Manger classes to provide the end points necessary to create the implemented manager user stories.
+
+    See \textit{\href{run:../JavaDoc/endpoints/manager/package-summary.html}{Manger Overview}} for details.
+  \item Menu classes to provide the end points needed to load and edit the menu.
+
+    See \textit{\href{run:../JavaDoc/endpoints/menu/package-summary.html}{Menu Overview}} for details.
+  \item Notification classes that provide our push notification service, including auto updating the web pages.
+
+    See \textit{\href{run:../JavaDoc/endpoints/notification/package-summary.html}{Notification Overview}} for details.
+  \item Order classes to provide the ability to create, view and edits for both the customer view and the waiter view.
+
+    See \textit{\href{run:../JavaDoc/endpoints/order/package-summary.html}{Order Overview}} for details.
+  \item Payment classes to provide the Stripe functionality so they customers can pay by card.
+
+    See \textit{\href{run:../JavaDoc/endpoints/payment/package-summary.html}{Payment Overview}} for details.
+  \item Table classes to get the list of table, change there status and change which waiters are assigned to which table.
+
+    See \textit{\href{run:../JavaDoc/endpoints/tables/package-summary.html}{Tables Overview}} for details.
+  \item Transaction classes to allow the front end to get details on the current transaction.
+
+    See \textit{\href{run:../JavaDoc/endpoints/transaction/package-summary.html}{Transaction Overview}} for details
 \end{itemize}
 
 \section*{Static}\label{sec:static}
