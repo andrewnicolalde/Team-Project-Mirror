@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: manager-employee.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: manager-employee.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module Manager-Employee
+ */
+
+let departments;
+
+$(document).ready(() => {
+  loadEmployees();
+  get("/api/authStaff/getDepartments",
+      (data) => {
+        departments = JSON.parse(data);
+      });
+});
+
+function loadEmployees() {
+  get("/api/authStaff/getEmployees", (data) => {
+    const employees = JSON.parse(data);
+    for (let i = 0; i &lt; employees.length; i++) {
+      const employee = employees[i];
+      $("#employees").append("&lt;tr id='emp-" + employee.employeeNumber + "'>\n"
+          + "&lt;td id='emp-id-" + employee.employeeNumber + "'>"
+          + employee.employeeNumber + "&lt;/td>\n"
+          + "&lt;td id='emp-first-" + employee.employeeNumber + "'>"
+          + employee.firstName + "&lt;/td>\n"
+          + "&lt;td id='emp-last-" + employee.employeeNumber + "'>"
+          + employee.lastName + "&lt;/td>\n"
+          + "&lt;td id='emp-department-" + employee.employeeNumber + "'>"
+          + employee.department + "&lt;/td>\n"
+          + "&lt;td id='actions-" + employee.employeeNumber + "'>&lt;i id='edit-"
+          + employee.employeeNumber
+          + "' class=\"fas fa-edit fa-lg edit\" onclick='startEdit("
+          + employee.employeeNumber
+          + ");'>&lt;/i>&lt;i class=\"fa fa-times fa-lg remove\" onclick='remove("
+          + employee.employeeNumber + ");'>&lt;/i>&lt;/td>\n"
+          + "&lt;/tr>");
+    }
+  });
+}
+
+function createDepartmentOptions(department) {
+  let departmentsOptions = "";
+  for (let i = 0; i &lt; departments.length; i++) {
+    if (departments[i] === department) {
+      departmentsOptions += "&lt;option selected>" + departments[i]
+          + "&lt;/option>\n";
+    } else {
+      departmentsOptions += "&lt;option>" + departments[i] + "&lt;/option>\n";
+    }
+  }
+  return departmentsOptions;
+}
+
+function startEdit(id) {
+  $("#emp-first-" + id).html("&lt;input id='emp-first-" + id + "-input' value='"
+      + $("#emp-first-" + id).text() + "'>");
+  $("#emp-last-" + id).html("&lt;input id='emp-last-" + id + "-input' value='"
+      + $("#emp-last-" + id).text() + "'>");
+  $("#emp-department-" + id).html("&lt;select id='emp-department-" + id
+      + "-input'>" + createDepartmentOptions($("#emp-department-" + id).text())
+      + "&lt;/select>");
+  $("#edit-" + id).remove();
+  $("#actions-" + id).prepend("&lt;i id='confirm-" + id
+      + "' class='fa fa-check fa-lg confirm' onclick='confirmEdit(" + id
+      + ")'>&lt;/i>");
+}
+
+function confirmEdit(id) {
+  const dataToSend = JSON.stringify({
+    employeeNumber: id,
+    firstName: $("#emp-first-" + id + "-input").val(),
+    lastName: $("#emp-last-" + id + "-input").val(),
+    department: $("#emp-department-" + id + "-input").val()
+  });
+
+  post("/api/authStaff/editStaff",
+      dataToSend,
+      (data) => {
+        if (data === "success") {
+          $("#emp-first-" + id).html($("#emp-first-" + id + "-input").val());
+          $("#emp-last-" + id).html($("#emp-last-" + id + "-input").val());
+          $("#emp-department-" + id).html(
+              $("#emp-department-" + id + "-input").val());
+          $("#actions-" + id).prepend("&lt;i id='edit-" + id
+              + "' class=\"fas fa-edit fa-lg edit\" onclick='startEdit(" + id
+              + ");'>&lt;/i>");
+          $("#confirm-" + id).remove();
+        }
+      });
+}
+
+function startAdd() {
+  $("#employees").append("&lt;tr id='new-employee-form'>\n"
+      + "&lt;td id='emp-id-new'>&lt;/td>\n"
+      + "&lt;td id='emp-first-new'>&lt;input id='emp-first-new-input'>&lt;/td>\n"
+      + "&lt;td id='emp-last-new'>&lt;input id='emp-last-new-input'>&lt;/td>\n"
+      + "&lt;td id='emp-department-new'>&lt;select id='emp-department-new-input'>"
+      + createDepartmentOptions("") + "&lt;/select>&lt;/td>\n"
+      + "&lt;td id='actions-new'>&lt;i id='confirm-new' class='fas fa-check fa-lg confirm' data-toggle='modal' data-target='#password-modal'>&lt;/i>&lt;/td>\n"
+      + "&lt;/tr>");
+  $("#add-staff-btn").hide();
+}
+
+function showPasswordModal() {
+
+}
+
+function confirmAdd() {
+  const dataToSend = JSON.stringify({
+    firstName: $("#emp-first-new-input").val(),
+    lastName: $("#emp-last-new-input").val(),
+    department: $("#emp-department-new-input").val()
+  });
+
+  post("/api/authStaff/addStaff",
+      dataToSend,
+      (data) => {
+        employee = JSON.parse(data);
+        // Remove new employee form
+        $("#new-employee-form").remove();
+
+        // Add new employee
+        $("#employees").append("&lt;tr id='emp-" + employee.employeeNumber + "'>\n"
+            + "&lt;td id='emp-id-" + employee.employeeNumber + "'>"
+            + employee.employeeNumber + "&lt;/td>\n"
+            + "&lt;td id='emp-first-" + employee.employeeNumber + "'>"
+            + employee.firstName + "&lt;/td>\n"
+            + "&lt;td id='emp-last-" + employee.employeeNumber + "'>"
+            + employee.lastName + "&lt;/td>\n"
+            + "&lt;td id='emp-department-" + employee.employeeNumber + "'>"
+            + employee.department + "&lt;/td>\n"
+            + "&lt;td id='actions-" + employee.employeeNumber + "'>&lt;i id='edit-"
+            + employee.employeeNumber
+            + "' class=\"fas fa-edit fa-lg edit\" onclick='startEdit("
+            + employee.employeeNumber
+            + ");'>&lt;/i>&lt;i class=\"fa fa-times fa-lg remove\" onclick='remove("
+            + employee.employeeNumber + ");'>&lt;/i>&lt;/td>\n"
+            + "&lt;/tr>");
+      });
+}
+
+function checkPasswordsMatch() {
+  const pwd1 = $("#pwd1");
+  const pwd2 = $("#pwd2");
+  const btn = $("#confirm-pwd");
+  if (pwd1.val() === pwd2.val() &amp;&amp; pwd1.val().length > 0) {
+    btn.removeClass("disabled");
+    btn.addClass("active");
+  } else {
+    btn.removeClass("active");
+    btn.addClass("disabled");
+  }
+}
+
+function remove(id) {
+  bootbox.confirm("Are you sure you want to remove this employee account?",
+      (result) => {
+        if (result) {
+          const dataToSend = JSON.stringify({employeeNumber: id});
+          post("/api/authStaff/removeStaff",
+              dataToSend,
+              (data) => {
+                if (data === "success") {
+                  $("#emp-" + id).remove();
+                }
+              })
+        }
+      });
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AJAX_Wrapper.html">AJAX_Wrapper</a></li><li><a href="module-Customer-Basket.html">Customer-Basket</a></li><li><a href="module-Customer-Home.html">Customer-Home</a></li><li><a href="module-Customer-Menu.html">Customer-Menu</a></li><li><a href="module-Kitchen.html">Kitchen</a></li><li><a href="module-Manager-Assign%2520Tables.html">Manager-Assign Tables</a></li><li><a href="module-Manager-Employee.html">Manager-Employee</a></li><li><a href="module-Manager-Menu.html">Manager-Menu</a></li><li><a href="module-Register-Service-Worker.html">Register-Service-Worker</a></li><li><a href="module-Waiter.html">Waiter</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Mar 23 2018 13:31:27 GMT+0000 (GMT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
