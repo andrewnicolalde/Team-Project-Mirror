@@ -1,5 +1,5 @@
 /**
- * @module Manager-Assign Tables
+ * @module Manager-Assign-Tables
  */
 
 $(document).ready(() => {
