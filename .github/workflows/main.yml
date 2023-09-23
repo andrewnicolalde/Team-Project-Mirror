@@ -1,3 +1,4 @@
+# Add comment to trigger workflow action
 name: CodeGuru Security Test
 on:
   push:
